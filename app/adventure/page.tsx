@@ -1,5 +1,7 @@
+import PageHeader from '../ui/page-header';
+
 const HomePage = () => {
-  return <p>Home Page</p>;
+  return <PageHeader>Upcoming Adventures</PageHeader>;
 };
 
 export default HomePage;

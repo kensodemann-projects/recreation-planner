@@ -1,7 +1,7 @@
 const PageHeader = ({ children }: { children: string }) => {
   return (
     <header>
-      <h1 className="text-4xl">{children}</h1>
+      <h1 className="text-2xl">{children}</h1>
     </header>
   );
 };

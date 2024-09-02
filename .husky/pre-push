@@ -1,7 +1,7 @@
 branch=`git rev-parse --abbrev-ref HEAD`
 
-pnpm build
 if [ "main" = "$branch" ]; then
   pnpm lint
+  pnpm build
   pnpm test
 fi;
