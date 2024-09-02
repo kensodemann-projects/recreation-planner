@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import PageHeader from './ui/page-header';
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-top p-6 gap-8">
-      <header>
-        <h1 className="text-4xl">Recreation Planner</h1>
-      </header>
+      <PageHeader> Recreation Planner </PageHeader>
       <div className="flex flex-row justify-center">
         <Image
           src="/indy-car.jpg"
