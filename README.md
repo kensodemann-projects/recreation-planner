@@ -1,36 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Recreation Planner
 
-## Getting Started
+## Development Workflow
 
-First, run the development server:
+All commits that are pushed to `main` are deployed automatically. As such, a hybrid approach between the older git-flow and the simplified GitHub-flow will be used.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+When starting a new feature:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Create a base branch for the feature.
+1. Create branches for the changes for the feature.
+   1. Make the required modifications.
+   1. Use `npx changeset` to describe the change.
+   1. Create a PR to merge the changes into the base branch for the feature.
+   1. Always use a "Squash Commit" to commit these PRs.
+1. When the feature is "complete", create a PR to merge the PR into `main`.
+1. This PR will very likely consist of multiple smaller micro-feature commits, so do not squash.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This allows for base features to be developed in parallel.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Note:** The database schema is very much "live" so dealing with changes that involve the database will need to be worked out. Ideally database modifications can be segmented to avoid issues. It may also be possible to use a local Postgres in development. This will need to be looked in to.
