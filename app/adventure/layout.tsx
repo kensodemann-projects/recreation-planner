@@ -1,8 +1,16 @@
 'use client';
 
-import { Bars3Icon, CalendarDaysIcon, HomeIcon, MapIcon, TruckIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  CalendarDaysIcon,
+  HomeIcon,
+  MapIcon,
+  TruckIcon,
+  ArrowRightStartOnRectangleIcon,
+} from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import MenuItem from '../ui/menu-item';
+import MenuItem from '@/app/ui/menu-item';
+import { logout } from '@/app/login/actions';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,18 +30,31 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="drawer-side">
         <label aria-label="close sidebar" className="drawer-overlay" onClick={() => setMenuOpen(false)}></label>
         <div className="menu bg-base-300 text-base-content min-h-full w-60 py-4 gap-1">
-          <MenuItem href="/adventure" onClick={() => setMenuOpen(false)} icon={HomeIcon}>
-            Home
-          </MenuItem>
-          <MenuItem href="/adventure/places" onClick={() => setMenuOpen(false)} icon={MapIcon}>
-            Places
-          </MenuItem>
-          <MenuItem href="/adventure/equipment" onClick={() => setMenuOpen(false)} icon={TruckIcon}>
-            Equipment
-          </MenuItem>
-          <MenuItem href="/adventure/reservations" onClick={() => setMenuOpen(false)} icon={CalendarDaysIcon}>
-            Reservations
-          </MenuItem>
+          <div className="flex-grow">
+            <MenuItem href="/adventure" onClick={() => setMenuOpen(false)} icon={HomeIcon}>
+              Home
+            </MenuItem>
+            <MenuItem href="/adventure/places" onClick={() => setMenuOpen(false)} icon={MapIcon}>
+              Places
+            </MenuItem>
+            <MenuItem href="/adventure/equipment" onClick={() => setMenuOpen(false)} icon={TruckIcon}>
+              Equipment
+            </MenuItem>
+            <MenuItem href="/adventure/reservations" onClick={() => setMenuOpen(false)} icon={CalendarDaysIcon}>
+              Reservations
+            </MenuItem>
+          </div>
+          <div>
+            <MenuItem
+              onClick={() => {
+                setMenuOpen(false);
+                logout();
+              }}
+              icon={ArrowRightStartOnRectangleIcon}
+            >
+              Sign Out
+            </MenuItem>
+          </div>
         </div>
       </div>
     </div>

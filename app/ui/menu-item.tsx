@@ -9,7 +9,7 @@ const MenuItem = ({
   icon,
   onClick,
 }: {
-  href: string;
+  href?: string | undefined;
   children: string;
   icon: React.ElementType;
   onClick: () => void;
@@ -17,15 +17,24 @@ const MenuItem = ({
   const pathName = usePathname();
   const matches = pathName === href;
   const LinkIcon = icon;
-  return (
+
+  const content = (
+    <div
+      className={`flex flex-row gap-2 p-4 rounded items-center hover:bg-primary hover:text-primary-content ${matches ? 'bg-primary text-primary-content' : ''}`}
+    >
+      {LinkIcon && <LinkIcon className="w-6" />}
+      {children}
+    </div>
+  );
+
+  return href ? (
     <Link href={href} onClick={onClick}>
-      <div
-        className={`flex flex-row gap-2 p-4 rounded items-center hover:bg-primary hover:text-primary-content ${matches ? 'bg-primary text-primary-content' : ''}`}
-      >
-        {LinkIcon && <LinkIcon className="w-6" />}
-        {children}
-      </div>
+      {content}
     </Link>
+  ) : (
+    <div className="cursor-pointer" onClick={onClick}>
+      {content}
+    </div>
   );
 };
 

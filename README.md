@@ -1,5 +1,16 @@
 # Recreation Planner
 
+## Development Setup
+
+In order to connect to the database and auth backend, a `.env.local` file is required with the following information:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+
+The actual data to use can be found on the API settings page for the Supabase instance being connected to.
+
 ## Development Workflow
 
 All commits that are pushed to `main` are deployed automatically. As such, a hybrid approach between the older git-flow and the simplified GitHub-flow will be used.
