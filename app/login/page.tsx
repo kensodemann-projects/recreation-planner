@@ -1,39 +1,48 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { login } from './actions';
+import Input from '../ui/input';
+import { useInputValidation } from '@/hooks/use-input-validation';
+import { isEmail, isRequired } from '@/utils/input-validations';
 
 const LoginPage = () => {
-  // Just use state for now, but eventually we should have a ValidatedInput component
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    value: email,
+    error: emailError,
+    handleChange: handleEmailChange,
+    handleBlur: handleEmailBlur,
+  } = useInputValidation((value: string) => isRequired(value, 'Email Address') || isEmail(value));
+  const {
+    value: password,
+    error: passwordError,
+    handleChange: handlePasswordChange,
+    handleBlur: handlePasswordBlur,
+  } = useInputValidation((value: string) => isRequired(value, 'Password'));
   const router = useRouter();
 
   return (
     <main className="flex flex-col items-center mt-24">
       <div className="card bg-base-300 shadow-xl mx-6 md:w-1/2">
         <div className="card-body">
-          <h2 className="card-title text-center">Time to Start Your Adventure</h2>
-          <label htmlFor="email" className="mt-4">
-            Email Address
-          </label>
-          <input
+          <h1 className="card-title text-center">Time to Start Your Adventure</h1>
+          <Input
             id="email"
             type="email"
-            className="input input-bordered"
+            label="Email Address"
             value={email}
-            onChange={(evt) => setEmail(evt.target.value)}
+            error={emailError}
+            onBlur={handleEmailBlur}
+            onChange={(evt) => handleEmailChange(evt.target.value)}
           />
-          <label htmlFor="password" className="mt-4">
-            Password
-          </label>
-          <input
+          <Input
             id="password"
             type="password"
-            className="input input-bordered"
+            label="Password"
             value={password}
-            onChange={(evt) => setPassword(evt.target.value)}
+            error={passwordError}
+            onBlur={handlePasswordBlur}
+            onChange={(evt) => handlePasswordChange(evt.target.value)}
           />
           <div className="card-actions justify-end mt-4">
             <button className="btn" onClick={() => router.back()}>

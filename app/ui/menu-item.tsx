@@ -11,7 +11,7 @@ const MenuItem = ({
 }: {
   href?: string | undefined;
   children: string;
-  icon: React.ElementType;
+  icon?: React.ElementType | undefined;
   onClick: () => void;
 }) => {
   const pathName = usePathname();
