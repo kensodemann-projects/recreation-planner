@@ -7,6 +7,8 @@ import {
   MapIcon,
   TruckIcon,
   ArrowRightStartOnRectangleIcon,
+  CalendarIcon,
+  ClipboardDocumentCheckIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import MenuItem from '@/app/ui/menu-item';
@@ -34,6 +36,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <MenuItem href="/adventure" onClick={() => setMenuOpen(false)} icon={HomeIcon}>
               Home
             </MenuItem>
+            <MenuItem href="/adventure/activities" onClick={() => setMenuOpen(false)} icon={CalendarIcon}>
+              Trips &amp; Events
+            </MenuItem>
             <MenuItem href="/adventure/places" onClick={() => setMenuOpen(false)} icon={MapIcon}>
               Places
             </MenuItem>
@@ -42,6 +47,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </MenuItem>
             <MenuItem href="/adventure/reservations" onClick={() => setMenuOpen(false)} icon={CalendarDaysIcon}>
               Reservations
+            </MenuItem>
+            <MenuItem href="/adventure/todos" onClick={() => setMenuOpen(false)} icon={ClipboardDocumentCheckIcon}>
+              Todos
             </MenuItem>
           </div>
           <div>

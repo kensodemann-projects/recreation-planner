@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import MustBeLoggedIn from '../ui/must-be-logged-in';
-import UpcomingAdventures from './upcoming-adventures';
+import Dashboard from './dashboard';
 
 const HomePage = async () => {
   const supabase = createClient();
@@ -9,7 +9,7 @@ const HomePage = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return user ? <UpcomingAdventures /> : <MustBeLoggedIn />;
+  return user ? <Dashboard /> : <MustBeLoggedIn />;
 };
 
 export default HomePage;

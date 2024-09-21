@@ -6,14 +6,14 @@ import { createClient } from '@/utils/supabase/server';
 
 vi.mock('@/utils/supabase/server');
 
-describe('Events Page', () => {
+describe('Todos Page', () => {
   afterEach(() => cleanup());
 
   describe('when logged in', () => {
     it('renders the events component', async () => {
       const jsx = await EventsPage();
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Events' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Todos' })).toBeDefined();
     });
   });
 

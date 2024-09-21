@@ -1,19 +1,19 @@
 import { describe, expect, it, Mock, vi } from 'vitest';
-import HomePage from '../page';
+import EventsPage from '../page';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach } from 'vitest';
 import { createClient } from '@/utils/supabase/server';
 
 vi.mock('@/utils/supabase/server');
 
-describe('Adventures Home Page', () => {
+describe('Events Page', () => {
   afterEach(() => cleanup());
 
   describe('when logged in', () => {
-    it('renders the dashboard component', async () => {
-      const jsx = await HomePage();
+    it('renders the events component', async () => {
+      const jsx = await EventsPage();
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Trips & Events' })).toBeDefined();
     });
   });
 
@@ -24,7 +24,7 @@ describe('Adventures Home Page', () => {
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await HomePage();
+      const jsx = await EventsPage();
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });
