@@ -3,7 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import PageHeader from './ui/page-header';
 
-export default function Home() {
+const LandingPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-top p-6 gap-8">
       <PageHeader> Recreation Planner </PageHeader>
@@ -37,4 +37,6 @@ export default function Home() {
       <p>Log in to start planning your next adventure</p>
     </main>
   );
-}
+};
+
+export default LandingPage;
