@@ -1,6 +1,6 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import PageHeader from '@/app/ui/page-header';
 import { createClient } from '@/utils/supabase/server';
+import Reservations from './reservations';
 
 const ReservationsPage = async () => {
   const supabase = createClient();
@@ -8,7 +8,7 @@ const ReservationsPage = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return user ? <PageHeader>Reservations</PageHeader> : <MustBeLoggedIn />;
+  return user ? <Reservations /> : <MustBeLoggedIn />;
 };
 
 export default ReservationsPage;

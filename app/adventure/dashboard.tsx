@@ -1,5 +1,3 @@
-'use client';
-
 import PageHeader from '@/app/ui/page-header';
 
 const Dashboard = () => {

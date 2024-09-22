@@ -1,6 +1,6 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import PageHeader from '@/app/ui/page-header';
 import { createClient } from '@/utils/supabase/server';
+import Todos from './todos';
 
 const EventsPage = async () => {
   const supabase = createClient();
@@ -8,7 +8,7 @@ const EventsPage = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return user ? <PageHeader>Todos</PageHeader> : <MustBeLoggedIn />;
+  return user ? <Todos /> : <MustBeLoggedIn />;
 };
 
 export default EventsPage;

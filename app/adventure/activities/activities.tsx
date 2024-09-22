@@ -44,6 +44,17 @@ const Activities = () => {
       <PageHeader>Trips &amp; Events</PageHeader>;
       <ActivitiesTable className="hidden md:table" activities={DUMMY_DATA} />
       <ActivitiesList className="block md:hidden" activities={DUMMY_DATA} />
+      <div className="mt-2">
+        For each activity, you will be able to:
+        <ul className="list-disc list-inside">
+          <li className="list-item">Create and view notes (lists, etc)</li>
+          <li className="list-item">Create Todos</li>
+          <li className="list-item">Packing List</li>
+          <li className="list-item">Shopping List</li>
+          <li className="list-item">List of sites to see</li>
+          <li className="list-item">Schedule</li>
+        </ul>
+      </div>
     </>
   );
 };
