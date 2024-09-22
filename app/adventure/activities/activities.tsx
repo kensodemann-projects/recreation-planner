@@ -1,5 +1,7 @@
 import PageHeader from '@/app/ui/page-header';
 import { Activity } from '@/models';
+import ActivitiesTable from './activities-table';
+import ActivitiesList from './activities-list';
 
 const DUMMY_DATA: Array<Activity> = [
   {
@@ -37,7 +39,13 @@ const DUMMY_DATA: Array<Activity> = [
 ];
 
 const Activities = () => {
-  return <PageHeader>Trips &amp; Events</PageHeader>;
+  return (
+    <>
+      <PageHeader>Trips &amp; Events</PageHeader>;
+      <ActivitiesTable className="hidden md:table" activities={DUMMY_DATA} />
+      <ActivitiesList className="block md:hidden" activities={DUMMY_DATA} />
+    </>
+  );
 };
 
 export default Activities;
