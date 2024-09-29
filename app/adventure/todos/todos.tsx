@@ -3,7 +3,7 @@ import PageHeader from '@/app/ui/page-header';
 const Todos = () => {
   return (
     <>
-      <PageHeader className="text-center mb-8">Todos</PageHeader>
+      <PageHeader>Todos</PageHeader>
       <section className="px-2">
         <p>This page will be a list of various TODO items sorted by due date.</p>
         <div className="mt-2">
@@ -17,7 +17,6 @@ const Todos = () => {
           </ul>
         </div>
       </section>
-      ;
     </>
   );
 };

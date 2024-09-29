@@ -1,7 +1,7 @@
 import PageHeader from '@/app/ui/page-header';
 import { Activity } from '@/models';
-import ActivitiesTable from './activities-table';
 import ActivitiesList from './activities-list';
+import ActivitiesTable from './activities-table';
 
 const DUMMY_DATA: Array<Activity> = [
   {

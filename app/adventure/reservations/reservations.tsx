@@ -3,7 +3,7 @@ import PageHeader from '@/app/ui/page-header';
 const Reservations = () => {
   return (
     <>
-      <PageHeader className="text-center mb-8">Reservations</PageHeader>
+      <PageHeader>Reservations</PageHeader>
       <section className="px-2">
         <p>
           This page will be a list of current reservations that we have. This section will allow us to track current and
@@ -23,7 +23,6 @@ const Reservations = () => {
           Other types of reservations may be added in the future as we come across ideas we have not thought of yet.
         </p>
       </section>
-      ;
     </>
   );
 };

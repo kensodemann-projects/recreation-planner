@@ -1,16 +1,16 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
-import PlacesPage from '../page';
-import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach } from 'vitest';
 import { createClient } from '@/utils/supabase/server';
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import PlacesPage from '../page';
 
+vi.mock('../data');
 vi.mock('@/utils/supabase/server');
 
 describe('Places Page', () => {
   afterEach(() => cleanup());
 
   describe('when logged in', () => {
-    it('renders the equipment component', async () => {
+    it('renders the places component', async () => {
       const jsx = await PlacesPage();
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Places' })).toBeDefined();

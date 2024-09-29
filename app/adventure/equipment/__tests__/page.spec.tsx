@@ -1,8 +1,7 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
-import EquipmentPage from '../page';
-import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach } from 'vitest';
 import { createClient } from '@/utils/supabase/server';
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import EquipmentPage from '../page';
 
 vi.mock('@/utils/supabase/server');
 

@@ -7,5 +7,6 @@ export interface Place {
   state?: string | undefined;
   postal?: string | undefined;
   phoneNumber?: string | undefined;
+  website?: string | undefined;
   typeName: string;
 }

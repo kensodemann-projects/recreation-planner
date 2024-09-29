@@ -1,8 +1,7 @@
-import { describe, expect, it, Mock, vi } from 'vitest';
-import EventsPage from '../page';
-import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach } from 'vitest';
 import { createClient } from '@/utils/supabase/server';
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import EventsPage from '../page';
 
 vi.mock('@/utils/supabase/server');
 
@@ -10,7 +9,7 @@ describe('Todos Page', () => {
   afterEach(() => cleanup());
 
   describe('when logged in', () => {
-    it('renders the events component', async () => {
+    it('renders the todos component', async () => {
       const jsx = await EventsPage();
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Todos' })).toBeDefined();

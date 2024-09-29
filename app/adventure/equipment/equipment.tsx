@@ -3,7 +3,7 @@ import PageHeader from '@/app/ui/page-header';
 const Equipment = () => {
   return (
     <>
-      <PageHeader className="text-center mb-8">Equipment</PageHeader>
+      <PageHeader>Equipment</PageHeader>
       <section className="px-2">
         <p>
           This page will be a list of equipment that we own such as the RV, cars, bikes, and other items that need
