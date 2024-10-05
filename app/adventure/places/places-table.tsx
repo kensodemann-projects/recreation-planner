@@ -1,5 +1,5 @@
+import Address from '@/app/ui/address';
 import { Place } from '@/models';
-import { cityStatePostal } from '@/utils/formatters';
 
 const PlacesTable = ({ className, places }: { className?: string | undefined; places: Array<Place> }) => {
   return (
@@ -18,11 +18,7 @@ const PlacesTable = ({ className, places }: { className?: string | undefined; pl
             <tr key={place.id}>
               <th>{place.name}</th>
               <td>
-                {place.line1 && <div>{place.line1}</div>}
-                {place.line2 && <div>{place.line1}</div>}
-                {(place.city || place.state || place.postal) && (
-                  <div>{cityStatePostal(place.city, place.state, place.postal)}</div>
-                )}
+                <Address value={place.address} />
               </td>
               <td>{place.phoneNumber}</td>
               <td>{place.typeName}</td>

@@ -1,11 +1,10 @@
+import { Address } from './address';
+
 export interface Place {
   id: string;
   name: string;
-  line1?: string | undefined;
-  line2?: string | undefined;
-  city?: string | undefined;
-  state?: string | undefined;
-  postal?: string | undefined;
+  description?: string | undefined | null;
+  address: Address;
   phoneNumber?: string | undefined;
   website?: string | undefined;
   typeName: string;
