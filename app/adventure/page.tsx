@@ -1,15 +1,9 @@
-import { createClient } from '@/utils/supabase/server';
-import MustBeLoggedIn from '../ui/must-be-logged-in';
+import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
+import { isLoggedIn } from '@/utils/supabase/auth';
 import Dashboard from './dashboard';
 
 const HomePage = async () => {
-  const supabase = createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return user ? <Dashboard /> : <MustBeLoggedIn />;
+  return (await isLoggedIn()) ? <Dashboard /> : <MustBeLoggedIn />;
 };
 
 export default HomePage;

@@ -1,14 +1,9 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import { createClient } from '@/utils/supabase/server';
+import { isLoggedIn } from '@/utils/supabase/auth';
 import Todos from './todos';
 
 const EventsPage = async () => {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return user ? <Todos /> : <MustBeLoggedIn />;
+  return (await isLoggedIn()) ? <Todos /> : <MustBeLoggedIn />;
 };
 
 export default EventsPage;

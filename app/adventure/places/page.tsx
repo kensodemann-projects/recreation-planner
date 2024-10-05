@@ -1,15 +1,10 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import { createClient } from '@/utils/supabase/server';
-import Places from './places';
+import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchPlaces } from './data';
+import Places from './places';
 
 const PlacesPage = async () => {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!(await isLoggedIn())) {
     return <MustBeLoggedIn />;
   }
 
