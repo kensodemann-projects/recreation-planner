@@ -1,8 +1,12 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { usePathname } from 'next/navigation';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import MenuItem from '../menu-item';
 
+vi.mock('next/navigation');
+
 describe('Menu Item', () => {
+  beforeEach(() => (usePathname as Mock).mockReturnValue('foobar'));
   afterEach(() => cleanup());
 
   it('displays the content', () => {
@@ -28,3 +32,6 @@ describe('Menu Item', () => {
     });
   });
 });
+function befoerEach(arg0: () => any) {
+  throw new Error('Function not implemented.');
+}

@@ -1,5 +1,6 @@
 import Address from '@/app/ui/address';
 import { Place } from '@/models';
+import Link from 'next/link';
 
 const PlacesTable = ({ className, places }: { className?: string | undefined; places: Array<Place> }) => {
   return (
@@ -16,7 +17,9 @@ const PlacesTable = ({ className, places }: { className?: string | undefined; pl
         <tbody>
           {places.map((place) => (
             <tr key={place.id}>
-              <th>{place.name}</th>
+              <th>
+                <Link href={`places/${place.id}`}>{place.name}</Link>
+              </th>
               <td>
                 <Address value={place.address} />
               </td>

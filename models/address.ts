@@ -1,7 +1,7 @@
 export interface Address {
-  line1?: string | undefined;
-  line2?: string | undefined;
-  city?: string | undefined;
-  state?: string | undefined;
-  postal?: string | undefined;
+  line1?: string | undefined | null;
+  line2?: string | undefined | null;
+  city?: string | undefined | null;
+  state?: string | undefined | null;
+  postal?: string | undefined | null;
 }

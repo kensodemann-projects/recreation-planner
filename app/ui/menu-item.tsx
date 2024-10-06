@@ -7,15 +7,17 @@ const MenuItem = ({
   href,
   children,
   icon,
+  full,
   onClick,
 }: {
   href?: string | undefined;
   children: string;
   icon?: React.ElementType | undefined;
+  full?: boolean | undefined;
   onClick: () => void;
 }) => {
   const pathName = usePathname();
-  const matches = pathName === href;
+  const matches = href && (full ? pathName === href : pathName.startsWith(href));
   const LinkIcon = icon;
 
   const content = (

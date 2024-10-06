@@ -33,7 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <label aria-label="close sidebar" className="drawer-overlay" onClick={() => setMenuOpen(false)}></label>
         <div className="menu bg-base-300 text-base-content min-h-full w-60 py-4 gap-1">
           <div className="flex-grow">
-            <MenuItem href="/adventure" onClick={() => setMenuOpen(false)} icon={HomeIcon}>
+            <MenuItem href="/adventure" full onClick={() => setMenuOpen(false)} icon={HomeIcon}>
               Home
             </MenuItem>
             <MenuItem href="/adventure/activities" onClick={() => setMenuOpen(false)} icon={CalendarIcon}>
