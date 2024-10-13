@@ -2,7 +2,7 @@
 
 import { FocusEventHandler, ChangeEventHandler } from 'react';
 
-const ValidatedInput = ({
+const Input = ({
   id,
   type,
   label,
@@ -16,8 +16,8 @@ const ValidatedInput = ({
   label: string;
   value: string;
   error?: string | undefined;
-  onBlur: FocusEventHandler<HTMLInputElement>;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
 }) => {
   return (
     <label className="form-control w-full max-w-xs">
@@ -37,4 +37,4 @@ const ValidatedInput = ({
   );
 };
 
-export default ValidatedInput;
+export default Input;
