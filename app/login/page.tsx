@@ -10,16 +10,22 @@ const LoginPage = () => {
   const {
     value: email,
     error: emailError,
+    touched: emailTouched,
     handleChange: handleEmailChange,
     handleBlur: handleEmailBlur,
   } = useInputValidation((value: string) => isRequired(value, 'Email Address') || isEmail(value));
   const {
     value: password,
     error: passwordError,
+    touched: passwordTouched,
     handleChange: handlePasswordChange,
     handleBlur: handlePasswordBlur,
   } = useInputValidation((value: string) => isRequired(value, 'Password'));
   const router = useRouter();
+
+  const displayedEmailError = emailTouched ? emailError : '';
+  const displayedPasswordError = passwordTouched ? passwordError : '';
+  const loginDisabled = !!(emailError || passwordError);
 
   return (
     <main className="flex flex-col items-center mt-24">
@@ -31,7 +37,7 @@ const LoginPage = () => {
             type="email"
             label="Email Address"
             value={email}
-            error={emailError}
+            error={displayedEmailError}
             onBlur={handleEmailBlur}
             onChange={(evt) => handleEmailChange(evt.target.value)}
           />
@@ -40,7 +46,7 @@ const LoginPage = () => {
             type="password"
             label="Password"
             value={password}
-            error={passwordError}
+            error={displayedPasswordError}
             onBlur={handlePasswordBlur}
             onChange={(evt) => handlePasswordChange(evt.target.value)}
           />
@@ -48,7 +54,7 @@ const LoginPage = () => {
             <button className="btn" onClick={() => router.back()}>
               Cancel
             </button>
-            <button className="btn btn-primary" onClick={() => login(email, password)}>
+            <button className="btn btn-primary" disabled={loginDisabled} onClick={() => login(email, password)}>
               Login
             </button>
           </div>
