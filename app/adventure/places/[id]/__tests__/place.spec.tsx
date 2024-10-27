@@ -12,8 +12,10 @@ const testPlace: Place = {
     state: 'WI',
     postal: '53139',
   },
-  typeId: 1,
-  typeName: 'State Park',
+  type: {
+    id: 1,
+    name: 'State Park',
+  },
   phoneNumber: '(262) 878-5600',
   website: 'https://dnr.wisconsin.gov/topic/parks/richardbong',
 };

@@ -18,7 +18,7 @@ const Place = ({ place }: { place: PlaceModel }) => {
       {addressInformation}
       <h2 className="mt-8 mb-2 text-lg font-bold">Other Information</h2>
       <div>
-        <span className="font-bold">Type:</span> {place.typeName}
+        <span className="font-bold">Type:</span> {place.type.name}
       </div>
       {place.phoneNumber && (
         <div>

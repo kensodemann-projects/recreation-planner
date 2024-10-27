@@ -10,7 +10,7 @@ const ActivitiesList = ({ className, activities }: { className: string; activiti
             {formatDateRange(activity.beginDate, activity.beginTime, activity.endDate, activity.endTime)}
           </div>
           <div>
-            {activity.typeName}: {activity.description}
+            {activity.typeName}: {activity.name}
           </div>
           <div>{activity.locationName}</div>
         </li>

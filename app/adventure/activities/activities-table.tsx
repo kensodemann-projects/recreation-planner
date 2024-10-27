@@ -22,7 +22,7 @@ const ActivitiesTable = ({
         {activities.map((activity) => (
           <tr key={activity.id}>
             <th>{formatDateRange(activity.beginDate, activity.beginTime, activity.endDate, activity.endTime)}</th>
-            <td>{activity.description}</td>
+            <td>{activity.name}</td>
             <td>{activity.locationName}</td>
             <td>{activity.typeName}</td>
           </tr>
