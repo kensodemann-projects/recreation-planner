@@ -3,7 +3,8 @@ import Place from './place';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchPlace } from '../data';
 
-const PlacePage = async ({ params }: { params: { id: string } }) => {
+const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   if (!(await isLoggedIn())) {
     return <MustBeLoggedIn />;
   }
