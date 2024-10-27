@@ -1,7 +1,30 @@
-import { Place } from '@/models';
+import { Place, PlaceType } from '@/models';
 import { vi } from 'vitest';
 
-const DUMMY_DATA: Array<Place> = [
+const PLACE_TYPES: Array<PlaceType> = [
+  {
+    id: 1,
+    name: 'State Park',
+    description: 'A state owned property for camping and recreation.',
+  },
+  {
+    id: 2,
+    name: 'Race Track',
+    description: 'A place where it is OK to drive really fast.',
+  },
+  {
+    id: 3,
+    name: 'Sports Arena',
+    description: 'Go sports!!',
+  },
+  {
+    id: 4,
+    name: 'Hotel',
+    description: 'A place to lodge for the night.',
+  },
+];
+
+const PLACES: Array<Place> = [
   {
     id: 1,
     name: 'Burnet State Park',
@@ -11,8 +34,7 @@ const DUMMY_DATA: Array<Place> = [
       state: 'WI',
       postal: '54732',
     },
-    typeId: 1,
-    typeName: 'State Park',
+    type: PLACE_TYPES[0],
     phoneNumber: '(715) 239-6888',
   },
   {
@@ -23,8 +45,7 @@ const DUMMY_DATA: Array<Place> = [
       city: 'Speedway',
       state: 'IN',
     },
-    typeId: 2,
-    typeName: 'Race Track',
+    type: PLACE_TYPES[1],
   },
   {
     id: 3,
@@ -35,8 +56,7 @@ const DUMMY_DATA: Array<Place> = [
       state: 'WI',
       postal: '53139',
     },
-    typeId: 1,
-    typeName: 'State Park',
+    type: PLACE_TYPES[0],
     phoneNumber: '(262) 878-5600',
   },
   {
@@ -48,12 +68,12 @@ const DUMMY_DATA: Array<Place> = [
       state: 'WI',
       postal: '53715',
     },
-    typeId: 3,
-    typeName: 'Sports Arena',
+    type: PLACE_TYPES[2],
   },
 ];
 
-export const fetchPlaces = vi.fn().mockResolvedValue(DUMMY_DATA);
-export const fetchPlace = vi
-  .fn()
-  .mockImplementation((id: number) => Promise.resolve(DUMMY_DATA.find((d) => d.id === id)));
+export const fetchPlaces = vi.fn().mockResolvedValue(PLACES);
+export const fetchPlace = vi.fn().mockImplementation((id: number) => Promise.resolve(PLACES.find((d) => d.id === id)));
+export const addPlace = vi.fn();
+
+export const fetchPlaceTypes = vi.fn().mockResolvedValue(PLACE_TYPES);

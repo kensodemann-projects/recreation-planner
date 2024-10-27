@@ -1,10 +1,10 @@
-export interface Activity {
-  id: string;
+import { CommonData } from './common-data';
+
+export interface Activity extends CommonData {
   beginDate: string;
   beginTime?: string | undefined;
   endDate?: string | undefined;
   endTime?: string | undefined;
-  description: string;
   locationName: string;
   typeName: string;
 }

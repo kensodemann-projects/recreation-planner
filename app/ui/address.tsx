@@ -1,7 +1,11 @@
 import { Address as AddressModel } from '@/models';
 import { cityStatePostal } from '@/utils/formatters';
 
-const Address = ({ value }: { value: AddressModel }) => {
+interface AddressProperties {
+  value: AddressModel;
+}
+
+const Address = ({ value }: AddressProperties) => {
   return (
     <>
       {value.line1 && <div>{value.line1}</div>}

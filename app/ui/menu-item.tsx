@@ -3,19 +3,15 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-const MenuItem = ({
-  href,
-  children,
-  icon,
-  full,
-  onClick,
-}: {
+interface MenuItemProperties {
   href?: string | undefined;
   children: string;
   icon?: React.ElementType | undefined;
   full?: boolean | undefined;
   onClick: () => void;
-}) => {
+}
+
+const MenuItem = ({ href, children, icon, full, onClick }: MenuItemProperties) => {
   const pathName = usePathname();
   const matches = href && (full ? pathName === href : pathName.startsWith(href));
   const LinkIcon = icon;

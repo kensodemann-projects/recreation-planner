@@ -24,7 +24,7 @@ const PlacesTable = ({ className, places }: { className?: string | undefined; pl
                 <Address value={place.address} />
               </td>
               <td>{place.phoneNumber}</td>
-              <td>{place.typeName}</td>
+              <td>{place.type.name}</td>
             </tr>
           ))}
         </tbody>

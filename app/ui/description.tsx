@@ -1,28 +1,26 @@
 'use client';
 
-import { FocusEventHandler, ChangeEventHandler, ComponentPropsWithoutRef } from 'react';
+import { ChangeEventHandler, ComponentPropsWithoutRef, FocusEventHandler } from 'react';
 
-interface InputProperties extends ComponentPropsWithoutRef<'input'> {
+interface DescriptionProperties extends ComponentPropsWithoutRef<'textarea'> {
   id: string;
-  type: string;
   label: string;
   value: string;
   className?: string | undefined;
   error?: string | undefined;
-  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
-  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
 }
 
-const Input = ({ id, type, label, value, className, error, onBlur, onChange, ...props }: InputProperties) => {
+const Description = ({ id, label, value, className, error, onBlur, onChange, ...props }: DescriptionProperties) => {
   return (
     <label className={`form-control w-full ${className}`}>
       <div className="label">
         <div className="label-text">{label}</div>
       </div>
-      <input
+      <textarea
         id={id}
-        type={type}
-        className={`input input-bordered ${error ? 'input-error' : null}`}
+        className={`textarea textarea-bordered ${error ? 'textarea-error' : null}`}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
@@ -33,4 +31,4 @@ const Input = ({ id, type, label, value, className, error, onBlur, onChange, ...
   );
 };
 
-export default Input;
+export default Description;

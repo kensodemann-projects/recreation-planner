@@ -1,12 +1,10 @@
 import { Address } from './address';
+import { CommonData } from './common-data';
+import { PlaceType } from './place-type';
 
-export interface Place {
-  id: number;
-  name: string;
-  description?: string | undefined | null;
+export interface Place extends CommonData {
   address: Address;
   phoneNumber?: string | undefined | null;
   website?: string | undefined | null;
-  typeId: number;
-  typeName: string;
+  type: PlaceType;
 }
