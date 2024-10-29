@@ -6,6 +6,7 @@ import CreatePlacePage from '../page';
 
 vi.mock('../../data');
 vi.mock('@/utils/supabase/auth');
+vi.mock('next/navigation');
 
 describe('Places Page', () => {
   beforeEach(() => vi.clearAllMocks());
