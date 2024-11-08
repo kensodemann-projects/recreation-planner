@@ -93,17 +93,12 @@ export const updatePlace = async (place: Place): Promise<Place | null> => {
     return null;
   }
 
-  console.log('update place', place);
-  console.log('update place DTO', convertToPlaceDTO(place));
-
   const supabase = createClient();
   const { data, error } = await supabase
     .from('places')
     .update(convertToPlaceDTO(place))
     .eq('id', place.id)
     .select(selectColumns);
-
-  console.log('update complete', data, error);
 
   return data && data.length ? convertToPlace(data[0]) : null;
 };

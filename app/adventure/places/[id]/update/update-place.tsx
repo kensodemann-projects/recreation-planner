@@ -1,6 +1,5 @@
 'use client';
 
-import PageHeader from '@/app/ui/page-header';
 import { Place, PlaceType } from '@/models';
 import { useRouter } from 'next/navigation';
 import PlaceEditor from '../../ui/place-editor';
@@ -13,7 +12,6 @@ const UpdatePlace = ({ place, types }: UpdatePlaceProperties) => {
 
   return (
     <>
-      <PageHeader>Update the Place</PageHeader>
       <PlaceEditor place={place} types={types} onConfirm={updatePlaceConfirmed} onCancel={() => router.back()} />
     </>
   );

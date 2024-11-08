@@ -1,9 +1,6 @@
-import PageHeader from '@/app/ui/page-header';
-
 const Dashboard = () => {
   return (
     <>
-      <PageHeader>Dashboard</PageHeader>
       <section className="p-4">
         <p>
           Right now, this layout is in flux. This should be more of a dashboard showing several items, but I am not sure

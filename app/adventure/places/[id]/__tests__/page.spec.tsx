@@ -25,10 +25,10 @@ describe('Place Page', () => {
       expect(fetchPlace).toHaveBeenCalledWith(2);
     });
 
-    it('renders the reservations component', async () => {
+    it('renders the page header', async () => {
       const jsx = await PlacePage({ params: Promise.resolve({ id: '2' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Indianapolis Motor Speedway' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Place Details' })).toBeDefined();
     });
   });
 
