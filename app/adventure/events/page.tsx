@@ -1,7 +1,7 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import { isLoggedIn } from '@/utils/supabase/auth';
-import Activities from './activities';
+import Events from './events';
 
 const EventsPage = async () => {
   if (!(await isLoggedIn())) {
@@ -11,7 +11,7 @@ const EventsPage = async () => {
   return (
     <>
       <PageHeader>Trips &amp; Events</PageHeader>;
-      <Activities />
+      <Events />
     </>
   );
 };

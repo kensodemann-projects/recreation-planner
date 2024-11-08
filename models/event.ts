@@ -1,10 +1,12 @@
+import { EventType } from './event-type';
 import { CommonData } from './common-data';
+import { Place } from './place';
 
-export interface Activity extends CommonData {
+export interface Event extends CommonData {
   beginDate: string;
   beginTime?: string | undefined;
   endDate?: string | undefined;
   endTime?: string | undefined;
-  locationName: string;
-  typeName: string;
+  place: Place;
+  type: EventType;
 }
