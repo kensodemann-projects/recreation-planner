@@ -1,14 +1,14 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchPlaceTypes } from '../../data';
+import { fetchPlace, fetchPlaceTypes } from '../../../data';
 import CreatePlacePage from '../page';
 
-vi.mock('../../data');
+vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
-describe('Create Place Page', () => {
+describe('Update Place Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
@@ -17,15 +17,21 @@ describe('Create Place Page', () => {
       (isLoggedIn as Mock).mockResolvedValue(true);
     });
 
+    it('fetches the place', async () => {
+      await CreatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchPlace).toHaveBeenCalledOnce();
+      expect(fetchPlace).toHaveBeenCalledWith(3);
+    });
+
     it('fetches the place types', async () => {
-      await CreatePlacePage();
+      await CreatePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(fetchPlaceTypes).toHaveBeenCalledOnce();
     });
 
-    it('renders the create place component', async () => {
-      const jsx = await CreatePlacePage();
+    it('renders the update place component', async () => {
+      const jsx = await CreatePlacePage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Add a New Place' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Update the Place' })).toBeDefined();
     });
   });
 
@@ -35,12 +41,12 @@ describe('Create Place Page', () => {
     });
 
     it('does not fetch the place types', async () => {
-      await CreatePlacePage();
+      await CreatePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(fetchPlaceTypes).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await CreatePlacePage();
+      const jsx = await CreatePlacePage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });

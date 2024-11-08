@@ -20,13 +20,13 @@ describe('Place Page', () => {
     });
 
     it('fetches the place', async () => {
-      await PlacePage({ params: { id: '2' } });
+      await PlacePage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchPlace).toHaveBeenCalledOnce();
       expect(fetchPlace).toHaveBeenCalledWith(2);
     });
 
     it('renders the reservations component', async () => {
-      const jsx = await PlacePage({ params: { id: '2' } });
+      const jsx = await PlacePage({ params: Promise.resolve({ id: '2' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Indianapolis Motor Speedway' })).toBeDefined();
     });
@@ -38,12 +38,12 @@ describe('Place Page', () => {
     });
 
     it('does not fetch the place', async () => {
-      await PlacePage({ params: { id: '2' } });
+      await PlacePage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchPlace).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await PlacePage({ params: { id: '2' } });
+      const jsx = await PlacePage({ params: Promise.resolve({ id: '2' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });

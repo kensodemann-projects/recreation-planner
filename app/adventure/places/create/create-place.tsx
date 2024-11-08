@@ -12,7 +12,7 @@ const CreatePlace = ({ types }: { types: Array<PlaceType> }) => {
   return (
     <>
       <PageHeader>Add a New Place</PageHeader>
-      <PlaceEditor types={types} onConfirm={createPlaceConfirmed} onCancel={() => router.back()} />;
+      <PlaceEditor types={types} onConfirm={createPlaceConfirmed} onCancel={() => router.back()} />
     </>
   );
 };

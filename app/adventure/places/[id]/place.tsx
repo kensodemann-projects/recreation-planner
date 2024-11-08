@@ -1,6 +1,8 @@
 import Address from '@/app/ui/address';
 import PageHeader from '@/app/ui/page-header';
 import { Place as PlaceModel } from '@/models';
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 const Place = ({ place }: { place: PlaceModel }) => {
   const addressInformation =
@@ -33,6 +35,11 @@ const Place = ({ place }: { place: PlaceModel }) => {
           </a>
         </div>
       )}
+      <Link href={`/adventure/places/${place.id}/update`}>
+        <button className="btn btn-primary btn-circle btn-outline fixed bottom-6 right-6">
+          <PencilSquareIcon className="w-6" />
+        </button>
+      </Link>
     </>
   );
 };

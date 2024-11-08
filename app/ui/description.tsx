@@ -5,7 +5,7 @@ import { ChangeEventHandler, ComponentPropsWithoutRef, FocusEventHandler } from 
 interface DescriptionProperties extends ComponentPropsWithoutRef<'textarea'> {
   id: string;
   label: string;
-  value: string;
+  value: string | undefined;
   className?: string | undefined;
   error?: string | undefined;
   onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;

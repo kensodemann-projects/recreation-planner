@@ -3,51 +3,98 @@
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
-import { useInputValidation } from '@/hooks/use-input-validation';
+import { useFormControl } from '@/hooks/use-form-control';
 import { Place, PlaceType } from '@/models';
 import { isRequired } from '@/utils/input-validations';
-import { useState } from 'react';
 
 export interface PlaceEditorProps {
   types: Array<PlaceType>;
+  place?: Place | undefined;
   onConfirm: (place: Place) => void;
   onCancel: () => void;
 }
 
-const PlaceEditor = ({ types, onConfirm, onCancel }: PlaceEditorProps) => {
+const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) => {
   const {
     value: placeName,
+    dirty: placeNameDirty,
     error: placeNameError,
     touched: placeNameTouched,
     handleChange: handlePlaceNameChange,
     handleBlur: handlePlaceNameBlur,
-  } = useInputValidation((value: string) => isRequired(value, 'Name'));
+  } = useFormControl(place?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
 
-  const [description, setDescription] = useState('');
-  const [addressLine1, setAddressLine1] = useState('');
-  const [addressLine2, setAddressLine2] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [postal, setPostal] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [website, setWebsite] = useState('');
-  const [placeTypeId, setPlaceTypeId] = useState<number>();
+  const {
+    value: description,
+    dirty: descriptionDirty,
+    handleChange: setDescription,
+  } = useFormControl(place?.description || '');
+  const {
+    value: addressLine1,
+    dirty: addressLine1Dirty,
+    handleChange: setAddressLine1,
+  } = useFormControl(place?.address.line1 || '');
+  const {
+    value: addressLine2,
+    dirty: addressLine2Dirty,
+    handleChange: setAddressLine2,
+  } = useFormControl(place?.address.line2 || '');
+  const {
+    value: addressCity,
+    dirty: addressCityDirty,
+    handleChange: setCity,
+  } = useFormControl(place?.address.city || '');
+  const {
+    value: addressState,
+    dirty: addressStateDirty,
+    handleChange: setState,
+  } = useFormControl(place?.address.state || '');
+  const {
+    value: addressPostal,
+    dirty: addressPostalDirty,
+    handleChange: setPostal,
+  } = useFormControl(place?.address.postal || '');
+  const {
+    value: phoneNumber,
+    dirty: phoneNumberDirty,
+    handleChange: setPhoneNumber,
+  } = useFormControl(place?.phoneNumber || '');
+  const { value: website, dirty: websiteDirty, handleChange: setWebsite } = useFormControl(place?.website || '');
+  const {
+    value: placeTypeId,
+    dirty: placeTypeIdDirty,
+    handleChange: setPlaceTypeId,
+  } = useFormControl<number>(place?.type.id || types[0].id);
 
-  const disableButton = !!placeNameError;
+  const disableButton =
+    !!placeNameError ||
+    !(
+      placeNameDirty ||
+      descriptionDirty ||
+      addressLine1Dirty ||
+      addressLine2Dirty ||
+      addressCityDirty ||
+      addressStateDirty ||
+      addressPostalDirty ||
+      phoneNumberDirty ||
+      websiteDirty ||
+      placeTypeIdDirty
+    );
 
   const buildPlace = (): Place => ({
-    name: placeName.trim(),
+    id: place?.id,
+    name: placeName!.trim(),
     type: types.find((t) => t.id === placeTypeId) || types[0],
     address: {
-      line1: addressLine1.trim() || null,
-      line2: addressLine2.trim() || null,
-      city: city.trim() || null,
-      state: state.trim() || null,
-      postal: postal.trim() || null,
+      line1: addressLine1?.trim() || null,
+      line2: addressLine2?.trim() || null,
+      city: addressCity?.trim() || null,
+      state: addressState?.trim() || null,
+      postal: addressPostal?.trim() || null,
     },
-    description: description.trim() || null,
-    phoneNumber: phoneNumber.trim() || null,
-    website: website.trim() || null,
+    description: description?.trim() || null,
+    phoneNumber: phoneNumber?.trim() || null,
+    website: website?.trim() || null,
   });
 
   return (
@@ -100,7 +147,7 @@ const PlaceEditor = ({ types, onConfirm, onCancel }: PlaceEditorProps) => {
           className="col-span-4 md:col-span-2"
           type="text"
           label="City"
-          value={city}
+          value={addressCity}
           onChange={(evt) => setCity(evt.target.value)}
         />
         <Input
@@ -108,7 +155,7 @@ const PlaceEditor = ({ types, onConfirm, onCancel }: PlaceEditorProps) => {
           className="col-span-2 md:col-span-1"
           type="text"
           label="State / Province"
-          value={state}
+          value={addressState}
           onChange={(evt) => setState(evt.target.value)}
         />
         <Input
@@ -116,7 +163,7 @@ const PlaceEditor = ({ types, onConfirm, onCancel }: PlaceEditorProps) => {
           className="col-span-2 md:col-span-1"
           type="text"
           label="Postal Code"
-          value={postal}
+          value={addressPostal}
           onChange={(evt) => setPostal(evt.target.value)}
         />
         <Input
@@ -148,7 +195,7 @@ const PlaceEditor = ({ types, onConfirm, onCancel }: PlaceEditorProps) => {
             onConfirm(place);
           }}
         >
-          Create
+          {place ? 'Update' : 'Create'}
         </button>
       </div>
     </div>

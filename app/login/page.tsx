@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { login } from './actions';
 import Input from '../ui/input';
-import { useInputValidation } from '@/hooks/use-input-validation';
+import { useFormControl } from '@/hooks/use-form-control';
 import { isEmail, isRequired } from '@/utils/input-validations';
 
 const LoginPage = () => {
@@ -13,14 +13,14 @@ const LoginPage = () => {
     touched: emailTouched,
     handleChange: handleEmailChange,
     handleBlur: handleEmailBlur,
-  } = useInputValidation((value: string) => isRequired(value, 'Email Address') || isEmail(value));
+  } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Email Address') || isEmail(value));
   const {
     value: password,
     error: passwordError,
     touched: passwordTouched,
     handleChange: handlePasswordChange,
     handleBlur: handlePasswordBlur,
-  } = useInputValidation((value: string) => isRequired(value, 'Password'));
+  } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Password'));
   const router = useRouter();
 
   const displayedEmailError = emailTouched ? emailError : '';
@@ -54,7 +54,7 @@ const LoginPage = () => {
             <button className="btn" onClick={() => router.back()}>
               Cancel
             </button>
-            <button className="btn btn-primary" disabled={loginDisabled} onClick={() => login(email, password)}>
+            <button className="btn btn-primary" disabled={loginDisabled} onClick={() => login(email!, password!)}>
               Login
             </button>
           </div>
