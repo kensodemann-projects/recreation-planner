@@ -16,8 +16,8 @@ const PlacesPage = async () => {
   return (
     <>
       <PageHeader>Places</PageHeader>
-      <Places places={places} />;
-      <Link className="absolute bottom-4 right-4" href="/adventure/places/create">
+      <Places places={places} />
+      <Link className="fixed bottom-4 right-4" href="/adventure/places/create">
         <button className="btn btn-secondary btn-circle btn-outline">
           <PlusIcon className="w-6" />
         </button>

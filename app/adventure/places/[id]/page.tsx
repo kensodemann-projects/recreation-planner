@@ -23,10 +23,10 @@ const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
       <PageHeader>Place Details</PageHeader>
       <PlaceDetails place={place} />
 
-      <Link className="absolute top-4 right-4 link-secondary" href={`/adventure/places`}>
+      <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/places`}>
         <ArrowUturnLeftIcon className="w-6" />
       </Link>
-      <Link className="absolute bottom-4 right-4" href={`/adventure/places/${place.id}/update`}>
+      <Link className="fixed bottom-4 right-4" href={`/adventure/places/${place.id}/update`}>
         <button className="btn btn-secondary btn-circle btn-outline">
           <PencilSquareIcon className="w-6" />
         </button>

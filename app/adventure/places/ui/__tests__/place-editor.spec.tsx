@@ -57,6 +57,27 @@ describe('Place Editor', () => {
     });
   });
 
+  describe('place type selector', () => {
+    it('exists', () => {
+      render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+      expect(screen.getByRole('combobox', { name: 'Type of place' })).toBeDefined();
+    });
+
+    describe('initial value', () => {
+      it('is the first type with no place', () => {
+        render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        const sel = screen.getByRole('combobox', { name: 'Type of place' }) as HTMLSelectElement;
+        expect(+sel.value).toBe(PLACE_TYPES[0].id);
+      });
+
+      it('has the type of the place', () => {
+        render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
+        const sel = screen.getByRole('combobox', { name: 'Type of place' }) as HTMLSelectElement;
+        expect(+sel.value).toBe(TEST_PLACE.type.id);
+      });
+    });
+  });
+
   describe('Description Input', () => {
     it('exists', () => {
       render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
@@ -329,7 +350,7 @@ describe('Place Editor', () => {
     });
   });
 
-  describe('Create Button', () => {
+  describe('Confirm Button', () => {
     describe('for create', () => {
       it('exists', () => {
         render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
@@ -360,6 +381,28 @@ describe('Place Editor', () => {
           fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
           fireEvent.click(btn);
           expect(place!.name).toBe('The Food Court');
+        });
+
+        it('uses the first type if not set', () => {
+          let place: Place | null = null;
+          render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
+          const btn = screen.getByRole('button', { name: 'Create' });
+          const inp = screen.getByRole('textbox', { name: 'Name' });
+          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
+          fireEvent.click(btn);
+          expect(place!.type).toEqual(PLACE_TYPES[0]);
+        });
+
+        it('includes the selected type', () => {
+          let place: Place | null = null;
+          render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
+          const btn = screen.getByRole('button', { name: 'Create' });
+          const inp = screen.getByRole('textbox', { name: 'Name' });
+          const sel = screen.getByRole('combobox', { name: 'Type of place' });
+          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
+          fireEvent.change(sel, { target: { value: '2' } });
+          fireEvent.click(btn);
+          expect(place!.type).toEqual(PLACE_TYPES[1]);
         });
 
         it('has an undefined ID', () => {
@@ -494,23 +537,6 @@ describe('Place Editor', () => {
         expect(btn).toBeDefined();
       });
 
-      it('includes the original ID', () => {
-        let place: Place | null = null;
-        render(
-          <PlaceEditor
-            place={TEST_PLACE}
-            types={placeTypes}
-            onCancel={() => null}
-            onConfirm={(p: Place) => (place = p)}
-          />,
-        );
-        const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-        fireEvent.click(btn);
-        expect(place!.id).toBe(TEST_PLACE.id);
-      });
-
       it('starts disabled', () => {
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
         const btn = screen.getByRole('button', { name: 'Update' });
@@ -595,6 +621,195 @@ describe('Place Editor', () => {
         const inp = screen.getByRole('textbox', { name: 'Website' });
         fireEvent.change(inp, { target: { value: TEST_PLACE.website + '/' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      describe('on click', () => {
+        it('includes the original ID', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const inp = screen.getByRole('textbox', { name: 'Name' });
+          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
+          fireEvent.click(btn);
+          expect(place!.id).toBe(TEST_PLACE.id);
+        });
+
+        it('includes the updated name', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const inp = screen.getByRole('textbox', { name: 'Name' });
+          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, name: 'The Food Court' });
+        });
+
+        it('includes the updated type', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const sel = screen.getByRole('combobox', { name: 'Type of place' });
+          fireEvent.change(sel, { target: { value: '2' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, type: PLACE_TYPES[1] });
+        });
+
+        it('includes the updated description', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const descriptionInput = screen.getByRole('textbox', { name: 'Description' });
+          fireEvent.change(descriptionInput, { target: { value: '   A place to get yummy food!  ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, description: 'A place to get yummy food!' });
+        });
+
+        it('includes the updated address line 1', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const addressLine1Input = screen.getByRole('textbox', { name: 'Line 1' });
+          fireEvent.change(addressLine1Input, { target: { value: '   123 Foobar Lane  ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, line1: '123 Foobar Lane' } });
+        });
+
+        it('includes the updated address line 2', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const addressLine2Input = screen.getByRole('textbox', { name: 'Line 2' });
+          fireEvent.change(addressLine2Input, { target: { value: '   Unit 4203  ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, line2: 'Unit 4203' } });
+        });
+
+        it('includes the updated city', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const cityInput = screen.getByRole('textbox', { name: 'City' });
+          fireEvent.change(cityInput, { target: { value: ' Waukesha   ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, city: 'Waukesha' } });
+        });
+
+        it('includes the updated state', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const stateInput = screen.getByRole('textbox', { name: 'State / Province' });
+          fireEvent.change(stateInput, { target: { value: '       WI ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, state: 'WI' } });
+        });
+
+        it('includes the updated postal code', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const postalInput = screen.getByRole('textbox', { name: 'Postal Code' });
+          fireEvent.change(postalInput, { target: { value: '  53819 ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, postal: '53819' } });
+        });
+
+        it('includes the updated phone number', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const phoneNumberInput = screen.getByRole('textbox', { name: 'Phone Number' });
+          fireEvent.change(phoneNumberInput, { target: { value: ' (231) 243-1433 ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, phoneNumber: '(231) 243-1433' });
+        });
+
+        it('includes the updated website', () => {
+          let place: Place | null = null;
+          render(
+            <PlaceEditor
+              place={TEST_PLACE}
+              types={placeTypes}
+              onCancel={() => null}
+              onConfirm={(p: Place) => (place = p)}
+            />,
+          );
+          const btn = screen.getByRole('button', { name: 'Update' });
+          const websiteInput = screen.getByRole('textbox', { name: 'Website' });
+          fireEvent.change(websiteInput, { target: { value: '    https://the.food.court.com  ' } });
+          fireEvent.click(btn);
+          expect(place).toEqual({ ...TEST_PLACE, website: 'https://the.food.court.com' });
+        });
       });
     });
   });

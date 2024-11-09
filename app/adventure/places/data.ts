@@ -94,7 +94,7 @@ export const updatePlace = async (place: Place): Promise<Place | null> => {
   }
 
   const supabase = createClient();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('places')
     .update(convertToPlaceDTO(place))
     .eq('id', place.id)

@@ -8,3 +8,5 @@ export interface Place extends CommonData {
   website?: string | undefined | null;
   type: PlaceType;
 }
+
+export type SelectablePlace = Pick<Place, 'id' | 'name'>;
