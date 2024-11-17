@@ -51,6 +51,39 @@ const convertToEventDTO = (event: Event): EventDTO => ({
 const selectColumns =
   'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name), event_types!inner(name, description)';
 
+export const fetchEvents = async (): Promise<Array<Event>> => {
+  if (!(await isLoggedIn())) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('events').select(selectColumns).order('begin_date, begin_time');
+
+  return data?.map((p) => convertToEvent(p)) || [];
+};
+
+export const fetchEvent = async (id: number): Promise<Event | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('events').select(selectColumns).eq('id', id).single();
+
+  return data ? convertToEvent(data) : null;
+};
+
+export const addEvent = async (event: Event): Promise<Event | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns);
+
+  return data && data.length ? convertToEvent(data[0]) : null;
+};
+
 export const fetchEventTypes = async (): Promise<Array<EventType>> => {
   if (!(await isLoggedIn())) {
     return [];
@@ -71,15 +104,4 @@ export const fetchPlaces = async (): Promise<Array<SelectablePlace>> => {
   const { data } = await supabase.from('places').select('id, name').order('name');
 
   return data || [];
-};
-
-export const addEvent = async (event: Event): Promise<Event | null> => {
-  if (!(await isLoggedIn())) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns);
-
-  return data && data.length ? convertToEvent(data[0]) : null;
 };

@@ -1,9 +1,11 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { fetchEvents } from '../data';
 import EventsPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
+vi.mock('../data');
 
 describe('Events Page', () => {
   afterEach(() => cleanup());
@@ -11,6 +13,11 @@ describe('Events Page', () => {
   describe('when logged in', () => {
     beforeEach(() => {
       (isLoggedIn as Mock).mockResolvedValue(true);
+    });
+
+    it('fetches the events', async () => {
+      await EventsPage();
+      expect(fetchEvents).toHaveBeenCalledOnce();
     });
 
     it('renders the activities component', async () => {
