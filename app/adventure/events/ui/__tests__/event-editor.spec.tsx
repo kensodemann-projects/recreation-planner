@@ -1,4 +1,4 @@
-import { Place, PlaceType, EventType, Event, SelectablePlace } from '@/models';
+import { Event, EventType, SelectablePlace } from '@/models';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import EventEditor from '../event-editor';
@@ -7,7 +7,7 @@ describe('Activity Editor', () => {
   afterEach(() => cleanup());
 
   const eventTypes: Array<EventType> = [...EVENT_TYPES];
-  const places: Array<Place> = [...PLACES];
+  const places: Array<SelectablePlace> = [...PLACES];
 
   it('exists', () => {
     const res = render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
