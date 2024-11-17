@@ -20,6 +20,7 @@ const testPlace: Place = {
   phoneNumber: '(262) 878-5600',
   website: 'https://dnr.wisconsin.gov/topic/parks/richardbong',
 };
+
 describe('Place', () => {
   afterEach(() => cleanup());
 

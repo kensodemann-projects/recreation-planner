@@ -1,37 +1,44 @@
 import Address from '@/app/ui/address';
+import SectionHeading from '@/app/ui/section-heading';
 import { Place as PlaceModel } from '@/models';
 
 const Place = ({ place }: { place: PlaceModel }) => {
   const addressInformation =
     place.address.line1 || place.address.line2 || place.address.city || place.address.state || place.address.postal ? (
-      <>
-        <h2 className="mt-8 mb-2 text-lg font-bold">Address</h2>
+      <section>
+        <SectionHeading>Address</SectionHeading>
         <Address value={place.address} />
-      </>
+      </section>
     ) : undefined;
 
   return (
     <>
-      <h2 className="mt-8 mb-2 text-lg font-bold">{place.name}</h2>
-      <div>{place.description}</div>
+      <section>
+        <SectionHeading>{place.name}</SectionHeading>
+        <div className="whitespace-pre-line">{place.description}</div>
+      </section>
+
       {addressInformation}
-      <h2 className="mt-8 mb-2 text-lg font-bold">Other Information</h2>
-      <div>
-        <span className="font-bold">Type:</span> {place.type.name}
-      </div>
-      {place.phoneNumber && (
+
+      <section>
+        <SectionHeading>Other Information</SectionHeading>
         <div>
-          <span className="font-bold">Phone Number:</span> {place.phoneNumber}
+          <span className="font-bold">Type:</span> {place.type.name}
         </div>
-      )}
-      {place.website && (
-        <div>
-          <span className="font-bold">Website:</span>{' '}
-          <a className="link" href={place.website} target="_blank">
-            {place.website}
-          </a>
-        </div>
-      )}
+        {place.phoneNumber && (
+          <div>
+            <span className="font-bold">Phone Number:</span> {place.phoneNumber}
+          </div>
+        )}
+        {place.website && (
+          <div>
+            <span className="font-bold">Website:</span>{' '}
+            <a className="link" href={place.website} target="_blank">
+              {place.website}
+            </a>
+          </div>
+        )}
+      </section>
     </>
   );
 };

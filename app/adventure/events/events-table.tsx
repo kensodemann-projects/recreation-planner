@@ -1,5 +1,6 @@
 import { Event } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
+import Link from 'next/link';
 
 const EventsTable = ({ className, events }: { className?: string | undefined; events: Array<Event> }) => {
   return (
@@ -16,7 +17,9 @@ const EventsTable = ({ className, events }: { className?: string | undefined; ev
         {events.map((event) => (
           <tr key={event.id}>
             <th>{formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}</th>
-            <td>{event.name}</td>
+            <td>
+              <Link href={`events/${event.id}`}>{event.name}</Link>
+            </td>
             <td>{event.place.name}</td>
             <td>{event.type.name}</td>
           </tr>

@@ -1,55 +1,12 @@
 'use server';
 
-import { Event, EventType, SelectablePlace } from '@/models';
+import { Event, EventDTO, EventType, Place, SelectablePlace } from '@/models';
+import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 
-interface EventDTO {
-  id?: number | undefined;
-  name: string;
-  description: string | null | undefined;
-  begin_date: string;
-  begin_time: string | null | undefined;
-  end_date: string | null | undefined;
-  end_time: string | null | undefined;
-  place_rid: number;
-  event_type_rid: number;
-  places?: Array<{ name: string }> | { name: string } | undefined;
-  event_types?: Array<{ name: string; description: string }> | { name: string; description: string } | undefined;
-}
-
-const convertToEvent = (data: EventDTO): Event => ({
-  id: data.id,
-  name: data.name,
-  description: data.description,
-  beginDate: data.begin_date,
-  beginTime: data.begin_time,
-  endDate: data.end_date,
-  endTime: data.end_time,
-  place: {
-    id: data.place_rid,
-    name: (data.places as { name: string }).name,
-  },
-  type: {
-    id: data.event_type_rid,
-    name: (data.event_types as { name: string; description: string }).name,
-    description: (data.event_types as { name: string; description: string }).description,
-  },
-});
-
-const convertToEventDTO = (event: Event): EventDTO => ({
-  name: event.name,
-  description: event.description,
-  begin_date: event.beginDate,
-  begin_time: event.beginTime,
-  end_date: event.endDate,
-  end_time: event.endTime,
-  place_rid: event.place.id!,
-  event_type_rid: event.type.id!,
-});
-
 const selectColumns =
-  'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name), event_types!inner(name, description)';
+  'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name, description, address_line_1, address_line_2, city, state, postal_code, phone_number, website), event_types!inner(name, description)';
 
 export const fetchEvents = async (): Promise<Array<Event>> => {
   if (!(await isLoggedIn())) {
@@ -59,7 +16,7 @@ export const fetchEvents = async (): Promise<Array<Event>> => {
   const supabase = createClient();
   const { data } = await supabase.from('events').select(selectColumns).order('begin_date, begin_time');
 
-  return data?.map((p) => convertToEvent(p)) || [];
+  return data?.map((p) => convertToEvent(p) as Event) || [];
 };
 
 export const fetchEvent = async (id: number): Promise<Event | null> => {
@@ -70,7 +27,7 @@ export const fetchEvent = async (id: number): Promise<Event | null> => {
   const supabase = createClient();
   const { data } = await supabase.from('events').select(selectColumns).eq('id', id).single();
 
-  return data ? convertToEvent(data) : null;
+  return data ? (convertToEvent(data) as Event) : null;
 };
 
 export const addEvent = async (event: Event): Promise<Event | null> => {
@@ -81,7 +38,7 @@ export const addEvent = async (event: Event): Promise<Event | null> => {
   const supabase = createClient();
   const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns);
 
-  return data && data.length ? convertToEvent(data[0]) : null;
+  return data && data.length ? (convertToEvent(data[0]) as Event) : null;
 };
 
 export const fetchEventTypes = async (): Promise<Array<EventType>> => {
