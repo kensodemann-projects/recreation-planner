@@ -1,0 +1,75 @@
+import { isLoggedIn } from '@/utils/supabase/auth';
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import UpdateEventPage from '../page';
+import { fetchEvent, fetchEventTypes, fetchPlaces } from '../../../data';
+
+vi.mock('../../../data');
+vi.mock('@/utils/supabase/auth');
+vi.mock('next/navigation');
+
+describe('Update Event / Trip Page', () => {
+  beforeEach(() => vi.clearAllMocks());
+  afterEach(() => cleanup());
+
+  describe('when logged in', () => {
+    beforeEach(() => {
+      (isLoggedIn as Mock).mockResolvedValue(true);
+    });
+
+    it('does not render the must be logged in component', async () => {
+      const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
+
+    it('fetchs the event', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchEvent).toHaveBeenCalledOnce();
+      expect(fetchEvent).toHaveBeenCalledWith(3);
+    });
+
+    it('fetches the event types', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchEventTypes).toHaveBeenCalledOnce();
+    });
+
+    it('fetches the places', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchPlaces).toHaveBeenCalledOnce();
+    });
+
+    it('renders the update events component', async () => {
+      const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.getByRole('heading', { level: 1, name: 'Update the Event / Trip' })).toBeDefined();
+    });
+  });
+
+  describe('when not logged in', () => {
+    beforeEach(() => {
+      (isLoggedIn as Mock).mockResolvedValue(false);
+    });
+
+    it('renders the must be logged in component', async () => {
+      const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
+    });
+
+    it('does not fetch the event', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchEvent).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch the event types', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchEventTypes).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch the places', async () => {
+      await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      expect(fetchPlaces).not.toHaveBeenCalled();
+    });
+  });
+});

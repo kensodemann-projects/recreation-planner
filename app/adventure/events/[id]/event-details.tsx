@@ -24,7 +24,7 @@ const EventDetails = ({ event }: EventDetailsProps) => {
         <SectionHeading>{event.name}</SectionHeading>
         <div>{event.type.name}</div>
         <div>{formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}</div>
-        <div className="whitespace-pre-line">{event.description}</div>
+        <div className="mt-4 whitespace-pre-line">{event.description}</div>
       </section>
 
       <section>

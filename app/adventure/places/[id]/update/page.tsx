@@ -4,7 +4,7 @@ import { fetchPlace, fetchPlaceTypes } from '../../data';
 import UpdatePlace from './update-place';
 import PageHeader from '@/app/ui/page-header';
 
-const CreatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
+const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   if (!(await isLoggedIn())) {
     return <MustBeLoggedIn />;
   }
@@ -13,12 +13,16 @@ const CreatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   const place = await fetchPlace(+params.id);
   const placeTypes = await fetchPlaceTypes();
 
+  if (!place) {
+    return <div>Failed to fetch the place</div>;
+  }
+
   return (
     <>
       <PageHeader>Update the Place</PageHeader>
-      <UpdatePlace place={place!} types={placeTypes} />
+      <UpdatePlace place={place} types={placeTypes} />
     </>
   );
 };
 
-export default CreatePlacePage;
+export default UpdatePlacePage;

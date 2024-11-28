@@ -15,7 +15,7 @@ const EventPage = async (props: { params: Promise<{ id: string }> }) => {
   const event = await fetchEvent(+params.id);
 
   if (!event) {
-    return <div>Failed to fetch the place</div>;
+    return <div>Failed to fetch the event</div>;
   }
 
   return (

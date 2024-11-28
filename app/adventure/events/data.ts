@@ -62,3 +62,18 @@ export const fetchPlaces = async (): Promise<Array<SelectablePlace>> => {
 
   return data || [];
 };
+
+export const updateEvent = async (event: Event): Promise<Place | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase
+    .from('events')
+    .update(convertToEventDTO(event))
+    .eq('id', event.id)
+    .select(selectColumns);
+
+  return data && data.length ? (convertToEvent(data[0]) as Place) : null;
+};
