@@ -2,7 +2,7 @@ import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { canDeletePlace, fetchPlace } from '../../../data';
-import UpdatePlacePage from '../page';
+import DeletePlacePage from '../page';
 
 vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
@@ -18,18 +18,18 @@ describe('Delete Place Page', () => {
     });
 
     it('fetches the place', async () => {
-      await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(fetchPlace).toHaveBeenCalledOnce();
       expect(fetchPlace).toHaveBeenCalledWith(3);
     });
 
     it('determines if the place can be deleted', async () => {
-      await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(canDeletePlace).toHaveBeenCalledOnce();
     });
 
-    it('renders the update place component', async () => {
-      const jsx = await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+    it('renders the delete place component', async () => {
+      const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Remove Place' })).toBeDefined();
     });
@@ -41,17 +41,17 @@ describe('Delete Place Page', () => {
     });
 
     it('does not fetch the place', async () => {
-      await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(fetchPlace).not.toHaveBeenCalled();
     });
 
     it('does not determine if the place can be deleted', async () => {
-      await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       expect(canDeletePlace).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
+      const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });

@@ -41,6 +41,20 @@ export const addEvent = async (event: Event): Promise<Event | null> => {
   return data && data.length ? (convertToEvent(data[0]) as Event) : null;
 };
 
+export const canDeleteEvent = async (event: Event): Promise<boolean> => {
+  if (!(await isLoggedIn())) {
+    return false;
+  }
+  return true;
+};
+
+export const deleteEvent = async (event: Event): Promise<void> => {
+  if (await isLoggedIn()) {
+    const supabase = createClient();
+    await supabase.from('events').delete().eq('id', event.id);
+  }
+};
+
 export const fetchEventTypes = async (): Promise<Array<EventType>> => {
   if (!(await isLoggedIn())) {
     return [];

@@ -54,5 +54,8 @@ const EVENTS: Array<Event> = [
 
 export const fetchEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchEvent = vi.fn().mockResolvedValue(EVENTS[0]);
+export const addEvent = vi.fn();
+export const deleteEvent = vi.fn();
+export const canDeleteEvent = vi.fn().mockResolvedValue(false);
 export const fetchEventTypes = vi.fn().mockResolvedValue(EVENT_TYPES);
 export const fetchPlaces = vi.fn().mockResolvedValue(PLACES);
