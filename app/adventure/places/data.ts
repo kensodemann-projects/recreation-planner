@@ -15,6 +15,7 @@ export const fetchPlaces = async (): Promise<Array<Place>> => {
 
   const supabase = createClient();
   const { data } = await supabase.from('places').select(selectColumns).order('name');
+  const { data: countData } = await supabase.from('places').select('count');
 
   return data?.map((p) => convertToPlace(p) as Place) || [];
 };
@@ -41,6 +42,35 @@ export const addPlace = async (place: Place): Promise<Place | null> => {
   return data && data.length ? (convertToPlace(data[0]) as Place) : null;
 };
 
+export const fetchPlaceTypes = async (): Promise<Array<PlaceType>> => {
+  if (!(await isLoggedIn())) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('place_types').select('id, name, description').order('name');
+
+  return data || [];
+};
+
+export const canDeletePlace = async (place: Place): Promise<boolean> => {
+  if (!(await isLoggedIn())) {
+    return false;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('events').select('count').eq('place_rid', place.id);
+
+  return data![0].count === 0;
+};
+
+export const deletePlace = async (place: Place): Promise<void> => {
+  if (await isLoggedIn()) {
+    const supabase = createClient();
+    await supabase.from('places').delete().eq('id', place.id);
+  }
+};
+
 export const updatePlace = async (place: Place): Promise<Place | null> => {
   if (!(await isLoggedIn())) {
     return null;
@@ -54,15 +84,4 @@ export const updatePlace = async (place: Place): Promise<Place | null> => {
     .select(selectColumns);
 
   return data && data.length ? (convertToPlace(data[0]) as Place) : null;
-};
-
-export const fetchPlaceTypes = async (): Promise<Array<PlaceType>> => {
-  if (!(await isLoggedIn())) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase.from('place_types').select('id, name, description').order('name');
-
-  return data || [];
 };

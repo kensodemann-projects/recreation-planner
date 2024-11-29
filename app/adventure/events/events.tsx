@@ -12,7 +12,7 @@ const Events = ({ events }: EventsProperties) => {
       <EventsTable className="hidden md:table" events={events} />
       <EventsList className="block md:hidden" events={events} />
       <div className="mt-2">
-        For each activity, you will be able to:
+        When this area is complete, you will be able to do the following for each event / trip:
         <ul className="list-disc list-inside">
           <li className="list-item">Create and view notes (lists, etc)</li>
           <li className="list-item">Create Todos</li>

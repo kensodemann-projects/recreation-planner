@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 
 export const updatePlaceConfirmed = async (p: Place) => {
   if (await updatePlace(p)) {
-    redirect(`/adventure/places/${p.id}`);
+    redirect('/adventure/places');
   } else {
     redirect('/error');
   }

@@ -6,6 +6,10 @@ interface AddressProperties {
 }
 
 const Address = ({ value }: AddressProperties) => {
+  if (!value) {
+    return undefined;
+  }
+
   return (
     <>
       {value.line1 && <div>{value.line1}</div>}

@@ -75,5 +75,8 @@ const PLACES: Array<Place> = [
 export const fetchPlaces = vi.fn().mockResolvedValue(PLACES);
 export const fetchPlace = vi.fn().mockImplementation((id: number) => Promise.resolve(PLACES.find((d) => d.id === id)));
 export const addPlace = vi.fn();
+export const updatePlace = vi.fn();
+export const deletePlace = vi.fn();
+export const canDeletePlace = vi.fn().mockResolvedValue(false);
 
 export const fetchPlaceTypes = vi.fn().mockResolvedValue(PLACE_TYPES);

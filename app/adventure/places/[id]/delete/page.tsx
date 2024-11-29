@@ -3,10 +3,11 @@ import PageHeader from '@/app/ui/page-header';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { fetchPlace } from '../data';
-import PlaceDetails from './place-details';
+import { canDeletePlace, fetchPlace } from '../../data';
+import ConfirmDelete from '@/app/ui/confirm-delete';
+import DeletePlace from './delete-place';
 
-const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
+const RemovePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   if (!(await isLoggedIn())) {
     return <MustBeLoggedIn />;
   }
@@ -18,10 +19,13 @@ const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
     return <div>Failed to fetch the place</div>;
   }
 
+  const canDelete = await canDeletePlace(place);
+
   return (
     <>
-      <PageHeader>Place Details</PageHeader>
-      <PlaceDetails place={place} />
+      <PageHeader>Remove Place</PageHeader>
+
+      <DeletePlace place={place} canDelete={canDelete} />
 
       <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/places`}>
         <ArrowUturnLeftIcon className="w-6" />
@@ -30,4 +34,4 @@ const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default PlacePage;
+export default RemovePlacePage;

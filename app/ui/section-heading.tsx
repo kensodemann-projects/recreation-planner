@@ -1,5 +1,5 @@
 interface SectionHeadingProperties {
-  children: string;
+  children: string | Array<string>;
   className?: string | undefined;
 }
 

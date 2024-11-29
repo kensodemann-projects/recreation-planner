@@ -1,7 +1,7 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import { isLoggedIn } from '@/utils/supabase/auth';
-import { ArrowUturnLeftIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { fetchEvent } from '../data';
 import EventDetails from './event-details';
@@ -26,11 +26,6 @@ const EventPage = async (props: { params: Promise<{ id: string }> }) => {
 
       <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/events`}>
         <ArrowUturnLeftIcon className="w-6" />
-      </Link>
-      <Link className="fixed bottom-4 right-4" href={`/adventure/events/${params.id}/update`}>
-        <button className="btn btn-secondary btn-circle btn-outline">
-          <PencilSquareIcon className="w-6" />
-        </button>
       </Link>
     </>
   );
