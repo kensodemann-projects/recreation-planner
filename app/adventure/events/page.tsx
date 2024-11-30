@@ -15,7 +15,7 @@ const EventsPage = async () => {
 
   return (
     <>
-      <PageHeader>Trips &amp; Events</PageHeader>;
+      <PageHeader>Trips &amp; Events</PageHeader>
       <Events events={events} />
       <Link className="fixed bottom-4 right-4" href="/adventure/events/create">
         <button className="btn btn-secondary btn-circle btn-outline">
