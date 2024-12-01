@@ -1,16 +1,20 @@
 import { Event } from '@/models';
 import EventsList from './events-list';
 import EventsTable from './events-table';
+import SectionHeading from '@/app/ui/section-heading';
 
 interface EventsProperties {
-  events: Array<Event>;
+  upcomingEvents: Array<Event>;
 }
 
-const Events = ({ events }: EventsProperties) => {
+const Events = ({ upcomingEvents }: EventsProperties) => {
   return (
     <>
-      <EventsTable className="hidden md:table" events={events} />
-      <EventsList className="block md:hidden" events={events} />
+      <section>
+        <SectionHeading>Upcoming Trips &amp; Events</SectionHeading>
+        <EventsTable className="hidden md:table" upcomingEvents={upcomingEvents} />
+        <EventsList className="block md:hidden" upcomingEvents={upcomingEvents} />
+      </section>
       <div className="mt-2">
         When this area is complete, you will be able to do the following for each event / trip:
         <ul className="list-disc list-inside">

@@ -1,9 +1,9 @@
 import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
-import { Event } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
 import Link from 'next/link';
+import { EventsListProps } from './events-list-props';
 
-const EventsTable = ({ className, events }: { className?: string | undefined; events: Array<Event> }) => {
+const EventsTable = ({ className, upcomingEvents }: EventsListProps) => {
   return (
     <table className={`table table-zebra ${className || ''}`}>
       <thead>
@@ -16,7 +16,7 @@ const EventsTable = ({ className, events }: { className?: string | undefined; ev
         </tr>
       </thead>
       <tbody>
-        {events.map((event) => (
+        {upcomingEvents.map((event) => (
           <tr key={event.id}>
             <th>{formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}</th>
             <td>

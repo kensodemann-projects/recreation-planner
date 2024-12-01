@@ -1,23 +1,32 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchEvents } from '../data';
+import { fetchUpcomingEvents, fetchEvents } from '../data';
 import EventsPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('../data');
 
 describe('Events Page', () => {
-  afterEach(() => cleanup());
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    cleanup();
+  });
 
   describe('when logged in', () => {
     beforeEach(() => {
       (isLoggedIn as Mock).mockResolvedValue(true);
     });
 
-    it('fetches the events', async () => {
+    it('fetches the current events', async () => {
+      vi.setSystemTime(new Date(2024, 10, 27));
       await EventsPage();
-      expect(fetchEvents).toHaveBeenCalledOnce();
+      expect(fetchUpcomingEvents).toHaveBeenCalledOnce();
+      expect(fetchUpcomingEvents).toHaveBeenCalledWith('2024-11-24');
     });
 
     it('renders the activities component', async () => {

@@ -1,9 +1,10 @@
 'use server';
 
-import { Event, EventDTO, EventType, Place, SelectablePlace } from '@/models';
+import { Event, EventType, Place, SelectablePlace } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
+import { formatISO, startOfWeek } from 'date-fns';
 
 const selectColumns =
   'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name, description, address_line_1, address_line_2, city, state, postal_code, phone_number, website), event_types!inner(name, description)';
@@ -15,6 +16,23 @@ export const fetchEvents = async (): Promise<Array<Event>> => {
 
   const supabase = createClient();
   const { data } = await supabase.from('events').select(selectColumns).order('begin_date, begin_time');
+
+  console.log(formatISO(startOfWeek(Date.now()), { representation: 'date' }));
+
+  return data?.map((p) => convertToEvent(p) as Event) || [];
+};
+
+export const fetchUpcomingEvents = async (dt: string): Promise<Array<Event>> => {
+  if (!(await isLoggedIn())) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase
+    .from('events')
+    .select(selectColumns)
+    .or(`end_date.gte."${dt}",and(end_date.is.null,begin_date.gte."${dt}")`)
+    .order('begin_date, begin_time');
 
   return data?.map((p) => convertToEvent(p) as Event) || [];
 };
