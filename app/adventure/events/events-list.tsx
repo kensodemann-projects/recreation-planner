@@ -3,10 +3,10 @@ import { formatDateRange } from '@/utils/formatters';
 import Link from 'next/link';
 import { EventsListProps } from './events-list-props';
 
-const EventsList = ({ className, upcomingEvents }: EventsListProps) => {
+const EventsList = ({ className, events }: EventsListProps) => {
   return (
     <ul className={`list-none ${className}`}>
-      {upcomingEvents.map((event) => (
+      {events.map((event) => (
         <li key={event.id} className="py-2 border-solid first:border-t border-b border-primary flex">
           <Link className="flex-grow" href={`events/${event.id}`}>
             <div className="font-bold">

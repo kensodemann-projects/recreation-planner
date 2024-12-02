@@ -1,7 +1,7 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchUpcomingEvents, fetchEvents } from '../data';
+import { fetchUpcomingEvents, fetchEvents, fetchPriorEvents } from '../data';
 import EventsPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
@@ -10,6 +10,7 @@ vi.mock('../data');
 describe('Events Page', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -27,6 +28,13 @@ describe('Events Page', () => {
       await EventsPage();
       expect(fetchUpcomingEvents).toHaveBeenCalledOnce();
       expect(fetchUpcomingEvents).toHaveBeenCalledWith('2024-11-24');
+    });
+
+    it('fetches the prior events', async () => {
+      vi.setSystemTime(new Date(2024, 10, 27));
+      await EventsPage();
+      expect(fetchPriorEvents).toHaveBeenCalledOnce();
+      expect(fetchPriorEvents).toHaveBeenCalledWith('2024-11-24');
     });
 
     it('renders the activities component', async () => {
