@@ -3,8 +3,9 @@ const Reservations = () => {
     <>
       <section className="px-2">
         <p>
-          This page will be a list of current reservations that we have. This section will allow us to track current and
-          future reservations, display previous reservations, and create tasks to create future reservations.
+          This page is being planned and is under development. It will be a list of current reservations that we have.
+          This section will allow us to track current and future reservations, display previous reservations, and create
+          tasks to create future reservations.
         </p>
         <div className="mt-2">
           Reservations can include:

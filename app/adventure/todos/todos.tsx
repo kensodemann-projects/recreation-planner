@@ -2,7 +2,10 @@ const Todos = () => {
   return (
     <>
       <section className="px-2">
-        <p>This page will be a list of various TODO items sorted by due date.</p>
+        <p>
+          This page is bein planned and is currently under development. It will be a list of various TODO items sorted
+          by due date.
+        </p>
         <div className="mt-2">
           Todo items can be created from any of the following areas:
           <ul className="list-disc list-inside">

@@ -3,8 +3,8 @@ const Equipment = () => {
     <>
       <section className="px-2">
         <p>
-          This page will be a list of equipment that we own such as the RV, cars, bikes, and other items that need
-          periodic maintenance or tasks performed on them.
+          This page is currently being planned and is under development. It will be a list of equipment that we own such
+          as the RV, cars, bikes, and other items that need periodic maintenance or tasks performed on them.
         </p>
         <p className="mt-2">
           This section will allow us to track when maintenance has been done, when current maintenance is scheduled, and
