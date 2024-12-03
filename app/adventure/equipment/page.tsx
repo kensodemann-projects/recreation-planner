@@ -10,8 +10,8 @@ const EquipmentPage = async () => {
 
   return (
     <>
-      <Equipment />
       <PageHeader>Equipment</PageHeader>
+      <Equipment />
     </>
   );
 };
