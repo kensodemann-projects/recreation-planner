@@ -16,8 +16,8 @@ const config: Config = {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ['garden', 'sunset'],
-    darkTheme: 'sunset',
+    themes: ['cmyk', 'dracula'],
+    darkTheme: 'dracula',
   },
 };
 export default config;
