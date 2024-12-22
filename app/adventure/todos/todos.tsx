@@ -1,20 +1,18 @@
-const Todos = () => {
+import { TodoCollection } from '@/models';
+import TodoCollectionCard from './ui/todo-collectoin-card';
+
+interface TodosProperties {
+  collections: TodoCollection[];
+}
+
+const Todos = ({ collections }: TodosProperties) => {
   return (
     <>
       <section className="px-2">
-        <p>
-          This page is bein planned and is currently under development. It will be a list of various TODO items sorted
-          by due date.
-        </p>
-        <div className="mt-2">
-          Todo items can be created from any of the following areas:
-          <ul className="list-disc list-inside">
-            <li className="list-item">General (created from here)</li>
-            <li className="list-item">Equipment</li>
-            <li className="list-item">Places</li>
-            <li className="list-item">Trips &amp; Events</li>
-            <li className="list-item">Reservations (still debating if that makes sense or not)</li>
-          </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+          {collections.map((x) => (
+            <TodoCollectionCard todoCollection={x} key={x.id} />
+          ))}
         </div>
       </section>
     </>

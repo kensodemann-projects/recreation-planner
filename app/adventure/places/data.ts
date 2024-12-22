@@ -1,6 +1,6 @@
 'use server';
 
-import { Place, PlaceDTO, PlaceType } from '@/models';
+import { Place, PlaceType } from '@/models';
 import { convertToPlace, convertToPlaceDTO } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
@@ -15,7 +15,6 @@ export const fetchPlaces = async (): Promise<Array<Place>> => {
 
   const supabase = createClient();
   const { data } = await supabase.from('places').select(selectColumns).order('name');
-  const { data: countData } = await supabase.from('places').select('count');
 
   return data?.map((p) => convertToPlace(p) as Place) || [];
 };

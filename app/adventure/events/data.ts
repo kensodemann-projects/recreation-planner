@@ -4,7 +4,6 @@ import { Event, EventType, Place, SelectablePlace } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
-import { formatISO, startOfWeek } from 'date-fns';
 
 const selectColumns =
   'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name, description, address_line_1, address_line_2, city, state, postal_code, phone_number, website), event_types!inner(name, description)';

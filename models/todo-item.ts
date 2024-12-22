@@ -7,5 +7,6 @@ export interface TodoItem {
 export interface TodoItemDTO {
   id?: number | undefined;
   name: string;
-  complete: boolean;
+  is_complete: boolean;
+  todo_collection_rid: number;
 }
