@@ -8,7 +8,7 @@ const EventsList = ({ className, events }: EventsListProps) => {
     <ul className={`list-none ${className}`}>
       {events.map((event) => (
         <li key={event.id} className="py-2 border-solid first:border-t border-b border-primary flex">
-          <Link className="flex-grow" href={`events/${event.id}`}>
+          <Link className="grow" href={`events/${event.id}`}>
             <div className="font-bold">
               {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
             </div>

@@ -50,7 +50,7 @@ describe('Activity Editor', () => {
         expect(screen.queryByText('Name is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
         fireEvent.blur(inp);
@@ -165,7 +165,7 @@ describe('Activity Editor', () => {
         expect(screen.queryByText('Begin Date is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByLabelText('Begin Date') as HTMLInputElement;
         fireEvent.blur(inp);

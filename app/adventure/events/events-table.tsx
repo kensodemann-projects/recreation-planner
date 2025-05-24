@@ -5,7 +5,7 @@ import { EventsListProps } from './events-list-props';
 
 const EventsTable = ({ className, events }: EventsListProps) => {
   return (
-    <table className={`table table-zebra ${className || ''}`}>
+    <table className={`table-zebra ${className || ''}`}>
       <thead>
         <tr>
           <th>Dates</th>

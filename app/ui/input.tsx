@@ -15,17 +15,16 @@ interface InputProperties extends ComponentPropsWithoutRef<'input'> {
 
 const Input = ({ id, type, label, value, className, error, onBlur, onChange, ...props }: InputProperties) => {
   return (
-    <label className={`form-control w-full ${className}`}>
-      <div className="label">
-        <div className="label-text">{label}</div>
-      </div>
+    <label className={`floating-label ${className}`}>
+      <span>{label}</span>
       <input
         id={id}
         type={type}
-        className={`input input-bordered ${error ? 'input-error' : null}`}
+        className={`input input-md w-full ${error ? 'input-error' : null}`}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        placeholder={label}
         {...props}
       />
       {error ? <div className="label-text-alt text-error">{error}</div> : <div className="label-text-alt">&nbsp;</div>}

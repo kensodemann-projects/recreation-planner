@@ -11,7 +11,7 @@ const EditableCheckbox = ({ label, onLabelChanged, ...props }: TodoItemPropertie
   const [editMode, setEditMode] = useState(false);
   return (
     <div className="form-control mt-4">
-      <div className="flex flex-row flex-grow gap-4 items-center cursor-pointer">
+      <div className="flex flex-row grow gap-4 items-center cursor-pointer">
         <input type="checkbox" className="checkbox" disabled={editMode} {...props} />
         {editMode ? (
           <input

@@ -102,7 +102,7 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
       <div className="grid grid-cols-4 gap-x-4">
         <Input
           id="place-name"
-          className="col-span-4 md:col-span-3"
+          className="col-span-4 md:col-span-2"
           type="text"
           label="Name"
           value={placeName}
@@ -112,7 +112,7 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
         />
         <Select
           id="place-type"
-          className="col-span-4 md:col-span-1"
+          className="col-span-4 md:col-span-2"
           label="Type of place"
           value={placeTypeId}
           values={types}

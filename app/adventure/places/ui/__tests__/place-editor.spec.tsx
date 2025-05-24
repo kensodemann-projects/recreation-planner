@@ -36,7 +36,7 @@ describe('Place Editor', () => {
         expect(screen.queryByText('Name is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
         fireEvent.blur(inp);

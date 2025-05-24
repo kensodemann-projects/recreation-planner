@@ -27,7 +27,7 @@ describe('Login Page', () => {
         expect(screen.queryByText('Email Address is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
         fireEvent.blur(inp);
@@ -63,7 +63,7 @@ describe('Login Page', () => {
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
         fireEvent.change(inp, { target: { value: 'foo' } });
@@ -82,7 +82,7 @@ describe('Login Page', () => {
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is not displayed with a valid email on initial blur', () => {
+      it('is not displayed with a valid email on initial blur-sm', () => {
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
         fireEvent.change(inp, { target: { value: 'foo@bar.com' } });
@@ -107,7 +107,7 @@ describe('Login Page', () => {
         expect(screen.queryByText('Password is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after blur-sm', () => {
         render(<LoginPage />);
         const inp = screen.getByLabelText('Password');
         fireEvent.blur(inp);

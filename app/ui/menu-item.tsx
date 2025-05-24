@@ -18,7 +18,7 @@ const MenuItem = ({ href, children, icon, full, onClick }: MenuItemProperties) =
 
   const content = (
     <div
-      className={`flex flex-row gap-2 p-4 rounded items-center hover:bg-primary hover:text-primary-content ${matches ? 'bg-primary text-primary-content' : ''}`}
+      className={`flex flex-row gap-2 p-4 rounded-sm items-center hover:bg-primary hover:text-primary-content ${matches ? 'bg-primary text-primary-content' : ''}`}
     >
       {LinkIcon && <LinkIcon className="w-6" />}
       {children}

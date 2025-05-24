@@ -50,7 +50,7 @@ describe('Editable Checkbox Component', () => {
       expect(cb.attributes.getNamedItem('disabled')).toBeTruthy();
     });
 
-    describe('on blur', () => {
+    describe('on blur-sm', () => {
       it('returns the edited label', () => {
         let label: string = 'I am a test';
         render(

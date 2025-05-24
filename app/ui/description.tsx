@@ -14,16 +14,15 @@ interface DescriptionProperties extends ComponentPropsWithoutRef<'textarea'> {
 
 const Description = ({ id, label, value, className, error, onBlur, onChange, ...props }: DescriptionProperties) => {
   return (
-    <label className={`form-control w-full ${className}`}>
-      <div className="label">
-        <div className="label-text">{label}</div>
-      </div>
+    <label className={`floating-label ${className}`}>
+      <span className="label">{label}</span>
       <textarea
         id={id}
-        className={`textarea textarea-bordered ${error ? 'textarea-error' : null}`}
+        className={`textarea textarea-bordered w-full ${error ? 'textarea-error' : null}`}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        placeholder={label}
         {...props}
       />
       {error ? <div className="label-text-alt text-error">{error}</div> : <div className="label-text-alt">&nbsp;</div>}

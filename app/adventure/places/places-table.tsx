@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const PlacesTable = ({ className, places }: { className?: string | undefined; places: Array<Place> }) => {
   return (
-    <table className={`table table-zebra ${className || ''}`}>
+    <table className={`table-zebra ${className || ''}`}>
       <thead>
         <tr>
           <th>Name</th>

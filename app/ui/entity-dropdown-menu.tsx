@@ -11,7 +11,7 @@ const EntityDropdownMenu = ({ href }: EntityDropdownMenuProps) => {
       <div tabIndex={0} role="button" className="btn btn-ghost ">
         <EllipsisVerticalIcon className="w-6" />
       </div>
-      <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-24 p-2 shadow">
+      <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
         <li>
           <Link href={href}>View</Link>
         </li>

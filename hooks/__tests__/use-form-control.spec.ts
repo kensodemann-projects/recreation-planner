@@ -31,7 +31,7 @@ describe('Input Validation Hook', () => {
       expect(result.current.error).toBe('value is required');
     });
 
-    describe('after blur', () => {
+    describe('after blur-sm', () => {
       it('is touched', () => {
         const { result } = renderHook(() => useFormControl<string>());
         act(() => result.current.handleBlur());
@@ -85,7 +85,7 @@ describe('Input Validation Hook', () => {
       expect(result.current.error).toBe('');
     });
 
-    describe('after blur', () => {
+    describe('after blur-sm', () => {
       it('is touched', () => {
         const { result } = renderHook(() => useFormControl<string>('starting value'));
         act(() => result.current.handleBlur());
@@ -158,7 +158,7 @@ describe('Input Validation Hook', () => {
       expect(result.current.error).toBe('');
     });
 
-    describe('after blur', () => {
+    describe('after blur-sm', () => {
       it('is touched', () => {
         const { result } = renderHook(() => useFormControl<number>(42));
         act(() => result.current.handleBlur());

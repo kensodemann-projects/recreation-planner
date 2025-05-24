@@ -8,7 +8,7 @@ const PlacesList = ({ className, places }: { className: string; places: Array<Pl
     <ul className={`list-none ${className}`}>
       {places.map((place) => (
         <li key={place.id} className="py-2 border-solid first:border-t border-b border-primary flex">
-          <Link className="flex-grow" href={`places/${place.id}`}>
+          <Link className="grow" href={`places/${place.id}`}>
             <div className="font-bold">{place.name}</div>
             <Address value={place.address} />
             {place.phoneNumber && <div>{place.phoneNumber}</div>}

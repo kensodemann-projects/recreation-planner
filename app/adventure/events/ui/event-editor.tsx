@@ -96,7 +96,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
       <div className="grid grid-cols-4 gap-x-4">
         <Input
           id="event-name"
-          className="col-span-4 md:col-span-3"
+          className="col-span-4"
           type="text"
           label="Name"
           value={eventName}
@@ -106,7 +106,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         />
         <Select
           id="event-type"
-          className="col-span-4 md:col-span-1"
+          className="col-span-4 md:col-span-2"
           label="Type of Event / Trip"
           value={eventTypeId}
           values={types}
@@ -114,7 +114,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         />
         <Select
           id="event-place"
-          className="col-span-4"
+          className="col-span-4 md:col-span-2"
           label="Location"
           value={eventPlaceId}
           values={places}
