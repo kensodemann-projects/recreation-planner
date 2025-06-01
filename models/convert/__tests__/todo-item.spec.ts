@@ -9,19 +9,21 @@ describe('todo item converters', () => {
 
     it('converts a full object', () => {
       expect(convertToTodoItem({ id: 42, name: 'Do the needful', is_complete: false, todo_collection_rid: 3 })).toEqual(
-        { id: 42, name: 'Do the needful', isComplete: false },
+        { id: 42, name: 'Do the needful', isComplete: false, todoCollectionRid: 3 },
       );
     });
   });
 
   describe('to TodoItem DTO', () => {
     it('converts the item and adds the collection ref ID', () => {
-      expect(convertToTodoItemDTO({ id: 42, name: 'Do the needful', isComplete: false }, { id: 3 })).toEqual({
-        id: 42,
-        name: 'Do the needful',
-        is_complete: false,
-        todo_collection_rid: 3,
-      });
+      expect(convertToTodoItemDTO({ id: 42, name: 'Do the needful', isComplete: false, todoCollectionRid: 3 })).toEqual(
+        {
+          id: 42,
+          name: 'Do the needful',
+          is_complete: false,
+          todo_collection_rid: 3,
+        },
+      );
     });
   });
 });

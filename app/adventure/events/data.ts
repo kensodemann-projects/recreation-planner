@@ -1,6 +1,6 @@
 'use server';
 
-import { Event, EventType, Place, SelectablePlace } from '@/models';
+import { Event, EventType, SelectablePlace } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
@@ -98,7 +98,7 @@ export const fetchPlaces = async (): Promise<Array<SelectablePlace>> => {
   return data || [];
 };
 
-export const updateEvent = async (event: Event): Promise<Place | null> => {
+export const updateEvent = async (event: Event): Promise<Event | null> => {
   if (!(await isLoggedIn())) {
     return null;
   }
@@ -110,5 +110,5 @@ export const updateEvent = async (event: Event): Promise<Place | null> => {
     .eq('id', event.id)
     .select(selectColumns);
 
-  return data && data.length ? (convertToEvent(data[0]) as Place) : null;
+  return data && data.length ? (convertToEvent(data[0]) as Event) : null;
 };

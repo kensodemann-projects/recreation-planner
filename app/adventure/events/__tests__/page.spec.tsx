@@ -1,7 +1,7 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchUpcomingEvents, fetchEvents, fetchPriorEvents } from '../data';
+import { fetchPriorEvents, fetchUpcomingEvents } from '../data';
 import EventsPage from '../page';
 
 vi.mock('@/utils/supabase/auth');

@@ -2,6 +2,7 @@ export interface TodoItem {
   id?: number | undefined;
   name: string;
   isComplete: boolean;
+  todoCollectionRid: number;
 }
 
 export interface TodoItemDTO {

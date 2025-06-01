@@ -1,5 +1,5 @@
 import { TodoCollection } from '@/models';
-import TodoCollectionCard from './ui/todo-collectoin-card';
+import TodoCollectionCard from './ui/todo-collection-card';
 
 interface TodosProperties {
   collections: TodoCollection[];
