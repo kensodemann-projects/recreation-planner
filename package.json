@@ -16,7 +16,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.8",
+    "@supabase/supabase-js": "^2.49.9",
     "daisyui": "^5.0.43",
     "date-fns": "^4.1.0",
     "next": "^15.3.3",
@@ -30,6 +30,7 @@
     "@tailwindcss/postcss": "^4.1.8",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.15.29",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
@@ -41,7 +42,7 @@
     "postcss": "^8.5.4",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.0"
   },
   "prettier": "@ionic/prettier-config",
   "lint-staged": {
@@ -55,5 +56,5 @@
       "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
     }
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.11.1"
 }

@@ -1,4 +1,5 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import LoginPage from '../page';
 
@@ -27,21 +28,25 @@ describe('Login Page', () => {
         expect(screen.queryByText('Email Address is required')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after tabbing out of the input', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Email Address is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'f' } });
+        await user.click(inp);
+        await user.tab();
+        await user.type(inp, 'f');
         expect(screen.queryByText('Email Address is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(inp);
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Email Address is required')).toBeDefined();
       });
@@ -55,38 +60,42 @@ describe('Login Page', () => {
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is not displayed after initial entry', () => {
+      it('is not displayed after initial entry', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.change(inp, { target: { value: 'foo' } });
+        await user.type(inp, 'foo');
         expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after tabbing out of the input', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.change(inp, { target: { value: 'foo' } });
-        fireEvent.blur(inp);
+        await user.type(inp, 'foo');
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Please enter a valid email address.')).toBeDefined();
       });
 
-      it('is no longer displayed once a valid email address is entered', () => {
+      it('is no longer displayed once a valid email address is entered', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.change(inp, { target: { value: 'foo' } });
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'foo@bar.com' } });
+        await user.type(inp, 'foo');
+        await user.tab();
+        await user.type(inp, '@bar.com');
         expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is not displayed with a valid email on initial blur-sm', () => {
+      it('is not displayed with a valid email on initial tab out', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
-        fireEvent.change(inp, { target: { value: 'foo@bar.com' } });
-        fireEvent.blur(inp);
+        await user.type(inp, 'foo@bar.com');
+        await user.tab();
         expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
@@ -107,22 +116,26 @@ describe('Login Page', () => {
         expect(screen.queryByText('Password is required')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after tabbing out of the input', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Password');
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Password is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Password');
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'f' } });
+        await user.click(inp);
+        await user.tab();
+        await user.type(inp, 'f');
         expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Password is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(inp);
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Password is required')).toBeDefined();
       });
@@ -142,39 +155,37 @@ describe('Login Page', () => {
       expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
     });
 
-    it('is disabled with only an email entered', () => {
+    it('is disabled with only an email entered', async () => {
+      const user = userEvent.setup();
       render(<LoginPage />);
       const btn = screen.getByRole('button', { name: 'Login' });
-      const inp = screen.getByLabelText('Email Address');
-      fireEvent.change(inp, { target: { value: 'foo@bar.com' } });
+      await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
       expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
     });
 
-    it('is disabled with only a password entered', () => {
+    it('is disabled with only a password entered', async () => {
+      const user = userEvent.setup();
       render(<LoginPage />);
       const btn = screen.getByRole('button', { name: 'Login' });
-      const inp = screen.getByLabelText('Password');
-      fireEvent.change(inp, { target: { value: 'cats are people too' } });
+      await user.type(screen.getByLabelText('Password'), 'cats are people too');
       expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
     });
 
-    it('is enabled if a valid email and password are entered', () => {
+    it('is enabled if a valid email and password are entered', async () => {
+      const user = userEvent.setup();
       render(<LoginPage />);
       const btn = screen.getByRole('button', { name: 'Login' });
-      const emailInput = screen.getByLabelText('Email Address');
-      const passwordInput = screen.getByLabelText('Password');
-      fireEvent.change(emailInput, { target: { value: 'foo@bar.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'cats are people too' } });
+      await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+      await user.type(screen.getByLabelText('Password'), 'cats are people too');
       expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
     });
 
-    it('is disabled if the email is invalid', () => {
+    it('is disabled if the email is invalid', async () => {
+      const user = userEvent.setup();
       render(<LoginPage />);
       const btn = screen.getByRole('button', { name: 'Login' });
-      const emailInput = screen.getByLabelText('Email Address');
-      const passwordInput = screen.getByLabelText('Password');
-      fireEvent.change(emailInput, { target: { value: 'foobar.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'cats are people too' } });
+      await user.type(screen.getByLabelText('Email Address'), 'foobar.com');
+      await user.type(screen.getByLabelText('Password'), 'cats are people too');
       expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
     });
   });

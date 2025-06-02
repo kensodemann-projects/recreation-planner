@@ -1,4 +1,5 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import EditableCheckbox from '../editable-checkbox';
 
@@ -16,7 +17,8 @@ describe('Editable Checkbox Component', () => {
     expect(screen.queryByRole('textbox')).toBeNull();
   });
 
-  it('toggles', () => {
+  it('toggles', async () => {
+    const user = userEvent.setup();
     let checked: boolean = true;
     render(
       <EditableCheckbox
@@ -27,60 +29,58 @@ describe('Editable Checkbox Component', () => {
         }}
       />,
     );
-    const cb = screen.getByRole('checkbox');
-    fireEvent.click(cb);
+    await user.click(screen.getByRole('checkbox'));
     expect(checked).toBe(false);
   });
 
   describe('edit mode', () => {
-    it('is entered by clicking the label text', () => {
+    it('is entered by clicking the label text', async () => {
+      const user = userEvent.setup();
       render(<EditableCheckbox checked={true} label="I am a test" onChange={() => null} />);
-      const el = screen.getByText('I am a test');
-      fireEvent.click(el);
+      await user.click(screen.getByText('I am a test'));
       const inp = screen.getByRole('textbox');
       expect(screen.getByDisplayValue('I am a test')).toEqual(inp);
     });
 
-    it('disables the checkbox', () => {
+    it('disables the checkbox', async () => {
+      const user = userEvent.setup();
       render(<EditableCheckbox checked={true} label="I am a test" onChange={() => null} />);
       const cb = screen.getByRole('checkbox');
       expect(cb.attributes.getNamedItem('disabled')).toBeFalsy();
-      const el = screen.getByText('I am a test');
-      fireEvent.click(el);
+      await user.click(screen.getByText('I am a test'));
       expect(cb.attributes.getNamedItem('disabled')).toBeTruthy();
     });
 
-    describe('on blur-sm', () => {
-      it('returns the edited label', () => {
+    describe('leaving the input', () => {
+      it('returns the edited label', async () => {
+        const user = userEvent.setup();
         let label: string = 'I am a test';
         render(
           <EditableCheckbox checked={true} label={label} onChange={() => null} onLabelChanged={(x) => (label = x)} />,
         );
-        const el = screen.getByText('I am a test');
-        fireEvent.click(el);
-        const inp = screen.getByRole('textbox');
-        fireEvent.change(inp, { target: { value: 'This is another test' } });
-        fireEvent.blur(inp);
-        expect(label).toBe('This is another test');
+        await user.click(screen.getByText('I am a test'));
+        await user.type(screen.getByRole('textbox'), '. I am only a test!');
+        await user.tab();
+        expect(label).toBe('I am a test. I am only a test!');
       });
 
-      it('exits edit mode', () => {
+      it('exits edit mode', async () => {
+        const user = userEvent.setup();
         render(<EditableCheckbox checked={true} label="I am a test" onChange={() => null} />);
-        const el = screen.getByText('I am a test');
-        fireEvent.click(el);
-        const inp = screen.getByRole('textbox');
-        fireEvent.blur(inp);
+        await user.click(screen.getByText('I am a test'));
+        await user.click(screen.getByRole('textbox'));
+        await user.tab();
         expect(screen.getByText('I am a test')).toBeDefined();
         expect(screen.queryByRole('textbox')).toBeNull();
       });
 
-      it('the checkbox is enabled', () => {
+      it('enables the checkbox', async () => {
+        const user = userEvent.setup();
         render(<EditableCheckbox checked={true} label="I am a test" onChange={() => null} />);
+        await user.click(screen.getByText('I am a test'));
+        await user.click(screen.getByRole('textbox'));
+        await user.tab();
         const cb = screen.getByRole('checkbox');
-        const el = screen.getByText('I am a test');
-        fireEvent.click(el);
-        const inp = screen.getByRole('textbox');
-        fireEvent.blur(inp);
         expect(cb.attributes.getNamedItem('disabled')).toBeFalsy();
       });
     });

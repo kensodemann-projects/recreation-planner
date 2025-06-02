@@ -1,5 +1,6 @@
 import { Place, PlaceType } from '@/models';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import PlaceEditor from '../place-editor';
 
@@ -36,21 +37,25 @@ describe('Place Editor', () => {
         expect(screen.queryByText('Name is required')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after exit', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'f' } });
+        await user.click(inp);
+        await user.tab();
+        await user.type(inp, 'f');
         expect(screen.queryByText('Name is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(inp);
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
       });
@@ -364,64 +369,58 @@ describe('Place Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if a name is entered', () => {
+      it('becomes enabled if a name is entered', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
         const btn = screen.getByRole('button', { name: 'Create' });
-        const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.change(inp, { target: { value: 'f' } });
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
       describe('on click', () => {
-        it('includes the entered name', () => {
+        it('includes the entered name', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.name).toBe('The Food Court');
         });
 
-        it('uses the first type if not set', () => {
+        it('uses the first type if not set', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.type).toEqual(PLACE_TYPES[0]);
         });
 
-        it('includes the selected type', () => {
+        it('includes the selected type', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          const sel = screen.getByRole('combobox', { name: 'Type of place' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.change(sel, { target: { value: '2' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of place' }), '2');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.type).toEqual(PLACE_TYPES[1]);
         });
 
-        it('has an undefined ID', () => {
+        it('has an undefined ID', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.id).toBeUndefined();
         });
 
-        it('sets the unspecified values to null', () => {
+        it('sets the unspecified values to null', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: 'The Food Court' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.description).toBeNull();
           expect(place!.address.line1).toBeNull();
           expect(place!.address.line2).toBeNull();
@@ -432,99 +431,83 @@ describe('Place Editor', () => {
           expect(place!.phoneNumber).toBeNull();
         });
 
-        it('includes description', () => {
+        it('includes description', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const descriptionInput = screen.getByRole('textbox', { name: 'Description' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(descriptionInput, { target: { value: '   A place to get yummy food!  ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), ' A place to get yummy food!  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.description).toBe('A place to get yummy food!');
         });
 
-        it('includes address line 1', () => {
+        it('includes address line 1', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const addressLine1Input = screen.getByRole('textbox', { name: 'Line 1' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(addressLine1Input, { target: { value: '   123 Foobar Lane  ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), '   123 Foobar Lane  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address.line1).toBe('123 Foobar Lane');
         });
 
-        it('includes address line 2', () => {
+        it('includes address line 2', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const addressLine2Input = screen.getByRole('textbox', { name: 'Line 2' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(addressLine2Input, { target: { value: '   Unit 4203  ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), '   Unit 4203  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address.line2).toBe('Unit 4203');
         });
 
-        it('includes city', () => {
+        it('includes city', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const cityInput = screen.getByRole('textbox', { name: 'City' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(cityInput, { target: { value: ' Waukesha   ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'City' }), '   Waukesha  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address.city).toBe('Waukesha');
         });
 
-        it('includes state', () => {
+        it('includes state', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const stateInput = screen.getByRole('textbox', { name: 'State / Province' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(stateInput, { target: { value: '       WI ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'State / Province' }), '   WI  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address.state).toBe('WI');
         });
 
-        it('includes postal', () => {
+        it('includes postal', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const postalInput = screen.getByRole('textbox', { name: 'Postal Code' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(postalInput, { target: { value: '  53819 ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '   53819   ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address.postal).toBe('53819');
         });
 
-        it('includes phone number', () => {
+        it('includes phone number', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const phoneNumberInput = screen.getByRole('textbox', { name: 'Phone Number' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(phoneNumberInput, { target: { value: ' (231) 243-1433 ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), ' (231) 243-1433   ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.phoneNumber).toBe('(231) 243-1433');
         });
 
-        it('includes website', () => {
+        it('includes website', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const websiteInput = screen.getByRole('textbox', { name: 'Website' });
-          fireEvent.change(nameInput, { target: { value: 'The Food Court' } });
-          fireEvent.change(websiteInput, { target: { value: '    https://the.food.court.com  ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
+          await user.type(screen.getByRole('textbox', { name: 'Website' }), '     https://the.food.court.com  ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.website).toBe('https://the.food.court.com');
         });
       });
@@ -543,88 +526,89 @@ describe('Place Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if the name is changed', () => {
+      it('becomes enabled if the name is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.name + 'f' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the place type is changed', () => {
+      it('becomes enabled if the place type is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Type of place' }), '4');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const sel = screen.getByRole('combobox', { name: 'Type of place' });
-        fireEvent.change(sel, { target: { value: 4 } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the description is changed', () => {
+      it('becomes enabled if the description is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Description' }), 'f');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Description' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.description + 'f' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the address line 1 is changed', () => {
+      it('becomes enabled if the address line 1 is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Line 1' }), 'f');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Line 1' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.address.line1 + 'f' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the address line 2 is changed', () => {
+      it('becomes enabled if the address line 2 is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Line 2' }), 'f');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Line 2' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.address.line2 + 'f' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the address city is changed', () => {
+      it('becomes enabled if the address city is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'City' }), 'f');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'City' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.address.city + 'f' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the address state / province is changed', () => {
+      it('becomes enabled if the address state / province is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'State / Province' }), 'S');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'State / Province' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.address.state + 'S' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the address postal code is changed', () => {
+      it('becomes enabled if the address postal code is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '-');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Postal Code' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.address.postal + '-' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the phone number is changed', () => {
+      it('becomes enabled if the phone number is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), '2');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Phone Number' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.phoneNumber + '2' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the website is changed', () => {
+      it('becomes enabled if the website is changed', async () => {
+        const user = userEvent.setup();
         render(<PlaceEditor place={TEST_PLACE} types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Website' }), '/');
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Website' });
-        fireEvent.change(inp, { target: { value: TEST_PLACE.website + '/' } });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
       describe('on click', () => {
-        it('includes the original ID', () => {
+        it('includes the original ID', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -634,14 +618,13 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place!.id).toBe(TEST_PLACE.id);
         });
 
-        it('includes the updated name', () => {
+        it('includes the updated name', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -651,14 +634,13 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' The Food Court     ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, name: 'The Food Court' });
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({ ...TEST_PLACE, name: TEST_PLACE.name + 'f' });
         });
 
-        it('includes the updated type', () => {
+        it('includes the updated type', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -668,14 +650,13 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const sel = screen.getByRole('combobox', { name: 'Type of place' });
-          fireEvent.change(sel, { target: { value: '2' } });
-          fireEvent.click(btn);
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of place' }), '2');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({ ...TEST_PLACE, type: PLACE_TYPES[1] });
         });
 
-        it('includes the updated description', () => {
+        it('includes the updated description', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -685,14 +666,13 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const descriptionInput = screen.getByRole('textbox', { name: 'Description' });
-          fireEvent.change(descriptionInput, { target: { value: '   A place to get yummy food!  ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, description: 'A place to get yummy food!' });
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), 'f');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({ ...TEST_PLACE, description: TEST_PLACE.description + 'f' });
         });
 
-        it('includes the updated address line 1', () => {
+        it('includes the updated address line 1', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -702,14 +682,16 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const addressLine1Input = screen.getByRole('textbox', { name: 'Line 1' });
-          fireEvent.change(addressLine1Input, { target: { value: '   123 Foobar Lane  ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, line1: '123 Foobar Lane' } });
+          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), ' Dr.   ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({
+            ...TEST_PLACE,
+            address: { ...TEST_PLACE.address, line1: TEST_PLACE.address.line1 + ' Dr.' },
+          });
         });
 
-        it('includes the updated address line 2', () => {
+        it('includes the updated address line 2', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -719,14 +701,16 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const addressLine2Input = screen.getByRole('textbox', { name: 'Line 2' });
-          fireEvent.change(addressLine2Input, { target: { value: '   Unit 4203  ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, line2: 'Unit 4203' } });
+          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), ' 3    ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({
+            ...TEST_PLACE,
+            address: { ...TEST_PLACE.address, line2: TEST_PLACE.address.line2 + ' 3' },
+          });
         });
 
-        it('includes the updated city', () => {
+        it('includes the updated city', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -736,14 +720,16 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const cityInput = screen.getByRole('textbox', { name: 'City' });
-          fireEvent.change(cityInput, { target: { value: ' Waukesha   ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, city: 'Waukesha' } });
+          await user.type(screen.getByRole('textbox', { name: 'City' }), ' City   ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({
+            ...TEST_PLACE,
+            address: { ...TEST_PLACE.address, city: TEST_PLACE.address.city + ' City' },
+          });
         });
 
-        it('includes the updated state', () => {
+        it('includes the updated state', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -753,14 +739,15 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const stateInput = screen.getByRole('textbox', { name: 'State / Province' });
-          fireEvent.change(stateInput, { target: { value: '       WI ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, state: 'WI' } });
+          const inp = screen.getByRole('textbox', { name: 'State / Province' });
+          await user.clear(inp);
+          await user.type(inp, '   MN  ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, state: 'MN' } });
         });
 
-        it('includes the updated postal code', () => {
+        it('includes the updated postal code', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -770,14 +757,16 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const postalInput = screen.getByRole('textbox', { name: 'Postal Code' });
-          fireEvent.change(postalInput, { target: { value: '  53819 ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, postal: '53819' } });
+          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '-1194  ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({
+            ...TEST_PLACE,
+            address: { ...TEST_PLACE.address, postal: TEST_PLACE.address.postal + '-1194' },
+          });
         });
 
-        it('includes the updated phone number', () => {
+        it('includes the updated phone number', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -787,14 +776,13 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const phoneNumberInput = screen.getByRole('textbox', { name: 'Phone Number' });
-          fireEvent.change(phoneNumberInput, { target: { value: ' (231) 243-1433 ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, phoneNumber: '(231) 243-1433' });
+          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), ' ext-4273  ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({ ...TEST_PLACE, phoneNumber: TEST_PLACE.phoneNumber + ' ext-4273' });
         });
 
-        it('includes the updated website', () => {
+        it('includes the updated website', async () => {
+          const user = userEvent.setup();
           let place: Place | null = null;
           render(
             <PlaceEditor
@@ -804,11 +792,9 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const websiteInput = screen.getByRole('textbox', { name: 'Website' });
-          fireEvent.change(websiteInput, { target: { value: '    https://the.food.court.com  ' } });
-          fireEvent.click(btn);
-          expect(place).toEqual({ ...TEST_PLACE, website: 'https://the.food.court.com' });
+          await user.type(screen.getByRole('textbox', { name: 'Website' }), '?search=foobar  ');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(place).toEqual({ ...TEST_PLACE, website: TEST_PLACE.website + '?search=foobar' });
         });
       });
     });
@@ -821,11 +807,11 @@ describe('Place Editor', () => {
       expect(btn).toBeDefined();
     });
 
-    it('fires onCancel when clicked', () => {
+    it('fires onCancel when clicked', async () => {
+      const user = userEvent.setup();
       let fired = false;
       render(<PlaceEditor types={placeTypes} onCancel={() => (fired = true)} onConfirm={() => null} />);
-      const btn = screen.getByRole('button', { name: 'Cancel' });
-      fireEvent.click(btn);
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
       expect(fired).toBe(true);
     });
   });

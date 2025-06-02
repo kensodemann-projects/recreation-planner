@@ -1,5 +1,6 @@
 import { Event, EventType, SelectablePlace } from '@/models';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import EventEditor from '../event-editor';
 
@@ -50,21 +51,26 @@ describe('Activity Editor', () => {
         expect(screen.queryByText('Name is required')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after tabbing out of the input', async () => {
+        const user = userEvent.setup();
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'f' } });
+        await user.click(inp);
+        await user.tab();
+        await user.type(inp, 'f');
+        expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Name is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(inp);
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
       });
@@ -165,21 +171,26 @@ describe('Activity Editor', () => {
         expect(screen.queryByText('Begin Date is required')).toBeNull();
       });
 
-      it('is displayed after blur-sm', () => {
+      it('is displayed after tabbing out of the field', async () => {
+        const user = userEvent.setup();
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByLabelText('Begin Date') as HTMLInputElement;
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Begin Date is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByLabelText('Begin Date') as HTMLInputElement;
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: '2024-01-15' } });
+        await user.click(inp);
+        await user.tab();
+        await user.type(inp, '2024-01-15');
+        expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Begin Date is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(inp);
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Begin Date is required')).toBeDefined();
       });
@@ -315,198 +326,167 @@ describe('Activity Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if a name and begin date are entered', () => {
+      it('becomes enabled if a name and begin date are entered', async () => {
+        const user = userEvent.setup();
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
         const btn = screen.getByRole('button', { name: 'Create' });
-        const nameInp = screen.getByRole('textbox', { name: 'Name' });
-        const beginDateInp = screen.getByLabelText('Begin Date');
-        fireEvent.change(nameInp, { target: { value: 'f' } });
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
-        fireEvent.change(beginDateInp, { target: { value: '2024-12-31' } });
+        await user.type(screen.getByLabelText('Begin Date'), '2024-12-31');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
       describe('on click', () => {
-        it('includes the entered name', () => {
+        it('includes the entered name', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.name).toBe('Buy some food');
         });
 
-        it('includes the entered begin date', () => {
+        it('includes the entered begin date', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.beginDate).toBe('2024-08-01');
         });
 
-        it('uses the first type if not set', () => {
+        it('uses the first type if not set', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.type).toEqual(EVENT_TYPES[0]);
         });
 
-        it('includes the selected type', () => {
+        it('includes the selected type', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const sel = screen.getByRole('combobox', { name: 'Type of Event / Trip' });
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(sel, { target: { value: '2' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '2');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.type).toEqual(EVENT_TYPES[1]);
         });
 
-        it('uses the first place if not set', () => {
+        it('uses the first place if not set', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.place).toEqual(PLACES[0]);
         });
 
-        it('includes the selected place', () => {
+        it('includes the selected place', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const sel = screen.getByRole('combobox', { name: 'Location' });
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(sel, { target: { value: '32' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '32');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.place).toEqual(PLACES[2]);
         });
 
-        it('has an undefined ID', () => {
+        it('has an undefined ID', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.id).toBeUndefined();
         });
 
-        it('sets the unspecified values to null', () => {
+        it('sets the unspecified values to null', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.description).toBeNull();
           expect(event!.beginTime).toBeNull();
           expect(event!.endDate).toBeNull();
           expect(event!.endTime).toBeNull();
         });
 
-        it('includes the begin time', () => {
+        it('includes the begin time', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const beginTimeInput = screen.getByLabelText('Begin Time');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(beginTimeInput, { target: { value: '17:43' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.type(screen.getByLabelText('Begin Time'), '17:43');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.beginTime).toEqual('17:43');
         });
 
-        it('includes the end date', () => {
+        it('includes the end date', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const endDateInput = screen.getByLabelText('End Date');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(endDateInput, { target: { value: '2024-08-03' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.type(screen.getByLabelText('End Date'), '2024-08-03');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.endDate).toEqual('2024-08-03');
         });
 
-        it('includes the end time', () => {
+        it('includes the end time', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const endTimeInput = screen.getByLabelText('End Time');
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(endTimeInput, { target: { value: '19:01' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.type(screen.getByLabelText('End Time'), '19:01');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.endTime).toEqual('19:01');
         });
 
-        it('includes the description', () => {
+        it('includes the description', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          const btn = screen.getByRole('button', { name: 'Create' });
-          const nameInput = screen.getByRole('textbox', { name: 'Name' });
-          const beginDateInput = screen.getByLabelText('Begin Date');
-          const descriptionInput = screen.getByRole('textbox', { name: 'Description' });
-          fireEvent.change(nameInput, { target: { value: ' Buy some food  ' } });
-          fireEvent.change(beginDateInput, { target: { value: '2024-08-01' } });
-          fireEvent.change(descriptionInput, { target: { value: '   Hi!      ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), '      Hi!    ');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.description).toEqual('Hi!');
         });
       });
@@ -540,7 +520,8 @@ describe('Activity Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if the name is changed', () => {
+      it('becomes enabled if the name is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -551,12 +532,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.change(inp, { target: { value: TEST_EVENT.name + 'f' } });
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'f');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('remains disabled if the name is made blank', () => {
+      it('remains disabled if the name is made blank', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -567,12 +548,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(screen.getByRole('textbox', { name: 'Name' }));
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if the type of event is changed', () => {
+      it('becomes enabled if the type of event is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -583,12 +564,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('combobox', { name: 'Type of Event / Trip' });
-        fireEvent.change(inp, { target: { value: '4' } });
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '4');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the place is changed', () => {
+      it('becomes enabled if the place is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -599,12 +580,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('combobox', { name: 'Location' });
-        fireEvent.change(inp, { target: { value: '42' } });
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '21');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the description is changed', () => {
+      it('becomes enabled if the description is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -615,12 +596,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByRole('textbox', { name: 'Description' });
-        fireEvent.change(inp, { target: { value: TEST_EVENT.description + 'w' } });
+        await user.type(screen.getByRole('textbox', { name: 'Description' }), 'w');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the begin date is changed', () => {
+      it('becomes enabled if the begin date is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -632,11 +613,13 @@ describe('Activity Editor', () => {
         );
         const btn = screen.getByRole('button', { name: 'Update' });
         const inp = screen.getByLabelText('Begin Date');
-        fireEvent.change(inp, { target: { value: '2024-12-31' } });
+        await user.clear(inp);
+        await user.type(inp, '2024-12-31');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('remains disabled if the begin date is removed', () => {
+      it('remains disabled if the begin date is removed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -647,12 +630,12 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        const inp = screen.getByLabelText('Begin Date');
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.clear(screen.getByLabelText('Begin Date'));
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
-      it('becomes enabled if the end date is changed', () => {
+      it('becomes enabled if the end date is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -664,11 +647,13 @@ describe('Activity Editor', () => {
         );
         const btn = screen.getByRole('button', { name: 'Update' });
         const inp = screen.getByLabelText('End Date');
-        fireEvent.change(inp, { target: { value: '2024-12-31' } });
+        await user.clear(inp);
+        await user.type(inp, '2024-12-31');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the begin time is changed', () => {
+      it('becomes enabled if the begin time is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -680,11 +665,13 @@ describe('Activity Editor', () => {
         );
         const btn = screen.getByRole('button', { name: 'Update' });
         const inp = screen.getByLabelText('Begin Time');
-        fireEvent.change(inp, { target: { value: '09:42' } });
+        await user.clear(inp);
+        await user.type(inp, '09:42');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
-      it('becomes enabled if the end time is changed', () => {
+      it('becomes enabled if the end time is changed', async () => {
+        const user = userEvent.setup();
         render(
           <EventEditor
             event={TEST_EVENT}
@@ -696,12 +683,14 @@ describe('Activity Editor', () => {
         );
         const btn = screen.getByRole('button', { name: 'Update' });
         const inp = screen.getByLabelText('End Time');
-        fireEvent.change(inp, { target: { value: '14:42' } });
+        await user.clear(inp);
+        await user.type(inp, '14:42');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
       describe('on click', () => {
-        it('includes the original ID', () => {
+        it('includes the original ID', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -712,14 +701,13 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' Buy some food     ' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' In it to win it!');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event!.id).toBe(TEST_EVENT.id);
         });
 
-        it('includes the updated name', () => {
+        it('includes the updated name', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -730,14 +718,13 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const inp = screen.getByRole('textbox', { name: 'Name' });
-          fireEvent.change(inp, { target: { value: ' Buy some food     ' } });
-          fireEvent.click(btn);
-          expect(event).toEqual({ ...TEST_EVENT, name: 'Buy some food' });
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' - in it to win it!');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(event).toEqual({ ...TEST_EVENT, name: TEST_EVENT.name + ' - in it to win it!' });
         });
 
-        it('includes the updated type', () => {
+        it('includes the updated type', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -748,14 +735,13 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const sel = screen.getByRole('combobox', { name: 'Type of Event / Trip' });
-          fireEvent.change(sel, { target: { value: '2' } });
-          fireEvent.click(btn);
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '2');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, type: EVENT_TYPES[1] });
         });
 
-        it('includes the updated place', () => {
+        it('includes the updated place', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -766,14 +752,13 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const sel = screen.getByRole('combobox', { name: 'Location' });
-          fireEvent.change(sel, { target: { value: '32' } });
-          fireEvent.click(btn);
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '32');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, place: PLACES[2] });
         });
 
-        it('includes the updated begin date', () => {
+        it('includes the updated begin date', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -784,14 +769,15 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
           const inp = screen.getByLabelText('Begin Date');
-          fireEvent.change(inp, { target: { value: '2024-10-30' } });
-          fireEvent.click(btn);
+          await user.clear(inp);
+          await user.type(inp, '2024-10-30');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, beginDate: '2024-10-30' });
         });
 
-        it('includes the updated begin time', () => {
+        it('includes the updated begin time', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -802,14 +788,15 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
           const inp = screen.getByLabelText('Begin Time');
-          fireEvent.change(inp, { target: { value: '13:42' } });
-          fireEvent.click(btn);
+          await user.clear(inp);
+          await user.type(inp, '13:42');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, beginTime: '13:42' });
         });
 
-        it('includes the updated end date', () => {
+        it('includes the updated end date', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -820,14 +807,15 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
           const inp = screen.getByLabelText('End Date');
-          fireEvent.change(inp, { target: { value: '2024-10-30' } });
-          fireEvent.click(btn);
+          await user.clear(inp);
+          await user.type(inp, '2024-10-30');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, endDate: '2024-10-30' });
         });
 
-        it('includes the updated end time', () => {
+        it('includes the updated end time', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -838,14 +826,15 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
           const inp = screen.getByLabelText('End Time');
-          fireEvent.change(inp, { target: { value: '13:42' } });
-          fireEvent.click(btn);
+          await user.clear(inp);
+          await user.type(inp, '13:42');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, endTime: '13:42' });
         });
 
-        it('includes the updated description', () => {
+        it('includes the updated description', async () => {
+          const user = userEvent.setup();
           let event: Event | null = null;
           render(
             <EventEditor
@@ -856,10 +845,8 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          const btn = screen.getByRole('button', { name: 'Update' });
-          const inp = screen.getByRole('textbox', { name: 'Description' });
-          fireEvent.change(inp, { target: { value: TEST_EVENT.description + 'y' } });
-          fireEvent.click(btn);
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), 'y');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, description: TEST_EVENT.description + 'y' });
         });
       });
@@ -872,11 +859,11 @@ describe('Activity Editor', () => {
       expect(screen.getByRole('button', { name: 'Cancel' })).toBeDefined();
     });
 
-    it('fires onCancel when clicked', () => {
+    it('fires onCancel when clicked', async () => {
+      const user = userEvent.setup();
       let fired = false;
       render(<EventEditor types={eventTypes} places={places} onCancel={() => (fired = true)} onConfirm={() => null} />);
-      const btn = screen.getByRole('button', { name: 'Cancel' });
-      fireEvent.click(btn);
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
       expect(fired).toBe(true);
     });
   });

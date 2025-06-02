@@ -1,5 +1,6 @@
 import { TodoCollection } from '@/models';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import TodoCollectionEditor from '../todo-collection-editor';
 
@@ -34,23 +35,27 @@ describe('TODO Editor', () => {
         expect(screen.queryByText('Name is required')).toBeNull();
       });
 
-      it('is displayed after blur', () => {
+      it('is displayed after tabbing out of the input', async () => {
+        const user = userEvent.setup();
         render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
       });
 
-      it('is no lonber displayed after text entry', () => {
+      it('is no longer displayed after text entry', async () => {
+        const user = userEvent.setup();
         render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Name' });
-        fireEvent.blur(inp);
-        fireEvent.change(inp, { target: { value: 'f' } });
-        expect(screen.queryByText('Name is required')).toBeNull();
-        fireEvent.change(inp, { target: { value: '' } });
+        await user.click(inp);
+        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Name is required')).toBeDefined();
+        await user.type(inp, 'f');
+        expect(inp.classList).not.toContain('input-error');
+        expect(screen.queryByText('Name is required')).toBeNull();
       });
     });
   });
@@ -95,5 +100,5 @@ const TEST_COLLECTION: TodoCollection = {
   description: 'The point of this collection is simply to do a thing',
   dueDate: '2025-03-17',
   isComplete: false,
-  todos: [],
+  todoItems: [],
 };
