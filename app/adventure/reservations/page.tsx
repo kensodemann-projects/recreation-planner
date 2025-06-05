@@ -15,7 +15,7 @@ const ReservationsPage = async () => {
       <PageHeader>Reservations</PageHeader>
       <Reservations />
       <Link className="fixed bottom-4 right-4" href="/adventure/reservations/create">
-        <button className="btn btn-secondary btn-circle btn-outline">
+        <button className="btn btn-primary btn-circle btn-outline">
           <PlusIcon className="w-6" />
         </button>
       </Link>

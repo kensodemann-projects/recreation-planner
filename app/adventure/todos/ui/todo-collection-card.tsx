@@ -4,6 +4,7 @@ import EditableCheckbox from '@/app/ui/editable-checkbox';
 import { TodoCollection, TodoItem } from '@/models';
 import { updateTodoItem } from '../data';
 import { useState } from 'react';
+import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 export interface TodoCollectionCardProps {
   todoCollection: TodoCollection;
@@ -50,7 +51,12 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
             ))}
         </div>
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Edit</button>
+          <button className="btn btn-secondary btn-outline btn-circle">
+            <PencilSquareIcon className="w-6" />
+          </button>
+          <button className="btn btn-primary btn-outline btn-circle">
+            <PlusIcon className="w-6" />
+          </button>
         </div>
       </div>
     </div>
