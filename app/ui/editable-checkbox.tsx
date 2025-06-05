@@ -24,7 +24,7 @@ const EditableCheckbox = ({ label, onLabelChanged, ...props }: TodoItemPropertie
             }}
           />
         ) : (
-          <div className="label-text min-w-xs min-h-4" tabIndex={0} onClick={() => setEditMode(true)}>
+          <div className="label-text min-w-28 min-h-4" tabIndex={0} onClick={() => setEditMode(true)}>
             {label}
           </div>
         )}
