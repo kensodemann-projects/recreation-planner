@@ -92,6 +92,28 @@ describe('TODO Editor', () => {
       });
     });
   });
+
+  describe('Cancel Button', () => {
+    it('exists', () => {
+      render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+      const btn = screen.getByRole('button', { name: 'Cancel' });
+      expect(btn).toBeDefined();
+    });
+
+    it('fires onCancel when clicked', async () => {
+      const user = userEvent.setup();
+      let fired = false;
+      render(
+        <TodoCollectionEditor
+          todoCollection={TEST_COLLECTION}
+          onCancel={() => (fired = true)}
+          onConfirm={() => null}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
+      expect(fired).toBe(true);
+    });
+  });
 });
 
 const TEST_COLLECTION: TodoCollection = {

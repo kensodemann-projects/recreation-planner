@@ -10,7 +10,7 @@ export interface TodoCollectionEditorProps {
   onCancel: () => void;
 }
 
-const TodoCollectionEditor = ({ todoCollection }: TodoCollectionEditorProps) => {
+const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditorProps) => {
   const {
     value: name,
     dirty: nameDirty,
@@ -46,6 +46,12 @@ const TodoCollectionEditor = ({ todoCollection }: TodoCollectionEditorProps) => 
           value={description}
           onChange={(evt) => setDescription(evt.target.value)}
         />
+      </div>
+
+      <div className="flex flow-row gap-8 justify-end mt-4">
+        <button className="btn" onClick={() => onCancel()}>
+          Cancel
+        </button>
       </div>
     </div>
   );
