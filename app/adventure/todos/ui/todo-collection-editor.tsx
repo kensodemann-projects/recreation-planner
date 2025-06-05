@@ -30,7 +30,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditor
       <div className="grid grid-cols-4 gap-x-4">
         <Input
           id="collection-name"
-          className="col-span-4 md:col-span-3"
+          className="col-span-4"
           type="text"
           label="Name"
           value={name}
