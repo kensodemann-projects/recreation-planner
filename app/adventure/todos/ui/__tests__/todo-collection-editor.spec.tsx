@@ -1,5 +1,5 @@
 import { TodoCollection } from '@/models';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, getByRole, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import TodoCollectionEditor from '../todo-collection-editor';
@@ -114,6 +114,131 @@ describe('TODO Editor', () => {
       expect(fired).toBe(true);
     });
   });
+
+  describe('Confirm Button', () => {
+    describe('for create', () => {
+      it('exists', () => {
+        render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
+        const btn = screen.getByRole('button', { name: 'Create' });
+        expect(btn).toBeDefined();
+      });
+
+      it('starts disabled', () => {
+        render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
+        const btn = screen.getByRole('button', { name: 'Create' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+      });
+
+      it('is disabled without a name', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Description' }), 'This is a collection');
+        const btn = screen.getByRole('button', { name: 'Create' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+      });
+
+      it('is enabled with a name', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
+        const btn = screen.getByRole('button', { name: 'Create' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      describe('on click', () => {
+        it('includes the entered data', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(<TodoCollectionEditor onCancel={() => null} onConfirm={(c) => (collection = c)} />);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
+          await user.type(
+            screen.getByRole('textbox', { name: 'Description' }),
+            'This is the description of the collection',
+          );
+          await user.click(screen.getByRole('button', { name: 'Create' }));
+          expect(collection).toEqual({
+            name: 'Test Collection',
+            description: 'This is the description of the collection',
+            dueDate: null,
+            isComplete: false,
+            todoItems: [],
+          });
+        });
+
+        it('uses null for optional items that are not entered', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(<TodoCollectionEditor onCancel={() => null} onConfirm={(c) => (collection = c)} />);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
+          expect(collection).toEqual({
+            name: 'Test Collection',
+            description: null,
+            dueDate: null,
+            isComplete: false,
+            todoItems: [],
+          });
+        });
+      });
+    });
+
+    describe('for update', () => {
+      it('exists', () => {
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn).toBeDefined();
+      });
+
+      it('begins disabled', () => {
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+      });
+
+      it('is enabled if the description is cleared', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.clear(screen.getByRole('textbox', { name: 'Description' }));
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      it('is enabled if the description is changed', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Description' }), 'more stuff');
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      it('is disabled if the name is cleared', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.clear(screen.getByRole('textbox', { name: 'Name' }));
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+      });
+
+      it('becomes enabled if the cleared name gets new data', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        const inp = screen.getByRole('textbox', { name: 'Name' });
+        await user.clear(inp);
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+        await user.type(inp, 'This is new data');
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      it('is enabled if the name is changed', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.type(screen.getByRole('textbox', { name: 'Name' }), 'more stuff');
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+    });
+  });
 });
 
 const TEST_COLLECTION: TodoCollection = {
@@ -121,6 +246,6 @@ const TEST_COLLECTION: TodoCollection = {
   name: 'This is a test collection',
   description: 'The point of this collection is simply to do a thing',
   dueDate: '2025-03-17',
-  isComplete: false,
+  isComplete: true,
   todoItems: [],
 };

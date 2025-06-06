@@ -10,7 +10,7 @@ export interface TodoCollectionEditorProps {
   onCancel: () => void;
 }
 
-const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditorProps) => {
+const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoCollectionEditorProps) => {
   const {
     value: name,
     dirty: nameDirty,
@@ -24,6 +24,8 @@ const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditor
     dirty: descriptionDirty,
     handleChange: setDescription,
   } = useFormControl(todoCollection?.description || '');
+
+  const disableConfirmButton = !!nameError || !(nameDirty || descriptionDirty);
 
   return (
     <div className="p-2 md:p-4">
@@ -40,7 +42,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditor
         />
         <Description
           id="place-description"
-          className="col-span-4"
+          className="col-span-4 mt-4"
           label="Description"
           rows={3}
           value={description}
@@ -51,6 +53,21 @@ const TodoCollectionEditor = ({ todoCollection, onCancel }: TodoCollectionEditor
       <div className="flex flow-row gap-8 justify-end mt-4">
         <button className="btn" onClick={() => onCancel()}>
           Cancel
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() =>
+            onConfirm({
+              name: name!,
+              description: description || null,
+              isComplete: false,
+              dueDate: null,
+              todoItems: [],
+            })
+          }
+          disabled={disableConfirmButton}
+        >
+          {todoCollection ? 'Update' : 'Create'}
         </button>
       </div>
     </div>
