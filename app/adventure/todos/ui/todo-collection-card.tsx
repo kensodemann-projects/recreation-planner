@@ -32,8 +32,8 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
     <div className="card card-border bg-base-100 m-2">
       <div className="card-body">
         <h2 className="card-title">{todoCollection.name}</h2>
-        <p>{todoCollection.description}</p>
-        <div>
+        <p className="grow-0">{todoCollection.description}</p>
+        <div className="grow">
           {todoItems
             .filter((todo) => !todo.isComplete)
             .map((todo) => (
@@ -57,7 +57,7 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
               />
             ))}
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end mt-6">
           <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
             <PencilSquareIcon className="w-6" />
           </button>
