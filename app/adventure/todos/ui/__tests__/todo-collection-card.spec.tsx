@@ -1,9 +1,9 @@
 import { TodoCollection } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import TodoCollectionCard from '../todo-collection-card';
 import userEvent from '@testing-library/user-event';
-import { updateTodoItem } from '../../data';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { addTodoItem, updateTodoItem } from '../../data';
+import TodoCollectionCard from '../todo-collection-card';
 
 vi.mock('../../data');
 
@@ -69,6 +69,24 @@ describe('TODO Collection Card', () => {
     expect(updateTodoItem).toHaveBeenCalledExactlyOnceWith({
       ...item,
       isComplete: false,
+    });
+  });
+
+  describe('add button', () => {
+    it('adds a new TODO', async () => {
+      const user = userEvent.setup();
+      render(<TodoCollectionCard todoCollection={TEST_COLLECTION} />);
+      await user.click(screen.getByRole('button', { name: 'Add new Todo Item' }));
+      expect(addTodoItem).toHaveBeenCalledExactlyOnceWith({ isComplete: false, name: '', todoCollectionRid: 7314159 });
+    });
+
+    it('displays the new TODO', async () => {
+      (addTodoItem as Mock).mockResolvedValue({ id: 932, name: '', todoCollectionRid: 7314159, isComplete: false });
+      const user = userEvent.setup();
+      render(<TodoCollectionCard todoCollection={TEST_COLLECTION} />);
+      await user.click(screen.getByRole('button', { name: 'Add new Todo Item' }));
+      const elements = screen.getAllByRole('checkbox');
+      expect(elements.length).toEqual(TEST_COLLECTION.todoItems.length + 1);
     });
   });
 });

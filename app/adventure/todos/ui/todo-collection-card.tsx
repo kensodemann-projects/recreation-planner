@@ -2,7 +2,7 @@
 
 import EditableCheckbox from '@/app/ui/editable-checkbox';
 import { TodoCollection, TodoItem } from '@/models';
-import { updateTodoItem } from '../data';
+import { addTodoItem, updateTodoItem } from '../data';
 import { useState } from 'react';
 import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
 
@@ -12,6 +12,13 @@ export interface TodoCollectionCardProps {
 
 const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
   const [todoItems, setTodoItems] = useState(todoCollection.todoItems);
+
+  const addItemClicked = async () => {
+    const item = await addTodoItem({ isComplete: false, name: '', todoCollectionRid: todoCollection.id! });
+    if (item) {
+      setTodoItems((items) => [...items, item]);
+    }
+  };
 
   const todoChanged = (todo: TodoItem) => {
     updateTodoItem(todo);
@@ -51,10 +58,14 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
             ))}
         </div>
         <div className="card-actions justify-end">
-          <button className="btn btn-secondary btn-outline btn-circle">
+          <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
             <PencilSquareIcon className="w-6" />
           </button>
-          <button className="btn btn-primary btn-outline btn-circle">
+          <button
+            className="btn btn-primary btn-outline btn-circle"
+            aria-label="Add new Todo Item"
+            onClick={addItemClicked}
+          >
             <PlusIcon className="w-6" />
           </button>
         </div>
