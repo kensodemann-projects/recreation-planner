@@ -58,11 +58,12 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           className="btn btn-primary"
           onClick={() =>
             onConfirm({
+              id: todoCollection ? todoCollection.id : undefined,
               name: name!,
               description: description || null,
-              isComplete: false,
-              dueDate: null,
-              todoItems: [],
+              isComplete: todoCollection ? todoCollection.isComplete : false,
+              dueDate: todoCollection ? todoCollection.dueDate : null,
+              todoItems: todoCollection ? todoCollection.todoItems : [],
             })
           }
           disabled={disableConfirmButton}

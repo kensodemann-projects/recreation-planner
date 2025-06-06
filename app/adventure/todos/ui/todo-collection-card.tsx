@@ -5,6 +5,7 @@ import { TodoCollection, TodoItem } from '@/models';
 import { addTodoItem, updateTodoItem } from '../data';
 import { useState } from 'react';
 import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export interface TodoCollectionCardProps {
   todoCollection: TodoCollection;
@@ -58,9 +59,11 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
             ))}
         </div>
         <div className="card-actions justify-end mt-6">
-          <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
-            <PencilSquareIcon className="w-6" />
-          </button>
+          <Link href={`/adventure/todos/${todoCollection.id}/update`}>
+            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
+              <PencilSquareIcon className="w-6" />
+            </button>
+          </Link>
           <button
             className="btn btn-primary btn-outline btn-circle"
             aria-label="Add new Todo Item"

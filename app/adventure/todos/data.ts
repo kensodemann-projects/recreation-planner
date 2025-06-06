@@ -30,6 +30,21 @@ export const fetchOpenTodoCollections = async (): Promise<Array<TodoCollection>>
   return data?.map((p) => convertToTodoCollection(p) as TodoCollection) || [];
 };
 
+export const fetchTodoCollection = async (id: number): Promise<TodoCollection | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase
+    .from(collectionTable)
+    .select(collectionSelectColumns)
+    .eq('id', id)
+    .order('created_at', { referencedTable: itemTable });
+
+  return data && data.length ? (convertToTodoCollection(data[0]) as TodoCollection) : null;
+};
+
 export const addTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
   if (!(await isLoggedIn())) {
     return null;

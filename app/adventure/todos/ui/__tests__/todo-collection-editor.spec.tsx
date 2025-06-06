@@ -237,6 +237,31 @@ describe('TODO Editor', () => {
         const btn = screen.getByRole('button', { name: 'Update' });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
+
+      describe('on click', () => {
+        it('resolves the updated data', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(
+            <TodoCollectionEditor
+              todoCollection={TEST_COLLECTION}
+              onCancel={() => null}
+              onConfirm={(c) => (collection = c)}
+            />,
+          );
+          const name = screen.getByRole('textbox', { name: 'Name' });
+          const description = screen.getByRole('textbox', { name: 'Description' });
+          await user.clear(name);
+          await user.type(name, 'Test Collection');
+          await user.type(description, ' This is extra stuff added to the description.');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(collection).toEqual({
+            ...TEST_COLLECTION,
+            name: 'Test Collection',
+            description: TEST_COLLECTION.description + ' This is extra stuff added to the description.',
+          });
+        });
+      });
     });
   });
 });
@@ -247,5 +272,18 @@ const TEST_COLLECTION: TodoCollection = {
   description: 'The point of this collection is simply to do a thing',
   dueDate: '2025-03-17',
   isComplete: true,
-  todoItems: [],
+  todoItems: [
+    {
+      id: 1,
+      name: 'test the add',
+      isComplete: true,
+      todoCollectionRid: 7314159,
+    },
+    {
+      id: 2,
+      name: 'test the update',
+      isComplete: false,
+      todoCollectionRid: 7314159,
+    },
+  ],
 };
