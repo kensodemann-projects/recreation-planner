@@ -1,9 +1,11 @@
+import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
 import { useFormControl } from '@/hooks/use-form-control';
 import { Event, EventType, SelectablePlace } from '@/models';
 import { isRequired } from '@/utils/input-validations';
+import { useState } from 'react';
 
 export interface EventEditorProps {
   places: Array<SelectablePlace>;
@@ -61,6 +63,8 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
     handleChange: setEventDescription,
   } = useFormControl(event?.description || '');
 
+  const [busy, setBusy] = useState(false);
+
   const disableButton =
     !!(eventNameError || eventBeginDateError) ||
     !(
@@ -97,6 +101,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Input
           id="event-name"
           className="col-span-4"
+          disabled={busy}
           type="text"
           label="Name"
           value={eventName}
@@ -107,6 +112,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Select
           id="event-type"
           className="col-span-4 md:col-span-2"
+          disabled={busy}
           label="Type of Event / Trip"
           value={eventTypeId}
           values={types}
@@ -115,6 +121,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Select
           id="event-place"
           className="col-span-4 md:col-span-2"
+          disabled={busy}
           label="Location"
           value={eventPlaceId}
           values={places}
@@ -123,6 +130,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Input
           id="event-begin-date"
           className="col-span-4 md:col-span-1"
+          disabled={busy}
           type="date"
           label="Begin Date"
           value={eventBeginDate}
@@ -133,6 +141,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Input
           id="event-begin-time"
           className="col-span-4 md:col-span-1"
+          disabled={busy}
           type="time"
           label="Begin Time"
           value={eventBeginTime}
@@ -141,6 +150,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Input
           id="event-end-date"
           className="col-span-4 md:col-span-1"
+          disabled={busy}
           type="date"
           label="End Date"
           value={eventEndDate}
@@ -149,6 +159,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Input
           id="event-end-time"
           className="col-span-4 md:col-span-1"
+          disabled={busy}
           type="time"
           label="End Time"
           value={eventEndTime}
@@ -157,6 +168,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         <Description
           id="event-description"
           className="col-span-4"
+          disabled={busy}
           label="Description"
           rows={5}
           value={eventDescription}
@@ -164,11 +176,18 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         />
       </div>
       <div className="flex flow-row gap-8 justify-end mt-4">
-        <button className="btn" onClick={() => onCancel()}>
+        <button className="btn" onClick={() => onCancel()} disabled={busy}>
           Cancel
         </button>
-        <button className="btn btn-primary" disabled={disableButton} onClick={handleConfirm}>
-          {event ? 'Update' : 'Create'}
+        <button
+          className="btn btn-primary min-w-24"
+          disabled={disableButton || busy}
+          onClick={() => {
+            setBusy(true);
+            handleConfirm();
+          }}
+        >
+          {busy ? BusyIndicator : event ? 'Update' : 'Create'}
         </button>
       </div>
     </div>

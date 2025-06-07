@@ -1,8 +1,11 @@
+import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
+import PageLoading from '@/app/ui/page-loading';
 import { useFormControl } from '@/hooks/use-form-control';
 import { TodoCollection } from '@/models';
 import { isRequired } from '@/utils/input-validations';
+import { useState } from 'react';
 
 export interface TodoCollectionEditorProps {
   todoCollection?: TodoCollection | undefined;
@@ -24,6 +27,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
     dirty: descriptionDirty,
     handleChange: setDescription,
   } = useFormControl(todoCollection?.description || '');
+  const [busy, setBusy] = useState(false);
 
   const disableConfirmButton = !!nameError || !(nameDirty || descriptionDirty);
 
@@ -36,6 +40,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           type="text"
           label="Name"
           value={name}
+          disabled={busy}
           error={nameTouched ? nameError : ''}
           onBlur={handleNameBlur}
           onChange={(evt) => handleNameChange(evt.target.value)}
@@ -46,17 +51,19 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           label="Description"
           rows={3}
           value={description}
+          disabled={busy}
           onChange={(evt) => setDescription(evt.target.value)}
         />
       </div>
 
       <div className="flex flow-row gap-8 justify-end mt-4">
-        <button className="btn" onClick={() => onCancel()}>
+        <button className="btn" onClick={() => onCancel()} disabled={busy}>
           Cancel
         </button>
         <button
-          className="btn btn-primary"
-          onClick={() =>
+          className="btn btn-primary min-w-24"
+          onClick={() => {
+            setBusy(true);
             onConfirm({
               id: todoCollection ? todoCollection.id : undefined,
               name: name!,
@@ -64,11 +71,11 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
               isComplete: todoCollection ? todoCollection.isComplete : false,
               dueDate: todoCollection ? todoCollection.dueDate : null,
               todoItems: todoCollection ? todoCollection.todoItems : [],
-            })
-          }
-          disabled={disableConfirmButton}
+            });
+          }}
+          disabled={disableConfirmButton || busy}
         >
-          {todoCollection ? 'Update' : 'Create'}
+          {busy ? BusyIndicator : todoCollection ? 'Update' : 'Create'}
         </button>
       </div>
     </div>
