@@ -19,9 +19,14 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
     dirty: nameDirty,
     error: nameError,
     touched: nameTouched,
-    handleChange: handleNameChange,
+    handleChange: setName,
     handleBlur: handleNameBlur,
   } = useFormControl(todoCollection?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
+  const {
+    value: dueDate,
+    dirty: dueDateDirty,
+    handleChange: setDueDate,
+  } = useFormControl(todoCollection?.dueDate || '');
   const {
     value: description,
     dirty: descriptionDirty,
@@ -36,18 +41,27 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
       <div className="grid grid-cols-4 gap-x-4">
         <Input
           id="collection-name"
-          className="col-span-4"
+          className="col-span-4 md:col-span-3"
           type="text"
           label="Name"
           value={name}
           disabled={busy}
           error={nameTouched ? nameError : ''}
           onBlur={handleNameBlur}
-          onChange={(evt) => handleNameChange(evt.target.value)}
+          onChange={(evt) => setName(evt.target.value)}
+        />
+        <Input
+          id="collection-due-date"
+          className="col-span-4 md:col-span-1"
+          type="date"
+          label="Due Date"
+          value={dueDate}
+          disabled={busy}
+          onChange={(evt) => setDueDate(evt.target.value)}
         />
         <Description
           id="place-description"
-          className="col-span-4 mt-4"
+          className="col-span-4 mt-2"
           label="Description"
           rows={3}
           value={description}
@@ -69,7 +83,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
               name: name!,
               description: description || null,
               isComplete: todoCollection ? todoCollection.isComplete : false,
-              dueDate: todoCollection ? todoCollection.dueDate : null,
+              dueDate: todoCollection ? todoCollection.dueDate : dueDate || null,
               todoItems: todoCollection ? todoCollection.todoItems : [],
             });
           }}

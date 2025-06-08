@@ -16,6 +16,16 @@ describe('TODO Collection Card', () => {
     expect(screen.getByRole('heading', { level: 2, name: TEST_COLLECTION.name })).toBeDefined();
   });
 
+  it('renders the due date if the collection has one', () => {
+    render(<TodoCollectionCard todoCollection={TEST_COLLECTION} />);
+    expect(screen.getByText('Due Date:')).toBeDefined();
+  });
+
+  it('does not render the due date if the collection does not have one', () => {
+    render(<TodoCollectionCard todoCollection={{ ...TEST_COLLECTION, dueDate: null }} />);
+    expect(screen.queryByText('Due Date:')).toBeNull();
+  });
+
   it('renders the description', () => {
     render(<TodoCollectionCard todoCollection={TEST_COLLECTION} />);
     expect(screen.getByText(TEST_COLLECTION.description!)).toBeDefined();

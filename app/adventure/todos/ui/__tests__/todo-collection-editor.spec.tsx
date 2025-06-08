@@ -155,11 +155,12 @@ describe('TODO Editor', () => {
             screen.getByRole('textbox', { name: 'Description' }),
             'This is the description of the collection',
           );
+          await user.type(screen.getByLabelText('Due Date'), '2025-06-08');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(collection).toEqual({
             name: 'Test Collection',
             description: 'This is the description of the collection',
-            dueDate: null,
+            dueDate: '2025-06-08',
             isComplete: false,
             todoItems: [],
           });

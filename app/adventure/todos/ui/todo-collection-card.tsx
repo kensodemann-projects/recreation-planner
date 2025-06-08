@@ -2,10 +2,11 @@
 
 import EditableCheckbox from '@/app/ui/editable-checkbox';
 import { TodoCollection, TodoItem } from '@/models';
-import { addTodoItem, updateTodoItem } from '../data';
-import { useState } from 'react';
+import { formatDate } from '@/utils/formatters';
 import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useState } from 'react';
+import { addTodoItem, updateTodoItem } from '../data';
 
 export interface TodoCollectionCardProps {
   todoCollection: TodoCollection;
@@ -29,11 +30,18 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
     setTodoItems(items);
   };
 
+  const DueDate = todoCollection.dueDate ? (
+    <p className="grow-0">
+      <span className="font-bold">Due Date:</span> {todoCollection.dueDate ? formatDate(todoCollection.dueDate) : null}
+    </p>
+  ) : null;
+
   return (
     <div className="card card-border bg-base-100 m-2">
       <div className="card-body">
         <h2 className="card-title">{todoCollection.name}</h2>
         <p className="grow-0">{todoCollection.description}</p>
+        {DueDate}
         <div className="grow">
           {todoItems
             .filter((todo) => !todo.isComplete)
