@@ -166,6 +166,27 @@ describe('TODO Editor', () => {
           });
         });
 
+        it('allows a completed collection to be created', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(<TodoCollectionEditor onCancel={() => null} onConfirm={(c) => (collection = c)} />);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
+          await user.type(
+            screen.getByRole('textbox', { name: 'Description' }),
+            'This is the description of the collection',
+          );
+          await user.type(screen.getByLabelText('Due Date'), '2025-06-08');
+          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('button', { name: 'Create' }));
+          expect(collection).toEqual({
+            name: 'Test Collection',
+            description: 'This is the description of the collection',
+            dueDate: '2025-06-08',
+            isComplete: true,
+            todoItems: [],
+          });
+        });
+
         it('uses null for optional items that are not entered', async () => {
           let collection: TodoCollection | null = null;
           const user = userEvent.setup();
@@ -239,6 +260,14 @@ describe('TODO Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
+      it('is enabled if the copmleted flag is changed', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
       describe('on click', () => {
         it('resolves the updated data', async () => {
           let collection: TodoCollection | null = null;
@@ -260,6 +289,42 @@ describe('TODO Editor', () => {
             ...TEST_COLLECTION,
             name: 'Test Collection',
             description: TEST_COLLECTION.description + ' This is extra stuff added to the description.',
+          });
+        });
+
+        it('allows a collection to be marked as not complete', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(
+            <TodoCollectionEditor
+              todoCollection={TEST_COLLECTION}
+              onCancel={() => null}
+              onConfirm={(c) => (collection = c)}
+            />,
+          );
+          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(collection).toEqual({
+            ...TEST_COLLECTION,
+            isComplete: false,
+          });
+        });
+
+        it('allows a collection to be marked complete', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(
+            <TodoCollectionEditor
+              todoCollection={{ ...TEST_COLLECTION, isComplete: false }}
+              onCancel={() => null}
+              onConfirm={(c) => (collection = c)}
+            />,
+          );
+          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(collection).toEqual({
+            ...TEST_COLLECTION,
+            isComplete: true,
           });
         });
       });

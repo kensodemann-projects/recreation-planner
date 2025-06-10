@@ -1,7 +1,6 @@
 import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
-import PageLoading from '@/app/ui/page-loading';
 import { useFormControl } from '@/hooks/use-form-control';
 import { TodoCollection } from '@/models';
 import { isRequired } from '@/utils/input-validations';
@@ -32,9 +31,14 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
     dirty: descriptionDirty,
     handleChange: setDescription,
   } = useFormControl(todoCollection?.description || '');
+  const {
+    value: isComplete,
+    dirty: isCompleteDirty,
+    handleChange: setIsComplete,
+  } = useFormControl(todoCollection?.isComplete || false);
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton = !!nameError || !(nameDirty || descriptionDirty);
+  const disableConfirmButton = !!nameError || !(nameDirty || descriptionDirty || isCompleteDirty);
 
   return (
     <div className="p-2 md:p-4">
@@ -68,6 +72,16 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           disabled={busy}
           onChange={(evt) => setDescription(evt.target.value)}
         />
+        <label className="label">
+          <input
+            type="checkbox"
+            className="checkbox"
+            checked={isComplete}
+            disabled={busy}
+            onChange={(evt) => setIsComplete(evt.target.checked)}
+          />
+          Complete (hide the collection)
+        </label>
       </div>
 
       <div className="flex flow-row gap-8 justify-end mt-4">
@@ -82,7 +96,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
               id: todoCollection ? todoCollection.id : undefined,
               name: name!,
               description: description || null,
-              isComplete: todoCollection ? todoCollection.isComplete : false,
+              isComplete: isComplete || false,
               dueDate: todoCollection ? todoCollection.dueDate : dueDate || null,
               todoItems: todoCollection ? todoCollection.todoItems : [],
             });
