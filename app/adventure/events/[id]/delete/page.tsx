@@ -1,5 +1,6 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { canDeleteEvent, fetchEvent } from '../../data';
 import DeleteEvent from './delete-event';
@@ -20,7 +21,9 @@ const RemovePlacePage = async (props: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <PageHeader>Remove Event / Trip</PageHeader>
+      <PageHeader>
+        <TitleHeading>Remove Trip / Event</TitleHeading>
+      </PageHeader>
       <DeleteEvent event={event} canDelete={canDelete} />
     </>
   );

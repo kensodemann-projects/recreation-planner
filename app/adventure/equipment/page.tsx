@@ -1,9 +1,10 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
-import Equipment from './equipment';
-import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import Equipment from './equipment';
 
 const EquipmentPage = async () => {
   if (!(await isLoggedIn())) {
@@ -12,7 +13,9 @@ const EquipmentPage = async () => {
 
   return (
     <>
-      <PageHeader>Equipment</PageHeader>
+      <PageHeader>
+        <TitleHeading>Equipment</TitleHeading>
+      </PageHeader>
       <Equipment />
       <Link className="fixed bottom-4 right-4" href="/adventure/equipment/create">
         <button className="btn btn-primary btn-circle btn-outline">

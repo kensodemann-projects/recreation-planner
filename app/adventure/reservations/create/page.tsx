@@ -1,6 +1,7 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import { isLoggedIn } from '@/utils/supabase/auth';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
+import { isLoggedIn } from '@/utils/supabase/auth';
 import CreateReservation from './create-reservation';
 
 const CreateReservationPage = async () => {
@@ -10,7 +11,9 @@ const CreateReservationPage = async () => {
 
   return (
     <>
-      <PageHeader>Add a New Reservation</PageHeader>
+      <PageHeader>
+        <TitleHeading>Add a New Reservation</TitleHeading>
+      </PageHeader>
       <CreateReservation />
     </>
   );

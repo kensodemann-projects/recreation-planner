@@ -1,5 +1,6 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchTodoCollection } from '../../data';
 import UpdateTodoCollection from './update-todo-collection';
@@ -18,7 +19,9 @@ const UpdateTodoCollectionPage = async (props: { params: Promise<{ id: string }>
 
   return (
     <>
-      <PageHeader>Update the Todo Collection</PageHeader>
+      <PageHeader>
+        <TitleHeading>Update the Todo Collection</TitleHeading>
+      </PageHeader>
       <UpdateTodoCollection todoCollection={todoCollection!} />
     </>
   );

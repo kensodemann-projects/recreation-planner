@@ -80,13 +80,13 @@ describe('Activity Editor', () => {
   describe('Type of Event Selector', () => {
     it('exists', () => {
       render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
-      expect(screen.getByRole('combobox', { name: 'Type of Event / Trip' })).toBeDefined();
+      expect(screen.getByRole('combobox', { name: 'Type of Trip / Event' })).toBeDefined();
     });
 
     describe('initial value', () => {
       it('is set to the first event type with no event', () => {
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
-        const sel = screen.getByRole('combobox', { name: 'Type of Event / Trip' }) as HTMLSelectElement;
+        const sel = screen.getByRole('combobox', { name: 'Type of Trip / Event' }) as HTMLSelectElement;
         expect(+sel.value).toBe(EVENT_TYPES[0].id);
       });
 
@@ -100,7 +100,7 @@ describe('Activity Editor', () => {
             onConfirm={() => null}
           />,
         );
-        const sel = screen.getByRole('combobox', { name: 'Type of Event / Trip' }) as HTMLSelectElement;
+        const sel = screen.getByRole('combobox', { name: 'Type of Trip / Event' }) as HTMLSelectElement;
         expect(+sel.value).toBe(TEST_EVENT.type.id);
       });
     });
@@ -381,7 +381,7 @@ describe('Activity Editor', () => {
           );
           await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '2');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '2');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.type).toEqual(EVENT_TYPES[1]);
         });
@@ -564,7 +564,7 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '4');
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '4');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
@@ -735,7 +735,7 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Event / Trip' }), '2');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '2');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, type: EVENT_TYPES[1] });
         });

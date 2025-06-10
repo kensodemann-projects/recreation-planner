@@ -55,6 +55,7 @@ const EVENTS: Array<Event> = [
 export const fetchPriorEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchUpcomingEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchEvent = vi.fn().mockResolvedValue(EVENTS[0]);
+export const fetchTodoCollectionsForEvent = vi.fn().mockResolvedValue([]);
 export const addEvent = vi.fn();
 export const deleteEvent = vi.fn();
 export const canDeleteEvent = vi.fn().mockResolvedValue(false);

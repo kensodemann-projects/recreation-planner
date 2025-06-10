@@ -30,7 +30,7 @@ describe('Create Place Page', () => {
     it('renders the create event header', async () => {
       const jsx = await CreateEventPage();
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Add a New Event / Trip' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Add a New Trip / Event' })).toBeDefined();
     });
   });
 

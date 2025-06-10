@@ -1,3 +1,4 @@
+import TitleHeading from '@/app/ui/title-heading';
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import { isLoggedIn } from '@/utils/supabase/auth';
@@ -15,7 +16,9 @@ const PlacesPage = async () => {
 
   return (
     <>
-      <PageHeader>Places</PageHeader>
+      <PageHeader>
+        <TitleHeading>Places</TitleHeading>
+      </PageHeader>
       <Places places={places} />
       <Link className="fixed bottom-4 right-4" href="/adventure/places/create">
         <button className="btn btn-primary btn-circle btn-outline">

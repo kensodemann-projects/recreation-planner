@@ -3,7 +3,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import CreateTodoCollectionPage from '../page';
 
-vi.mock('../../data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
@@ -21,6 +20,12 @@ describe('Create Todo Collection Page', () => {
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Add a New Todo Collection' })).toBeDefined();
     });
+
+    it('does not render the must be logged in component', async () => {
+      const jsx = await CreateTodoCollectionPage();
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
   });
 
   describe('when not logged in', () => {
@@ -32,6 +37,12 @@ describe('Create Todo Collection Page', () => {
       const jsx = await CreateTodoCollectionPage();
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
+    });
+
+    it('does not render the create todo collection component', async () => {
+      const jsx = await CreateTodoCollectionPage();
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'Add a New Todo Collection' })).toBeNull();
     });
   });
 });

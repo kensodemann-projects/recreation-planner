@@ -1,13 +1,18 @@
 import Address from '@/app/ui/address';
-import SectionHeading from '@/app/ui/section-heading';
-import { Event } from '@/models';
+import SectionHeader from '@/app/ui/section-header';
+import SubtitleHeading from '@/app/ui/subtitle-heading';
+import { Event, TodoCollection } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import TodoCollectionCard from '../../todos/ui/todo-collection-card';
 
 interface EventDetailsProps {
   event: Event;
+  todoCollections: TodoCollection[];
 }
 
-const EventDetails = ({ event }: EventDetailsProps) => {
+const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
   const addressInformation =
     event.place.address &&
     (event.place.address.line1 ||
@@ -21,18 +26,39 @@ const EventDetails = ({ event }: EventDetailsProps) => {
   return (
     <>
       <section>
-        <SectionHeading>{event.name}</SectionHeading>
+        <SectionHeader>
+          <SubtitleHeading>{event.name}</SubtitleHeading>
+        </SectionHeader>
         <div>{event.type.name}</div>
         <div>{formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}</div>
         <div className="mt-4 whitespace-pre-line">{event.description}</div>
       </section>
 
       <section>
-        <SectionHeading>Location</SectionHeading>
+        <SectionHeader>
+          <SubtitleHeading>Location</SubtitleHeading>
+        </SectionHeader>
         <div>{event.place.name}</div>
         {addressInformation}
         <div>{event.place.website}</div>
         <div>{event.place.phoneNumber}</div>
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Todos</SubtitleHeading>
+        </SectionHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+          {todoCollections.map((c) => (
+            <TodoCollectionCard todoCollection={c} key={c.id} />
+          ))}
+        </div>
+        <Link href={`${event.id}/todos/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Todo Collection
+          </button>
+        </Link>
       </section>
     </>
   );

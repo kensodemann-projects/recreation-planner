@@ -1,9 +1,10 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { fetchEvent } from '../data';
+import { fetchEvent, fetchTodoCollectionsForEvent } from '../data';
 import EventDetails from './event-details';
 
 const EventPage = async (props: { params: Promise<{ id: string }> }) => {
@@ -12,17 +13,22 @@ const EventPage = async (props: { params: Promise<{ id: string }> }) => {
   }
 
   const params = await props.params;
-  const event = await fetchEvent(+params.id);
+  const id = +params.id;
+  const event = await fetchEvent(id);
 
   if (!event) {
     return <div>Failed to fetch the event</div>;
   }
 
+  const todoCollections = (await fetchTodoCollectionsForEvent(id)) || [];
+
   return (
     <>
-      <PageHeader>Event / Trip Details</PageHeader>
+      <PageHeader>
+        <TitleHeading>Trip / Event Details</TitleHeading>
+      </PageHeader>
 
-      <EventDetails event={event} />
+      <EventDetails event={event} todoCollections={todoCollections} />
 
       <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/events`}>
         <ArrowUturnLeftIcon className="w-6" />

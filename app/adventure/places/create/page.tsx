@@ -1,8 +1,9 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
+import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchPlaceTypes } from '../data';
 import CreatePlace from './create-place';
-import PageHeader from '@/app/ui/page-header';
 
 const CreatePlacePage = async () => {
   if (!(await isLoggedIn())) {
@@ -12,7 +13,9 @@ const CreatePlacePage = async () => {
   const placeTypes = await fetchPlaceTypes();
   return (
     <>
-      <PageHeader>Add a New Place</PageHeader>
+      <PageHeader>
+        <TitleHeading>Add a New Place</TitleHeading>
+      </PageHeader>
       <CreatePlace types={placeTypes} />
     </>
   );

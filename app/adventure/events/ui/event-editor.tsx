@@ -113,7 +113,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           id="event-type"
           className="col-span-4 md:col-span-2"
           disabled={busy}
-          label="Type of Event / Trip"
+          label="Type of Trip / Event"
           value={eventTypeId}
           values={types}
           onChange={(evt) => setEventTypeId(+evt.target.value)}

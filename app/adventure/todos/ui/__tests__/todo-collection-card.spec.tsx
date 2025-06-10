@@ -13,7 +13,7 @@ describe('TODO Collection Card', () => {
 
   it('renders the title', () => {
     render(<TodoCollectionCard todoCollection={TEST_COLLECTION} />);
-    expect(screen.getByRole('heading', { level: 2, name: TEST_COLLECTION.name })).toBeDefined();
+    expect(screen.getByRole('heading', { level: 3, name: TEST_COLLECTION.name })).toBeDefined();
   });
 
   it('renders the due date if the collection has one', () => {

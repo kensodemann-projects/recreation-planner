@@ -1,7 +1,8 @@
 'use client';
 
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import SectionHeading from './section-heading';
+import SectionHeader from './section-header';
+import SubtitleHeading from './subtitle-heading';
 
 interface ConfirmDeleteProps {
   entityName: string;
@@ -11,8 +12,10 @@ interface ConfirmDeleteProps {
 
 const ConfirmDelete = ({ entityName, onConfirm, onDeny }: ConfirmDeleteProps) => {
   return (
-    <>
-      <SectionHeading className="text-center">{entityName} can be removed</SectionHeading>
+    <section>
+      <SectionHeader className="text-center">
+        <SubtitleHeading>{entityName} can be removed</SubtitleHeading>
+      </SectionHeader>
       <div className="my-8">
         {entityName} is unused and can be removed. While it is safe to remove this item, doing so cannot be reversed.
         Are you sure you would like to proceed?
@@ -28,7 +31,7 @@ const ConfirmDelete = ({ entityName, onConfirm, onDeny }: ConfirmDeleteProps) =>
           <XCircleIcon className="w-6" />
         </button>
       </div>
-    </>
+    </section>
   );
 };
 

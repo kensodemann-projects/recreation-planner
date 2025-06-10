@@ -8,6 +8,7 @@ export const convertToTodoCollection = (dto: Partial<TodoCollectionDTO>): Partia
   description: dto.description,
   dueDate: dto.due_date,
   isComplete: dto.is_complete,
+  eventRid: dto.event_rid,
   todoItems: dto.todo_items ? dto.todo_items.map((x) => convertToTodoItem(x) as TodoItem) : undefined,
 });
 
@@ -16,5 +17,6 @@ export const convertToTodoCollectionDTO = (collection: TodoCollection): TodoColl
   name: collection.name,
   description: collection.description,
   due_date: collection.dueDate,
+  event_rid: collection.eventRid,
   is_complete: collection.isComplete,
 });

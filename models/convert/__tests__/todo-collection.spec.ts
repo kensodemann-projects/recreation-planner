@@ -33,6 +33,26 @@ describe('todo collection converters', () => {
       });
     });
 
+    it('converts a event related collection', () => {
+      expect(
+        convertToTodoCollection({
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          event_rid: 4273,
+          is_complete: false,
+        }),
+      ).toEqual({
+        id: 1,
+        name: 'Stuff I need to do',
+        description: 'This is a thing, and I need to do things that are stuff',
+        dueDate: '2025-05-23',
+        isComplete: false,
+        eventRid: 4273,
+      });
+    });
+
     it('converts a full base collection with child items', () => {
       expect(
         convertToTodoCollection({
@@ -127,6 +147,46 @@ describe('todo collection converters', () => {
         name: 'Stuff I need to do',
         description: 'This is a thing, and I need to do things that are stuff',
         due_date: '2025-05-23',
+        is_complete: false,
+      });
+    });
+
+    it('converts an event related collection', () => {
+      expect(
+        convertToTodoCollectionDTO({
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          eventRid: 4273,
+          todoItems: [
+            {
+              id: 42,
+              name: 'Do the needful',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 73,
+              name: 'Bite the unbitten',
+              isComplete: true,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 314159,
+              name: 'Eat the pi',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+          ],
+        }),
+      ).toEqual({
+        id: 1,
+        name: 'Stuff I need to do',
+        description: 'This is a thing, and I need to do things that are stuff',
+        due_date: '2025-05-23',
+        event_rid: 4273,
         is_complete: false,
       });
     });

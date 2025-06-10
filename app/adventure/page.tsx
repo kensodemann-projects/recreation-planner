@@ -1,6 +1,7 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import PageHeader from '../ui/page-header';
+import TitleHeading from '../ui/title-heading';
 import Dashboard from './dashboard';
 
 const HomePage = async () => {
@@ -10,7 +11,9 @@ const HomePage = async () => {
 
   return (
     <>
-      <PageHeader>Dashboard</PageHeader>
+      <PageHeader>
+        <TitleHeading>Dashboard</TitleHeading>
+      </PageHeader>
       <Dashboard />
     </>
   );

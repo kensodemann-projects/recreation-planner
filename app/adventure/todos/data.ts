@@ -45,6 +45,17 @@ export const fetchTodoCollection = async (id: number): Promise<TodoCollection | 
   return data && data.length ? (convertToTodoCollection(data[0]) as TodoCollection) : null;
 };
 
+export const fetchEventName = async (id: number): Promise<string | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase.from('events').select('name').eq('id', id).single();
+
+  return data ? data.name : null;
+};
+
 export const addTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
   if (!(await isLoggedIn())) {
     return null;

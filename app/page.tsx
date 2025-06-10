@@ -1,12 +1,15 @@
-import Image from 'next/image';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import Link from 'next/link';
 import PageHeader from './ui/page-header';
+import TitleHeading from './ui/title-heading';
 
 const LandingPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-top p-6 gap-8">
-      <PageHeader> Recreation Planner </PageHeader>
+      <PageHeader>
+        <TitleHeading>Recreation Planner</TitleHeading>
+      </PageHeader>
       <div className="flex flex-row justify-center">
         <Image
           src="/indy-car.jpg"

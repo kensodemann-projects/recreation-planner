@@ -1,12 +1,15 @@
 import Address from '@/app/ui/address';
-import SectionHeading from '@/app/ui/section-heading';
+import SectionHeader from '@/app/ui/section-header';
+import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Place as PlaceModel } from '@/models';
 
 const Place = ({ place }: { place: PlaceModel }) => {
   const addressInformation =
     place.address.line1 || place.address.line2 || place.address.city || place.address.state || place.address.postal ? (
       <section>
-        <SectionHeading>Address</SectionHeading>
+        <SectionHeader>
+          <SubtitleHeading>Address</SubtitleHeading>
+        </SectionHeader>
         <Address value={place.address} />
       </section>
     ) : undefined;
@@ -14,14 +17,18 @@ const Place = ({ place }: { place: PlaceModel }) => {
   return (
     <>
       <section>
-        <SectionHeading>{place.name}</SectionHeading>
+        <SectionHeader>
+          <SubtitleHeading>{place.name}</SubtitleHeading>
+        </SectionHeader>
         <div className="whitespace-pre-line">{place.description}</div>
       </section>
 
       {addressInformation}
 
       <section>
-        <SectionHeading>Other Information</SectionHeading>
+        <SectionHeader>
+          <SubtitleHeading>Other Information</SubtitleHeading>
+        </SectionHeader>
         <div>
           <span className="font-bold">Type:</span> {place.type.name}
         </div>

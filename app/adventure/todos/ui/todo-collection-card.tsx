@@ -39,7 +39,7 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
   return (
     <div className="card card-border bg-base-100 m-2">
       <div className="card-body">
-        <h2 className="card-title">{todoCollection.name}</h2>
+        <h3 className="card-title">{todoCollection.name}</h3>
         <p className="grow-0">{todoCollection.description}</p>
         {DueDate}
         <div className="grow">

@@ -1,7 +1,8 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
+import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchEventTypes, fetchPlaces } from '../data';
-import PageHeader from '@/app/ui/page-header';
 import CreateEvent from './create-event';
 
 const CreateEventPage = async () => {
@@ -13,7 +14,9 @@ const CreateEventPage = async () => {
   const places = await fetchPlaces();
   return (
     <>
-      <PageHeader>Add a New Event / Trip</PageHeader>
+      <PageHeader>
+        <TitleHeading>Add a New Trip / Event</TitleHeading>
+      </PageHeader>
       <CreateEvent types={eventTypes} places={places} />
     </>
   );

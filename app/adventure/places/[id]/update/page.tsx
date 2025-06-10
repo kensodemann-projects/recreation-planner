@@ -1,8 +1,9 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
+import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { fetchPlace, fetchPlaceTypes } from '../../data';
 import UpdatePlace from './update-place';
-import PageHeader from '@/app/ui/page-header';
 
 const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   if (!(await isLoggedIn())) {
@@ -19,7 +20,9 @@ const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <PageHeader>Update the Place</PageHeader>
+      <PageHeader>
+        <TitleHeading>Update the Place</TitleHeading>
+      </PageHeader>
       <UpdatePlace place={place} types={placeTypes} />
     </>
   );

@@ -8,7 +8,7 @@ vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
-describe('Update Event / Trip Page', () => {
+describe('Update Trip / Event Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
@@ -42,7 +42,7 @@ describe('Update Event / Trip Page', () => {
     it('renders the update events component', async () => {
       const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Update the Event / Trip' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Update the Trip / Event' })).toBeDefined();
     });
   });
 

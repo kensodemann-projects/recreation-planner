@@ -1,7 +1,7 @@
 'use server';
 
-import { Event, EventType, SelectablePlace } from '@/models';
-import { convertToEvent, convertToEventDTO } from '@/models/convert';
+import { Event, EventType, SelectablePlace, TodoCollection } from '@/models';
+import { convertToEvent, convertToEventDTO, convertToTodoCollection } from '@/models/convert';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 
@@ -49,6 +49,23 @@ export const fetchEvent = async (id: number): Promise<Event | null> => {
   const { data } = await supabase.from('events').select(selectColumns).eq('id', id).single();
 
   return data ? (convertToEvent(data) as Event) : null;
+};
+
+export const fetchTodoCollectionsForEvent = async (eventRid: number): Promise<TodoCollection[] | null> => {
+  if (!(await isLoggedIn())) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase
+    .from('todo_collections')
+    .select('*, todo_items(*)')
+    .eq('event_rid', eventRid)
+    .eq('is_complete', false)
+    .order('due_date', { nullsFirst: false })
+    .order('created_at', { referencedTable: 'todo_items' });
+
+  return data?.map((p) => convertToTodoCollection(p) as TodoCollection) || [];
 };
 
 export const addEvent = async (event: Event): Promise<Event | null> => {

@@ -2,13 +2,12 @@ import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import EventPage from '../page';
-import { fetchEvent } from '../../data';
-//import { fetchPlace } from '../../data';
+import { fetchEvent, fetchTodoCollectionsForEvent } from '../../data';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('../../data');
 
-describe('Place Page', () => {
+describe('Event Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -20,16 +19,26 @@ describe('Place Page', () => {
       (isLoggedIn as Mock).mockResolvedValue(true);
     });
 
-    it('fetches the place', async () => {
+    it('fetches the event', async () => {
       await EventPage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchEvent).toHaveBeenCalledOnce();
-      expect(fetchEvent).toHaveBeenCalledWith(2);
+      expect(fetchEvent).toHaveBeenCalledExactlyOnceWith(2);
+    });
+
+    it('fetches the todo collections for the event', async () => {
+      await EventPage({ params: Promise.resolve({ id: '2' }) });
+      expect(fetchTodoCollectionsForEvent).toHaveBeenCalledExactlyOnceWith(2);
     });
 
     it('renders the page header', async () => {
       const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Event / Trip Details' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeDefined();
+    });
+
+    it('does not render the must be logged in component', async () => {
+      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
   });
 
@@ -38,15 +47,22 @@ describe('Place Page', () => {
       (isLoggedIn as Mock).mockResolvedValue(false);
     });
 
-    it('does not fetch the place', async () => {
+    it('does not fetch any data', async () => {
       await EventPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchEvent).not.toHaveBeenCalled();
+      expect(fetchTodoCollectionsForEvent).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
       const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
+    });
+
+    it('does not render the page header', async () => {
+      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeNull();
     });
   });
 });

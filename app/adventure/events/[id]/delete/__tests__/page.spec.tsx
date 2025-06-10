@@ -31,7 +31,7 @@ describe('Delete Event Page', () => {
     it('renders the delete event component', async () => {
       const jsx = await DeleteEventPage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Remove Event / Trip' })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 1, name: 'Remove Trip / Event' })).toBeDefined();
     });
   });
 

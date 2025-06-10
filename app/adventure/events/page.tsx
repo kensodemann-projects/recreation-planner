@@ -1,5 +1,6 @@
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
+import TitleHeading from '@/app/ui/title-heading';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { formatISO, startOfWeek } from 'date-fns';
@@ -18,7 +19,9 @@ const EventsPage = async () => {
 
   return (
     <>
-      <PageHeader>Trips &amp; Events</PageHeader>
+      <PageHeader>
+        <TitleHeading>Trips &amp; Events</TitleHeading>
+      </PageHeader>
       <Events priorEvents={priorEvents} upcomingEvents={upcomingEvents} />
       <Link className="fixed bottom-4 right-4" href="/adventure/events/create">
         <button className="btn btn-primary btn-circle btn-outline">
