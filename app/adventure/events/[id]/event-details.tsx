@@ -50,7 +50,11 @@ const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
         </SectionHeader>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
           {todoCollections.map((c) => (
-            <TodoCollectionCard todoCollection={c} key={c.id} />
+            <TodoCollectionCard
+              editHref={`/adventure/events/${event.id}/todos/${c.id}/update`}
+              todoCollection={c}
+              key={c.id}
+            />
           ))}
         </div>
         <Link href={`${event.id}/todos/create`}>

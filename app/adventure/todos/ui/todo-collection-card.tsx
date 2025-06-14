@@ -9,10 +9,11 @@ import { useState } from 'react';
 import { addTodoItem, updateTodoItem } from '../data';
 
 export interface TodoCollectionCardProps {
+  editHref: string;
   todoCollection: TodoCollection;
 }
 
-const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
+const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProps) => {
   const [todoItems, setTodoItems] = useState(todoCollection.todoItems);
 
   const addItemClicked = async () => {
@@ -67,7 +68,7 @@ const TodoCollectionCard = ({ todoCollection }: TodoCollectionCardProps) => {
             ))}
         </div>
         <div className="card-actions justify-end mt-6">
-          <Link href={`/adventure/todos/${todoCollection.id}/update`}>
+          <Link href={editHref}>
             <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
               <PencilSquareIcon className="w-6" />
             </button>

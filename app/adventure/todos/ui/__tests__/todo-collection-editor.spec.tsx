@@ -217,6 +217,24 @@ describe('TODO Editor', () => {
         expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
       });
 
+      it('is enabled if the due date is cleared', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        await user.clear(screen.getByLabelText('Due Date'));
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
+      it('is enabled if the due date is changed', async () => {
+        const user = userEvent.setup();
+        render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
+        const inp = screen.getByLabelText('Due Date');
+        await user.clear(inp);
+        await user.type(inp, '2026-03-17');
+        const btn = screen.getByRole('button', { name: 'Update' });
+        expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
+      });
+
       it('is enabled if the description is cleared', async () => {
         const user = userEvent.setup();
         render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
@@ -279,16 +297,42 @@ describe('TODO Editor', () => {
               onConfirm={(c) => (collection = c)}
             />,
           );
+          const dueDate = screen.getByLabelText('Due Date');
           const name = screen.getByRole('textbox', { name: 'Name' });
           const description = screen.getByRole('textbox', { name: 'Description' });
           await user.clear(name);
           await user.type(name, 'Test Collection');
           await user.type(description, ' This is extra stuff added to the description.');
+          await user.clear(dueDate);
+          await user.type(dueDate, '2025-06-15');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(collection).toEqual({
             ...TEST_COLLECTION,
             name: 'Test Collection',
             description: TEST_COLLECTION.description + ' This is extra stuff added to the description.',
+            dueDate: '2025-06-15',
+          });
+        });
+
+        it('preserves the event ref ID', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(
+            <TodoCollectionEditor
+              todoCollection={{ ...TEST_COLLECTION, eventRid: 4439 }}
+              onCancel={() => null}
+              onConfirm={(c) => (collection = c)}
+            />,
+          );
+          const name = screen.getByRole('textbox', { name: 'Name' });
+          const description = screen.getByRole('textbox', { name: 'Description' });
+          await user.clear(name);
+          await user.type(name, 'Test Collection');
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(collection).toEqual({
+            ...TEST_COLLECTION,
+            name: 'Test Collection',
+            eventRid: 4439,
           });
         });
 

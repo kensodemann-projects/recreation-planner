@@ -38,7 +38,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
   } = useFormControl(todoCollection?.isComplete || false);
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton = !!nameError || !(nameDirty || descriptionDirty || isCompleteDirty);
+  const disableConfirmButton = !!nameError || !(dueDateDirty || nameDirty || descriptionDirty || isCompleteDirty);
 
   return (
     <div className="p-2 md:p-4">
@@ -92,14 +92,13 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           className="btn btn-primary min-w-24"
           onClick={() => {
             setBusy(true);
-            onConfirm({
-              id: todoCollection ? todoCollection.id : undefined,
+            const data = {
               name: name!,
               description: description || null,
               isComplete: isComplete || false,
-              dueDate: todoCollection ? todoCollection.dueDate : dueDate || null,
-              todoItems: todoCollection ? todoCollection.todoItems : [],
-            });
+              dueDate: dueDate || null,
+            };
+            onConfirm(todoCollection ? { ...todoCollection, ...data } : { ...data, todoItems: [] });
           }}
           disabled={disableConfirmButton || busy}
         >

@@ -1,10 +1,11 @@
+import { fetchTodoCollection } from '@/app/adventure/todos/data';
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchTodoCollection } from '../../../data';
 import UpdateTodoCollectionPage from '../page';
 
-vi.mock('../../../data');
+vi.mock('@/app/adventure/events/data');
+vi.mock('@/app/adventure/todos/data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
@@ -18,19 +19,18 @@ describe('Update Todo Collection Page', () => {
     });
 
     it('fetches the collection', async () => {
-      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchTodoCollection).toHaveBeenCalledOnce();
-      expect(fetchTodoCollection).toHaveBeenCalledWith(3);
+      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
+      expect(fetchTodoCollection).toHaveBeenCalledExactlyOnceWith(56);
     });
 
     it('renders the update todo collection component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeDefined();
     });
 
     it('does not render the must be logged in component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
@@ -41,19 +41,19 @@ describe('Update Todo Collection Page', () => {
       (isLoggedIn as Mock).mockResolvedValue(false);
     });
 
-    it('does not fetch the todo collection', async () => {
-      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
+    it('does not fetch anything', async () => {
+      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
       expect(fetchTodoCollection).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });
 
     it('does not render the update todo collection component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeNull();
     });
