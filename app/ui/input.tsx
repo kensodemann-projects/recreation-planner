@@ -6,7 +6,7 @@ interface InputProperties extends ComponentPropsWithoutRef<'input'> {
   id: string;
   type: string;
   label: string;
-  value: string | undefined;
+  value: string | number | undefined;
   className?: string | undefined;
   error?: string | undefined;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;

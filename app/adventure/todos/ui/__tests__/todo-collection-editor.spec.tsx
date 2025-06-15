@@ -79,7 +79,7 @@ describe('TODO Editor', () => {
         expect(inp.value).toBe(TEST_COLLECTION.description);
       });
 
-      it('is blank if the place description is null', () => {
+      it('is blank if the todo collection description is null', () => {
         render(
           <TodoCollectionEditor
             todoCollection={{ ...TEST_COLLECTION, description: null }}
