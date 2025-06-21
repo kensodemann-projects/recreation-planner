@@ -40,20 +40,10 @@ export const fetchTodoCollection = async (id: number): Promise<TodoCollection | 
     .from(collectionTable)
     .select(collectionSelectColumns)
     .eq('id', id)
-    .order('created_at', { referencedTable: itemTable });
+    .order('created_at', { referencedTable: itemTable })
+    .single();
 
-  return data && data.length ? (convertToTodoCollection(data[0]) as TodoCollection) : null;
-};
-
-export const fetchEventName = async (id: number): Promise<string | null> => {
-  if (!(await isLoggedIn())) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase.from('events').select('name').eq('id', id).single();
-
-  return data ? data.name : null;
+  return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 export const addTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
@@ -65,9 +55,10 @@ export const addTodoCollection = async (collection: TodoCollection): Promise<Tod
   const { data } = await supabase
     .from(collectionTable)
     .insert(convertToTodoCollectionDTO(collection))
-    .select(collectionSelectColumns);
+    .select(collectionSelectColumns)
+    .single();
 
-  return data && data.length ? (convertToTodoCollection(data[0]) as TodoCollection) : null;
+  return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 export const canDeleteTodoCollection = async (collection: TodoCollection): Promise<boolean> => {
@@ -87,9 +78,10 @@ export const updateTodoCollection = async (collection: TodoCollection): Promise<
     .from(collectionTable)
     .update(convertToTodoCollectionDTO(collection))
     .eq('id', collection.id)
-    .select(collectionSelectColumns);
+    .select(collectionSelectColumns)
+    .single();
 
-  return data && data.length ? (convertToTodoCollection(data[0]) as TodoCollection) : null;
+  return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 export const addTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {
@@ -98,9 +90,9 @@ export const addTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from(itemTable).insert(convertToTodoItemDTO(item)).select('*');
+  const { data } = await supabase.from(itemTable).insert(convertToTodoItemDTO(item)).select('*').single();
 
-  return data && data.length ? (convertToTodoItem(data[0]) as TodoItem) : null;
+  return data && (convertToTodoItem(data) as TodoItem);
 };
 
 export const canDeleteTodoItem = async (item: TodoItem): Promise<boolean> => {
@@ -116,7 +108,12 @@ export const updateTodoItem = async (item: TodoItem): Promise<TodoItem | null> =
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from(itemTable).update(convertToTodoItemDTO(item)).eq('id', item.id).select('*');
+  const { data } = await supabase
+    .from(itemTable)
+    .update(convertToTodoItemDTO(item))
+    .eq('id', item.id)
+    .select('*')
+    .single();
 
-  return data && data.length ? (convertToTodoItem(data[0]) as TodoItem) : null;
+  return data && (convertToTodoItem(data) as TodoItem);
 };

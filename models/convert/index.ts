@@ -1,3 +1,4 @@
+export * from './equipment';
 export * from './event';
 export * from './place';
 export * from './todo-collection';

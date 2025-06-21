@@ -1,4 +1,3 @@
-import { TodoCollection, TodoCollectionDTO } from '../todo-collection';
 import { TodoItem, TodoItemDTO } from '../todo-item';
 
 export const convertToTodoItem = (dto: Partial<TodoItemDTO>): Partial<TodoItem> => ({

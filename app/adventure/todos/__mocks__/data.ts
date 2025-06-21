@@ -81,7 +81,6 @@ const TODO_COLLECTIONS: TodoCollection[] = [
 
 export const fetchOpenTodoCollections = vi.fn().mockResolvedValue(TODO_COLLECTIONS.filter((x) => !x.isComplete));
 export const fetchTodoCollection = vi.fn().mockResolvedValue(TODO_COLLECTIONS[2]);
-export const fetchEventName = vi.fn().mockResolvedValue(null);
 export const addTodoCollection = vi.fn().mockResolvedValue(null);
 export const updateTodoCollection = vi.fn().mockResolvedValue(null);
 export const addTodoItem = vi.fn().mockResolvedValue(null);

@@ -74,9 +74,9 @@ export const addEvent = async (event: Event): Promise<Event | null> => {
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns);
+  const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns).single();
 
-  return data && data.length ? (convertToEvent(data[0]) as Event) : null;
+  return data ? (convertToEvent(data) as Event) : null;
 };
 
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
@@ -125,7 +125,8 @@ export const updateEvent = async (event: Event): Promise<Event | null> => {
     .from('events')
     .update(convertToEventDTO(event))
     .eq('id', event.id)
-    .select(selectColumns);
+    .select(selectColumns)
+    .single();
 
-  return data && data.length ? (convertToEvent(data[0]) as Event) : null;
+  return data ? (convertToEvent(data) as Event) : null;
 };
