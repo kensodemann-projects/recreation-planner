@@ -29,3 +29,10 @@ export const cityStatePostal = (
     ((city || state) && postal ? ` ${postal}` : postal || '')
   );
 };
+
+const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
+export const formatCurrency = (value?: number): string => (value || value === 0 ? usdFormatter.format(value) : '');

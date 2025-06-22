@@ -1,0 +1,34 @@
+import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
+import { Equipment, Place } from '@/models';
+import { formatCurrency, formatDate } from '@/utils/formatters';
+import Link from 'next/link';
+
+const EquipmentTable = ({ className, equipment }: { className?: string | undefined; equipment: Array<Equipment> }) => {
+  return (
+    <table className={`table-zebra ${className || ''}`}>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Purchase Date</th>
+          <th>Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        {equipment.map((current) => (
+          <tr key={current.id}>
+            <th>
+              <Link href={`equipment/${current.id}`}>{current.name}</Link>
+            </th>
+            <td>{current.purchaseDate && formatDate(current.purchaseDate)}</td>
+            <td>{(current.cost || current.cost === 0) && formatCurrency(current.cost)}</td>
+            <td>
+              <EntityDropdownMenu href={`equipment/${current.id}`} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default EquipmentTable;

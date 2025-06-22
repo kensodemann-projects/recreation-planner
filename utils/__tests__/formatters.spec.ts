@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cityStatePostal, formatDate, formatDateRange } from '../formatters';
+import { cityStatePostal, formatCurrency, formatDate, formatDateRange } from '../formatters';
 
 describe('Formatters', () => {
   describe('date and time', () => {
@@ -63,6 +63,20 @@ describe('Formatters', () => {
 
     it('formats the city, state, and postal code ', () => {
       expect(cityStatePostal('Waukesha', 'WI', '53189')).toEqual('Waukesha, WI 53189');
+    });
+  });
+
+  describe('currency', () => {
+    it('formats to blank for null-ish values', () => {
+      expect(formatCurrency()).toEqual('');
+    });
+
+    it('formats for US dollars', () => {
+      expect(formatCurrency(0)).toEqual('$0.00');
+      expect(formatCurrency(1)).toEqual('$1.00');
+      expect(formatCurrency(139.24)).toEqual('$139.24');
+      expect(formatCurrency(2139.24)).toEqual('$2,139.24');
+      expect(formatCurrency(9822139.24)).toEqual('$9,822,139.24');
     });
   });
 });
