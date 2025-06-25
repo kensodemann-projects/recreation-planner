@@ -137,16 +137,46 @@ describe('Formatters', () => {
   });
 
   describe('currency', () => {
-    it('formats to blank for null-ish values', () => {
-      expect(formatCurrency()).toEqual('');
-    });
+    const testCases = [
+      {
+        name: 'formats to blank for null',
+        value: null,
+        expected: '',
+      },
+      {
+        name: 'formats to blank for undefined',
+        value: undefined,
+        expected: '',
+      },
+      {
+        name: 'formats to US dollars for zero',
+        value: 0,
+        expected: '$0.00',
+      },
+      {
+        name: 'formats to US dollars for a single dollar',
+        value: 1,
+        expected: '$1.00',
+      },
+      {
+        name: 'formats to US dollars for < 1000',
+        value: 139.24,
+        expected: '$139.24',
+      },
+      {
+        name: 'formats to US dollars for > 1,000',
+        value: 2139.24,
+        expected: '$2,139.24',
+      },
+      {
+        name: 'formats to US dollars for > 1,000,000',
+        value: 9822139.24,
+        expected: '$9,822,139.24',
+      },
+    ];
 
-    it('formats for US dollars', () => {
-      expect(formatCurrency(0)).toEqual('$0.00');
-      expect(formatCurrency(1)).toEqual('$1.00');
-      expect(formatCurrency(139.24)).toEqual('$139.24');
-      expect(formatCurrency(2139.24)).toEqual('$2,139.24');
-      expect(formatCurrency(9822139.24)).toEqual('$9,822,139.24');
+    it.each(testCases)('$name', ({ value, expected }) => {
+      expect(formatCurrency(value)).toEqual(expected);
     });
   });
 });

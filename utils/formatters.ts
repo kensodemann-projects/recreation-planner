@@ -35,4 +35,5 @@ const usdFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
-export const formatCurrency = (value?: number): string => (value || value === 0 ? usdFormatter.format(value) : '');
+export const formatCurrency = (value?: number | null): string =>
+  value || value === 0 ? usdFormatter.format(value) : '';

@@ -32,6 +32,7 @@ export const fetchAllEquipment = vi.fn().mockResolvedValue(EQUIPMENT);
 export const fetchEquipment = vi
   .fn()
   .mockImplementation((id: number) => Promise.resolve(EQUIPMENT.find((d) => d.id === id)));
+export const fetchTodoCollectionsForEquipment = vi.fn().mockResolvedValue([]);
 export const addEquipment = vi.fn();
 export const updateEquipment = vi.fn();
 export const canDeleteEquipment = vi.fn().mockResolvedValue(false);
