@@ -3,38 +3,52 @@ import { isEmail, isRequired } from '../input-validations';
 
 describe('Input Validations', () => {
   describe('required', () => {
-    it('is empty if there is a value', () => {
-      expect(isRequired('i')).toEqual('');
-    });
+    const testCases = [
+      {
+        name: 'is empty of there is a value',
+        value: 'i',
+        label: 'Does Not Matter',
+        expected: '',
+      },
+      {
+        name: 'returns an error message if empty',
+        value: '',
+        expected: 'Value is required',
+      },
+      {
+        name: 'returns an error message if empty after trimming',
+        value: '  ',
+        expected: 'Value is required',
+      },
+      {
+        name: 'uses the label in the error message',
+        value: '',
+        label: 'Email Address',
+        expected: 'Email Address is required',
+      },
+    ];
 
-    it('returns an error message if empty', () => {
-      expect(isRequired('')).toEqual('Value is required');
-    });
-
-    it('trims the input value', () => {
-      expect(isRequired(' ')).toEqual('Value is required');
-    });
-
-    it('uses the label if given', () => {
-      expect(isRequired('', 'Email Address')).toEqual('Email Address is required');
-    });
+    it.each(testCases)('$name', ({ value, label, expected }) => expect(isRequired(value, label)).toEqual(expected));
   });
 
   describe('email', () => {
-    it('is empty if the input is a valid email', () => {
-      expect(isEmail('test@test.com')).toEqual('');
-    });
-
-    it('returns an error message if no @', () => {
-      expect(isEmail('test.test.com')).toEqual('Please enter a valid email address.');
-    });
-
-    it('returns an error message if plain string', () => {
-      expect(isEmail('test')).toEqual('Please enter a valid email address.');
-    });
-
-    it('returns an error message if subdomain is missing', () => {
-      expect(isEmail('test@test.')).toEqual('Please enter a valid email address.');
-    });
+    const testCases = [
+      {
+        name: 'is empty if the value is a valid email',
+        value: 'test@test.com',
+        expected: '',
+      },
+      {
+        name: 'returns an error message if the value is a plain string',
+        value: 'test',
+        expected: 'Please enter a valid email address.',
+      },
+      {
+        name: 'returns an error message if the subdomain is missing',
+        value: 'test@test.',
+        expected: 'Please enter a valid email address.',
+      },
+    ];
+    it.each(testCases)('$name', ({ value, expected }) => expect(isEmail(value)).toEqual(expected));
   });
 });

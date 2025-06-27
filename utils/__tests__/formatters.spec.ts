@@ -3,67 +3,137 @@ import { cityStatePostal, formatCurrency, formatDate, formatDateRange } from '..
 
 describe('Formatters', () => {
   describe('date and time', () => {
-    it('formats the date', () => {
-      expect(formatDate('2024-09-26')).toEqual('Sep 26, 2024');
-    });
+    const testCases = [
+      {
+        name: 'formats a date',
+        date: '2024-09-26',
+        time: null,
+        expected: 'Sep 26, 2024',
+      },
+      {
+        name: 'formats a date and time',
+        date: '2022-05-03',
+        time: '17:15',
+        expected: 'May 3, 2022 at 5:15 PM',
+      },
+    ];
 
-    it('formats the date and time', () => {
-      expect(formatDate('2024-09-26', '17:15')).toEqual('Sep 26, 2024 at 5:15 PM');
-    });
+    it.each(testCases)('$name', ({ date, time, expected }) => expect(formatDate(date, time)).toEqual(expected));
   });
 
   describe('date range', () => {
-    it('formats a single date', () => {
-      expect(formatDateRange('2024-09-26')).toEqual('Sep 26, 2024');
-    });
+    const testCases = [
+      {
+        name: 'formats a single date',
+        beginDate: '2024-09-26',
+        beginTime: null,
+        endDate: null,
+        endTime: null,
+        expected: 'Sep 26, 2024',
+      },
+      {
+        name: 'formats a single date/Time',
+        beginDate: '2025-04-15',
+        beginTime: '17:15',
+        endDate: null,
+        endTime: null,
+        expected: 'Apr 15, 2025 at 5:15 PM',
+      },
+      {
+        name: 'formats a begin and end date / time',
+        beginDate: '2024-09-26',
+        beginTime: '15:42',
+        endDate: '2024-09-30',
+        endTime: '08:34',
+        expected: 'Sep 26, 2024 at 3:42 PM - Sep 30, 2024 at 8:34 AM',
+      },
+      {
+        name: 'formats a begin date and end date / time',
+        beginDate: '2024-09-26',
+        beginTime: null,
+        endDate: '2024-09-30',
+        endTime: '08:34',
+        expected: 'Sep 26, 2024 - Sep 30, 2024 at 8:34 AM',
+      },
+      {
+        name: 'formats a begin date / time and end date',
+        beginDate: '2024-08-30',
+        beginTime: '08:34',
+        endDate: '2024-09-01',
+        endTime: null,
+        expected: 'Aug 30, 2024 at 8:34 AM - Sep 1, 2024',
+      },
+      {
+        name: 'formats a date with a begin and end time',
+        beginDate: '2024-09-26',
+        beginTime: '08:42',
+        endDate: null,
+        endTime: '15:34',
+        expected: 'Sep 26, 2024 at 8:42 AM to 3:34 PM',
+      },
+    ];
 
-    it('formats a single date/time', () => {
-      expect(formatDateRange('2024-09-26', '17:15')).toEqual('Sep 26, 2024 at 5:15 PM');
-    });
-
-    it('formats a begin and end date', () => {
-      expect(formatDateRange('2024-09-26', undefined, '2024-09-30')).toEqual('Sep 26, 2024 - Sep 30, 2024');
-    });
-
-    it('formats a begin and end date / time', () => {
-      expect(formatDateRange('2024-09-26', '15:42', '2024-09-30', '08:34')).toEqual(
-        'Sep 26, 2024 at 3:42 PM - Sep 30, 2024 at 8:34 AM',
-      );
-    });
-
-    it('formats a date with a begin and end time', () => {
-      expect(formatDateRange('2024-09-26', '08:42', undefined, '15:34')).toEqual('Sep 26, 2024 at 8:42 AM to 3:34 PM');
-    });
+    it.each(testCases)('$name', ({ beginDate, beginTime, endDate, endTime, expected }) =>
+      expect(formatDateRange(beginDate, beginTime, endDate, endTime)).toEqual(expected),
+    );
   });
 
   describe('City, State Postal', () => {
-    it('formats just the city', () => {
-      expect(cityStatePostal('Waukesha')).toEqual('Waukesha');
-    });
+    const testCases = [
+      {
+        name: 'formats just the city',
+        city: 'Waukesha',
+        stateCode: null,
+        postalCode: null,
+        expected: 'Waukesha',
+      },
+      {
+        name: 'formats just the state',
+        city: null,
+        stateCode: 'WI',
+        postalCode: null,
+        expected: 'WI',
+      },
+      {
+        name: 'formats just the postal code',
+        city: null,
+        stateCode: null,
+        postalCode: '53189',
+        expected: '53189',
+      },
+      {
+        name: 'formats the city and postal code',
+        city: 'Waukesha',
+        stateCode: null,
+        postalCode: '53189',
+        expected: 'Waukesha 53189',
+      },
+      {
+        name: 'formats the state and postal code',
+        city: null,
+        stateCode: 'WI',
+        postalCode: '53189',
+        expected: 'WI 53189',
+      },
+      {
+        name: 'formats the city and state',
+        city: 'Madison',
+        stateCode: 'WI',
+        postalCode: null,
+        expected: 'Madison, WI',
+      },
+      {
+        name: 'formats the city, state and postal code',
+        city: 'Madison',
+        stateCode: 'WI',
+        postalCode: '53702',
+        expected: 'Madison, WI 53702',
+      },
+    ];
 
-    it('formats just the state', () => {
-      expect(cityStatePostal(null, 'WI')).toEqual('WI');
-    });
-
-    it('formats just the postal code', () => {
-      expect(cityStatePostal(null, null, '53189')).toEqual('53189');
-    });
-
-    it('formats the city and postal code', () => {
-      expect(cityStatePostal('Waukesha', null, '53189')).toEqual('Waukesha 53189');
-    });
-
-    it('formats the state and postal code', () => {
-      expect(cityStatePostal(null, 'WI', '53189')).toEqual('WI 53189');
-    });
-
-    it('formats the city and state', () => {
-      expect(cityStatePostal('Waukesha', 'WI')).toEqual('Waukesha, WI');
-    });
-
-    it('formats the city, state, and postal code ', () => {
-      expect(cityStatePostal('Waukesha', 'WI', '53189')).toEqual('Waukesha, WI 53189');
-    });
+    it.each(testCases)('$name', ({ city, stateCode, postalCode, expected }) =>
+      expect(cityStatePostal(city, stateCode, postalCode)).toEqual(expected),
+    );
   });
 
   describe('currency', () => {

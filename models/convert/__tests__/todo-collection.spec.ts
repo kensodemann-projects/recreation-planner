@@ -3,59 +3,57 @@ import { convertToTodoCollection, convertToTodoCollectionDTO } from '../todo-col
 
 describe('todo collection converters', () => {
   describe('to todo Collection', () => {
-    it('converts a basic collection', () => {
-      expect(
-        convertToTodoCollection({
+    const testCases = [
+      {
+        name: 'converts a basic collection',
+        input: {
           id: 1,
           name: 'Stuff I need to do',
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-      });
-    });
-
-    it('converts a full base collection without todos', () => {
-      expect(
-        convertToTodoCollection({
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+        },
+      },
+      {
+        name: 'converts a full base collection without todos',
+        input: {
           id: 1,
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           is_complete: false,
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-        description: 'This is a thing, and I need to do things that are stuff',
-        dueDate: '2025-05-23',
-        isComplete: false,
-      });
-    });
-
-    it('converts a event related collection', () => {
-      expect(
-        convertToTodoCollection({
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+        },
+      },
+      {
+        name: 'converts an event related collection',
+        input: {
           id: 1,
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           event_rid: 4273,
           is_complete: false,
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-        description: 'This is a thing, and I need to do things that are stuff',
-        dueDate: '2025-05-23',
-        isComplete: false,
-        eventRid: 4273,
-      });
-    });
-
-    it('converts a full base collection with child items', () => {
-      expect(
-        convertToTodoCollection({
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          eventRid: 4273,
+        },
+      },
+      {
+        name: 'converts a full base collection with child items',
+        input: {
           id: 1,
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
@@ -81,41 +79,8 @@ describe('todo collection converters', () => {
               todo_collection_rid: 1,
             },
           ],
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-        description: 'This is a thing, and I need to do things that are stuff',
-        dueDate: '2025-05-23',
-        isComplete: false,
-        todoItems: [
-          {
-            id: 42,
-            name: 'Do the needful',
-            isComplete: false,
-            todoCollectionRid: 1,
-          },
-          {
-            id: 73,
-            name: 'Bite the unbitten',
-            isComplete: true,
-            todoCollectionRid: 1,
-          },
-          {
-            id: 314159,
-            name: 'Eat the pi',
-            isComplete: false,
-            todoCollectionRid: 1,
-          },
-        ],
-      });
-    });
-  });
-
-  describe('to DTO', () => {
-    it('converts the full collection without the children', () => {
-      expect(
-        convertToTodoCollectionDTO({
+        },
+        expected: {
           id: 1,
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
@@ -141,19 +106,55 @@ describe('todo collection converters', () => {
               todoCollectionRid: 1,
             },
           ],
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-        description: 'This is a thing, and I need to do things that are stuff',
-        due_date: '2025-05-23',
-        is_complete: false,
-      });
-    });
+        },
+      },
+    ];
 
-    it('converts an event related collection', () => {
-      expect(
-        convertToTodoCollectionDTO({
+    it.each(testCases)('$name', ({ input, expected }) => expect(convertToTodoCollection(input)).toEqual(expected));
+  });
+
+  describe('to DTO', () => {
+    const testCases = [
+      {
+        name: 'converts the full collection without the children',
+        input: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          todoItems: [
+            {
+              id: 42,
+              name: 'Do the needful',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 73,
+              name: 'Bite the unbitten',
+              isComplete: true,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 314159,
+              name: 'Eat the pi',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+          ],
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          is_complete: false,
+        },
+      },
+      {
+        name: 'converts an event related collection',
+        input: {
           id: 1,
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
@@ -180,15 +181,18 @@ describe('todo collection converters', () => {
               todoCollectionRid: 1,
             },
           ],
-        }),
-      ).toEqual({
-        id: 1,
-        name: 'Stuff I need to do',
-        description: 'This is a thing, and I need to do things that are stuff',
-        due_date: '2025-05-23',
-        event_rid: 4273,
-        is_complete: false,
-      });
-    });
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          event_rid: 4273,
+          is_complete: false,
+        },
+      },
+    ];
+
+    it.each(testCases)('$name', ({ input, expected }) => expect(convertToTodoCollectionDTO(input)).toEqual(expected));
   });
 });
