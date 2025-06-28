@@ -25,24 +25,37 @@ describe('Update Trip / Event Page', () => {
 
     it('fetchs the event', async () => {
       await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchEvent).toHaveBeenCalledOnce();
-      expect(fetchEvent).toHaveBeenCalledWith(3);
+      expect(fetchEvent).toHaveBeenCalledExactlyOnceWith(3);
     });
 
     it('fetches the event types', async () => {
       await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchEventTypes).toHaveBeenCalledOnce();
+      expect(fetchEventTypes).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('fetches the places', async () => {
       await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchPlaces).toHaveBeenCalledOnce();
+      expect(fetchPlaces).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('renders the update events component', async () => {
       const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Update the Trip / Event' })).toBeDefined();
+    });
+
+    describe('if the event cannot be fetched', () => {
+      it('renders an error message', async () => {
+        const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '524' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the event')).toBeDefined();
+      });
+
+      it('does not render the delete equipment component', async () => {
+        const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '524' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Update Trip / Event' })).toBeNull();
+      });
     });
   });
 

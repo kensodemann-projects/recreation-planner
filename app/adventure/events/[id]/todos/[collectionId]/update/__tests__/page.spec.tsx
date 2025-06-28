@@ -9,7 +9,7 @@ vi.mock('@/app/adventure/todos/data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
-describe('Update Todo Collection Page', () => {
+describe('Update Todo Collection for Event Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
@@ -24,15 +24,29 @@ describe('Update Todo Collection Page', () => {
     });
 
     it('renders the update todo collection component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '2' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeDefined();
     });
 
     it('does not render the must be logged in component', async () => {
-      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
+      const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '2' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
+
+    describe('if the todo collection cannot be fetched', () => {
+      it('renders an error message', async () => {
+        const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '524' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the todo collection')).toBeDefined();
+      });
+
+      it('does not render the delete equipment component', async () => {
+        const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '524' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeNull();
+      });
     });
   });
 

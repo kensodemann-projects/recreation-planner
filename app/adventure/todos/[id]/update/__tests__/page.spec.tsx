@@ -19,8 +19,7 @@ describe('Update Todo Collection Page', () => {
 
     it('fetches the collection', async () => {
       await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchTodoCollection).toHaveBeenCalledOnce();
-      expect(fetchTodoCollection).toHaveBeenCalledWith(3);
+      expect(fetchTodoCollection).toHaveBeenCalledExactlyOnceWith(3);
     });
 
     it('renders the update todo collection component', async () => {
@@ -33,6 +32,20 @@ describe('Update Todo Collection Page', () => {
       const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
+
+    describe('if the todo collection cannot be fetched', () => {
+      it('renders an error message', async () => {
+        const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '23' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the todo collection')).toBeDefined();
+      });
+
+      it('does not render the delete equipment component', async () => {
+        const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '23' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeNull();
+      });
     });
   });
 

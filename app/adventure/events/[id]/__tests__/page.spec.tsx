@@ -40,6 +40,20 @@ describe('Event Page', () => {
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
+
+    describe('if the event cannot be fetched', () => {
+      it('renders an error message', async () => {
+        const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the event')).toBeDefined();
+      });
+
+      it('does not render the delete equipment component', async () => {
+        const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeNull();
+      });
+    });
   });
 
   describe('when not logged in', () => {

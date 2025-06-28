@@ -3,6 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { canDeleteEquipment, fetchEquipment } from '../../../data';
 import DeleteEquipmentPage from '../page';
+import { EQUIPMENT } from '../../../__mocks__/data';
 
 vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
@@ -15,10 +16,6 @@ describe('Delete Equipment Page', () => {
   describe('when logged in', () => {
     beforeEach(() => {
       (isLoggedIn as Mock).mockResolvedValue(true);
-      (fetchEquipment as Mock).mockResolvedValue({
-        id: 3,
-        name: 'Minimal amount of data',
-      });
     });
 
     it('fetches the equipment', async () => {
@@ -28,10 +25,7 @@ describe('Delete Equipment Page', () => {
 
     it('determines if the equipment can be deleted', async () => {
       await DeleteEquipmentPage({ params: Promise.resolve({ id: '3' }) });
-      expect(canDeleteEquipment).toHaveBeenCalledExactlyOnceWith({
-        id: 3,
-        name: 'Minimal amount of data',
-      });
+      expect(canDeleteEquipment).toHaveBeenCalledExactlyOnceWith(EQUIPMENT.find((x) => x.id === 3));
     });
 
     it('renders the delete equipment component', async () => {
@@ -47,18 +41,14 @@ describe('Delete Equipment Page', () => {
     });
 
     describe('if the equipment cannot be fetched', () => {
-      beforeEach(() => {
-        (fetchEquipment as Mock).mockResolvedValue(null);
-      });
-
       it('renders an error message', async () => {
-        const jsx = await DeleteEquipmentPage({ params: Promise.resolve({ id: '3' }) });
+        const jsx = await DeleteEquipmentPage({ params: Promise.resolve({ id: '524' }) });
         render(jsx);
         expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
       });
 
       it('does not render the delete equipment component', async () => {
-        const jsx = await DeleteEquipmentPage({ params: Promise.resolve({ id: '3' }) });
+        const jsx = await DeleteEquipmentPage({ params: Promise.resolve({ id: '524' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Remove Equipment' })).toBeNull();
       });

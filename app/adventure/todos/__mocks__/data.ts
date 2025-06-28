@@ -1,7 +1,7 @@
 import { TodoCollection, TodoItem } from '@/models';
 import { vi } from 'vitest';
 
-const TODO_ITEMS: TodoItem[] = [
+export const TODO_ITEMS: TodoItem[] = [
   {
     id: 17,
     name: 'Fetch the data',
@@ -52,7 +52,7 @@ const TODO_ITEMS: TodoItem[] = [
   },
 ];
 
-const TODO_COLLECTIONS: TodoCollection[] = [
+export const TODO_COLLECTIONS: TodoCollection[] = [
   {
     id: 1,
     name: 'Todo Development',
@@ -80,7 +80,9 @@ const TODO_COLLECTIONS: TodoCollection[] = [
 ];
 
 export const fetchOpenTodoCollections = vi.fn().mockResolvedValue(TODO_COLLECTIONS.filter((x) => !x.isComplete));
-export const fetchTodoCollection = vi.fn().mockResolvedValue(TODO_COLLECTIONS[2]);
+export const fetchTodoCollection = vi
+  .fn()
+  .mockImplementation((id: number) => Promise.resolve(TODO_COLLECTIONS.find((x) => x.id === id)));
 export const addTodoCollection = vi.fn().mockResolvedValue(null);
 export const updateTodoCollection = vi.fn().mockResolvedValue(null);
 export const addTodoItem = vi.fn().mockResolvedValue(null);

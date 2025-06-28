@@ -1,30 +1,32 @@
 import { Equipment } from '@/models';
 import { vi } from 'vitest';
 
-const EQUIPMENT: Array<Equipment> = [
+export const EQUIPMENT: Array<Equipment> = [
   {
     id: 1,
-    name: 'Burnet State Park',
-    purchaseDate: '2015-03-17',
-    cost: 42584.34,
+    name: 'Ford Pinto',
+    description: 'It blows up if you touch it, so be careful',
+    purchaseDate: '1977-03-17',
+    cost: 3024.34,
   },
   {
     id: 2,
-    name: 'Indianapolis Motor Speedway',
-    purchaseDate: '2015-03-17',
-    cost: 42584.34,
+    name: 'The bare minimum',
+    purchaseDate: null,
+    cost: null,
   },
   {
     id: 3,
-    name: 'Richard Bong State Park',
-    purchaseDate: '2015-03-17',
-    cost: 42584.34,
+    name: 'Fork Maverick',
+    purchaseDate: '2014-11-27',
+    cost: 24584.34,
   },
   {
     id: 4,
-    name: 'Ford Maverick',
-    purchaseDate: '2015-03-17',
-    cost: 42584.34,
+    name: 'The e-bike',
+    description: 'Just mine makes it into the test',
+    purchaseDate: '2022-05-30',
+    cost: 1943.5,
   },
 ];
 

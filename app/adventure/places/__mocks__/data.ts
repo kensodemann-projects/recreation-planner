@@ -24,7 +24,7 @@ const PLACE_TYPES: Array<PlaceType> = [
   },
 ];
 
-const PLACES: Array<Place> = [
+export const PLACES: Array<Place> = [
   {
     id: 1,
     name: 'Burnet State Park',

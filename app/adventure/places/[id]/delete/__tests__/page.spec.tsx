@@ -33,6 +33,26 @@ describe('Delete Place Page', () => {
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Remove Place' })).toBeDefined();
     });
+
+    it('does not render the must be logged in component', async () => {
+      const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
+
+    describe('if the place cannot be fetched', () => {
+      it('renders an error message', async () => {
+        const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '23' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the place')).toBeDefined();
+      });
+
+      it('does not render the delete equipment component', async () => {
+        const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '23' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Remove Place' })).toBeNull();
+      });
+    });
   });
 
   describe('when not logged in', () => {
@@ -54,6 +74,12 @@ describe('Delete Place Page', () => {
       const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
+    });
+
+    it('does not render the delete place component', async () => {
+      const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'Remove Place' })).toBeNull();
     });
   });
 });
