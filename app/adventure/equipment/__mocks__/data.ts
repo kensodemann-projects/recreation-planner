@@ -35,4 +35,5 @@ export const fetchEquipment = vi
 export const fetchTodoCollectionsForEquipment = vi.fn().mockResolvedValue([]);
 export const addEquipment = vi.fn();
 export const updateEquipment = vi.fn();
+export const deleteEquipment = vi.fn();
 export const canDeleteEquipment = vi.fn().mockResolvedValue(false);

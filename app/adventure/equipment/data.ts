@@ -69,6 +69,13 @@ export const canDeleteEquipment = async (equipment: Equipment): Promise<boolean>
   return true;
 };
 
+export const deleteEquipment = async (equipment: Equipment): Promise<void> => {
+  if (await isLoggedIn()) {
+    const supabase = createClient();
+    await supabase.from('equipment').delete().eq('id', equipment.id);
+  }
+};
+
 export const updateEquipment = async (item: Equipment): Promise<Equipment | null> => {
   if (!(await isLoggedIn())) {
     return null;

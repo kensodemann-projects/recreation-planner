@@ -15,10 +15,10 @@ const purchaseDate = (dt: string | undefined | null) =>
     </div>
   ) : null;
 
-const cost = (c: number | undefined | null) =>
-  c ? (
+const cost = (amount: number | undefined | null) =>
+  amount ? (
     <div>
-      <span className="label">Cost:</span> {formatCurrency(c)}
+      <span className="label">Cost:</span> {formatCurrency(amount)}
     </div>
   ) : null;
 
