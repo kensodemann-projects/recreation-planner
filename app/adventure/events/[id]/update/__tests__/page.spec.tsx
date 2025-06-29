@@ -44,6 +44,12 @@ describe('Update Trip / Event Page', () => {
       expect(screen.getByRole('heading', { level: 1, name: 'Update the Trip / Event' })).toBeDefined();
     });
 
+    it('does not render the must be logged in component', async () => {
+      const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+    });
+
     describe('if the event cannot be fetched', () => {
       it('renders an error message', async () => {
         const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '524' }) });
@@ -51,7 +57,7 @@ describe('Update Trip / Event Page', () => {
         expect(screen.getByText('Failed to fetch the event')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the update events component', async () => {
         const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '524' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Update Trip / Event' })).toBeNull();
@@ -83,6 +89,12 @@ describe('Update Trip / Event Page', () => {
     it('does not fetch the places', async () => {
       await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
       expect(fetchPlaces).not.toHaveBeenCalled();
+    });
+
+    it('does not render the update events component', async () => {
+      const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
+      render(jsx);
+      expect(screen.queryByRole('heading', { level: 1, name: 'Update the Trip / Event' })).toBeNull();
     });
   });
 });

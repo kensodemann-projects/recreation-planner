@@ -19,8 +19,8 @@ describe('Update Todo Collection for Event Page', () => {
     });
 
     it('fetches the collection', async () => {
-      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '56' }) });
-      expect(fetchTodoCollection).toHaveBeenCalledExactlyOnceWith(56);
+      await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '2' }) });
+      expect(fetchTodoCollection).toHaveBeenCalledExactlyOnceWith(2);
     });
 
     it('renders the update todo collection component', async () => {
@@ -42,7 +42,7 @@ describe('Update Todo Collection for Event Page', () => {
         expect(screen.getByText('Failed to fetch the todo collection')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the update todo collection component', async () => {
         const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '524' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeNull();

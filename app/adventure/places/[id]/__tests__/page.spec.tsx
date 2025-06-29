@@ -21,8 +21,7 @@ describe('Place Page', () => {
 
     it('fetches the place', async () => {
       await PlacePage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchPlace).toHaveBeenCalledOnce();
-      expect(fetchPlace).toHaveBeenCalledWith(2);
+      expect(fetchPlace).toHaveBeenCalledExactlyOnceWith(2);
     });
 
     it('renders the page header', async () => {
@@ -44,7 +43,7 @@ describe('Place Page', () => {
         expect(screen.getByText('Failed to fetch the place')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the page header', async () => {
         const jsx = await PlacePage({ params: Promise.resolve({ id: '23' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Place Details' })).toBeNull();

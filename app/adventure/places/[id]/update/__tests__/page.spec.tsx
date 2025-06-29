@@ -19,13 +19,12 @@ describe('Update Place Page', () => {
 
     it('fetches the place', async () => {
       await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchPlace).toHaveBeenCalledOnce();
-      expect(fetchPlace).toHaveBeenCalledWith(3);
+      expect(fetchPlace).toHaveBeenCalledExactlyOnceWith(3);
     });
 
     it('fetches the place types', async () => {
       await UpdatePlacePage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchPlaceTypes).toHaveBeenCalledOnce();
+      expect(fetchPlaceTypes).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('renders the update place component', async () => {
@@ -47,7 +46,7 @@ describe('Update Place Page', () => {
         expect(screen.getByText('Failed to fetch the place')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the update place component', async () => {
         const jsx = await UpdatePlacePage({ params: Promise.resolve({ id: '23' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Update the Place' })).toBeNull();

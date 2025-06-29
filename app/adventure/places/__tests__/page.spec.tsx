@@ -21,7 +21,7 @@ describe('Places Page', () => {
 
     it('fetches the places', async () => {
       await PlacesPage();
-      expect(fetchPlaces).toHaveBeenCalledOnce();
+      expect(fetchPlaces).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('renders the places component', async () => {

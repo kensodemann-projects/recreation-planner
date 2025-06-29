@@ -41,7 +41,7 @@ describe('Update Todo Collection Page', () => {
         expect(screen.getByText('Failed to fetch the todo collection')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the update todo collection component', async () => {
         const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '23' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeNull();

@@ -41,7 +41,7 @@ describe('Delete Event Page', () => {
         expect(screen.getByText('Failed to fetch the event')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the delete event component', async () => {
         const jsx = await DeleteEventPage({ params: Promise.resolve({ id: '524' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Remove Trip / Event' })).toBeNull();

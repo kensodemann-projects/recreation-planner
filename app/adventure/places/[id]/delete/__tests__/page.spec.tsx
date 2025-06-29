@@ -3,6 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { canDeletePlace, fetchPlace } from '../../../data';
 import DeletePlacePage from '../page';
+import { PLACES } from '../../../__mocks__/data';
 
 vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
@@ -19,13 +20,12 @@ describe('Delete Place Page', () => {
 
     it('fetches the place', async () => {
       await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
-      expect(fetchPlace).toHaveBeenCalledOnce();
-      expect(fetchPlace).toHaveBeenCalledWith(3);
+      expect(fetchPlace).toHaveBeenCalledExactlyOnceWith(3);
     });
 
     it('determines if the place can be deleted', async () => {
       await DeletePlacePage({ params: Promise.resolve({ id: '3' }) });
-      expect(canDeletePlace).toHaveBeenCalledOnce();
+      expect(canDeletePlace).toHaveBeenCalledExactlyOnceWith(PLACES.find((x) => x.id === 3));
     });
 
     it('renders the delete place component', async () => {
@@ -47,7 +47,7 @@ describe('Delete Place Page', () => {
         expect(screen.getByText('Failed to fetch the place')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the delete place component', async () => {
         const jsx = await DeletePlacePage({ params: Promise.resolve({ id: '23' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Remove Place' })).toBeNull();

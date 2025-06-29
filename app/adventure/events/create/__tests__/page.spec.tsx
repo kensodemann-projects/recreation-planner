@@ -19,12 +19,12 @@ describe('Create Place Page', () => {
 
     it('fetches the event types', async () => {
       await CreateEventPage();
-      expect(fetchEventTypes).toHaveBeenCalledOnce();
+      expect(fetchEventTypes).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('fetches the places', async () => {
       await CreateEventPage();
-      expect(fetchPlaces).toHaveBeenCalledOnce();
+      expect(fetchPlaces).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('renders the create event header', async () => {

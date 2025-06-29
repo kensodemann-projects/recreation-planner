@@ -1,8 +1,8 @@
 import { isLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import EventPage from '../page';
 import { fetchEvent, fetchTodoCollectionsForEvent } from '../../data';
+import EventPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('../../data');
@@ -48,7 +48,7 @@ describe('Event Page', () => {
         expect(screen.getByText('Failed to fetch the event')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the page header', async () => {
         const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeNull();

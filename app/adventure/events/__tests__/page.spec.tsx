@@ -26,15 +26,13 @@ describe('Events Page', () => {
     it('fetches the current events', async () => {
       vi.setSystemTime(new Date(2024, 10, 27));
       await EventsPage();
-      expect(fetchUpcomingEvents).toHaveBeenCalledOnce();
-      expect(fetchUpcomingEvents).toHaveBeenCalledWith('2024-11-24');
+      expect(fetchUpcomingEvents).toHaveBeenCalledExactlyOnceWith('2024-11-24');
     });
 
     it('fetches the prior events', async () => {
       vi.setSystemTime(new Date(2024, 10, 27));
       await EventsPage();
-      expect(fetchPriorEvents).toHaveBeenCalledOnce();
-      expect(fetchPriorEvents).toHaveBeenCalledWith('2024-11-24');
+      expect(fetchPriorEvents).toHaveBeenCalledExactlyOnceWith('2024-11-24');
     });
 
     it('renders the activities component', async () => {

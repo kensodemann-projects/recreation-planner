@@ -54,7 +54,7 @@ describe('Equipment Page', () => {
         expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
       });
 
-      it('does not render the delete equipment component', async () => {
+      it('does not render the page header', async () => {
         const jsx = await EquipmentPage({ params: Promise.resolve({ id: '52' }) });
         render(jsx);
         expect(screen.queryByRole('heading', { level: 1, name: 'Equipment Details' })).toBeNull();

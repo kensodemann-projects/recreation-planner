@@ -19,7 +19,7 @@ describe('Create Place Page', () => {
 
     it('fetches the place types', async () => {
       await CreatePlacePage();
-      expect(fetchPlaceTypes).toHaveBeenCalledOnce();
+      expect(fetchPlaceTypes).toHaveBeenCalledExactlyOnceWith();
     });
 
     it('renders the create place component', async () => {
