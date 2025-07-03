@@ -60,21 +60,11 @@ describe('Login Page', () => {
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });
 
-      it('is not displayed after initial entry', async () => {
+      it('is displayed if the format is invalid', async () => {
         const user = userEvent.setup();
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
         await user.type(inp, 'foo');
-        expect(inp.classList).not.toContain('input-error');
-        expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
-      });
-
-      it('is displayed after tabbing out of the input', async () => {
-        const user = userEvent.setup();
-        render(<LoginPage />);
-        const inp = screen.getByLabelText('Email Address');
-        await user.type(inp, 'foo');
-        await user.tab();
         expect(inp.classList).toContain('input-error');
         expect(screen.getByText('Please enter a valid email address.')).toBeDefined();
       });
@@ -84,18 +74,8 @@ describe('Login Page', () => {
         render(<LoginPage />);
         const inp = screen.getByLabelText('Email Address');
         await user.type(inp, 'foo');
-        await user.tab();
+        expect(screen.getByText('Please enter a valid email address.')).toBeDefined();
         await user.type(inp, '@bar.com');
-        expect(inp.classList).not.toContain('input-error');
-        expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
-      });
-
-      it('is not displayed with a valid email on initial tab out', async () => {
-        const user = userEvent.setup();
-        render(<LoginPage />);
-        const inp = screen.getByLabelText('Email Address');
-        await user.type(inp, 'foo@bar.com');
-        await user.tab();
         expect(inp.classList).not.toContain('input-error');
         expect(screen.queryByText('Please enter a valid email address.')).toBeNull();
       });

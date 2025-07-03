@@ -3,31 +3,27 @@
 import { useRouter } from 'next/navigation';
 import { login } from './actions';
 import Input from '../ui/input';
-import { useFormControl } from '@/hooks/use-form-control';
 import { isEmail, isRequired } from '@/utils/input-validations';
 import BusyIndicator from '../ui/busy-indicator';
 import { useState } from 'react';
+import { useFormControl } from '@/hooks/use-form-control';
 
 const LoginPage = () => {
   const {
     value: email,
     error: emailError,
-    touched: emailTouched,
-    handleChange: handleEmailChange,
-    handleBlur: handleEmailBlur,
+    setValue: setEmail,
+    validate: validateEmail,
   } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Email Address') || isEmail(value));
   const {
     value: password,
     error: passwordError,
-    touched: passwordTouched,
-    handleChange: handlePasswordChange,
-    handleBlur: handlePasswordBlur,
+    setValue: setPassword,
+    validate: validatePassword,
   } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Password'));
   const router = useRouter();
 
-  const displayedEmailError = emailTouched ? emailError : '';
-  const displayedPasswordError = passwordTouched ? passwordError : '';
-  const loginDisabled = !!(emailError || passwordError);
+  const loginDisabled = !(email && password) || !!(emailError || passwordError);
 
   const [busy, setBusy] = useState(false);
 
@@ -42,9 +38,9 @@ const LoginPage = () => {
             type="email"
             label="Email Address"
             value={email}
-            error={displayedEmailError}
-            onBlur={handleEmailBlur}
-            onChange={(evt) => handleEmailChange(evt.target.value)}
+            error={emailError}
+            onBlur={validateEmail}
+            onChange={(evt) => setEmail(evt.target.value)}
           />
           <Input
             id="password"
@@ -52,9 +48,9 @@ const LoginPage = () => {
             type="password"
             label="Password"
             value={password}
-            error={displayedPasswordError}
-            onBlur={handlePasswordBlur}
-            onChange={(evt) => handlePasswordChange(evt.target.value)}
+            error={passwordError}
+            onBlur={validatePassword}
+            onChange={(evt) => setPassword(evt.target.value)}
           />
           <div className="card-actions justify-end mt-4">
             <button className="btn min-w-24" disabled={busy} onClick={() => router.back()}>

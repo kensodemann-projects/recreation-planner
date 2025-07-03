@@ -1,31 +1,22 @@
 'use client';
 
-import { ChangeEventHandler, ComponentPropsWithoutRef, FocusEventHandler } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 
 interface DescriptionProperties extends ComponentPropsWithoutRef<'textarea'> {
-  id: string;
   label: string;
-  value: string | undefined;
-  className?: string | undefined;
   error?: string | undefined;
-  onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
-  onChange?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
 }
 
-const Description = ({ id, label, value, className, error, onBlur, onChange, ...props }: DescriptionProperties) => {
+const Description = ({ label, className, error, ...props }: DescriptionProperties) => {
   return (
     <label className={`floating-label ${className}`}>
       <span className="label">{label}</span>
       <textarea
-        id={id}
-        className={`textarea textarea-bordered w-full ${error ? 'textarea-error' : null}`}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        placeholder={label}
         {...props}
+        className={`textarea textarea-bordered w-full ${error ? 'textarea-error' : null}`}
+        placeholder={label}
       />
-      {error ? <div className="label-text-alt text-error">{error}</div> : <div className="label-text-alt">&nbsp;</div>}
+      <div className="text-error text-sm pb-2">{error ? error : '\u00A0'}</div>
     </label>
   );
 };

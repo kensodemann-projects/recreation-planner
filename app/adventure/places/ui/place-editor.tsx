@@ -19,70 +19,37 @@ export interface PlaceEditorProps {
 const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) => {
   const {
     value: placeName,
-    dirty: placeNameDirty,
     error: placeNameError,
-    touched: placeNameTouched,
-    handleChange: handlePlaceNameChange,
-    handleBlur: handlePlaceNameBlur,
+    setValue: setPlaceName,
+    validate: validatePlaceName,
   } = useFormControl(place?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
 
-  const {
-    value: description,
-    dirty: descriptionDirty,
-    handleChange: setDescription,
-  } = useFormControl(place?.description || '');
-  const {
-    value: addressLine1,
-    dirty: addressLine1Dirty,
-    handleChange: setAddressLine1,
-  } = useFormControl(place?.address.line1 || '');
-  const {
-    value: addressLine2,
-    dirty: addressLine2Dirty,
-    handleChange: setAddressLine2,
-  } = useFormControl(place?.address.line2 || '');
-  const {
-    value: addressCity,
-    dirty: addressCityDirty,
-    handleChange: setCity,
-  } = useFormControl(place?.address.city || '');
-  const {
-    value: addressState,
-    dirty: addressStateDirty,
-    handleChange: setState,
-  } = useFormControl(place?.address.state || '');
-  const {
-    value: addressPostal,
-    dirty: addressPostalDirty,
-    handleChange: setPostal,
-  } = useFormControl(place?.address.postal || '');
-  const {
-    value: phoneNumber,
-    dirty: phoneNumberDirty,
-    handleChange: setPhoneNumber,
-  } = useFormControl(place?.phoneNumber || '');
-  const { value: website, dirty: websiteDirty, handleChange: setWebsite } = useFormControl(place?.website || '');
-  const {
-    value: placeTypeId,
-    dirty: placeTypeIdDirty,
-    handleChange: setPlaceTypeId,
-  } = useFormControl<number>(place?.type.id || types[0].id);
+  const { value: description, setValue: setDescription } = useFormControl(place?.description || '');
+  const { value: addressLine1, setValue: setAddressLine1 } = useFormControl(place?.address.line1 || '');
+  const { value: addressLine2, setValue: setAddressLine2 } = useFormControl(place?.address.line2 || '');
+  const { value: addressCity, setValue: setCity } = useFormControl(place?.address.city || '');
+  const { value: addressState, setValue: setState } = useFormControl(place?.address.state || '');
+  const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address.postal || '');
+  const { value: phoneNumber, setValue: setPhoneNumber } = useFormControl(place?.phoneNumber || '');
+  const { value: website, setValue: setWebsite } = useFormControl(place?.website || '');
+  const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id);
 
   const [busy, setBusy] = useState(false);
 
   const disableButton =
+    !placeName ||
     !!placeNameError ||
     !(
-      placeNameDirty ||
-      descriptionDirty ||
-      addressLine1Dirty ||
-      addressLine2Dirty ||
-      addressCityDirty ||
-      addressStateDirty ||
-      addressPostalDirty ||
-      phoneNumberDirty ||
-      websiteDirty ||
-      placeTypeIdDirty
+      placeName !== (place?.name || '') ||
+      description !== (place?.description || '') ||
+      addressLine1 !== (place?.address.line1 || '') ||
+      addressLine2 !== (place?.address.line2 || '') ||
+      addressCity !== (place?.address.city || '') ||
+      addressState !== (place?.address.state || '') ||
+      addressPostal !== (place?.address.postal || '') ||
+      phoneNumber !== (place?.phoneNumber || '') ||
+      website !== (place?.website || '') ||
+      placeTypeId !== place?.type.id
     );
 
   const buildPlace = (): Place => ({
@@ -111,9 +78,9 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           label="Name"
           value={placeName}
-          error={placeNameTouched ? placeNameError : ''}
-          onBlur={handlePlaceNameBlur}
-          onChange={(evt) => handlePlaceNameChange(evt.target.value)}
+          error={placeNameError}
+          onBlur={validatePlaceName}
+          onChange={(evt) => setPlaceName(evt.target.value)}
         />
         <Select
           id="place-type"

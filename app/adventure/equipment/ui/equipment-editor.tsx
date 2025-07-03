@@ -15,26 +15,23 @@ export interface EquipmentEditorProps {
 const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProps) => {
   const {
     value: name,
-    dirty: nameDirty,
     error: nameError,
-    touched: nameTouched,
-    handleChange: setName,
-    handleBlur: handleNameBlur,
+    setValue: setName,
+    validate: validateName,
   } = useFormControl(equipment?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const {
-    value: description,
-    dirty: descriptionDirty,
-    handleChange: setDescription,
-  } = useFormControl(equipment?.description || '');
-  const {
-    value: purchaseDate,
-    dirty: purchaseDateDirty,
-    handleChange: setPurchaseDate,
-  } = useFormControl(equipment?.purchaseDate || '');
-  const { value: cost, dirty: costDirty, handleChange: setCost } = useFormControl(equipment?.cost || null);
+  const { value: description, setValue: setDescription } = useFormControl(equipment?.description || '');
+  const { value: purchaseDate, setValue: setPurchaseDate } = useFormControl(equipment?.purchaseDate || '');
+  const { value: cost, setValue: setCost } = useFormControl(equipment?.cost || '');
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton = !name || !(nameDirty || descriptionDirty || purchaseDateDirty || costDirty);
+  const disableConfirmButton =
+    !name ||
+    !(
+      name !== (equipment?.name || '') ||
+      description !== (equipment?.description || '') ||
+      purchaseDate !== (equipment?.purchaseDate || '') ||
+      cost !== (equipment?.cost || '')
+    );
 
   return (
     <div className="p-2 md:p-4">
@@ -46,8 +43,8 @@ const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProp
           label="Name"
           value={name}
           disabled={busy}
-          error={nameTouched ? nameError : ''}
-          onBlur={handleNameBlur}
+          error={nameError}
+          onBlur={validateName}
           onChange={(evt) => setName(evt.target.value)}
         />
 
@@ -78,7 +75,7 @@ const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProp
           value={cost ?? undefined}
           label="Cost"
           disabled={busy}
-          onChange={(evt) => setCost(evt.target.valueAsNumber)}
+          onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
         />
       </div>
 
@@ -94,7 +91,7 @@ const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProp
               name: name!,
               description: description || null,
               purchaseDate: purchaseDate || null,
-              cost: cost || null,
+              cost: Number(cost) || null,
             };
             onConfirm(equipment ? { ...equipment, ...data } : data);
           }}

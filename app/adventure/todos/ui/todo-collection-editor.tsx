@@ -15,30 +15,23 @@ export interface TodoCollectionEditorProps {
 const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoCollectionEditorProps) => {
   const {
     value: name,
-    dirty: nameDirty,
     error: nameError,
-    touched: nameTouched,
-    handleChange: setName,
-    handleBlur: handleNameBlur,
+    setValue: setName,
+    validate: validateName,
   } = useFormControl(todoCollection?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const {
-    value: dueDate,
-    dirty: dueDateDirty,
-    handleChange: setDueDate,
-  } = useFormControl(todoCollection?.dueDate || '');
-  const {
-    value: description,
-    dirty: descriptionDirty,
-    handleChange: setDescription,
-  } = useFormControl(todoCollection?.description || '');
-  const {
-    value: isComplete,
-    dirty: isCompleteDirty,
-    handleChange: setIsComplete,
-  } = useFormControl(todoCollection?.isComplete || false);
+  const { value: dueDate, setValue: setDueDate } = useFormControl(todoCollection?.dueDate || '');
+  const { value: description, setValue: setDescription } = useFormControl(todoCollection?.description || '');
+  const { value: isComplete, setValue: setIsComplete } = useFormControl(todoCollection?.isComplete || false);
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton = !!nameError || !(dueDateDirty || nameDirty || descriptionDirty || isCompleteDirty);
+  const disableConfirmButton =
+    !name ||
+    !(
+      dueDate !== (todoCollection?.dueDate || '') ||
+      name !== (todoCollection?.name || '') ||
+      description !== (todoCollection?.description || '') ||
+      isComplete !== (todoCollection?.isComplete || false)
+    );
 
   return (
     <div className="p-2 md:p-4">
@@ -50,8 +43,8 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           label="Name"
           value={name}
           disabled={busy}
-          error={nameTouched ? nameError : ''}
-          onBlur={handleNameBlur}
+          error={nameError}
+          onBlur={validateName}
           onChange={(evt) => setName(evt.target.value)}
         />
         <Input

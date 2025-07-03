@@ -18,64 +18,37 @@ export interface EventEditorProps {
 const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorProps) => {
   const {
     value: eventName,
-    dirty: eventNameDirty,
     error: eventNameError,
-    touched: eventNameTouched,
-    handleChange: handleEventNameChange,
-    handleBlur: handleEventNameBlur,
+    setValue: setEventName,
+    validate: validateEventName,
   } = useFormControl(event?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const {
-    value: eventTypeId,
-    dirty: eventTypeDirty,
-    handleChange: setEventTypeId,
-  } = useFormControl(event?.type.id || types[0]?.id);
-  const {
-    value: eventPlaceId,
-    dirty: eventPlaceDirty,
-    handleChange: setEventPlaceId,
-  } = useFormControl(event?.place.id || places[0]?.id);
+  const { value: eventTypeId, setValue: setEventTypeId } = useFormControl(event?.type.id || types[0]?.id);
+  const { value: eventPlaceId, setValue: setEventPlaceId } = useFormControl(event?.place.id || places[0]?.id);
   const {
     value: eventBeginDate,
-    dirty: eventBeginDateDirty,
     error: eventBeginDateError,
-    touched: eventBeginDateTouched,
-    handleChange: handleEventBeginDateChange,
-    handleBlur: handleEventBeginDateBlur,
+    setValue: setEventBeginDate,
+    validate: validateEventBeginDate,
   } = useFormControl(event?.beginDate || '', (value: string | undefined) => isRequired(value, 'Begin Date'));
-  const {
-    value: eventBeginTime,
-    dirty: eventBeginTimeDirty,
-    handleChange: setEventBeginTime,
-  } = useFormControl(event?.beginTime || '');
-  const {
-    value: eventEndDate,
-    dirty: eventEndDateDirty,
-    handleChange: setEventEndDate,
-  } = useFormControl(event?.endDate || '');
-  const {
-    value: eventEndTime,
-    dirty: eventEndTimeDirty,
-    handleChange: setEventEndTime,
-  } = useFormControl(event?.endTime || '');
-  const {
-    value: eventDescription,
-    dirty: eventDescriptionDirty,
-    handleChange: setEventDescription,
-  } = useFormControl(event?.description || '');
+  const { value: eventBeginTime, setValue: setEventBeginTime } = useFormControl(event?.beginTime || '');
+  const { value: eventEndDate, setValue: setEventEndDate } = useFormControl(event?.endDate || '');
+  const { value: eventEndTime, setValue: setEventEndTime } = useFormControl(event?.endTime || '');
+  const { value: eventDescription, setValue: setEventDescription } = useFormControl(event?.description || '');
 
   const [busy, setBusy] = useState(false);
 
   const disableButton =
+    !(eventName && eventBeginDate) ||
     !!(eventNameError || eventBeginDateError) ||
     !(
-      eventNameDirty ||
-      eventTypeDirty ||
-      eventPlaceDirty ||
-      eventBeginDateDirty ||
-      eventBeginTimeDirty ||
-      eventEndDateDirty ||
-      eventEndTimeDirty ||
-      eventDescriptionDirty
+      eventName !== (event?.name || '') ||
+      eventTypeId !== event?.type.id ||
+      eventPlaceId !== event?.place.id ||
+      eventBeginDate !== (event?.beginDate || '') ||
+      eventBeginTime !== (event?.beginTime || '') ||
+      eventEndDate !== (event?.endDate || '') ||
+      eventEndTime !== (event?.endTime || '') ||
+      eventDescription !== (event?.description || '')
     );
 
   const handleConfirm = () => {
@@ -105,9 +78,9 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           type="text"
           label="Name"
           value={eventName}
-          error={eventNameTouched ? eventNameError : ''}
-          onBlur={handleEventNameBlur}
-          onChange={(evt) => handleEventNameChange(evt.target.value)}
+          error={eventNameError}
+          onBlur={validateEventName}
+          onChange={(evt) => setEventName(evt.target.value)}
         />
         <Select
           id="event-type"
@@ -134,9 +107,9 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           type="date"
           label="Begin Date"
           value={eventBeginDate}
-          error={eventBeginDateTouched ? eventBeginDateError : ''}
-          onBlur={handleEventBeginDateBlur}
-          onChange={(evt) => handleEventBeginDateChange(evt.target.value)}
+          error={eventBeginDateError}
+          onBlur={validateEventBeginDate}
+          onChange={(evt) => setEventBeginDate(evt.target.value)}
         />
         <Input
           id="event-begin-time"

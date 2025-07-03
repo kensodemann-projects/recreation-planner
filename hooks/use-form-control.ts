@@ -1,20 +1,17 @@
 import { useState } from 'react';
 
 export const useFormControl = <T>(initialValue?: T | undefined, validations?: (val: T | undefined) => string) => {
-  const [value, setValue] = useState<T | undefined>(initialValue);
-  const [dirty, setDirty] = useState(false);
-  const [touched, setTouched] = useState(false);
-  const [error, setError] = useState(validations && validations(initialValue));
+  const [value, setValueInternal] = useState<T | undefined>(initialValue);
+  const [error, setError] = useState<string | undefined>();
 
-  const handleChange = (inputValue: T | undefined) => {
-    setDirty(true);
-    setValue(inputValue);
+  const setValue = (inputValue: T | undefined) => {
+    setValueInternal(inputValue);
     setError(validations && validations(inputValue));
   };
 
-  const handleBlur = () => {
-    setTouched(true);
+  const validate = () => {
+    setError(validations && validations(value));
   };
 
-  return { value, dirty, error, touched, handleBlur, handleChange };
+  return { value, error, setValue, validate };
 };

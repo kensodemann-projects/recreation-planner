@@ -2,48 +2,60 @@ import { describe, expect, it } from 'vitest';
 import { useFormControl } from '../use-form-control';
 import { act, renderHook } from '@testing-library/react';
 
-describe('Input Validation Hook', () => {
+describe('Form Control Hook', () => {
   describe('without an undefined initial value', () => {
     it('starts with an empty value', () => {
-      const { result } = renderHook(() => useFormControl<string>());
+      const { result } = renderHook(() =>
+        useFormControl<string>(undefined, (v: string | undefined) => (v ? '' : 'The value is in error')),
+      );
       expect(result.current.value).toBeUndefined();
     });
 
-    it('starts untouched', () => {
-      const { result } = renderHook(() => useFormControl<string>());
-      expect(result.current.touched).toEqual(false);
-    });
-
-    it('starts not dirty', () => {
-      const { result } = renderHook(() => useFormControl<string>());
-      expect(result.current.dirty).toEqual(false);
-    });
-
     it('has no errors', () => {
-      const { result } = renderHook(() => useFormControl<string>());
+      const { result } = renderHook(() =>
+        useFormControl<string>(undefined, (v: string | undefined) => (v ? '' : 'The value is in error')),
+      );
       expect(result.current.error).toBeUndefined();
     });
 
-    it('runs validations', () => {
-      const { result } = renderHook(() =>
-        useFormControl<string>(undefined, (v: string | undefined) => (v ? '' : 'value is required')),
-      );
-      expect(result.current.error).toBe('value is required');
-    });
+    describe('validate', () => {
+      it('sets the error message if the data is invalid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>(undefined, (v: string | undefined) => (v ? '' : 'The value is in error')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBe('The value is in error');
+      });
 
-    describe('after blur-sm', () => {
-      it('is touched', () => {
-        const { result } = renderHook(() => useFormControl<string>());
-        act(() => result.current.handleBlur());
-        expect(result.current.touched).toEqual(true);
+      it('does not set the error message if the data is valid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>('good data', (v: string | undefined) => (v ? '' : 'The value is in error')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBeFalsy();
       });
     });
 
-    describe('after change', () => {
-      it('is dirty', () => {
-        const { result } = renderHook(() => useFormControl<string>());
-        act(() => result.current.handleChange('This is a test'));
-        expect(result.current.dirty).toEqual(true);
+    describe('set value', () => {
+      it('runs the validations', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>(undefined, (v: string | undefined) => (v === 'bad' ? 'The value is in error' : '')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.setValue('bad'));
+        expect(result.current.error).toBe('The value is in error');
+        act(() => result.current.setValue('good'));
+        expect(result.current.error).toBeFalsy();
+      });
+
+      it('sets the value', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>(undefined, (v: string | undefined) => (v === 'bad' ? 'The value is in error' : '')),
+        );
+        act(() => result.current.setValue('bad'));
+        expect(result.current.value).toEqual('bad');
       });
     });
   });
@@ -54,61 +66,41 @@ describe('Input Validation Hook', () => {
       expect(result.current.value).toEqual('starting value');
     });
 
-    it('starts untouched', () => {
-      const { result } = renderHook(() => useFormControl<string>('starting value'));
-      expect(result.current.touched).toEqual(false);
-    });
-
-    it('starts not dirty', () => {
-      const { result } = renderHook(() => useFormControl<string>('starting value'));
-      expect(result.current.dirty).toEqual(false);
-    });
-
     it('has no errors', () => {
-      const { result } = renderHook(() => useFormControl<string>('starting value'));
-      expect(result.current.error).toBeUndefined();
-    });
-
-    it('runs validations (failed)', () => {
       const { result } = renderHook(() =>
         useFormControl<string>('starting value', (v: string | undefined) =>
           (v?.length || 0) < 5 ? '' : 'value is too long',
         ),
       );
-      expect(result.current.error).toBe('value is too long');
+      expect(result.current.error).toBeFalsy();
     });
 
-    it('runs validations (passed)', () => {
-      const { result } = renderHook(() =>
-        useFormControl<string>('four', (v: string | undefined) => ((v?.length || 0) < 5 ? '' : 'value is too long')),
-      );
-      expect(result.current.error).toBe('');
+    describe('validate', () => {
+      it('sets the error message if the data is invalid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>('starting value', (v: string | undefined) =>
+            (v?.length || 0) < 5 ? '' : 'value is too long',
+          ),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBe('value is too long');
+      });
+
+      it('does not set the error message if the data is valid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<string>('dude', (v: string | undefined) => ((v?.length || 0) < 5 ? '' : 'value is too long')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBeFalsy();
+      });
     });
 
-    describe('after blur-sm', () => {
-      it('is touched', () => {
+    describe('set value', () => {
+      it('sets the new value', () => {
         const { result } = renderHook(() => useFormControl<string>('starting value'));
-        act(() => result.current.handleBlur());
-        expect(result.current.touched).toEqual(true);
-      });
-
-      it('has the original value', () => {
-        const { result } = renderHook(() => useFormControl<string>('starting value'));
-        act(() => result.current.handleBlur());
-        expect(result.current.value).toEqual('starting value');
-      });
-    });
-
-    describe('after change', () => {
-      it('is dirty', () => {
-        const { result } = renderHook(() => useFormControl<string>('starting value'));
-        act(() => result.current.handleChange('This is a test'));
-        expect(result.current.dirty).toEqual(true);
-      });
-
-      it('has the new value', () => {
-        const { result } = renderHook(() => useFormControl<string>('starting value'));
-        act(() => result.current.handleChange('This is a test'));
+        act(() => result.current.setValue('This is a test'));
         expect(result.current.value).toEqual('This is a test');
       });
 
@@ -116,8 +108,8 @@ describe('Input Validation Hook', () => {
         const { result } = renderHook(() =>
           useFormControl<string>('four', (v: string | undefined) => ((v?.length || 0) < 5 ? '' : 'value is too long')),
         );
-        expect(result.current.error).toBe('');
-        act(() => result.current.handleChange('This is a test'));
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.setValue('This is a test'));
         expect(result.current.error).toBe('value is too long');
       });
     });
@@ -129,59 +121,37 @@ describe('Input Validation Hook', () => {
       expect(result.current.value).toEqual(42);
     });
 
-    it('starts untouched', () => {
-      const { result } = renderHook(() => useFormControl<number>(42));
-      expect(result.current.touched).toEqual(false);
-    });
-
-    it('starts not dirty', () => {
-      const { result } = renderHook(() => useFormControl<number>(42));
-      expect(result.current.dirty).toEqual(false);
-    });
-
     it('has no errors', () => {
-      const { result } = renderHook(() => useFormControl<number>(42));
-      expect(result.current.error).toBeUndefined();
-    });
-
-    it('runs validations (failed)', () => {
       const { result } = renderHook(() =>
         useFormControl<number>(42, (v: number | undefined) => (v && v < 41 ? '' : 'value is too big')),
       );
-      expect(result.current.error).toBe('value is too big');
+      expect(result.current.error).toBeFalsy();
     });
 
-    it('runs validations (passed)', () => {
-      const { result } = renderHook(() =>
-        useFormControl<number>(40, (v: number | undefined) => (v && v < 41 ? '' : 'value is too big')),
-      );
-      expect(result.current.error).toBe('');
+    describe('validate', () => {
+      it('sets the error message if the data is invalid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<number>(42, (v: number | undefined) => (v && v < 41 ? '' : 'value is too big')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBe('value is too big');
+      });
+
+      it('does not set the error message if the data is valid', () => {
+        const { result } = renderHook(() =>
+          useFormControl<number>(40, (v: number | undefined) => (v && v < 41 ? '' : 'value is too big')),
+        );
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.validate());
+        expect(result.current.error).toBeFalsy();
+      });
     });
 
-    describe('after blur-sm', () => {
-      it('is touched', () => {
+    describe('set value', () => {
+      it('sets the new value', () => {
         const { result } = renderHook(() => useFormControl<number>(42));
-        act(() => result.current.handleBlur());
-        expect(result.current.touched).toEqual(true);
-      });
-
-      it('has the original value', () => {
-        const { result } = renderHook(() => useFormControl<number>(42));
-        act(() => result.current.handleBlur());
-        expect(result.current.value).toEqual(42);
-      });
-    });
-
-    describe('after change', () => {
-      it('is dirty', () => {
-        const { result } = renderHook(() => useFormControl<number>(42));
-        act(() => result.current.handleChange(73));
-        expect(result.current.dirty).toEqual(true);
-      });
-
-      it('has the new value', () => {
-        const { result } = renderHook(() => useFormControl<number>(42));
-        act(() => result.current.handleChange(73));
+        act(() => result.current.setValue(73));
         expect(result.current.value).toEqual(73);
       });
 
@@ -189,8 +159,8 @@ describe('Input Validation Hook', () => {
         const { result } = renderHook(() =>
           useFormControl<number>(40, (v: number | undefined) => (v && v < 41 ? '' : 'value is too big')),
         );
-        expect(result.current.error).toBe('');
-        act(() => result.current.handleChange(73));
+        expect(result.current.error).toBeFalsy();
+        act(() => result.current.setValue(73));
         expect(result.current.error).toBe('value is too big');
       });
     });

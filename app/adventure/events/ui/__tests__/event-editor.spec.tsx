@@ -735,9 +735,9 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '2');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '1');
           await user.click(screen.getByRole('button', { name: 'Update' }));
-          expect(event).toEqual({ ...TEST_EVENT, type: EVENT_TYPES[1] });
+          expect(event).toEqual({ ...TEST_EVENT, type: EVENT_TYPES[2] });
         });
 
         it('includes the updated place', async () => {
