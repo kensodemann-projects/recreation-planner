@@ -1,6 +1,6 @@
+import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { useFormControl } from '../use-form-control';
-import { act, renderHook } from '@testing-library/react';
 
 describe('Form Control Hook', () => {
   describe('without an undefined initial value', () => {

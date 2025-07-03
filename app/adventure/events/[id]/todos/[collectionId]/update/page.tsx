@@ -1,12 +1,12 @@
+import { fetchTodoCollection } from '@/app/adventure/todos/data';
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
-import { isLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 import UpdateTodoCollection from './update-todo-collection';
-import { fetchTodoCollection } from '@/app/adventure/todos/data';
 
 const UpdateTodoCollectionPage = async (props: { params: Promise<{ id: string; collectionId: string }> }) => {
-  if (!(await isLoggedIn())) {
+  if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
 

@@ -1,8 +1,8 @@
-import { isLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import PlacesPage from '../page';
 import { fetchPlaces } from '../data';
+import PlacesPage from '../page';
 
 vi.mock('../data');
 vi.mock('@/utils/supabase/auth');
@@ -16,7 +16,7 @@ describe('Places Page', () => {
 
   describe('when logged in', () => {
     beforeEach(() => {
-      (isLoggedIn as Mock).mockResolvedValue(true);
+      (isNotLoggedIn as Mock).mockResolvedValue(false);
     });
 
     it('fetches the places', async () => {
@@ -33,7 +33,7 @@ describe('Places Page', () => {
 
   describe('when not logged in', () => {
     beforeEach(() => {
-      (isLoggedIn as Mock).mockResolvedValue(false);
+      (isNotLoggedIn as Mock).mockResolvedValue(true);
     });
 
     it('does not fetch the places', async () => {

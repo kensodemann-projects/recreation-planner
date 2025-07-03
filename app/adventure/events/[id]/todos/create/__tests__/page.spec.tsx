@@ -1,8 +1,8 @@
-import { isLoggedIn } from '@/utils/supabase/auth';
+import { fetchEvent } from '@/app/adventure/events/data';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import CreateTodoCollectionForEventPage from '../page';
-import { fetchEvent } from '@/app/adventure/events/data';
 
 vi.mock('@/app/adventure/events/data');
 vi.mock('@/utils/supabase/auth');
@@ -23,7 +23,7 @@ describe('Create Todo Collection Page', () => {
         name: "Women's Hockey Tournament",
         description: 'A three day long tournament of women playing hockey',
       });
-      (isLoggedIn as Mock).mockResolvedValue(true);
+      (isNotLoggedIn as Mock).mockResolvedValue(false);
     });
 
     it('fetches the event', async () => {
@@ -50,7 +50,7 @@ describe('Create Todo Collection Page', () => {
 
   describe('when not logged in', () => {
     beforeEach(() => {
-      (isLoggedIn as Mock).mockResolvedValue(false);
+      (isNotLoggedIn as Mock).mockResolvedValue(true);
     });
 
     it('does not fetche the event', async () => {

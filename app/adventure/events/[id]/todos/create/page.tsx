@@ -2,12 +2,12 @@ import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import TitleHeading from '@/app/ui/title-heading';
-import { isLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { fetchEvent } from '../../../data';
 import CreateTodoCollection from './create-todo-collection';
 
 const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: string }> }) => {
-  if (!(await isLoggedIn())) {
+  if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
 

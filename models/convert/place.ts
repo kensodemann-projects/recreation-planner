@@ -13,9 +13,9 @@ export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
           postal: dto.postal_code,
         }
       : undefined;
-  const type: PlaceType | undefined = dto.place_type_rid
+  const type: PlaceType | undefined = dto.place_types
     ? {
-        id: dto.place_type_rid,
+        id: (dto.place_types as PlaceTypeDTO).id || dto.place_type_rid,
         name: (dto.place_types as PlaceTypeDTO).name,
         description: (dto.place_types as PlaceTypeDTO).description,
       }

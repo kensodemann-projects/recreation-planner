@@ -1,132 +1,168 @@
 'use server';
 
-import { Event, EventType, SelectablePlace, TodoCollection } from '@/models';
+import { Event, EventDTO, EventType, SelectablePlace, TodoCollection, TodoCollectionDTO } from '@/models';
 import { convertToEvent, convertToEventDTO, convertToTodoCollection } from '@/models/convert';
-import { isLoggedIn } from '@/utils/supabase/auth';
+import { executeQuery } from '@/utils/data';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-const selectColumns =
-  'id, name, description, begin_date, begin_time, end_date, end_time, place_rid, event_type_rid, places!inner(name, description, address_line_1, address_line_2, city, state, postal_code, phone_number, website), event_types!inner(name, description)';
+const selectColumns = '*, places!inner(*), event_types!inner(*)';
+const eventsTable = 'events';
 
-export const fetchUpcomingEvents = async (dt: string): Promise<Array<Event>> => {
-  if (!(await isLoggedIn())) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase
-    .from('events')
+const upcomingEventsQuery = (supabase: SupabaseClient, dt: string): any => {
+  return supabase
+    .from(eventsTable)
     .select(selectColumns)
     .or(`end_date.gte."${dt}",and(end_date.is.null,begin_date.gte."${dt}")`)
     .order('begin_date')
     .order('begin_time', { nullsFirst: true });
-
-  return data?.map((p) => convertToEvent(p) as Event) || [];
 };
 
-export const fetchPriorEvents = async (dt: string): Promise<Array<Event>> => {
-  if (!(await isLoggedIn())) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase
-    .from('events')
+const priorEventsQuery = (supabase: SupabaseClient, dt: string): any => {
+  return supabase
+    .from(eventsTable)
     .select(selectColumns)
     .or(`end_date.lt."${dt}",and(end_date.is.null,begin_date.lt."${dt}")`)
     .order('begin_date', { ascending: false })
     .order('begin_time', { ascending: false, nullsFirst: false });
-
-  return data?.map((p) => convertToEvent(p) as Event) || [];
 };
 
-export const fetchEvent = async (id: number): Promise<Event | null> => {
-  if (!(await isLoggedIn())) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const { data } = await supabase.from('events').select(selectColumns).eq('id', id).single();
-
-  return data ? (convertToEvent(data) as Event) : null;
+const eventQuery = (supabase: SupabaseClient, id: number): any => {
+  return supabase.from(eventsTable).select(selectColumns).eq('id', id).single();
 };
 
-export const fetchTodoCollectionsForEvent = async (eventRid: number): Promise<TodoCollection[] | null> => {
-  if (!(await isLoggedIn())) {
-    return null;
-  }
+const eventInsert = (supabase: SupabaseClient, event: Event): any => {
+  return supabase.from(eventsTable).insert(convertToEventDTO(event)).select(selectColumns).single();
+};
 
-  const supabase = createClient();
-  const { data } = await supabase
+const eventUpdate = (supabase: SupabaseClient, event: Event): any => {
+  return supabase.from(eventsTable).update(convertToEventDTO(event)).eq('id', event.id).select(selectColumns).single();
+};
+
+const eventDelete = (supabase: SupabaseClient, event: Event): any => {
+  return supabase.from(eventsTable).delete().eq('id', event.id);
+};
+
+const todoCollectionsForEventQuery = (supabase: SupabaseClient, eventRid: number): any => {
+  return supabase
     .from('todo_collections')
     .select('*, todo_items(*)')
     .eq('event_rid', eventRid)
     .eq('is_complete', false)
     .order('due_date', { nullsFirst: false })
     .order('created_at', { referencedTable: 'todo_items' });
-
-  return data?.map((p) => convertToTodoCollection(p) as TodoCollection) || [];
 };
 
-export const addEvent = async (event: Event): Promise<Event | null> => {
-  if (!(await isLoggedIn())) {
+const eventTypesQuery = (supabase: SupabaseClient): any => {
+  return supabase.from('event_types').select('id, name, description').order('name');
+};
+
+const selectablePlacesQuery = (supabase: SupabaseClient): any => {
+  return supabase.from('places').select('id, name').order('name');
+};
+
+export const fetchUpcomingEvents = async (dt: string): Promise<Event[]> => {
+  if (await isNotLoggedIn()) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const query = upcomingEventsQuery(supabase, dt);
+  const data = await executeQuery<EventDTO[]>(query);
+  return (data || []).map((p) => convertToEvent(p) as Event);
+};
+
+export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
+  if (await isNotLoggedIn()) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const query = priorEventsQuery(supabase, dt);
+  const data = await executeQuery<EventDTO[]>(query);
+  return (data || []).map((p) => convertToEvent(p) as Event);
+};
+
+export const fetchEvent = async (id: number): Promise<Event | null> => {
+  if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from('events').insert(convertToEventDTO(event)).select(selectColumns).single();
+  const query = eventQuery(supabase, id);
+  const data = await executeQuery<EventDTO>(query);
+  return data ? (convertToEvent(data) as Event) : null;
+};
 
+export const fetchTodoCollectionsForEvent = async (eventRid: number): Promise<TodoCollection[]> => {
+  if (await isNotLoggedIn()) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const query = todoCollectionsForEventQuery(supabase, eventRid);
+  const data = await executeQuery<TodoCollectionDTO[]>(query);
+  return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
+};
+
+export const addEvent = async (event: Event): Promise<Event | null> => {
+  if (await isNotLoggedIn()) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const query = eventInsert(supabase, event);
+  const data = await executeQuery<EventDTO>(query);
   return data ? (convertToEvent(data) as Event) : null;
 };
 
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
-  if (!(await isLoggedIn())) {
+  if (await isNotLoggedIn()) {
     return false;
   }
   return true;
 };
 
 export const deleteEvent = async (event: Event): Promise<void> => {
-  if (await isLoggedIn()) {
-    const supabase = createClient();
-    await supabase.from('events').delete().eq('id', event.id);
+  if (await isNotLoggedIn()) {
+    return;
   }
+
+  const supabase = createClient();
+  const query = eventDelete(supabase, event);
+  await executeQuery<void>(query);
 };
 
-export const fetchEventTypes = async (): Promise<Array<EventType>> => {
-  if (!(await isLoggedIn())) {
+export const fetchEventTypes = async (): Promise<EventType[]> => {
+  if (await isNotLoggedIn()) {
     return [];
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from('event_types').select('id, name, description').order('name');
-
+  const query = eventTypesQuery(supabase);
+  const data = await executeQuery<EventType[]>(query);
   return data || [];
 };
 
-export const fetchPlaces = async (): Promise<Array<SelectablePlace>> => {
-  if (!(await isLoggedIn())) {
+export const fetchPlaces = async (): Promise<SelectablePlace[]> => {
+  if (await isNotLoggedIn()) {
     return [];
   }
 
   const supabase = createClient();
-  const { data } = await supabase.from('places').select('id, name').order('name');
-
+  const query = selectablePlacesQuery(supabase);
+  const data = await executeQuery<SelectablePlace[]>(query);
   return data || [];
 };
 
 export const updateEvent = async (event: Event): Promise<Event | null> => {
-  if (!(await isLoggedIn())) {
+  if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const { data } = await supabase
-    .from('events')
-    .update(convertToEventDTO(event))
-    .eq('id', event.id)
-    .select(selectColumns)
-    .single();
-
+  const query = eventUpdate(supabase, event);
+  const data = await executeQuery<EventDTO>(query);
   return data ? (convertToEvent(data) as Event) : null;
 };

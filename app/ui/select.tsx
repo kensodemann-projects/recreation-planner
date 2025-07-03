@@ -1,5 +1,5 @@
 import { CommonData } from '@/models/common-data';
-import { ChangeEventHandler, ComponentPropsWithoutRef, FocusEventHandler } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 
 interface SelectProperties extends ComponentPropsWithoutRef<'select'> {
   label: string;

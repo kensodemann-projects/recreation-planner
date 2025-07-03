@@ -46,6 +46,7 @@ const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProp
           error={nameError}
           onBlur={validateName}
           onChange={(evt) => setName(evt.target.value)}
+          onInput={(evt) => console.log((evt.nativeEvent.srcElement as HTMLInputElement).validity.valid)}
         />
 
         <Description
@@ -76,6 +77,15 @@ const EquipmentEditor = ({ equipment, onCancel, onConfirm }: EquipmentEditorProp
           label="Cost"
           disabled={busy}
           onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
+        />
+      </div>
+
+      <div>
+        <input
+          className="validator col-span-4"
+          required
+          type="email"
+          onChange={(evt) => console.log((evt.nativeEvent.srcElement as HTMLInputElement).validity)}
         />
       </div>
 

@@ -9,9 +9,9 @@ export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
     ? convertToPlace({ ...(dto.places as PlaceTypeDTO), id: dto.place_rid })
     : undefined;
 
-  const type: EventType | undefined = dto.event_type_rid
+  const type: EventType | undefined = dto.event_types
     ? {
-        id: dto.event_type_rid,
+        id: (dto.event_types as EventTypeDTO).id,
         name: (dto.event_types as EventTypeDTO).name,
         description: (dto.event_types as EventTypeDTO).description,
       }

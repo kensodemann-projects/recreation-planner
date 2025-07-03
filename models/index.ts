@@ -1,5 +1,6 @@
 export * from './address';
 export * from './equipment';
+export * from './equipment-type';
 export * from './event';
 export * from './event-type';
 export * from './place';

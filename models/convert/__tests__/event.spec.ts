@@ -29,6 +29,7 @@ describe('event convertions', () => {
           end_time: '08:42',
           place_rid: 3,
           places: {
+            id: 3,
             name: 'Earth',
             description: 'Third rock from Sol',
             address_line_1: 'Planet #3',
@@ -36,7 +37,7 @@ describe('event convertions', () => {
             website: 'https://solsys.gov',
           },
           event_type_rid: 2,
-          event_types: { name: 'Demolition', description: 'Death and destrutction' },
+          event_types: { id: 2, name: 'Demolition', description: 'Death and destrutction' },
         },
         expected: {
           id: 42,

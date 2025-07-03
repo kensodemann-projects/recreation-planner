@@ -46,7 +46,7 @@ describe('place convertions', () => {
           name: 'Earth',
           description: 'Mostly harmless',
           place_type_rid: 3,
-          place_types: { name: 'Planet', description: 'Big globe thing' },
+          place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
         },
         expected: {
           id: 42,
@@ -71,7 +71,7 @@ describe('place convertions', () => {
           state: 'WI',
           postal_code: '54732',
           place_type_rid: 3,
-          place_types: { name: 'Planet', description: 'Big globe thing' },
+          place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
           phone_number: '(262) 339-9943',
           website: 'https://foo.bar',
         },
