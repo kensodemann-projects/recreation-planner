@@ -2,7 +2,7 @@ import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { fetchEquipment } from '../../data';
+import { fetchEquipment, fetchEquipmentTypes } from '../../data';
 import UpdateEquipment from './update-equipment';
 
 const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
@@ -12,6 +12,7 @@ const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
 
   const params = await props.params;
   const equipment = await fetchEquipment(+params.id);
+  const equipmentTypes = await fetchEquipmentTypes();
 
   if (!equipment) {
     return <div>Failed to fetch the equipment</div>;
@@ -22,7 +23,7 @@ const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
       <PageHeader>
         <TitleHeading>Update the Equipment</TitleHeading>
       </PageHeader>
-      <UpdateEquipment equipment={equipment} />
+      <UpdateEquipment equipment={equipment} equipmentTypes={equipmentTypes} />
     </>
   );
 };

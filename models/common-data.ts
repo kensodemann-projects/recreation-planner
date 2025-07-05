@@ -1,11 +1,12 @@
 export interface CommonData {
   id?: number | undefined;
   name: string;
-  description?: string | undefined | null;
+  description?: string | null;
 }
 
 export interface CommonDataDTO {
-  id?: number | undefined;
+  id?: number;
+  created_at?: string;
   name: string;
-  description?: string | undefined | null;
+  description?: string | null;
 }

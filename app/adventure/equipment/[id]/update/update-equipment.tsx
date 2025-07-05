@@ -1,18 +1,23 @@
 'use client';
 
-import { Equipment, Place, PlaceType } from '@/models';
+import { Equipment, EquipmentType, Place, PlaceType } from '@/models';
 import { useRouter } from 'next/navigation';
 import EquipmentEditor from '../../ui/equipment-editor';
 import { updateEquipmentConfirmed } from './actions';
 
-type UpdateEquipmentProperties = { equipment: Equipment };
+type UpdateEquipmentProperties = { equipment: Equipment; equipmentTypes: EquipmentType[] };
 
-const UpdateEquipment = ({ equipment }: UpdateEquipmentProperties) => {
+const UpdateEquipment = ({ equipment, equipmentTypes }: UpdateEquipmentProperties) => {
   const router = useRouter();
 
   return (
     <>
-      <EquipmentEditor equipment={equipment} onConfirm={updateEquipmentConfirmed} onCancel={() => router.back()} />
+      <EquipmentEditor
+        equipment={equipment}
+        equipmentTypes={equipmentTypes}
+        onConfirm={updateEquipmentConfirmed}
+        onCancel={() => router.back()}
+      />
     </>
   );
 };

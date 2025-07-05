@@ -3,13 +3,20 @@
 import { useRouter } from 'next/navigation';
 import EquipmentEditor from '../ui/equipment-editor';
 import { createEquipmentConfirmed } from './actions';
+import { EquipmentType } from '@/models';
 
-const CreateEquipment = () => {
+type CreateEquipmentProperties = { equipmentTypes: EquipmentType[] };
+
+const CreateEquipment = ({ equipmentTypes }: CreateEquipmentProperties) => {
   const router = useRouter();
 
   return (
     <>
-      <EquipmentEditor onConfirm={createEquipmentConfirmed} onCancel={() => router.back()} />
+      <EquipmentEditor
+        equipmentTypes={equipmentTypes}
+        onConfirm={createEquipmentConfirmed}
+        onCancel={() => router.back()}
+      />
     </>
   );
 };

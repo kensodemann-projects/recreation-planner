@@ -1,74 +1,180 @@
 import { describe, expect, it } from 'vitest';
 import { convertToEquipment, convertToEquipmentDTO } from '../equipment';
+import { Equipment, EquipmentDTO } from '@/models/equipment';
 
 describe('equipment convertions', () => {
   describe('to equipment', () => {
-    it('handles a "common data" conversion', () => {
-      expect(
-        convertToEquipment({
+    const testCases: { name: string; value: Partial<EquipmentDTO>; expected: Partial<Equipment> }[] = [
+      {
+        name: 'handles a "common data" convertion',
+        value: {
           id: 42,
           name: 'Planet Destroyer',
           description: 'The Vogons should destroy the Earth using this.',
-        }),
-      ).toEqual({
-        id: 42,
-        name: 'Planet Destroyer',
-        description: 'The Vogons should destroy the Earth using this.',
-      });
-    });
-
-    it('converts a full equipment', () => {
-      expect(
-        convertToEquipment({
+        },
+        expected: {
+          id: 42,
+          name: 'Planet Destroyer',
+          description: 'The Vogons should destroy the Earth using this.',
+        },
+      },
+      {
+        name: 'converts the full equipment data',
+        value: {
           id: 42,
           name: 'Planet Destroyer',
           description: 'The Vogons should destroy the Earth using this.',
           purchase_date: '2025-03-28',
           cost: 2954932.34,
-        }),
-      ).toEqual({
-        id: 42,
-        name: 'Planet Destroyer',
-        description: 'The Vogons should destroy the Earth using this.',
-        purchaseDate: '2025-03-28',
-        cost: 2954932.34,
-      });
-    });
-  });
-
-  describe('to DTO', () => {
-    it('converts a full Equipment for CRUD', () => {
-      expect(
-        convertToEquipmentDTO({
+          manufacturer: 'Vogon Vehicles',
+          model: 'DST-X3',
+          identification: '1994-ff8ge-1234',
+          length: '7 Miles, 4 feet',
+          weight: '1.1 Million Tons (Roughly)',
+          capacity: 'A full crew',
+          license_plate_number: 'I<3DST',
+          insurance_carrier: 'Contructors Insurance',
+          insurance_policy_number: '8849950-29934',
+          insurance_contact_name: 'Bob',
+          insurance_contact_phone_number: '555-930-2994',
+          insurance_contact_email: 'bob@conins.com',
+          equipment_type_rid: 4,
+          equipment_types: {
+            id: 4,
+            name: 'Intergallactic Space Cruiser',
+            description: 'A large, wasteful space craft.',
+          },
+        },
+        expected: {
           id: 42,
           name: 'Planet Destroyer',
           description: 'The Vogons should destroy the Earth using this.',
           purchaseDate: '2025-03-28',
           cost: 2954932.34,
-        }),
-      ).toEqual({
-        name: 'Planet Destroyer',
-        description: 'The Vogons should destroy the Earth using this.',
-        purchase_date: '2025-03-28',
-        cost: 2954932.34,
-      });
-    });
+          manufacturer: 'Vogon Vehicles',
+          model: 'DST-X3',
+          identification: '1994-ff8ge-1234',
+          length: '7 Miles, 4 feet',
+          weight: '1.1 Million Tons (Roughly)',
+          capacity: 'A full crew',
+          licensePlateNumber: 'I<3DST',
+          insuranceCarrier: 'Contructors Insurance',
+          insurancePolicyNumber: '8849950-29934',
+          insuranceContactName: 'Bob',
+          insuranceContactPhoneNumber: '555-930-2994',
+          insuranceContactEmail: 'bob@conins.com',
+          equipmentType: {
+            id: 4,
+            name: 'Intergallactic Space Cruiser',
+            description: 'A large, wasteful space craft.',
+          },
+        },
+      },
+    ];
 
-    it('sets unspecified values to null', () => {
-      expect(
-        convertToEquipmentDTO({
+    it.each(testCases)('$name', ({ value, expected }) => {
+      expect(convertToEquipment(value)).toEqual(expected);
+    });
+  });
+
+  describe('to DTO', () => {
+    const testCases: { name: string; value: Equipment; expected: EquipmentDTO }[] = [
+      {
+        name: 'converts a full Equipment for CRUD',
+        value: {
           id: 42,
           name: 'Planet Destroyer',
+          description: 'The Vogons should destroy the Earth using this.',
+          purchaseDate: '2025-03-28',
+          cost: 2954932.34,
+          manufacturer: 'Vogon Vehicles',
+          model: 'DST-X3',
+          identification: '1994-ff8ge-1234',
+          length: '7 Miles, 4 feet',
+          weight: '1.1 Million Tons (Roughly)',
+          capacity: 'A full crew',
+          licensePlateNumber: 'I<3DST',
+          insuranceCarrier: 'Contructors Insurance',
+          insurancePolicyNumber: '8849950-29934',
+          insuranceContactName: 'Bob',
+          insuranceContactPhoneNumber: '555-930-2994',
+          insuranceContactEmail: 'bob@conins.com',
+          equipmentType: {
+            id: 4,
+            name: 'Intergallactic Space Cruiser',
+            description: 'A large, wasteful space craft.',
+          },
+        },
+        expected: {
+          name: 'Planet Destroyer',
+          description: 'The Vogons should destroy the Earth using this.',
+          purchase_date: '2025-03-28',
+          cost: 2954932.34,
+          manufacturer: 'Vogon Vehicles',
+          model: 'DST-X3',
+          identification: '1994-ff8ge-1234',
+          length: '7 Miles, 4 feet',
+          weight: '1.1 Million Tons (Roughly)',
+          capacity: 'A full crew',
+          license_plate_number: 'I<3DST',
+          insurance_carrier: 'Contructors Insurance',
+          insurance_policy_number: '8849950-29934',
+          insurance_contact_name: 'Bob',
+          insurance_contact_phone_number: '555-930-2994',
+          insurance_contact_email: 'bob@conins.com',
+          equipment_type_rid: 4,
+        },
+      },
+      {
+        name: 'sets unspecified values to null',
+        value: {
+          id: 42,
+          name: 'Planet Destroyer',
+          equipmentType: {
+            id: 4,
+            name: 'Intergallactic Space Cruiser',
+            description: 'A large, wasteful space craft.',
+          },
           description: '',
           purchaseDate: '',
           cost: null,
-        }),
-      ).toEqual({
-        name: 'Planet Destroyer',
-        description: null,
-        purchase_date: null,
-        cost: null,
-      });
+          manufacturer: '',
+          model: '',
+          identification: '',
+          length: '',
+          weight: '',
+          capacity: '',
+          licensePlateNumber: '',
+          insuranceCarrier: '',
+          insurancePolicyNumber: '',
+          insuranceContactName: '',
+          insuranceContactPhoneNumber: '',
+          insuranceContactEmail: '',
+        },
+        expected: {
+          name: 'Planet Destroyer',
+          equipment_type_rid: 4,
+          description: null,
+          purchase_date: null,
+          cost: null,
+          manufacturer: null,
+          model: null,
+          identification: null,
+          length: null,
+          weight: null,
+          capacity: null,
+          license_plate_number: null,
+          insurance_carrier: null,
+          insurance_policy_number: null,
+          insurance_contact_name: null,
+          insurance_contact_phone_number: null,
+          insurance_contact_email: null,
+        },
+      },
+    ];
+
+    it.each(testCases)('$name', ({ value, expected }) => {
+      expect(convertToEquipmentDTO(value)).toEqual(expected);
     });
   });
 });
