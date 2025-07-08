@@ -12,7 +12,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const equipmentSelectColumns = '*';
+const equipmentSelectColumns = '*, equipment_types!inner(*)';
 const equipmentTable = 'equipment';
 
 const equipmentQuery = (supabase: SupabaseClient, id?: number): any => {
