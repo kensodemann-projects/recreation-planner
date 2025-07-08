@@ -1,6 +1,9 @@
 import { format, parseISO } from 'date-fns';
 
-export const formatDate = (date: string, time?: string | undefined | null): string => {
+export const formatDate = (date: string | null, time?: string | undefined | null): string => {
+  if (!date) {
+    return '';
+  }
   const dt = time ? parseISO(date + 'T' + time) : parseISO(date);
   return format(dt, 'PP') + (time ? ` at ${format(dt, 'p')}` : '');
 };

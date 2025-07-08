@@ -5,6 +5,12 @@ describe('Formatters', () => {
   describe('date and time', () => {
     const testCases = [
       {
+        name: 'handles a null date and time',
+        date: null,
+        time: null,
+        expected: '',
+      },
+      {
         name: 'formats a date',
         date: '2024-09-26',
         time: null,

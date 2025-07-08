@@ -110,26 +110,6 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
           />
 
           <Input
-            id="equipment-identification"
-            className="col-span-4 md:col-span-2"
-            type="text"
-            label="Identification"
-            value={identification}
-            disabled={busy}
-            onChange={(evt) => setIdentification(evt.target.value)}
-          />
-
-          <Input
-            id="equipment-license-plate-number"
-            className="col-span-4 md:col-span-2"
-            type="text"
-            label="License Plate"
-            value={licensePlateNumber}
-            disabled={busy}
-            onChange={(evt) => setLicencePlateNumber(evt.target.value)}
-          />
-
-          <Input
             id="equipment-purchase-date"
             className="col-span-4 md:col-span-2"
             type="date"
@@ -148,15 +128,7 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             disabled={busy}
             onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
           />
-        </div>
-      </section>
 
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Specifications</SubtitleHeading>
-        </SectionHeader>
-
-        <div className="grid grid-cols-4 gap-x-4">
           <Input
             id="equipment-manufacturer"
             className="col-span-4 md:col-span-2"
@@ -177,6 +149,34 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             onChange={(evt) => setModel(evt.target.value)}
           />
 
+          <Input
+            id="equipment-identification"
+            className="col-span-4 md:col-span-2"
+            type="text"
+            label="Identification"
+            value={identification}
+            disabled={busy}
+            onChange={(evt) => setIdentification(evt.target.value)}
+          />
+
+          <Input
+            id="equipment-license-plate-number"
+            className="col-span-4 md:col-span-2"
+            type="text"
+            label="License Plate"
+            value={licensePlateNumber}
+            disabled={busy}
+            onChange={(evt) => setLicencePlateNumber(evt.target.value)}
+          />
+        </div>
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Specifications</SubtitleHeading>
+        </SectionHeader>
+
+        <div className="grid grid-cols-4 gap-x-4">
           <Input
             id="equipment-weight"
             className="col-span-4 md:col-span-2"

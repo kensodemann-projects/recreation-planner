@@ -8,30 +8,72 @@ interface EquipmentDetailsProps {
   todoCollections: TodoCollection[];
 }
 
-const purchaseDate = (dt: string | undefined | null) =>
-  dt ? (
+const labeledFied = (label: string, value: string | null) =>
+  value ? (
     <div>
-      <span className="label">Purchase Date:</span> {formatDate(dt)}
+      <span className="label">{label}:</span> {value}
     </div>
   ) : null;
 
-const cost = (amount: number | undefined | null) =>
-  amount ? (
-    <div>
-      <span className="label">Cost:</span> {formatCurrency(amount)}
-    </div>
+const detailsSection = (equipment: Equipment) => (
+  <section className="col-span-3 md:col-span-1">
+    <SectionHeader>
+      <SubtitleHeading>Details</SubtitleHeading>
+    </SectionHeader>
+    {labeledFied('Purchase Date', formatDate(equipment.purchaseDate))}
+    {labeledFied('Cost', formatCurrency(equipment.cost))}
+    {labeledFied('Manufacturer', equipment.manufacturer)}
+    {labeledFied('Model', equipment.model)}
+  </section>
+);
+
+const specificationsSection = (equipment: Equipment) =>
+  equipment.weight || equipment.length || equipment.capacity ? (
+    <section className="col-span-3 md:col-span-1">
+      <SectionHeader>
+        <SubtitleHeading>Specifications</SubtitleHeading>
+      </SectionHeader>
+      {labeledFied('Weight', equipment.weight)}
+      {labeledFied('Length', equipment.length)}
+      {labeledFied('Capacity', equipment.capacity)}
+    </section>
+  ) : null;
+
+const insuranceSection = (equipment: Equipment) =>
+  equipment.insuranceCarrier ||
+  equipment.insurancePolicyNumber ||
+  equipment.insuranceContactName ||
+  equipment.insuranceContactPhoneNumber ||
+  equipment.insuranceContactEmail ? (
+    <section className="col-span-3 md:col-span-1">
+      <SectionHeader>
+        <SubtitleHeading>Insurance Information</SubtitleHeading>
+      </SectionHeader>
+      {labeledFied('Carrier', equipment.insuranceCarrier)}
+      {labeledFied('Policy Number', equipment.insurancePolicyNumber)}
+      {labeledFied('Contact', equipment.insuranceContactName)}
+      {labeledFied('Phone Number', equipment.insuranceContactPhoneNumber)}
+      {labeledFied('Email', equipment.insuranceContactEmail)}
+    </section>
   ) : null;
 
 const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
   return (
-    <section>
-      <SectionHeader>
-        <SubtitleHeading>{equipment.name}</SubtitleHeading>
-      </SectionHeader>
-      <div className="whitespace-pre-line">{equipment.description}</div>
-      {purchaseDate(equipment.purchaseDate)}
-      {cost(equipment.cost)}
-    </section>
+    <>
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>{equipment.name}</SubtitleHeading>
+        </SectionHeader>
+        <div className="whitespace-pre-line">{equipment.description}</div>
+        {labeledFied('Equipment Type', equipment.equipmentType.name)}
+      </section>
+
+      <div className="grid grid-cols-3 gap-x-4">
+        {detailsSection(equipment)}
+        {specificationsSection(equipment)}
+        {insuranceSection(equipment)}
+      </div>
+    </>
   );
 };
 
