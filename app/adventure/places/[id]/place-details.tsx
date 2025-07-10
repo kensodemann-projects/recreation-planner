@@ -1,4 +1,5 @@
 import Address from '@/app/ui/address';
+import LabeledField from '@/app/ui/labeled-field';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Place as PlaceModel } from '@/models';
@@ -29,21 +30,14 @@ const Place = ({ place }: { place: PlaceModel }) => {
         <SectionHeader>
           <SubtitleHeading>Other Information</SubtitleHeading>
         </SectionHeader>
-        <div>
-          <span className="font-bold">Type:</span> {place.type.name}
-        </div>
-        {place.phoneNumber && (
-          <div>
-            <span className="font-bold">Phone Number:</span> {place.phoneNumber}
-          </div>
-        )}
+        <LabeledField label="Type">{place.type.name}</LabeledField>
+        {place.phoneNumber && <LabeledField label="Phone Number">{place.phoneNumber}</LabeledField>}
         {place.website && (
-          <div>
-            <span className="font-bold">Website:</span>{' '}
+          <LabeledField label="Website">
             <a className="link" href={place.website} target="_blank">
               {place.website}
             </a>
-          </div>
+          </LabeledField>
         )}
       </section>
     </>
