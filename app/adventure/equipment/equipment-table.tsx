@@ -1,9 +1,9 @@
 import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
-import { Equipment, Place } from '@/models';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 import Link from 'next/link';
+import { EquipmentListProps } from './equipment-list-props';
 
-const EquipmentTable = ({ className, equipment }: { className?: string | undefined; equipment: Array<Equipment> }) => {
+const EquipmentTable = ({ className, equipment }: EquipmentListProps) => {
   return (
     <table className={`table-zebra ${className || ''}`}>
       <thead>

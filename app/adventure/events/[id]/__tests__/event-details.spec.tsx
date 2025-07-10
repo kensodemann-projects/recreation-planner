@@ -139,8 +139,20 @@ describe('Event Details', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Location' })).toBeDefined();
   });
 
-  it('renders the todo collections', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
-    testTodoCollections.forEach((c) => expect(screen.getByRole('heading', { level: 3, name: c.name })).toBeDefined());
+  describe('todo section', () => {
+    it('renders the section header', () => {
+      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('heading', { level: 2, name: 'Todos' })).toBeDefined();
+    });
+
+    it('renders the section header', () => {
+      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('button', { name: 'Add Todo Collection' })).toBeDefined();
+    });
+
+    it('renders the todo collections', () => {
+      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+      testTodoCollections.forEach((c) => expect(screen.getByRole('heading', { level: 3, name: c.name })).toBeDefined());
+    });
   });
 });

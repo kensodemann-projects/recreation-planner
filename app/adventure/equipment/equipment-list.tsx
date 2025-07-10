@@ -1,9 +1,9 @@
 import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
-import { Equipment } from '@/models';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 import Link from 'next/link';
+import { EquipmentListProps } from './equipment-list-props';
 
-const EquipmentList = ({ className, equipment }: { className: string; equipment: Equipment[] }) => {
+const EquipmentList = ({ className, equipment }: EquipmentListProps) => {
   return (
     <ul className={`list-none ${className}`}>
       {equipment.map((current) => (

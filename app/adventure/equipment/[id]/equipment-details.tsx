@@ -3,6 +3,8 @@ import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Equipment, TodoCollection } from '@/models';
 import { formatCurrency, formatDate } from '@/utils/formatters';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;
@@ -71,6 +73,19 @@ const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
         {specificationsSection(equipment)}
         {insuranceSection(equipment)}
       </div>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Maintenance Events</SubtitleHeading>
+        </SectionHeader>
+
+        <Link href={`${equipment.id}/events/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Event
+          </button>
+        </Link>
+      </section>
     </>
   );
 };

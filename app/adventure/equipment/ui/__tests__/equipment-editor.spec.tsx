@@ -77,7 +77,7 @@ describe('Equipment Editor', () => {
     });
 
     describe('initial value', () => {
-      it('is set to the first equipment type with no event', () => {
+      it('is set to the first equipment type when there is no type', () => {
         render(<EquipmentEditor equipmentTypes={EQUIPMENT_TYPES} onCancel={() => null} onConfirm={() => null} />);
         const sel = screen.getByRole('combobox', { name: 'Type of Equipment' }) as HTMLSelectElement;
         expect(+sel.value).toBe(EQUIPMENT_TYPES[0].id);

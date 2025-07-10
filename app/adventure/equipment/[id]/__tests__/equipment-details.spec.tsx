@@ -230,4 +230,16 @@ describe('EquipmentDetails', () => {
       });
     });
   });
+
+  describe('maintenance events section', () => {
+    it('renders a section header', () => {
+      render(<EquipmentDetails equipment={testEquipment} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('heading', { level: 2, name: 'Maintenance Events' })).toBeDefined();
+    });
+
+    it('renders an add button', () => {
+      render(<EquipmentDetails equipment={testEquipment} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('button', { name: 'Add Event' })).toBeDefined();
+    });
+  });
 });

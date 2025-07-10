@@ -2,6 +2,7 @@ import { Event, EventDTO } from '../event';
 import { EventType, EventTypeDTO } from '../event-type';
 import { Place } from '../place';
 import { PlaceTypeDTO } from '../place-type';
+import { convertToEventType } from './event-type';
 import { convertToPlace } from './place';
 
 export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
@@ -9,13 +10,7 @@ export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
     ? convertToPlace({ ...(dto.places as PlaceTypeDTO), id: dto.place_rid })
     : undefined;
 
-  const type: EventType | undefined = dto.event_types
-    ? {
-        id: (dto.event_types as EventTypeDTO).id,
-        name: (dto.event_types as EventTypeDTO).name,
-        description: (dto.event_types as EventTypeDTO).description,
-      }
-    : undefined;
+  const type: EventType | undefined = dto.event_types ? convertToEventType(dto.event_types) : undefined;
 
   return {
     id: dto.id,

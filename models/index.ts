@@ -1,5 +1,7 @@
 export * from './address';
 export * from './equipment';
+export * from './equipment-event';
+export * from './equipment-event-type';
 export * from './equipment-type';
 export * from './event';
 export * from './event-type';
@@ -7,3 +9,4 @@ export * from './place';
 export * from './place-type';
 export * from './todo-collection';
 export * from './todo-item';
+export * from './usage-units';

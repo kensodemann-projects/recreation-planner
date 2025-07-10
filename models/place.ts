@@ -11,7 +11,7 @@ export interface PlaceDTO extends CommonDataDTO {
   phone_number: string | null;
   website: string | null;
   place_type_rid: number;
-  place_types?: Array<PlaceTypeDTO> | PlaceTypeDTO | undefined;
+  place_types?: PlaceTypeDTO | undefined;
 }
 
 export interface Place extends CommonData {

@@ -1,5 +1,4 @@
 import { Equipment, EquipmentDTO } from '../equipment';
-import { TodoItem, TodoItemDTO } from '../todo-item';
 import { convertToEquipmentType } from './equipment-type';
 
 export const convertToEquipment = (dto: Partial<EquipmentDTO>): Partial<Equipment> => ({

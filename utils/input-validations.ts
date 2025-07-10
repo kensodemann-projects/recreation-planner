@@ -1,5 +1,5 @@
-export const isRequired = (value: string | undefined | null, label?: string | undefined): string => {
-  return (value || '').trim().length > 0 ? '' : `${label || 'Value'} is required`;
+export const isRequired = (value: string | number | undefined | null, label?: string | undefined): string => {
+  return (value ?? '').toString().trim().length > 0 ? '' : `${label || 'Value'} is required`;
 };
 
 export const isEmail = (value: string | undefined | null): string => {

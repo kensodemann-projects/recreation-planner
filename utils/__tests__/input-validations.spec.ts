@@ -3,9 +3,9 @@ import { isEmail, isRequired } from '../input-validations';
 
 describe('Input Validations', () => {
   describe('required', () => {
-    const testCases = [
+    const testCases: { name: string; value?: string | number | null; label?: string; expected: string }[] = [
       {
-        name: 'is empty of there is a value',
+        name: 'is empty if there is a value',
         value: 'i',
         label: 'Does Not Matter',
         expected: '',
@@ -21,10 +21,29 @@ describe('Input Validations', () => {
         expected: 'Value is required',
       },
       {
+        name: 'returns an error message for undefined',
+        expected: 'Value is required',
+      },
+      {
+        name: 'returns an error message for null',
+        value: null,
+        expected: 'Value is required',
+      },
+      {
         name: 'uses the label in the error message',
         value: '',
         label: 'Email Address',
         expected: 'Email Address is required',
+      },
+      {
+        name: 'is empty if there is a numeric value',
+        value: 42,
+        expected: '',
+      },
+      {
+        name: 'is empty if the numeric value is zero',
+        value: 0,
+        expected: '',
       },
     ];
 

@@ -9,8 +9,8 @@ export interface EventDTO extends CommonDataDTO {
   end_time: string | null;
   place_rid: number;
   event_type_rid: number;
-  places?: Array<Partial<PlaceDTO>> | Partial<PlaceDTO> | undefined;
-  event_types?: Array<EventTypeDTO> | EventTypeDTO | undefined;
+  places?: Partial<PlaceDTO> | undefined;
+  event_types?: EventTypeDTO | undefined;
 }
 
 export interface Event extends CommonData {
