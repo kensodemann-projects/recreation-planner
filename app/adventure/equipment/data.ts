@@ -71,7 +71,7 @@ const equipmentTypesQuery = (supabase: SupabaseClient): any =>
 const equipmentEventTypesQuery = (supabase: SupabaseClient): any =>
   supabase.from('equipment_event_types').select('*').order('name');
 
-const usageUnitsQuery = (supabase: SupabaseClient): any => supabase.from('usage_units').select('*').order('name');
+const usageUnitsQuery = (supabase: SupabaseClient): any => supabase.from('usage_units').select('*').order('id');
 
 const equipmentEventsQuery = (supabase: SupabaseClient, equipmentRid: number): any =>
   supabase
@@ -85,14 +85,18 @@ const equipmentEventQuery = (supabase: SupabaseClient, id: number): any =>
   supabase.from(equipmentEventsTable).select(equipmentEventsSelectColumns).eq('id', id).single();
 
 const equipmentEventInsert = (supabase: SupabaseClient, event: EquipmentEvent): any =>
-  supabase.from(equipmentTable).insert(convertToEquipmentEventDTO(event)).select(equipmentEventsSelectColumns).single();
+  supabase
+    .from(equipmentEventsTable)
+    .insert(convertToEquipmentEventDTO(event))
+    .select(equipmentEventsSelectColumns)
+    .single();
 
 const equipmentEventDelete = (supabase: SupabaseClient, event: EquipmentEvent): any =>
   supabase.from('equipment_events').delete().eq('id', event.id);
 
 const equipmentEventUpdate = (supabase: SupabaseClient, event: EquipmentEvent): any =>
   supabase
-    .from(equipmentTable)
+    .from(equipmentEventsTable)
     .update(convertToEquipmentEventDTO(event))
     .eq('id', event.id)
     .select(equipmentEventsSelectColumns)
