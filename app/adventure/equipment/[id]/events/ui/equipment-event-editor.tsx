@@ -113,7 +113,7 @@ const EquipmentEventEditor = ({
 
         <Select
           id="equipment-event-type"
-          className="col-span-4 md:col-span-2"
+          className="col-span-4 md:col-span-2 xl:col-span-1"
           disabled={busy}
           label="Type of Event"
           value={eventTypeId}
@@ -123,7 +123,7 @@ const EquipmentEventEditor = ({
 
         <Input
           id="equipment-event-date"
-          className="col-span-4"
+          className="col-span-4 xl:col-span-1"
           type="date"
           label="Date"
           value={eventDate}
@@ -146,8 +146,20 @@ const EquipmentEventEditor = ({
         />
 
         <Input
+          id="equipment-event-cost"
+          className="col-span-4 xl:col-span-2"
+          type="number"
+          label="Cost"
+          value={cost}
+          error={costError}
+          disabled={busy}
+          onBlur={validateCost}
+          onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
+        />
+
+        <Input
           id="equipment-event-usage"
-          className="col-span-4 md:col-span-2"
+          className="col-span-4 md:col-span-2 xl:col-span-1"
           type="number"
           label="Usage"
           value={usage}
@@ -159,24 +171,12 @@ const EquipmentEventEditor = ({
 
         <Select
           id="equipment-event-usage-units"
-          className="col-span-4 md:col-span-2"
+          className="col-span-4 md:col-span-2 xl:col-span-1"
           disabled={busy}
           label="Usage Units"
           value={usageUnitsId}
           values={usageUnits}
           onChange={(evt) => setUsageUnitsId(+evt.target.value)}
-        />
-
-        <Input
-          id="equipment-event-cost"
-          className="col-span-4"
-          type="number"
-          label="Cost"
-          value={cost}
-          error={costError}
-          disabled={busy}
-          onBlur={validateCost}
-          onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
         />
       </div>
 

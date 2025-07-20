@@ -1,14 +1,9 @@
-import {
-  EQUIPMENT_EVENT_TYPES,
-  EQUIPMENT_EVENTS,
-  EQUIPMENT_TYPES,
-  USAGE_UNITS,
-} from '@/app/adventure/equipment/__mocks__/data';
+import { EQUIPMENT_EVENT_TYPES, EQUIPMENT_EVENTS, USAGE_UNITS } from '@/app/adventure/equipment/__mocks__/data';
+import { EquipmentEvent } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import EquipmentEventEditor from '../equipment-event-editor';
-import userEvent, { UserEvent } from '@testing-library/user-event';
-import { EquipmentEvent } from '@/models';
 
 describe('Equipment Editor', () => {
   beforeEach(() => vi.clearAllMocks());
