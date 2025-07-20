@@ -2,7 +2,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { EQUIPMENT } from '../../__mocks__/data';
-import { fetchEquipment, fetchTodoCollectionsForEquipment } from '../../data';
+import { fetchEquipment, fetchEquipmentEvents, fetchTodoCollectionsForEquipment } from '../../data';
 import EquipmentPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
@@ -21,6 +21,11 @@ describe('Equipment Page', () => {
     it('fetches the equipment', async () => {
       await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(2);
+    });
+
+    it('fetches the maintenance events for the equipment', async () => {
+      await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
+      expect(fetchEquipmentEvents).toHaveBeenCalledExactlyOnceWith(2);
     });
 
     it('fetches the todo collection for the equipment', async () => {

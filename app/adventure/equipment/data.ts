@@ -29,7 +29,7 @@ import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const equipmentSelectColumns = '*, equipment_types!inner(*)';
-const equipmentEventsSelectColumns = '*, equipment_event_types!inner(*)';
+const equipmentEventsSelectColumns = '*, equipment_event_types!inner(*), usage_units(*)';
 const equipmentTable = 'equipment';
 const equipmentEventsTable = 'equipment_events';
 

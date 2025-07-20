@@ -1,18 +1,20 @@
 import LabeledField from '@/app/ui/labeled-field';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { Equipment, TodoCollection } from '@/models';
+import { Equipment, EquipmentEvent, TodoCollection } from '@/models';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import EquipmentEventsWrapper from './equipment-events-wrapper';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;
+  equipmentEvents: EquipmentEvent[];
   todoCollections: TodoCollection[];
 }
 
 const detailsSection = (equipment: Equipment) => (
-  <section className="col-span-3 md:col-span-1">
+  <section className="col-span-3 md:col-span-1" data-testid="details-section">
     <SectionHeader>
       <SubtitleHeading>Details</SubtitleHeading>
     </SectionHeader>
@@ -26,7 +28,7 @@ const detailsSection = (equipment: Equipment) => (
 
 const specificationsSection = (equipment: Equipment) =>
   (equipment.weight || equipment.length || equipment.capacity) && (
-    <section className="col-span-3 md:col-span-1">
+    <section className="col-span-3 md:col-span-1" data-testid="specifications-section">
       <SectionHeader>
         <SubtitleHeading>Specifications</SubtitleHeading>
       </SectionHeader>
@@ -42,7 +44,7 @@ const insuranceSection = (equipment: Equipment) =>
     equipment.insuranceContactName ||
     equipment.insuranceContactPhoneNumber ||
     equipment.insuranceContactEmail) && (
-    <section className="col-span-3 md:col-span-1">
+    <section className="col-span-3 md:col-span-1" data-testid="insurance-section">
       <SectionHeader>
         <SubtitleHeading>Insurance Information</SubtitleHeading>
       </SectionHeader>
@@ -58,7 +60,7 @@ const insuranceSection = (equipment: Equipment) =>
     </section>
   );
 
-const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
+const EquipmentDetails = ({ equipment, equipmentEvents }: EquipmentDetailsProps) => {
   return (
     <>
       <section>
@@ -74,10 +76,12 @@ const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
         {insuranceSection(equipment)}
       </div>
 
-      <section>
+      <section data-testid="maintenance-events-section">
         <SectionHeader>
           <SubtitleHeading>Maintenance Events</SubtitleHeading>
         </SectionHeader>
+
+        <EquipmentEventsWrapper equipmentEvents={equipmentEvents} />
 
         <Link href={`${equipment.id}/events/create`}>
           <button className="btn btn-primary">

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cityStatePostal, formatCurrency, formatDate, formatDateRange } from '../formatters';
+import { cityStatePostal, formatCurrency, formatDate, formatDateRange, formatNumber } from '../formatters';
 
 describe('Formatters', () => {
   describe('date and time', () => {
@@ -143,7 +143,7 @@ describe('Formatters', () => {
   });
 
   describe('currency', () => {
-    const testCases = [
+    const testCases: { name: string; value: number | null | undefined; expected: string }[] = [
       {
         name: 'formats to blank for null',
         value: null,
@@ -183,6 +183,50 @@ describe('Formatters', () => {
 
     it.each(testCases)('$name', ({ value, expected }) => {
       expect(formatCurrency(value)).toEqual(expected);
+    });
+  });
+
+  describe('number', () => {
+    const testCases: { name: string; value: number | null | undefined; expected: string }[] = [
+      {
+        name: 'formats to blank for null',
+        value: null,
+        expected: '',
+      },
+      {
+        name: 'formats to blank for undefined',
+        value: undefined,
+        expected: '',
+      },
+      {
+        name: 'formats to US dollars for zero',
+        value: 0,
+        expected: '0.00',
+      },
+      {
+        name: 'formats to US dollars for a single dollar',
+        value: 1,
+        expected: '1.00',
+      },
+      {
+        name: 'formats to US dollars for < 1000',
+        value: 139.24,
+        expected: '139.24',
+      },
+      {
+        name: 'formats to US dollars for > 1,000',
+        value: 2139.24,
+        expected: '2,139.24',
+      },
+      {
+        name: 'formats to US dollars for > 1,000,000',
+        value: 9822139.24,
+        expected: '9,822,139.24',
+      },
+    ];
+
+    it.each(testCases)('$name', ({ value, expected }) => {
+      expect(formatNumber(value)).toEqual(expected);
     });
   });
 });

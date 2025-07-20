@@ -40,3 +40,12 @@ const usdFormatter = new Intl.NumberFormat('en-US', {
 
 export const formatCurrency = (value?: number | null): string =>
   value || value === 0 ? usdFormatter.format(value) : '';
+
+const decimalFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+export const formatNumber = (value?: number | null): string =>
+  value || value === 0 ? decimalFormatter.format(value) : '';

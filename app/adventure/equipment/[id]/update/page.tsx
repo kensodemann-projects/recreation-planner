@@ -5,7 +5,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { fetchEquipment, fetchEquipmentTypes } from '../../data';
 import UpdateEquipment from './update-equipment';
 
-const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
+const UpdateEquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -28,4 +28,4 @@ const UpdatePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default UpdatePlacePage;
+export default UpdateEquipmentPage;
