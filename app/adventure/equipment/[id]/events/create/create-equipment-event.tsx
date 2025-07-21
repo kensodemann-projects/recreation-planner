@@ -3,15 +3,15 @@
 import { useRouter } from 'next/navigation';
 import EquipmentEventEditor from '../ui/equipment-event-editor';
 import { createEquipmentEventConfirmed } from './actions';
-import { EquipmentEventType, EquipmentType, UsageUnits } from '@/models';
+import { Equipment, EquipmentEventType, EquipmentType, UsageUnits } from '@/models';
 
 type CreateEquipmentEventProperties = {
-  equipmentRid: number;
+  equipment: Equipment;
   equipmentEventTypes: EquipmentEventType[];
   usageUnits: UsageUnits[];
 };
 
-const CreateEquipmentEvent = ({ equipmentRid, equipmentEventTypes, usageUnits }: CreateEquipmentEventProperties) => {
+const CreateEquipmentEvent = ({ equipment, equipmentEventTypes, usageUnits }: CreateEquipmentEventProperties) => {
   const router = useRouter();
 
   return (
@@ -19,7 +19,7 @@ const CreateEquipmentEvent = ({ equipmentRid, equipmentEventTypes, usageUnits }:
       <EquipmentEventEditor
         equipmentEventTypes={equipmentEventTypes}
         usageUnits={usageUnits}
-        onConfirm={(evt) => createEquipmentEventConfirmed({ ...evt, equipmentRid })}
+        onConfirm={(evt) => createEquipmentEventConfirmed({ ...evt, equipment })}
         onCancel={() => router.back()}
       />
     </>

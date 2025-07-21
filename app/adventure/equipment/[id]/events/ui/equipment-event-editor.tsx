@@ -11,7 +11,7 @@ interface EquipmentEventEditorProps {
   equipmentEvent?: EquipmentEvent;
   equipmentEventTypes: EquipmentEventType[];
   usageUnits: UsageUnits[];
-  onConfirm: (e: EquipmentEvent | Omit<EquipmentEvent, 'equipmentRid'>) => void;
+  onConfirm: (e: EquipmentEvent | Omit<EquipmentEvent, 'equipment'>) => void;
   onCancel: () => void;
 }
 
@@ -188,7 +188,7 @@ const EquipmentEventEditor = ({
           className="btn btn-primary min-w-24"
           onClick={() => {
             setBusy(true);
-            const data: Omit<EquipmentEvent, 'equipmentRid'> = {
+            const data: Omit<EquipmentEvent, 'equipment'> = {
               name: name || '',
               date: eventDate || '',
               description: description || null,

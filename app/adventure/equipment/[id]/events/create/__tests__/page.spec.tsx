@@ -49,6 +49,44 @@ describe('Create Equipment Event Page', () => {
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
+
+    it('does not render the failed fetch error message', async () => {
+      const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+      render(jsx);
+      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
+    });
+
+    describe('if the equipment fetch fails', () => {
+      beforeEach(() => {
+        (fetchEquipment as Mock).mockResolvedValue(null);
+      });
+
+      it('renders a simple error message', async () => {
+        const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+        render(jsx);
+        expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
+      });
+
+      it('does not fetch anything else', async () => {
+        const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+        render(jsx);
+        expect(fetchEquipmentEventTypes).not.toHaveBeenCalled();
+        expect(fetchUsageUnits).not.toHaveBeenCalled();
+      });
+
+      it('does not render the create equipment event component', async () => {
+        const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'Add a New Maintenance Event' })).toBeNull();
+        expect(screen.queryByRole('heading', { level: 2, name: `For: ${EQUIPMENT[0].name}` })).toBeNull();
+      });
+
+      it('does not render the must be logged in component', async () => {
+        const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+        render(jsx);
+        expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+      });
+    });
   });
 
   describe('when not logged in', () => {
@@ -74,6 +112,12 @@ describe('Create Equipment Event Page', () => {
       const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Add a New Maintenance Event' })).toBeNull();
+    });
+
+    it('does not render the failed fetch error message', async () => {
+      const jsx = await CreateEquipmentEventPage({ params: Promise.resolve({ id: '7342' }) });
+      render(jsx);
+      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
     });
   });
 });

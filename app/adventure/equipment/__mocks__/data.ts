@@ -161,7 +161,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     id: 1,
     name: 'Spring Inspection',
     description: 'Generally in good condition.',
-    equipmentRid: 3,
+    equipment: EQUIPMENT[2],
     date: '2025-05-20',
     usage: null,
     cost: null,
@@ -170,7 +170,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
   {
     id: 2,
     name: '2025 Fall Oil Change',
-    equipmentRid: 3,
+    equipment: EQUIPMENT[2],
     date: '2025-08-15',
     usage: 12834.3,
     cost: 123.43,
@@ -181,7 +181,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     id: 3,
     name: 'Spring Inspection',
     description: 'The brakes squeak a bit, but it does not seem to be a problem overall.',
-    equipmentRid: 4,
+    equipment: EQUIPMENT[3],
     date: '2025-03-17',
     usage: 12.7,
     cost: null,
@@ -203,7 +203,7 @@ export const canDeleteEquipment = vi.fn().mockResolvedValue(false);
 export const fetchEquipmentEvents = vi
   .fn()
   .mockImplementation((equipmentRid: number) =>
-    Promise.resolve(EQUIPMENT_EVENTS.filter((d) => d.equipmentRid === equipmentRid)),
+    Promise.resolve(EQUIPMENT_EVENTS.filter((d) => d.equipment.id === equipmentRid)),
   );
 export const fetchEquipmentEvent = vi
   .fn()

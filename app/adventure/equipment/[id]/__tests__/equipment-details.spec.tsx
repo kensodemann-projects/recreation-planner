@@ -6,7 +6,7 @@ import { EQUIPMENT, EQUIPMENT_EVENTS } from '../../__mocks__/data';
 
 const testEquipment: Equipment = EQUIPMENT.find((x) => x.name === 'My Truck')!;
 const minimalEquipment: Equipment = EQUIPMENT.find((x) => x.name === 'The bare minimum')!;
-const testEquipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipmentRid === testEquipment.id);
+const testEquipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipment.id === testEquipment.id);
 
 const testTodoCollections: TodoCollection[] = [];
 

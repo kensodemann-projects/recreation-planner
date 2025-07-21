@@ -8,7 +8,7 @@ const EquipmentList = ({ className, equipmentEvents }: EquipmentEventsListProps)
     <ul className={`list-none ${className}`}>
       {equipmentEvents.map((current) => (
         <li key={current.id} className="py-2 border-solid first:border-t border-b border-primary flex">
-          <Link className="grow" href={`${current.equipmentRid}/events/${current.id}/update`}>
+          <Link className="grow" href={`${current.equipment.id}/events/${current.id}/update`}>
             <div className="font-bold">{current.name}</div>
             <div>
               <span className="label">Date:</span> {formatDate(current.date)}

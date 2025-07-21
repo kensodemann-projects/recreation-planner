@@ -13,6 +13,11 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
 
   const params = await props.params;
   const equipment = await fetchEquipment(+params.id);
+
+  if (!equipment) {
+    return <div>Failed to fetch the equipment</div>;
+  }
+
   const equipmentEventTypes = await fetchEquipmentEventTypes();
   const usageUnits = await fetchUsageUnits();
 
@@ -22,11 +27,7 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
         <TitleHeading>Add a New Maintenance Event</TitleHeading>
         <SubtitleHeading>For: {equipment?.name || ''}</SubtitleHeading>
       </PageHeader>
-      <CreateEquipmentEvent
-        equipmentRid={equipment!.id!}
-        equipmentEventTypes={equipmentEventTypes}
-        usageUnits={usageUnits}
-      />
+      <CreateEquipmentEvent equipment={equipment!} equipmentEventTypes={equipmentEventTypes} usageUnits={usageUnits} />
     </>
   );
 };

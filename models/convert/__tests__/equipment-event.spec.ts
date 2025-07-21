@@ -1,4 +1,4 @@
-import { EquipmentEvent, EquipmentEventDTO } from '@/models';
+import { Equipment, EquipmentDTO, EquipmentEvent, EquipmentEventDTO } from '@/models';
 import { describe, expect, it } from 'vitest';
 import { convertToEquipmentEvent, convertToEquipmentEventDTO } from '../equipment-event';
 
@@ -60,10 +60,51 @@ describe('equipment event conversions', () => {
   });
 });
 
+const equipment: Omit<Equipment, 'equipmentType'> = {
+  id: 99403,
+  name: 'Planet Destroyer',
+  description: 'The Vogons should destroy the Earth using this.',
+  purchaseDate: '2025-03-28',
+  cost: 2954932.34,
+  manufacturer: 'Vogon Vehicles',
+  model: 'DST-X3',
+  identification: '1994-ff8ge-1234',
+  length: '7 Miles, 4 feet',
+  weight: '1.1 Million Tons (Roughly)',
+  capacity: 'A full crew',
+  licensePlateNumber: 'I<3DST',
+  insuranceCarrier: 'Contructors Insurance',
+  insurancePolicyNumber: '8849950-29934',
+  insuranceContactName: 'Bob',
+  insuranceContactPhoneNumber: '555-930-2994',
+  insuranceContactEmail: 'bob@conins.com',
+};
+
+const equipmentDTO: EquipmentDTO = {
+  id: 99403,
+  name: 'Planet Destroyer',
+  description: 'The Vogons should destroy the Earth using this.',
+  purchase_date: '2025-03-28',
+  cost: 2954932.34,
+  manufacturer: 'Vogon Vehicles',
+  model: 'DST-X3',
+  identification: '1994-ff8ge-1234',
+  length: '7 Miles, 4 feet',
+  weight: '1.1 Million Tons (Roughly)',
+  capacity: 'A full crew',
+  license_plate_number: 'I<3DST',
+  insurance_carrier: 'Contructors Insurance',
+  insurance_policy_number: '8849950-29934',
+  insurance_contact_name: 'Bob',
+  insurance_contact_phone_number: '555-930-2994',
+  insurance_contact_email: 'bob@conins.com',
+  equipment_type_rid: 4,
+};
+
 const conditionReportDTO: EquipmentEventDTO = {
   name: 'Spring Inspection',
   description: 'Generally in good condition. Table needs reconditioning',
-  equipment_rid: 7392,
+  equipment_rid: 99403,
   date: '2025-05-20',
   usage: null,
   cost: null,
@@ -81,13 +122,13 @@ const conditionReportFetchDTO: EquipmentEventDTO = {
     name: 'Condition Report',
     description: 'Inspect the equipment and provide a report of its current condition based on this assessment.',
   },
+  equipment: equipmentDTO,
 };
 
 const conditionReport: EquipmentEvent = {
   id: 42,
   name: 'Spring Inspection',
   description: 'Generally in good condition. Table needs reconditioning',
-  equipmentRid: 7392,
   date: '2025-05-20',
   usage: null,
   cost: null,
@@ -96,6 +137,7 @@ const conditionReport: EquipmentEvent = {
     name: 'Condition Report',
     description: 'Inspect the equipment and provide a report of its current condition based on this assessment.',
   },
+  equipment,
 };
 
 const repairDTO: EquipmentEventDTO = {
@@ -119,13 +161,13 @@ const repairFetchDTO: EquipmentEventDTO = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
+  equipment: equipmentDTO,
 };
 
 const repair: EquipmentEvent = {
   id: 73,
   name: 'Fix the wall',
   description: 'Repair wall damaged by a ball strike.',
-  equipmentRid: 99403,
   date: '2027-06-13',
   usage: null,
   cost: 352.03,
@@ -134,6 +176,7 @@ const repair: EquipmentEvent = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
+  equipment,
 };
 
 const usageDTO: EquipmentEventDTO = {
@@ -162,13 +205,13 @@ const usageFetchDTO: EquipmentEventDTO = {
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Miles',
   },
+  equipment: equipmentDTO,
 };
 
 const usage: EquipmentEvent = {
   id: 3884,
   name: 'July Mileage Reading',
   description: null,
-  equipmentRid: 99403,
   date: '2025-07-01',
   usage: 14394.3,
   cost: null,
@@ -181,6 +224,7 @@ const usage: EquipmentEvent = {
     id: 1,
     name: 'Miles',
   },
+  equipment,
 };
 
 const maintenanceDTO: EquipmentEventDTO = {
@@ -209,13 +253,13 @@ const maintenanceFetchDTO: EquipmentEventDTO = {
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Miles',
   },
+  equipment: equipmentDTO,
 };
 
 const maintenance: EquipmentEvent = {
   id: 341,
   name: '2025 Oil Change',
   description: null,
-  equipmentRid: 99403,
   date: '2025-05-15',
   usage: 11374.2,
   cost: 115.45,
@@ -228,4 +272,5 @@ const maintenance: EquipmentEvent = {
     name: 'Periodic Maintenance',
     description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
   },
+  equipment,
 };
