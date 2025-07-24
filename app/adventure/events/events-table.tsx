@@ -18,7 +18,11 @@ const EventsTable = ({ className, events }: EventsListProps) => {
       <tbody>
         {events.map((event) => (
           <tr key={event.id}>
-            <th>{formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}</th>
+            <th>
+              <Link href={`events/${event.id}`}>
+                {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
+              </Link>
+            </th>
             <td>
               <Link href={`events/${event.id}`}>{event.name}</Link>
             </td>
