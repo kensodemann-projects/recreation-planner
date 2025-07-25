@@ -8,7 +8,7 @@ vi.mock('@/app/adventure/todos/data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
-describe('Update Todo Collection for Event Page', () => {
+describe('Update Todo Collection for Equipment Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 

@@ -6,6 +6,7 @@ import { formatCurrency, formatDate } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import EquipmentEventsWrapper from './equipment-events-wrapper';
+import TodoCollectionCard from '../../todos/ui/todo-collection-card';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;
@@ -60,7 +61,7 @@ const insuranceSection = (equipment: Equipment) =>
     </section>
   );
 
-const EquipmentDetails = ({ equipment, equipmentEvents }: EquipmentDetailsProps) => {
+const EquipmentDetails = ({ equipment, equipmentEvents, todoCollections }: EquipmentDetailsProps) => {
   return (
     <>
       <section>
@@ -87,6 +88,27 @@ const EquipmentDetails = ({ equipment, equipmentEvents }: EquipmentDetailsProps)
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
             Add Event
+          </button>
+        </Link>
+      </section>
+
+      <section data-testid="todos-section">
+        <SectionHeader>
+          <SubtitleHeading>Todos</SubtitleHeading>
+        </SectionHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+          {todoCollections.map((c) => (
+            <TodoCollectionCard
+              editHref={`/adventure/equipment/${equipment.id}/todos/${c.id}/update`}
+              todoCollection={c}
+              key={c.id}
+            />
+          ))}
+        </div>
+        <Link href={`${equipment.id}/todos/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Todo Collection
           </button>
         </Link>
       </section>

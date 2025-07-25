@@ -52,6 +52,25 @@ describe('todo collection converters', () => {
         },
       },
       {
+        name: 'converts an equipment related collection',
+        input: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          equipment_rid: 4273,
+          is_complete: false,
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          equipmentRid: 4273,
+        },
+      },
+      {
         name: 'converts a full base collection with child items',
         input: {
           id: 1,
@@ -188,6 +207,45 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           event_rid: 4273,
+          is_complete: false,
+        },
+      },
+      {
+        name: 'converts an equipment related collection',
+        input: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          equipmentRid: 4273,
+          todoItems: [
+            {
+              id: 42,
+              name: 'Do the needful',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 73,
+              name: 'Bite the unbitten',
+              isComplete: true,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 314159,
+              name: 'Eat the pi',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+          ],
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          equipment_rid: 4273,
           is_complete: false,
         },
       },
