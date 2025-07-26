@@ -86,4 +86,5 @@ export const fetchTodoCollection = vi
 export const addTodoCollection = vi.fn().mockResolvedValue(null);
 export const updateTodoCollection = vi.fn().mockResolvedValue(null);
 export const addTodoItem = vi.fn().mockResolvedValue(null);
+export const deleteTodoItem = vi.fn().mockResolvedValue(undefined);
 export const updateTodoItem = vi.fn().mockResolvedValue(null);

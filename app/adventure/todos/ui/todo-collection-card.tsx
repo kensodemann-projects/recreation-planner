@@ -6,7 +6,7 @@ import { formatDate } from '@/utils/formatters';
 import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useState } from 'react';
-import { addTodoItem, updateTodoItem } from '../data';
+import { addTodoItem, deleteTodoItem, updateTodoItem } from '../data';
 
 export interface TodoCollectionCardProps {
   editHref: string;
@@ -28,6 +28,12 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
     const items = [...todoItems];
     const idx = items.findIndex((i) => i.id === todo.id);
     items[idx] = todo;
+    setTodoItems(items);
+  };
+
+  const removeTodoItem = (todo: TodoItem) => {
+    deleteTodoItem(todo);
+    const items = todoItems.filter((x) => x.id !== todo.id);
     setTodoItems(items);
   };
 
@@ -53,6 +59,8 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
                 label={todo.name}
                 onChange={(evt) => todoChanged({ ...todo, isComplete: evt.target.checked })}
                 onLabelChanged={(name) => todoChanged({ ...todo, name })}
+                onRemove={() => removeTodoItem(todo)}
+                removeVerification={todo.name && 'Removing this TODO is permanent and cannot be undone.'}
               />
             ))}
           {todoItems
@@ -64,6 +72,8 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
                 label={todo.name}
                 onChange={(evt) => todoChanged({ ...todo, isComplete: evt.target.checked })}
                 onLabelChanged={(name) => todoChanged({ ...todo, name })}
+                onRemove={() => null}
+                removeVerification={todo.name && 'Removing this TODO is permanent and cannot be undone.'}
               />
             ))}
         </div>

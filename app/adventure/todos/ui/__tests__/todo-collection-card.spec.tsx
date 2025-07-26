@@ -2,7 +2,7 @@ import { TodoCollection } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { addTodoItem, updateTodoItem } from '../../data';
+import { addTodoItem, deleteTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
 
 vi.mock('../../data');
@@ -86,7 +86,7 @@ describe('TODO Collection Card', () => {
     );
     await user.click(screen.getByText('Fetch the data'));
     await user.type(screen.getByRole('textbox'), ' and do something with it');
-    await user.tab();
+    await user.click(screen.getByTestId('save-button'));
     expect(updateTodoItem).toHaveBeenCalledExactlyOnceWith({
       ...item,
       name: item!.name + ' and do something with it',
