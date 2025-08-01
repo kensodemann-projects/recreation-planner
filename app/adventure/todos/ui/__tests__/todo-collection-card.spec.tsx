@@ -1,8 +1,8 @@
 import { TodoCollection } from '@/models';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { addTodoItem, deleteTodoItem, updateTodoItem } from '../../data';
+import { addTodoItem, deleteTodoItem, updateTodoCollection, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
 
 vi.mock('../../data');
@@ -58,7 +58,8 @@ describe('TODO Collection Card', () => {
         todoCollection={TEST_COLLECTION}
       />,
     );
-    expect(screen.getAllByRole('checkbox').length).toEqual(TEST_COLLECTION.todoItems.length);
+    const items = screen.getByTestId('todo-items');
+    expect(within(items).getAllByRole('checkbox').length).toEqual(TEST_COLLECTION.todoItems.length);
   });
 
   it('renders the open items first, completed items last', () => {
@@ -127,6 +128,23 @@ describe('TODO Collection Card', () => {
     });
   });
 
+  describe('archive list checkbox', () => {
+    it('marks the collection complete', async () => {
+      const user = userEvent.setup();
+      render(
+        <TodoCollectionCard
+          editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+          todoCollection={TEST_COLLECTION}
+        />,
+      );
+      await user.click(screen.getByRole('checkbox', { name: 'Archive List' }));
+      expect(updateTodoCollection).toHaveBeenCalledExactlyOnceWith({
+        ...TEST_COLLECTION,
+        isComplete: true,
+      });
+    });
+  });
+
   describe('add button', () => {
     it('adds a new TODO', async () => {
       const user = userEvent.setup();
@@ -150,8 +168,8 @@ describe('TODO Collection Card', () => {
         />,
       );
       await user.click(screen.getByRole('button', { name: 'Add new Todo Item' }));
-      const elements = screen.getAllByRole('checkbox');
-      expect(elements.length).toEqual(TEST_COLLECTION.todoItems.length + 1);
+      const items = screen.getByTestId('todo-items');
+      expect(within(items).getAllByRole('checkbox').length).toEqual(TEST_COLLECTION.todoItems.length + 1);
     });
   });
 });
