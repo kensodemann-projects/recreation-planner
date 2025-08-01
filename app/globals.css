@@ -31,3 +31,9 @@
 @utility text-balance {
   text-wrap: balance;
 }
+
+/* This removes the double border on focused form elements */
+:focus,
+:focus-within {
+  outline: none;
+}
