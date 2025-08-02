@@ -176,7 +176,7 @@ describe('TODO Editor', () => {
             'This is the description of the collection',
           );
           await user.type(screen.getByLabelText('Due Date'), '2025-06-08');
-          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('checkbox', { name: 'Archived' }));
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(collection).toEqual({
             name: 'Test Collection',
@@ -281,7 +281,7 @@ describe('TODO Editor', () => {
       it('is enabled if the copmleted flag is changed', async () => {
         const user = userEvent.setup();
         render(<TodoCollectionEditor todoCollection={TEST_COLLECTION} onCancel={() => null} onConfirm={() => null} />);
-        await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+        await user.click(screen.getByRole('checkbox', { name: 'Archived' }));
         const btn = screen.getByRole('button', { name: 'Update' });
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
@@ -346,7 +346,7 @@ describe('TODO Editor', () => {
               onConfirm={(c) => (collection = c)}
             />,
           );
-          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('checkbox', { name: 'Archived' }));
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(collection).toEqual({
             ...TEST_COLLECTION,
@@ -364,7 +364,7 @@ describe('TODO Editor', () => {
               onConfirm={(c) => (collection = c)}
             />,
           );
-          await user.click(screen.getByRole('checkbox', { name: 'Complete (hide the collection)' }));
+          await user.click(screen.getByRole('checkbox', { name: 'Archived' }));
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(collection).toEqual({
             ...TEST_COLLECTION,

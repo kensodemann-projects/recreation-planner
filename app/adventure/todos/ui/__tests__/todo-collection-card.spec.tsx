@@ -128,23 +128,6 @@ describe('TODO Collection Card', () => {
     });
   });
 
-  describe('archive list checkbox', () => {
-    it('marks the collection complete', async () => {
-      const user = userEvent.setup();
-      render(
-        <TodoCollectionCard
-          editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-          todoCollection={TEST_COLLECTION}
-        />,
-      );
-      await user.click(screen.getByRole('checkbox', { name: 'Archive List' }));
-      expect(updateTodoCollection).toHaveBeenCalledExactlyOnceWith({
-        ...TEST_COLLECTION,
-        isComplete: true,
-      });
-    });
-  });
-
   describe('add button', () => {
     it('adds a new TODO', async () => {
       const user = userEvent.setup();

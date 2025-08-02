@@ -73,7 +73,7 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
             disabled={busy}
             onChange={(evt) => setIsComplete(evt.target.checked)}
           />
-          Complete (hide the collection)
+          Archived
         </label>
       </div>
 

@@ -14,7 +14,6 @@ export interface TodoCollectionCardProps {
 }
 
 const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProps) => {
-  const [collection, setCollection] = useState(todoCollection);
   const [todoItems, setTodoItems] = useState(todoCollection.todoItems);
 
   const addItemClicked = async () => {
@@ -38,17 +37,17 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
     setTodoItems(items);
   };
 
-  const DueDate = collection.dueDate ? (
+  const DueDate = todoCollection.dueDate ? (
     <p className="grow-0">
-      <span className="font-bold">Due Date:</span> {collection.dueDate ? formatDate(collection.dueDate) : null}
+      <span className="font-bold">Due Date:</span> {todoCollection.dueDate ? formatDate(todoCollection.dueDate) : null}
     </p>
   ) : null;
 
   return (
     <div className="card card-border bg-base-100 m-2">
       <div className="card-body">
-        <h3 className="card-title">{collection.name}</h3>
-        <p className="grow-0">{collection.description}</p>
+        <h3 className="card-title">{todoCollection.name}</h3>
+        <p className="grow-0">{todoCollection.description}</p>
         {DueDate}
         <div className="grow" data-testid="todo-items">
           {todoItems
@@ -79,19 +78,6 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
             ))}
         </div>
         <div className="card-actions justify-end items-center mt-6">
-          <label className="label flex-grow">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={collection.isComplete}
-              onChange={() => {
-                const c: TodoCollection = { ...collection, isComplete: !collection.isComplete };
-                setCollection(c);
-                updateTodoCollection(c);
-              }}
-            />
-            Archive List
-          </label>
           <Link href={editHref}>
             <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
               <PencilSquareIcon className="w-6" />
