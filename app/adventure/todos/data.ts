@@ -22,10 +22,7 @@ const todoCollectionQuery = (supabase: SupabaseClient, id?: number): any => {
   if (id) {
     return query.eq('id', id).order('created_at', { referencedTable: itemTable }).single();
   } else {
-    return query
-      .eq('is_complete', false)
-      .order('due_date', { nullsFirst: false })
-      .order('created_at', { referencedTable: itemTable });
+    return query.order('due_date', { nullsFirst: false }).order('created_at', { referencedTable: itemTable });
   }
 };
 

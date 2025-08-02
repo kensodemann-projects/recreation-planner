@@ -152,7 +152,9 @@ describe('Event Details', () => {
 
     it('renders the todo collections', () => {
       render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
-      testTodoCollections.forEach((c) => expect(screen.getByRole('heading', { level: 3, name: c.name })).toBeDefined());
+      testTodoCollections
+        .filter((x) => !x.isComplete)
+        .forEach((c) => expect(screen.getByRole('heading', { level: 3, name: c.name })).toBeDefined());
     });
   });
 });

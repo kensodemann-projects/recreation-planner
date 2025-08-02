@@ -5,7 +5,7 @@ import { Event, TodoCollection } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import TodoCollectionCard from '../../todos/ui/todo-collection-card';
+import Todos from '../../todos/ui/todos';
 
 interface EventDetailsProps {
   event: Event;
@@ -48,15 +48,7 @@ const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
         <SectionHeader>
           <SubtitleHeading>Todos</SubtitleHeading>
         </SectionHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
-          {todoCollections.map((c) => (
-            <TodoCollectionCard
-              editHref={`/adventure/events/${event.id}/todos/${c.id}/update`}
-              todoCollection={c}
-              key={c.id}
-            />
-          ))}
-        </div>
+        <Todos collections={todoCollections} editBaseHref={`/adventure/events/${event.id}/todos`} />
         <Link href={`${event.id}/todos/create`}>
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
