@@ -11,7 +11,6 @@ const createEntities = async (evt: Event) => {
     const place = await addPlace({
       name: `Edit Me for: ${evt.name}`,
       type: types[0],
-      address: {},
     });
     return addEvent({ ...evt, place: place! });
   } else {

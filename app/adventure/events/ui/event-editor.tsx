@@ -1,3 +1,4 @@
+import AlertDialog from '@/app/ui/alert-dialog';
 import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
@@ -16,6 +17,7 @@ export interface EventEditorProps {
 }
 
 const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorProps) => {
+  const [alertPlaceCreation, setAlertPlaceCreation] = useState(false);
   const {
     value: eventName,
     error: eventNameError,
@@ -98,7 +100,13 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           label="Location"
           value={eventPlaceId}
           values={places}
-          onChange={(evt) => setEventPlaceId(+evt.target.value)}
+          onChange={(evt) => {
+            const id = +evt.target.value;
+            setEventPlaceId(+evt.target.value);
+            if (id < 0) {
+              setAlertPlaceCreation(true);
+            }
+          }}
         />
         <Input
           id="event-begin-date"
@@ -163,6 +171,13 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           {busy ? BusyIndicator : event ? 'Update' : 'Create'}
         </button>
       </div>
+      <AlertDialog
+        title="Place will be generated"
+        message="Using this option will generate a minimally speciffied Place once the event is saved. Please modify the generated place as appropriate."
+        isOpen={alertPlaceCreation}
+        alertType="info"
+        onResponse={() => setAlertPlaceCreation(false)}
+      />
     </div>
   );
 };
