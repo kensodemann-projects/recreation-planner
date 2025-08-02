@@ -3,7 +3,7 @@
 import { Event, EventType, SelectablePlace } from '@/models';
 import { useRouter } from 'next/navigation';
 import EventEditor from '../../ui/event-editor';
-import { updateEventConfirmed } from './actions';
+import { updateConfirmed } from './actions';
 
 type CreateEventProps = {
   event: Event;
@@ -20,7 +20,7 @@ const UpdateEvent = ({ event, types, places }: CreateEventProps) => {
         event={event}
         types={types}
         places={places}
-        onConfirm={updateEventConfirmed}
+        onConfirm={updateConfirmed}
         onCancel={() => router.back()}
       />
     </>

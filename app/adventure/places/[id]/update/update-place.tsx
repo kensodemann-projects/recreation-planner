@@ -3,7 +3,7 @@
 import { Place, PlaceType } from '@/models';
 import { useRouter } from 'next/navigation';
 import PlaceEditor from '../../ui/place-editor';
-import { updatePlaceConfirmed } from './actions';
+import { updateConfirmed } from './actions';
 
 type UpdatePlaceProperties = { place: Place; types: Array<PlaceType> };
 
@@ -12,7 +12,7 @@ const UpdatePlace = ({ place, types }: UpdatePlaceProperties) => {
 
   return (
     <>
-      <PlaceEditor place={place} types={types} onConfirm={updatePlaceConfirmed} onCancel={() => router.back()} />
+      <PlaceEditor place={place} types={types} onConfirm={updateConfirmed} onCancel={() => router.back()} />
     </>
   );
 };

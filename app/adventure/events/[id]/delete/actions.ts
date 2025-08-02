@@ -4,11 +4,11 @@ import { Event } from '@/models';
 import { redirect } from 'next/navigation';
 import { deleteEvent } from '../../data';
 
-export const deleteEventConfirmed = async (e: Event) => {
+export const deleteConfirmed = async (e: Event) => {
   await deleteEvent(e);
   redirect('/adventure/events');
 };
 
-export const deleteEventAborted = async () => {
+export const deleteAborted = async () => {
   redirect('/adventure/events');
 };

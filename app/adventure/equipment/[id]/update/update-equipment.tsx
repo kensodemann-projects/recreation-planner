@@ -3,7 +3,7 @@
 import { Equipment, EquipmentType, Place, PlaceType } from '@/models';
 import { useRouter } from 'next/navigation';
 import EquipmentEditor from '../../ui/equipment-editor';
-import { updateEquipmentConfirmed } from './actions';
+import { updateConfirmed } from './actions';
 
 type UpdateEquipmentProperties = { equipment: Equipment; equipmentTypes: EquipmentType[] };
 
@@ -15,7 +15,7 @@ const UpdateEquipment = ({ equipment, equipmentTypes }: UpdateEquipmentPropertie
       <EquipmentEditor
         equipment={equipment}
         equipmentTypes={equipmentTypes}
-        onConfirm={updateEquipmentConfirmed}
+        onConfirm={updateConfirmed}
         onCancel={() => router.back()}
       />
     </>

@@ -2,7 +2,7 @@ import { TodoCollection } from '@/models';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { addTodoItem, deleteTodoItem, updateTodoCollection, updateTodoItem } from '../../data';
+import { addTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
 
 vi.mock('../../data');
@@ -14,7 +14,7 @@ describe('TODO Collection Card', () => {
   it('renders the title', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -24,7 +24,7 @@ describe('TODO Collection Card', () => {
   it('renders the due date if the collection has one', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -34,7 +34,7 @@ describe('TODO Collection Card', () => {
   it('does not render the due date if the collection does not have one', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={{ ...TEST_COLLECTION, dueDate: null }}
       />,
     );
@@ -44,7 +44,7 @@ describe('TODO Collection Card', () => {
   it('renders the description', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -54,7 +54,7 @@ describe('TODO Collection Card', () => {
   it('renders the todo items', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -65,7 +65,7 @@ describe('TODO Collection Card', () => {
   it('renders the open items first, completed items last', () => {
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -81,7 +81,7 @@ describe('TODO Collection Card', () => {
     const user = userEvent.setup();
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -99,7 +99,7 @@ describe('TODO Collection Card', () => {
     const user = userEvent.setup();
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -116,7 +116,7 @@ describe('TODO Collection Card', () => {
     const user = userEvent.setup();
     render(
       <TodoCollectionCard
-        editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
         todoCollection={TEST_COLLECTION}
       />,
     );
@@ -133,7 +133,7 @@ describe('TODO Collection Card', () => {
       const user = userEvent.setup();
       render(
         <TodoCollectionCard
-          editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+          baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
           todoCollection={TEST_COLLECTION}
         />,
       );
@@ -146,7 +146,7 @@ describe('TODO Collection Card', () => {
       const user = userEvent.setup();
       render(
         <TodoCollectionCard
-          editHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
+          baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
           todoCollection={TEST_COLLECTION}
         />,
       );

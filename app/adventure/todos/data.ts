@@ -43,6 +43,9 @@ const todoCollectionUpdate = (supabase: SupabaseClient, collection: TodoCollecti
     .single();
 };
 
+const todoCollectionDelete = (supabase: SupabaseClient, collection: TodoCollection): any =>
+  supabase.from(collectionTable).delete().eq('id', collection.id);
+
 const todoItemInsert = (supabase: SupabaseClient, item: TodoItem): any => {
   return supabase.from(itemTable).insert(convertToTodoItemDTO(item)).select('*').single();
 };
@@ -94,6 +97,16 @@ export const canDeleteTodoCollection = async (collection: TodoCollection): Promi
   return true;
 };
 
+export const deleteTodoCollection = async (collection: TodoCollection): Promise<void> => {
+  if (await isNotLoggedIn()) {
+    return;
+  }
+
+  const supabase = createClient();
+  const query = todoCollectionDelete(supabase, collection);
+  await executeQuery<void>(query);
+};
+
 export const updateTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
   if (await isNotLoggedIn()) {
     return null;
@@ -130,7 +143,7 @@ export const deleteTodoItem = async (item: TodoItem): Promise<void> => {
 
   const supabase = createClient();
   const query = todoItemDelete(supabase, item);
-  await executeQuery<TodoItemDTO>(query);
+  await executeQuery<void>(query);
 };
 
 export const updateTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {

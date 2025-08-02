@@ -48,7 +48,7 @@ const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
         <SectionHeader>
           <SubtitleHeading>Todos</SubtitleHeading>
         </SectionHeader>
-        <Todos collections={todoCollections} editBaseHref={`/adventure/events/${event.id}/todos`} />
+        <Todos collections={todoCollections} baseHref={`/adventure/events/${event.id}/todos`} />
         <Link href={`${event.id}/todos/create`}>
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />

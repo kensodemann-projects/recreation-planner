@@ -4,7 +4,7 @@ import { Place } from '@/models';
 import { addPlace } from '../data';
 import { redirect } from 'next/navigation';
 
-export const createPlaceConfirmed = async (p: Place) => {
+export const createConfirmed = async (p: Place) => {
   if (await addPlace(p)) {
     redirect('/adventure/places');
   } else {

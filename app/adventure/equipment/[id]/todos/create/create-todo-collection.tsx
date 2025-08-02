@@ -2,7 +2,7 @@
 
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
 import { useRouter } from 'next/navigation';
-import { createTodoCollectionConfirmed } from './actions';
+import { createConfirmed } from './actions';
 
 type CreateTodoCollectionProps = {
   equipmentRid: number | null | undefined;
@@ -14,7 +14,7 @@ const CreateTodoCollection = ({ equipmentRid }: CreateTodoCollectionProps) => {
   return (
     <>
       <TodoCollectionEditor
-        onConfirm={(collection) => createTodoCollectionConfirmed({ ...collection, equipmentRid: equipmentRid })}
+        onConfirm={(collection) => createConfirmed({ ...collection, equipmentRid: equipmentRid })}
         onCancel={() => router.back()}
       />
     </>

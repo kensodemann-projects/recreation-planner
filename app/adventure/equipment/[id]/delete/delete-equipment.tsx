@@ -3,22 +3,18 @@
 import CannotDelete from '@/app/ui/cannot-delete';
 import ConfirmDelete from '@/app/ui/confirm-delete';
 import { Equipment } from '@/models';
-import { deleteEquipmentAborted, deleteEquipmentConfirmed } from './actions';
+import { deleteAborted, deleteConfirmed } from './actions';
 
-interface DeleteEventProps {
+interface DeleteEqipmentProps {
   equipment: Equipment;
   canDelete: boolean;
 }
 
-const DeleteEquipment = ({ equipment, canDelete }: DeleteEventProps) => {
+const DeleteEquipment = ({ equipment, canDelete }: DeleteEqipmentProps) => {
   return canDelete ? (
-    <ConfirmDelete
-      entityName={equipment.name}
-      onConfirm={() => deleteEquipmentConfirmed(equipment)}
-      onDeny={deleteEquipmentAborted}
-    />
+    <ConfirmDelete entityName={equipment.name} onConfirm={() => deleteConfirmed(equipment)} onDeny={deleteAborted} />
   ) : (
-    <CannotDelete entityName={equipment.name} onClick={deleteEquipmentAborted} />
+    <CannotDelete entityName={equipment.name} onClick={deleteAborted} />
   );
 };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { createReservationConfirmed } from './actions';
+import { createConfirmed } from './actions';
 import ReservationEditor from '../ui/reservation-editor';
 
 const CreateReservation = () => {
@@ -9,7 +9,7 @@ const CreateReservation = () => {
 
   return (
     <>
-      <ReservationEditor onConfirm={createReservationConfirmed} onCancel={() => router.back()} />
+      <ReservationEditor onConfirm={createConfirmed} onCancel={() => router.back()} />
     </>
   );
 };

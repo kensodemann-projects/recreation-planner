@@ -84,7 +84,10 @@ export const fetchTodoCollection = vi
   .fn()
   .mockImplementation((id: number) => Promise.resolve(TODO_COLLECTIONS.find((x) => x.id === id)));
 export const addTodoCollection = vi.fn().mockResolvedValue(null);
+export const canDeleteTodoCollection = vi.fn().mockResolvedValue(false);
+export const deleteTodoCollection = vi.fn().mockResolvedValue(undefined);
 export const updateTodoCollection = vi.fn().mockResolvedValue(null);
 export const addTodoItem = vi.fn().mockResolvedValue(null);
+export const canDeleteTodoItem = vi.fn().mockResolvedValue(false);
 export const deleteTodoItem = vi.fn().mockResolvedValue(undefined);
 export const updateTodoItem = vi.fn().mockResolvedValue(null);

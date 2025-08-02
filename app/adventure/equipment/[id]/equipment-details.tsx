@@ -96,7 +96,7 @@ const EquipmentDetails = ({ equipment, equipmentEvents, todoCollections }: Equip
         <SectionHeader>
           <SubtitleHeading>Todos</SubtitleHeading>
         </SectionHeader>
-        <Todos collections={todoCollections} editBaseHref={`/adventure/equipment/${equipment.id}/todos`} />
+        <Todos collections={todoCollections} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
         <Link href={`${equipment.id}/todos/create`}>
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />

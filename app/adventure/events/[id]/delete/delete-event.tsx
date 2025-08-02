@@ -3,7 +3,7 @@
 import CannotDelete from '@/app/ui/cannot-delete';
 import ConfirmDelete from '@/app/ui/confirm-delete';
 import { Event } from '@/models';
-import { deleteEventAborted, deleteEventConfirmed } from './actions';
+import { deleteAborted, deleteConfirmed } from './actions';
 
 interface DeleteEventProps {
   event: Event;
@@ -12,9 +12,9 @@ interface DeleteEventProps {
 
 const DeleteEvent = ({ event, canDelete }: DeleteEventProps) => {
   return canDelete ? (
-    <ConfirmDelete entityName={event.name} onConfirm={() => deleteEventConfirmed(event)} onDeny={deleteEventAborted} />
+    <ConfirmDelete entityName={event.name} onConfirm={() => deleteConfirmed(event)} onDeny={deleteAborted} />
   ) : (
-    <CannotDelete entityName={event.name} onClick={deleteEventAborted} />
+    <CannotDelete entityName={event.name} onClick={deleteAborted} />
   );
 };
 

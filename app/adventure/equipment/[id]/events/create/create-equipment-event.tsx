@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import EquipmentEventEditor from '../ui/equipment-event-editor';
-import { createEquipmentEventConfirmed } from './actions';
+import { createConfirmed } from './actions';
 import { Equipment, EquipmentEventType, EquipmentType, UsageUnits } from '@/models';
 
 type CreateEquipmentEventProperties = {
@@ -19,7 +19,7 @@ const CreateEquipmentEvent = ({ equipment, equipmentEventTypes, usageUnits }: Cr
       <EquipmentEventEditor
         equipmentEventTypes={equipmentEventTypes}
         usageUnits={usageUnits}
-        onConfirm={(evt) => createEquipmentEventConfirmed({ ...evt, equipment })}
+        onConfirm={(evt) => createConfirmed({ ...evt, equipment })}
         onCancel={() => router.back()}
       />
     </>

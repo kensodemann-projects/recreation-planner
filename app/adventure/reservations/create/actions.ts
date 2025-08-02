@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-export const createReservationConfirmed = async () => {
+export const createConfirmed = async () => {
   redirect('/adventure/reservations');
   // if (/* do the saves here */) {
   //   redirect('/adventure/todos');

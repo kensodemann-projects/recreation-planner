@@ -20,14 +20,14 @@ describe('todos component', () => {
   });
 
   it('displays the todos collections', () => {
-    render(<Todos collections={TODO_COLLECTIONS} editBaseHref="/does/not/matter/here" />);
+    render(<Todos collections={TODO_COLLECTIONS} baseHref="/does/not/matter/here" />);
     verifyDisplayedCollections(false);
   });
 
   describe('show archived toggle', () => {
     it('toggles the display of archived collections', async () => {
       const user = userEvent.setup();
-      render(<Todos collections={TODO_COLLECTIONS} editBaseHref="/does/not/matter/here" />);
+      render(<Todos collections={TODO_COLLECTIONS} baseHref="/does/not/matter/here" />);
       const toggle = screen.getByRole('checkbox', { name: 'Show Archived' });
       await user.click(toggle);
       verifyDisplayedCollections(true);

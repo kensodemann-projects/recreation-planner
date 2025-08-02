@@ -2,7 +2,7 @@
 
 import { TodoCollection } from '@/models';
 import { useRouter } from 'next/navigation';
-import { updateTodoCollectionConfirmed } from './actions';
+import { updateConfirmed } from './actions';
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
 
 type UpdateTodoCollectionProperties = { todoCollection: TodoCollection };
@@ -14,7 +14,7 @@ const UpdateTodoCollection = ({ todoCollection }: UpdateTodoCollectionProperties
     <>
       <TodoCollectionEditor
         todoCollection={todoCollection}
-        onConfirm={updateTodoCollectionConfirmed}
+        onConfirm={updateConfirmed}
         onCancel={() => router.back()}
       />
     </>

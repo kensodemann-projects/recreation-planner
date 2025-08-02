@@ -3,7 +3,7 @@
 import { TodoCollection } from '@/models';
 import { useRouter } from 'next/navigation';
 import TodoCollectionEditor from '../../ui/todo-collection-editor';
-import { updateTodoCollectionConfirmed } from './actions';
+import { updateConfirmed } from './actions';
 
 type UpdateTodoCollectionProperties = { todoCollection: TodoCollection };
 
@@ -14,7 +14,7 @@ const UpdateTodoCollection = ({ todoCollection }: UpdateTodoCollectionProperties
     <>
       <TodoCollectionEditor
         todoCollection={todoCollection}
-        onConfirm={updateTodoCollectionConfirmed}
+        onConfirm={updateConfirmed}
         onCancel={() => router.back()}
       />
     </>

@@ -2,14 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import TodoCollectionEditor from '../ui/todo-collection-editor';
-import { createTodoCollectionConfirmed } from './actions';
+import { createConfirmed } from './actions';
 
 const CreateTodoCollection = () => {
   const router = useRouter();
 
   return (
     <>
-      <TodoCollectionEditor onConfirm={createTodoCollectionConfirmed} onCancel={() => router.back()} />
+      <TodoCollectionEditor onConfirm={createConfirmed} onCancel={() => router.back()} />
     </>
   );
 };

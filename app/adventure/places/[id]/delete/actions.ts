@@ -4,11 +4,11 @@ import { Place } from '@/models';
 import { redirect } from 'next/navigation';
 import { deletePlace } from '../../data';
 
-export const deletePlaceConfirmed = async (p: Place) => {
+export const deleteConfirmed = async (p: Place) => {
   await deletePlace(p);
   redirect('/adventure/places');
 };
 
-export const deletePlaceAborted = async () => {
+export const deleteAborted = async () => {
   redirect('/adventure/places');
 };

@@ -3,17 +3,17 @@
 import EditableCheckbox from '@/app/ui/editable-checkbox';
 import { TodoCollection, TodoItem } from '@/models';
 import { formatDate } from '@/utils/formatters';
-import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useState } from 'react';
-import { addTodoItem, deleteTodoItem, updateTodoCollection, updateTodoItem } from '../data';
+import { addTodoItem, deleteTodoItem, updateTodoItem } from '../data';
 
 export interface TodoCollectionCardProps {
-  editHref: string;
+  baseHref: string;
   todoCollection: TodoCollection;
 }
 
-const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProps) => {
+const TodoCollectionCard = ({ baseHref, todoCollection }: TodoCollectionCardProps) => {
   const [todoItems, setTodoItems] = useState(todoCollection.todoItems);
 
   const addItemClicked = async () => {
@@ -78,7 +78,12 @@ const TodoCollectionCard = ({ editHref, todoCollection }: TodoCollectionCardProp
             ))}
         </div>
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={editHref}>
+          <Link href={`${baseHref}/${todoCollection.id}/delete`}>
+            <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
+              <TrashIcon className="w-6" />
+            </button>
+          </Link>
+          <Link href={`${baseHref}/${todoCollection.id}/update`}>
             <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
               <PencilSquareIcon className="w-6" />
             </button>

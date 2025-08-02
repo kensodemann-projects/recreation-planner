@@ -6,10 +6,10 @@ import TodoCollectionCard from './todo-collection-card';
 
 interface TodosProperties {
   collections: TodoCollection[];
-  editBaseHref: string;
+  baseHref: string;
 }
 
-const Todos = ({ collections, editBaseHref }: TodosProperties) => {
+const Todos = ({ collections, baseHref }: TodosProperties) => {
   const [showArchived, setShowArchived] = useState(false);
 
   return (
@@ -30,7 +30,7 @@ const Todos = ({ collections, editBaseHref }: TodosProperties) => {
           {collections
             .filter((x) => showArchived || !x.isComplete)
             .map((x) => (
-              <TodoCollectionCard editHref={`${editBaseHref}/${x.id}/update`} todoCollection={x} key={x.id} />
+              <TodoCollectionCard baseHref={baseHref} todoCollection={x} key={x.id} />
             ))}
         </div>
       </section>
