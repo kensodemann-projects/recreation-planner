@@ -133,7 +133,7 @@ describe('Place Editor', () => {
       it('has the address line 1 of the place', () => {
         render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Line 1' }) as HTMLInputElement;
-        expect(inp.value).toBe(TEST_PLACE.address.line1);
+        expect(inp.value).toBe(TEST_PLACE.address?.line1);
       });
 
       it('is blank if the place address line 1 is null', () => {
@@ -167,7 +167,7 @@ describe('Place Editor', () => {
       it('has the address line 2 of the place', () => {
         render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Line 2' }) as HTMLInputElement;
-        expect(inp.value).toBe(TEST_PLACE.address.line2);
+        expect(inp.value).toBe(TEST_PLACE.address?.line2);
       });
 
       it('is blank if the place address line 2 is null', () => {
@@ -201,7 +201,7 @@ describe('Place Editor', () => {
       it('has the address city of the place', () => {
         render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'City' }) as HTMLInputElement;
-        expect(inp.value).toBe(TEST_PLACE.address.city);
+        expect(inp.value).toBe(TEST_PLACE.address?.city);
       });
 
       it('is blank if the place address city is null', () => {
@@ -235,7 +235,7 @@ describe('Place Editor', () => {
       it('has the address state / province of the place', () => {
         render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'State / Province' }) as HTMLInputElement;
-        expect(inp.value).toBe(TEST_PLACE.address.state);
+        expect(inp.value).toBe(TEST_PLACE.address?.state);
       });
 
       it('is blank if the place address state / province is null', () => {
@@ -269,7 +269,7 @@ describe('Place Editor', () => {
       it('has the postal code of the place', () => {
         render(<PlaceEditor types={placeTypes} place={TEST_PLACE} onCancel={() => null} onConfirm={() => null} />);
         const inp = screen.getByRole('textbox', { name: 'Postal Code' }) as HTMLInputElement;
-        expect(inp.value).toBe(TEST_PLACE.address.postal);
+        expect(inp.value).toBe(TEST_PLACE.address?.postal);
       });
 
       it('is blank if the place postal code is null', () => {
@@ -422,11 +422,11 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.description).toBeNull();
-          expect(place!.address.line1).toBeNull();
-          expect(place!.address.line2).toBeNull();
-          expect(place!.address.city).toBeNull();
-          expect(place!.address.state).toBeNull();
-          expect(place!.address.postal).toBeNull();
+          expect(place!.address?.line1).toBeNull();
+          expect(place!.address?.line2).toBeNull();
+          expect(place!.address?.city).toBeNull();
+          expect(place!.address?.state).toBeNull();
+          expect(place!.address?.postal).toBeNull();
           expect(place!.website).toBeNull();
           expect(place!.phoneNumber).toBeNull();
         });
@@ -448,7 +448,7 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.type(screen.getByRole('textbox', { name: 'Line 1' }), '   123 Foobar Lane  ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.address.line1).toBe('123 Foobar Lane');
+          expect(place!.address?.line1).toBe('123 Foobar Lane');
         });
 
         it('includes address line 2', async () => {
@@ -458,7 +458,7 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.type(screen.getByRole('textbox', { name: 'Line 2' }), '   Unit 4203  ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.address.line2).toBe('Unit 4203');
+          expect(place!.address?.line2).toBe('Unit 4203');
         });
 
         it('includes city', async () => {
@@ -468,7 +468,7 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.type(screen.getByRole('textbox', { name: 'City' }), '   Waukesha  ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.address.city).toBe('Waukesha');
+          expect(place!.address?.city).toBe('Waukesha');
         });
 
         it('includes state', async () => {
@@ -478,7 +478,7 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.type(screen.getByRole('textbox', { name: 'State / Province' }), '   WI  ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.address.state).toBe('WI');
+          expect(place!.address?.state).toBe('WI');
         });
 
         it('includes postal', async () => {
@@ -488,7 +488,7 @@ describe('Place Editor', () => {
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '   53819   ');
           await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.address.postal).toBe('53819');
+          expect(place!.address?.postal).toBe('53819');
         });
 
         it('includes phone number', async () => {
@@ -686,7 +686,7 @@ describe('Place Editor', () => {
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
-            address: { ...TEST_PLACE.address, line1: TEST_PLACE.address.line1 + ' Dr.' },
+            address: { ...TEST_PLACE.address, line1: TEST_PLACE.address?.line1 + ' Dr.' },
           });
         });
 
@@ -705,7 +705,7 @@ describe('Place Editor', () => {
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
-            address: { ...TEST_PLACE.address, line2: TEST_PLACE.address.line2 + ' 3' },
+            address: { ...TEST_PLACE.address, line2: TEST_PLACE.address?.line2 + ' 3' },
           });
         });
 
@@ -724,7 +724,7 @@ describe('Place Editor', () => {
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
-            address: { ...TEST_PLACE.address, city: TEST_PLACE.address.city + ' City' },
+            address: { ...TEST_PLACE.address, city: TEST_PLACE.address?.city + ' City' },
           });
         });
 
@@ -761,7 +761,7 @@ describe('Place Editor', () => {
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
-            address: { ...TEST_PLACE.address, postal: TEST_PLACE.address.postal + '-1194' },
+            address: { ...TEST_PLACE.address, postal: TEST_PLACE.address?.postal + '-1194' },
           });
         });
 

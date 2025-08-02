@@ -25,11 +25,11 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
   } = useFormControl(place?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
 
   const { value: description, setValue: setDescription } = useFormControl(place?.description || '');
-  const { value: addressLine1, setValue: setAddressLine1 } = useFormControl(place?.address.line1 || '');
-  const { value: addressLine2, setValue: setAddressLine2 } = useFormControl(place?.address.line2 || '');
-  const { value: addressCity, setValue: setCity } = useFormControl(place?.address.city || '');
-  const { value: addressState, setValue: setState } = useFormControl(place?.address.state || '');
-  const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address.postal || '');
+  const { value: addressLine1, setValue: setAddressLine1 } = useFormControl(place?.address?.line1 || '');
+  const { value: addressLine2, setValue: setAddressLine2 } = useFormControl(place?.address?.line2 || '');
+  const { value: addressCity, setValue: setCity } = useFormControl(place?.address?.city || '');
+  const { value: addressState, setValue: setState } = useFormControl(place?.address?.state || '');
+  const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address?.postal || '');
   const { value: phoneNumber, setValue: setPhoneNumber } = useFormControl(place?.phoneNumber || '');
   const { value: website, setValue: setWebsite } = useFormControl(place?.website || '');
   const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id);
@@ -42,11 +42,11 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
     !(
       placeName !== (place?.name || '') ||
       description !== (place?.description || '') ||
-      addressLine1 !== (place?.address.line1 || '') ||
-      addressLine2 !== (place?.address.line2 || '') ||
-      addressCity !== (place?.address.city || '') ||
-      addressState !== (place?.address.state || '') ||
-      addressPostal !== (place?.address.postal || '') ||
+      addressLine1 !== (place?.address?.line1 || '') ||
+      addressLine2 !== (place?.address?.line2 || '') ||
+      addressCity !== (place?.address?.city || '') ||
+      addressState !== (place?.address?.state || '') ||
+      addressPostal !== (place?.address?.postal || '') ||
       phoneNumber !== (place?.phoneNumber || '') ||
       website !== (place?.website || '') ||
       placeTypeId !== place?.type.id

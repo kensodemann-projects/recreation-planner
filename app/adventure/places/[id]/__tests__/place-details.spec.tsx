@@ -53,7 +53,7 @@ describe('Place', () => {
 
   describe('if the address information is empty', () => {
     it('does not display the address header', () => {
-      const place = { ...testPlace, address: {} };
+      const place = { ...testPlace, address: undefined };
       render(<PlaceDetails place={place} />);
       expect(screen.queryByRole('heading', { level: 2, name: 'Address' })).toBeNull();
     });

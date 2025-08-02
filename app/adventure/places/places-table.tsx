@@ -21,9 +21,7 @@ const PlacesTable = ({ className, places }: { className?: string | undefined; pl
             <th>
               <Link href={`places/${place.id}`}>{place.name}</Link>
             </th>
-            <td>
-              <Address value={place.address} />
-            </td>
+            <td>{place.address && <Address value={place.address} />}</td>
             <td>{place.phoneNumber}</td>
             <td>{place.type.name}</td>
             <td>

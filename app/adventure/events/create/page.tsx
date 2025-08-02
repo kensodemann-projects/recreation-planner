@@ -12,12 +12,13 @@ const CreateEventPage = async () => {
 
   const eventTypes = await fetchEventTypes();
   const places = await fetchPlaces();
+
   return (
     <>
       <PageHeader>
         <TitleHeading>Add a New Trip / Event</TitleHeading>
       </PageHeader>
-      <CreateEvent types={eventTypes} places={places} />
+      <CreateEvent types={eventTypes} places={[...places, { id: -1, name: 'Create a new place...' }]} />
     </>
   );
 };

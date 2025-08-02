@@ -142,7 +142,6 @@ describe('place convertions', () => {
           id: 42,
           name: 'Earth',
           description: '',
-          address: {},
           type: {
             id: 3,
             name: 'Planet',

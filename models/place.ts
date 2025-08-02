@@ -15,7 +15,7 @@ export interface PlaceDTO extends CommonDataDTO {
 }
 
 export interface Place extends CommonData {
-  address: Address;
+  address?: Address | undefined | null;
   phoneNumber?: string | undefined | null;
   website?: string | undefined | null;
   type: PlaceType;
