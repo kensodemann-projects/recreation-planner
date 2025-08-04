@@ -162,8 +162,6 @@ describe('TODO Editor', () => {
             description: 'This is the description of the collection',
             dueDate: '2025-06-08',
             isComplete: false,
-            equipmentRid: null,
-            eventRid: null,
             todoItems: [],
           });
         });
@@ -185,8 +183,6 @@ describe('TODO Editor', () => {
             description: 'This is the description of the collection',
             dueDate: '2025-06-08',
             isComplete: true,
-            equipmentRid: null,
-            eventRid: null,
             todoItems: [],
           });
         });
@@ -202,8 +198,6 @@ describe('TODO Editor', () => {
             description: null,
             dueDate: null,
             isComplete: false,
-            equipmentRid: null,
-            eventRid: null,
             todoItems: [],
           });
         });

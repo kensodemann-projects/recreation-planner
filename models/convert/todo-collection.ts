@@ -18,7 +18,7 @@ export const convertToTodoCollectionDTO = (collection: TodoCollection): TodoColl
   name: collection.name,
   description: collection.description,
   due_date: collection.dueDate,
-  event_rid: collection.eventRid,
-  equipment_rid: collection.equipmentRid,
+  event_rid: collection.eventRid || null,
+  equipment_rid: collection.equipmentRid || null,
   is_complete: collection.isComplete,
 });

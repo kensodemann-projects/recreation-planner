@@ -79,7 +79,7 @@ export const TODO_COLLECTIONS: TodoCollection[] = [
   },
 ];
 
-export const fetchOpenTodoCollections = vi.fn().mockResolvedValue(TODO_COLLECTIONS.filter((x) => !x.isComplete));
+export const fetchTodoCollections = vi.fn().mockResolvedValue(TODO_COLLECTIONS.filter((x) => !x.isComplete));
 export const fetchTodoCollection = vi
   .fn()
   .mockImplementation((id: number) => Promise.resolve(TODO_COLLECTIONS.find((x) => x.id === id)));

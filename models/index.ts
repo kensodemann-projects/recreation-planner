@@ -5,6 +5,7 @@ export * from './equipment-event-type';
 export * from './equipment-type';
 export * from './event';
 export * from './event-type';
+export * from './note';
 export * from './place';
 export * from './place-type';
 export * from './todo-collection';

@@ -4,8 +4,8 @@ import { TodoItem, TodoItemDTO } from './todo-item';
 export interface TodoCollection extends CommonData {
   dueDate: string | null;
   isComplete: boolean;
-  eventRid: number | null;
-  equipmentRid: number | null;
+  eventRid?: number | null;
+  equipmentRid?: number | null;
   todoItems: Array<TodoItem>;
 }
 

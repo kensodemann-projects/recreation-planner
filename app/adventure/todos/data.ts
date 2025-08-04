@@ -57,7 +57,7 @@ const todoItemUpdate = (supabase: SupabaseClient, item: TodoItem): any => {
 const todoItemDelete = (supabase: SupabaseClient, item: TodoItem): any =>
   supabase.from(itemTable).delete().eq('id', item.id);
 
-export const fetchOpenTodoCollections = async (): Promise<TodoCollection[]> => {
+export const fetchTodoCollections = async (): Promise<TodoCollection[]> => {
   if (await isNotLoggedIn()) {
     return [];
   }

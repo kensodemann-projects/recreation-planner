@@ -1,7 +1,7 @@
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchOpenTodoCollections } from '../data';
+import { fetchTodoCollections } from '../data';
 import TodosPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
@@ -31,7 +31,7 @@ describe('Todos Page', () => {
 
     it('fetches the open TODO collections', async () => {
       await TodosPage();
-      expect(fetchOpenTodoCollections).toHaveBeenCalledExactlyOnceWith();
+      expect(fetchTodoCollections).toHaveBeenCalledExactlyOnceWith();
     });
   });
 
@@ -54,7 +54,7 @@ describe('Todos Page', () => {
 
     it('does not fetche the open TODO collections', async () => {
       await TodosPage();
-      expect(fetchOpenTodoCollections).not.toHaveBeenCalled();
+      expect(fetchTodoCollections).not.toHaveBeenCalled();
     });
   });
 });
