@@ -1,5 +1,5 @@
 import { TodoCollection } from '@/models';
-import { cleanup, getByRole, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import TodoCollectionEditor from '../todo-collection-editor';
@@ -162,6 +162,8 @@ describe('TODO Editor', () => {
             description: 'This is the description of the collection',
             dueDate: '2025-06-08',
             isComplete: false,
+            equipmentRid: null,
+            eventRid: null,
             todoItems: [],
           });
         });
@@ -183,6 +185,8 @@ describe('TODO Editor', () => {
             description: 'This is the description of the collection',
             dueDate: '2025-06-08',
             isComplete: true,
+            equipmentRid: null,
+            eventRid: null,
             todoItems: [],
           });
         });
@@ -198,6 +202,8 @@ describe('TODO Editor', () => {
             description: null,
             dueDate: null,
             isComplete: false,
+            equipmentRid: null,
+            eventRid: null,
             todoItems: [],
           });
         });
@@ -382,6 +388,8 @@ const TEST_COLLECTION: TodoCollection = {
   description: 'The point of this collection is simply to do a thing',
   dueDate: '2025-03-17',
   isComplete: true,
+  equipmentRid: null,
+  eventRid: null,
   todoItems: [
     {
       id: 1,

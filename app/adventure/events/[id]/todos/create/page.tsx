@@ -14,13 +14,17 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
   const params = await props.params;
   const event = await fetchEvent(+params.id);
 
+  if (!event) {
+    return <div>Failed to fetch the event</div>;
+  }
+
   return (
     <>
       <PageHeader>
         <TitleHeading>Add a New Todo Collection</TitleHeading>
-        <SubtitleHeading>For Trip / Event: {event?.name || ''}</SubtitleHeading>
+        <SubtitleHeading>For Trip / Event: {event.name || ''}</SubtitleHeading>
       </PageHeader>
-      <CreateTodoCollection eventRid={event?.id} />
+      <CreateTodoCollection eventRid={event.id!} />
     </>
   );
 };

@@ -91,7 +91,11 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
               isComplete: isComplete || false,
               dueDate: dueDate || null,
             };
-            onConfirm(todoCollection ? { ...todoCollection, ...data } : { ...data, todoItems: [] });
+            onConfirm(
+              todoCollection
+                ? { ...todoCollection, ...data }
+                : { ...data, equipmentRid: null, eventRid: null, todoItems: [] },
+            );
           }}
           disabled={disableConfirmButton || busy}
         >

@@ -53,7 +53,10 @@ describe('event convertions', () => {
             description: 'Third rock from Sol',
             address: {
               line1: 'Planet #3',
+              line2: null,
+              city: null,
               state: 'Solar System',
+              postal: null,
             },
             website: 'https://solsys.gov',
           },
@@ -87,7 +90,10 @@ describe('event convertions', () => {
             description: 'Third rock from Sol',
             address: {
               line1: 'Planet #3',
+              line2: null,
+              city: null,
               state: 'Solar System',
+              postal: null,
             },
             website: 'https://solsys.gov',
           },
@@ -121,7 +127,10 @@ describe('event convertions', () => {
             description: 'Third rock from Sol',
             address: {
               line1: 'Planet #3',
+              line2: null,
+              city: null,
               state: 'Solar System',
+              postal: null,
             },
             website: 'https://solsys.gov',
           },

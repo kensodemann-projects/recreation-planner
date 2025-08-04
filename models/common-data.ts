@@ -1,5 +1,5 @@
 export interface CommonData {
-  id?: number | undefined;
+  id?: number;
   name: string;
   description?: string | null;
 }

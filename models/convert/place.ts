@@ -7,11 +7,11 @@ export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
   const address: Address | undefined =
     dto.address_line_1 || dto.address_line_2 || dto.city || dto.state || dto.postal_code
       ? {
-          line1: dto.address_line_1,
-          line2: dto.address_line_2,
-          city: dto.city,
-          state: dto.state,
-          postal: dto.postal_code,
+          line1: dto.address_line_1 || null,
+          line2: dto.address_line_2 || null,
+          city: dto.city || null,
+          state: dto.state || null,
+          postal: dto.postal_code || null,
         }
       : undefined;
   const type: PlaceType | undefined = dto.place_types && convertToPlaceType(dto.place_types);

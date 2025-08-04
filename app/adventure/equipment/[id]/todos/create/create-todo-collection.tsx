@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createConfirmed } from './actions';
 
 type CreateTodoCollectionProps = {
-  equipmentRid: number | null | undefined;
+  equipmentRid: number | null;
 };
 
 const CreateTodoCollection = ({ equipmentRid }: CreateTodoCollectionProps) => {

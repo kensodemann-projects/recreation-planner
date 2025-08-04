@@ -14,13 +14,17 @@ const CreateTodoCollectionForEquipmentPage = async (props: { params: Promise<{ i
   const params = await props.params;
   const equipment = await fetchEquipment(+params.id);
 
+  if (!equipment) {
+    return <div>Failed to fetch the equipment</div>;
+  }
+
   return (
     <>
       <PageHeader>
         <TitleHeading>Add a New Todo Collection</TitleHeading>
-        <SubtitleHeading>For Equipment: {equipment?.name || ''}</SubtitleHeading>
+        <SubtitleHeading>For Equipment: {equipment.name || ''}</SubtitleHeading>
       </PageHeader>
-      <CreateTodoCollection equipmentRid={equipment?.id} />
+      <CreateTodoCollection equipmentRid={equipment.id!} />
     </>
   );
 };
