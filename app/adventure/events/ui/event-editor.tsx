@@ -11,7 +11,7 @@ import { useState } from 'react';
 export interface EventEditorProps {
   places: Array<SelectablePlace>;
   types: Array<EventType>;
-  event?: Event | undefined;
+  event?: Event;
   onConfirm: (event: Event) => void;
   onCancel: () => void;
 }
@@ -60,14 +60,14 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
 
   const buildEvent = (): Event => ({
     id: event?.id,
-    name: eventName?.trim() || '',
-    beginDate: eventBeginDate || '',
-    beginTime: eventBeginTime || null,
-    endDate: eventEndDate || null,
-    endTime: eventEndTime || null,
+    name: eventName!,
+    beginDate: eventBeginDate!,
+    beginTime: eventBeginTime,
+    endDate: eventEndDate,
+    endTime: eventEndTime,
     type: types.find((x) => x.id === eventTypeId) || types[0],
     place: places.find((x) => x.id === eventPlaceId) || places[0],
-    description: eventDescription?.trim() || null,
+    description: eventDescription,
   });
 
   return (

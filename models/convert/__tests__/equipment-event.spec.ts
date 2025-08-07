@@ -53,6 +53,16 @@ describe('equipment event conversions', () => {
         value: maintenance,
         expected: maintenanceDTO,
       },
+      {
+        name: 'trims the strings',
+        value: untrimmed,
+        expected: trimmedDTO,
+      },
+      {
+        name: 'converts an empty description to null',
+        value: noDescription,
+        expected: noDescriptionDTO,
+      },
     ];
     it.each(testCases)('$name', ({ expected, value }) => {
       expect(convertToEquipmentEventDTO(value)).toEqual(expected);
@@ -273,4 +283,56 @@ const maintenance: EquipmentEvent = {
     description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
   },
   equipment,
+};
+
+const untrimmed: EquipmentEvent = {
+  id: 73,
+  name: '   Fix the wall  ',
+  description: '      Repair wall damaged by a ball strike. ',
+  date: '    2027-06-13 ',
+  usage: null,
+  cost: 352.03,
+  equipmentEventType: {
+    id: 3,
+    name: 'Repair',
+    description: 'Unscheduled repair due to damage or breakdown.',
+  },
+  equipment,
+};
+
+const trimmedDTO: EquipmentEventDTO = {
+  name: 'Fix the wall',
+  description: 'Repair wall damaged by a ball strike.',
+  equipment_rid: 99403,
+  date: '2027-06-13',
+  usage: null,
+  cost: 352.03,
+  usage_units_rid: null,
+  equipment_event_type_rid: 3,
+};
+
+const noDescription: EquipmentEvent = {
+  id: 73,
+  name: '   Fix the wall  ',
+  description: '      ',
+  date: '    2027-06-13 ',
+  usage: null,
+  cost: 352.03,
+  equipmentEventType: {
+    id: 3,
+    name: 'Repair',
+    description: 'Unscheduled repair due to damage or breakdown.',
+  },
+  equipment,
+};
+
+const noDescriptionDTO: EquipmentEventDTO = {
+  name: 'Fix the wall',
+  description: null,
+  equipment_rid: 99403,
+  date: '2027-06-13',
+  usage: null,
+  cost: 352.03,
+  usage_units_rid: null,
+  equipment_event_type_rid: 3,
 };

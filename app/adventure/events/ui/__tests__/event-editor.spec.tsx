@@ -343,7 +343,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.name).toBe('Buy some food');
@@ -355,7 +355,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.beginDate).toBe('2024-08-01');
@@ -367,7 +367,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.type).toEqual(EVENT_TYPES[0]);
@@ -379,7 +379,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.selectOptions(screen.getByRole('combobox', { name: 'Type of Trip / Event' }), '2');
           await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -392,7 +392,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.place).toEqual(PLACES[0]);
@@ -404,7 +404,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '32');
           await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -417,25 +417,10 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.id).toBeUndefined();
-        });
-
-        it('sets the unspecified values to null', async () => {
-          const user = userEvent.setup();
-          let event: Event | null = null;
-          render(
-            <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
-          );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
-          await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
-          await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(event!.description).toBeNull();
-          expect(event!.beginTime).toBeNull();
-          expect(event!.endDate).toBeNull();
-          expect(event!.endTime).toBeNull();
         });
 
         it('includes the begin time', async () => {
@@ -444,7 +429,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.type(screen.getByLabelText('Begin Time'), '17:43');
           await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -457,7 +442,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.type(screen.getByLabelText('End Date'), '2024-08-03');
           await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -470,7 +455,7 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
           await user.type(screen.getByLabelText('End Time'), '19:01');
           await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -483,9 +468,9 @@ describe('Activity Editor', () => {
           render(
             <EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={(e) => (event = e)} />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' Buy some food  ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
-          await user.type(screen.getByRole('textbox', { name: 'Description' }), '      Hi!    ');
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), 'Hi!');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.description).toEqual('Hi!');
         });

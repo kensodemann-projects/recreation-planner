@@ -9,7 +9,7 @@ export const convertToTodoItem = (dto: Partial<TodoItemDTO>): Partial<TodoItem> 
 
 export const convertToTodoItemDTO = (todoItem: TodoItem): TodoItemDTO => ({
   id: todoItem.id,
-  name: todoItem.name,
+  name: todoItem.name.trim(),
   is_complete: todoItem.isComplete,
   todo_collection_rid: todoItem.todoCollectionRid,
 });

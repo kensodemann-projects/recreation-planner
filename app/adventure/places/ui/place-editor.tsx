@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 export interface PlaceEditorProps {
   types: Array<PlaceType>;
-  place?: Place | undefined;
+  place?: Place;
   onConfirm: (place: Place) => void;
   onCancel: () => void;
 }
@@ -32,7 +32,7 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
   const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address?.postal || '');
   const { value: phoneNumber, setValue: setPhoneNumber } = useFormControl(place?.phoneNumber || '');
   const { value: website, setValue: setWebsite } = useFormControl(place?.website || '');
-  const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id);
+  const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id!);
 
   const [busy, setBusy] = useState(false);
 
@@ -54,18 +54,18 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
 
   const buildPlace = (): Place => ({
     id: place?.id,
-    name: placeName!.trim(),
+    name: placeName!,
     type: types.find((t) => t.id === placeTypeId) || types[0],
     address: {
-      line1: addressLine1?.trim() || null,
-      line2: addressLine2?.trim() || null,
-      city: addressCity?.trim() || null,
-      state: addressState?.trim() || null,
-      postal: addressPostal?.trim() || null,
+      line1: addressLine1,
+      line2: addressLine2,
+      city: addressCity,
+      state: addressState,
+      postal: addressPostal,
     },
-    description: description?.trim() || null,
-    phoneNumber: phoneNumber?.trim() || null,
-    website: website?.trim() || null,
+    description: description,
+    phoneNumber: phoneNumber,
+    website: website,
   });
 
   return (

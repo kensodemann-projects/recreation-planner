@@ -21,8 +21,6 @@ describe('Equipment Editor', () => {
   const getUpdateButton = () => screen.getByRole('button', { name: 'Update' }) as HTMLButtonElement;
   const nameErrorMessage = 'Name is required';
   const dateErrorMessage = 'Date is required';
-  const descriptionErrorMessage = 'Description is required';
-  const costErrorMessage = 'Cost is required';
   const usageErrorMessage = 'Usage is required';
 
   describe('name input', () => {
@@ -305,8 +303,8 @@ describe('Equipment Editor', () => {
         name: 'Check the miles',
         date: '2025-03-18',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
-        description: null,
-        cost: null,
+        description: '',
+        cost: 0,
         usage: 13435.3,
         usageUnits: USAGE_UNITS[0],
       });
@@ -323,8 +321,8 @@ describe('Equipment Editor', () => {
         name: 'Check the hours',
         date: '2025-03-18',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
-        description: null,
-        cost: null,
+        description: '',
+        cost: 0,
         usage: 143.5,
         usageUnits: USAGE_UNITS[1],
       });
@@ -341,9 +339,9 @@ describe('Equipment Editor', () => {
         name: 'Wash the windows',
         date: '2025-03-31',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 2),
-        description: null,
-        cost: null,
-        usage: null,
+        description: '',
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -359,9 +357,9 @@ describe('Equipment Editor', () => {
         name: 'Realign the main deflectors',
         date: '2025-06-15',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 3),
-        description: null,
+        description: '',
         cost: 4883.39,
-        usage: null,
+        usage: 0,
       });
     });
 
@@ -377,9 +375,9 @@ describe('Equipment Editor', () => {
         name: 'Add a massive death ray',
         date: '2025-07-04',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 4),
-        description: null,
+        description: '',
         cost: 51993.99,
-        usage: null,
+        usage: 0,
       });
     });
 
@@ -396,8 +394,8 @@ describe('Equipment Editor', () => {
         date: '2025-10-15',
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 5),
         description: 'Completely winterized and clean. Death ray is disconnected.',
-        cost: null,
-        usage: null,
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -463,6 +461,7 @@ describe('Equipment Editor', () => {
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
         usage: 99340.9,
         usageUnits: USAGE_UNITS[0],
+        cost: 0,
       });
     });
 
@@ -473,6 +472,8 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
         equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 2),
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -484,6 +485,8 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
         name: EQUIPMENT_EVENTS[0].name + 'i',
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -496,6 +499,8 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
         date: '2025-01-03',
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -507,6 +512,8 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
         description: EQUIPMENT_EVENTS[0].description + 'x',
+        cost: 0,
+        usage: 0,
       });
     });
 
@@ -517,6 +524,7 @@ describe('Equipment Editor', () => {
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
+        cost: 0,
         usage: 42,
         usageUnits: USAGE_UNITS[0],
       });
@@ -530,6 +538,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         ...EQUIPMENT_EVENTS[0],
         cost: 73,
+        usage: 0,
       });
     });
 

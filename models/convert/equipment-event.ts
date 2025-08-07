@@ -17,11 +17,11 @@ export const convertToEquipmentEvent = (dto: EquipmentEventDTO): EquipmentEvent 
 });
 
 export const convertToEquipmentEventDTO = (event: EquipmentEvent): EquipmentEventDTO => ({
-  name: event.name,
-  description: event.description || null,
-  date: event.date,
-  cost: event.cost,
-  usage: event.usage,
+  name: event.name.trim(),
+  description: event.description?.trim() || null,
+  date: event.date.trim(),
+  cost: event.cost || null,
+  usage: event.usage || null,
   usage_units_rid: event.usageUnits ? event.usageUnits.id! : null,
   equipment_event_type_rid: event.equipmentEventType.id!,
   equipment_rid: event.equipment.id!,

@@ -174,6 +174,45 @@ describe('todo collection converters', () => {
         },
       },
       {
+        name: 'trims the strings',
+        input: {
+          id: 1,
+          name: '  Stuff I need to do ',
+          description: ' This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23   ',
+          isComplete: false,
+          todoItems: [
+            {
+              id: 42,
+              name: 'Do the needful',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 73,
+              name: 'Bite the unbitten',
+              isComplete: true,
+              todoCollectionRid: 1,
+            },
+            {
+              id: 314159,
+              name: 'Eat the pi',
+              isComplete: false,
+              todoCollectionRid: 1,
+            },
+          ],
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          event_rid: null,
+          equipment_rid: null,
+          is_complete: false,
+        },
+      },
+      {
         name: 'converts an event related collection',
         input: {
           id: 1,

@@ -137,6 +137,40 @@ describe('place convertions', () => {
         },
       },
       {
+        name: 'times the strings',
+        input: {
+          id: 42,
+          name: '    Earth ',
+          description: ' Mostly harmless ',
+          address: {
+            line1: '   23125 255th St. ',
+            line2: ' Planet #3 ',
+            city: ' Cornell   ',
+            state: ' WI     ',
+            postal: '  54732 ',
+          },
+          type: {
+            id: 3,
+            name: 'Planet',
+            description: 'Big globe thing',
+          },
+          phoneNumber: '    (262) 339-9943 ',
+          website: ' https://foo.bar ',
+        },
+        expected: {
+          name: 'Earth',
+          description: 'Mostly harmless',
+          address_line_1: '23125 255th St.',
+          address_line_2: 'Planet #3',
+          city: 'Cornell',
+          state: 'WI',
+          postal_code: '54732',
+          place_type_rid: 3,
+          phone_number: '(262) 339-9943',
+          website: 'https://foo.bar',
+        },
+      },
+      {
         name: 'sets unspecified or blank items to NULL',
         input: {
           id: 42,

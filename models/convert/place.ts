@@ -28,14 +28,14 @@ export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
 };
 
 export const convertToPlaceDTO = (place: Place): PlaceDTO => ({
-  name: place.name,
-  description: place.description || null,
-  address_line_1: place.address?.line1 || null,
-  address_line_2: place.address?.line2 || null,
-  city: place.address?.city || null,
-  state: place.address?.state || null,
-  postal_code: place.address?.postal || null,
-  phone_number: place.phoneNumber || null,
-  website: place.website || null,
+  name: place.name.trim(),
+  description: place.description?.trim() || null,
+  address_line_1: place.address?.line1?.trim() || null,
+  address_line_2: place.address?.line2?.trim() || null,
+  city: place.address?.city?.trim() || null,
+  state: place.address?.state?.trim() || null,
+  postal_code: place.address?.postal?.trim() || null,
+  phone_number: place.phoneNumber?.trim() || null,
+  website: place.website?.trim() || null,
   place_type_rid: place.type.id!,
 });

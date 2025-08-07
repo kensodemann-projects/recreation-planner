@@ -26,6 +26,11 @@ describe('todo item converters', () => {
         value: { id: 42, name: 'Do the needful', isComplete: false, todoCollectionRid: 3 },
         expected: { id: 42, name: 'Do the needful', is_complete: false, todo_collection_rid: 3 },
       },
+      {
+        name: 'trims the strings',
+        value: { id: 42, name: ' Do the needful ', isComplete: false, todoCollectionRid: 3 },
+        expected: { id: 42, name: 'Do the needful', is_complete: false, todo_collection_rid: 3 },
+      },
     ];
 
     it.each(testCases)('$name', ({ value, expected }) => expect(convertToTodoItemDTO(value)).toEqual(expected));

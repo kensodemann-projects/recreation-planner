@@ -1,4 +1,4 @@
-import { Place, PlaceType } from '@/models';
+import { Address, Place, PlaceType } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -140,7 +140,7 @@ describe('Place Editor', () => {
         render(
           <PlaceEditor
             types={placeTypes}
-            place={{ ...TEST_PLACE, address: { ...TEST_PLACE.address, line1: null } }}
+            place={{ ...TEST_PLACE, address: { ...(TEST_PLACE.address as Address), line1: null } }}
             onCancel={() => null}
             onConfirm={() => null}
           />,
@@ -174,7 +174,7 @@ describe('Place Editor', () => {
         render(
           <PlaceEditor
             types={placeTypes}
-            place={{ ...TEST_PLACE, address: { ...TEST_PLACE.address, line2: null } }}
+            place={{ ...TEST_PLACE, address: { ...(TEST_PLACE.address as Address), line2: null } }}
             onCancel={() => null}
             onConfirm={() => null}
           />,
@@ -208,7 +208,7 @@ describe('Place Editor', () => {
         render(
           <PlaceEditor
             types={placeTypes}
-            place={{ ...TEST_PLACE, address: { ...TEST_PLACE.address, city: null } }}
+            place={{ ...TEST_PLACE, address: { ...(TEST_PLACE.address as Address), city: null } }}
             onCancel={() => null}
             onConfirm={() => null}
           />,
@@ -242,7 +242,7 @@ describe('Place Editor', () => {
         render(
           <PlaceEditor
             types={placeTypes}
-            place={{ ...TEST_PLACE, address: { ...TEST_PLACE.address, state: null } }}
+            place={{ ...TEST_PLACE, address: { ...(TEST_PLACE.address as Address), state: null } }}
             onCancel={() => null}
             onConfirm={() => null}
           />,
@@ -276,7 +276,7 @@ describe('Place Editor', () => {
         render(
           <PlaceEditor
             types={placeTypes}
-            place={{ ...TEST_PLACE, address: { ...TEST_PLACE.address, postal: null } }}
+            place={{ ...TEST_PLACE, address: { ...(TEST_PLACE.address as Address), postal: null } }}
             onCancel={() => null}
             onConfirm={() => null}
           />,
@@ -382,7 +382,7 @@ describe('Place Editor', () => {
           const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.name).toBe('The Food Court');
         });
@@ -391,7 +391,7 @@ describe('Place Editor', () => {
           const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.type).toEqual(PLACE_TYPES[0]);
         });
@@ -400,7 +400,7 @@ describe('Place Editor', () => {
           const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.selectOptions(screen.getByRole('combobox', { name: 'Type of place' }), '2');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.type).toEqual(PLACE_TYPES[1]);
@@ -410,25 +410,9 @@ describe('Place Editor', () => {
           const user = userEvent.setup();
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.id).toBeUndefined();
-        });
-
-        it('sets the unspecified values to null', async () => {
-          const user = userEvent.setup();
-          let place: Place | null = null;
-          render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), ' The Food Court     ');
-          await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(place!.description).toBeNull();
-          expect(place!.address?.line1).toBeNull();
-          expect(place!.address?.line2).toBeNull();
-          expect(place!.address?.city).toBeNull();
-          expect(place!.address?.state).toBeNull();
-          expect(place!.address?.postal).toBeNull();
-          expect(place!.website).toBeNull();
-          expect(place!.phoneNumber).toBeNull();
         });
 
         it('includes description', async () => {
@@ -436,7 +420,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Description' }), ' A place to get yummy food!  ');
+          await user.type(screen.getByRole('textbox', { name: 'Description' }), 'A place to get yummy food!');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.description).toBe('A place to get yummy food!');
         });
@@ -446,7 +430,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), '   123 Foobar Lane  ');
+          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), '123 Foobar Lane');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address?.line1).toBe('123 Foobar Lane');
         });
@@ -456,7 +440,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), '   Unit 4203  ');
+          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), 'Unit 4203');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address?.line2).toBe('Unit 4203');
         });
@@ -466,7 +450,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'City' }), '   Waukesha  ');
+          await user.type(screen.getByRole('textbox', { name: 'City' }), 'Waukesha');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address?.city).toBe('Waukesha');
         });
@@ -476,7 +460,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'State / Province' }), '   WI  ');
+          await user.type(screen.getByRole('textbox', { name: 'State / Province' }), 'WI');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address?.state).toBe('WI');
         });
@@ -486,7 +470,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '   53819   ');
+          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '53819');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.address?.postal).toBe('53819');
         });
@@ -496,7 +480,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), ' (231) 243-1433   ');
+          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), '(231) 243-1433');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.phoneNumber).toBe('(231) 243-1433');
         });
@@ -506,7 +490,7 @@ describe('Place Editor', () => {
           let place: Place | null = null;
           render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={(p: Place) => (place = p)} />);
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'The Food Court');
-          await user.type(screen.getByRole('textbox', { name: 'Website' }), '     https://the.food.court.com  ');
+          await user.type(screen.getByRole('textbox', { name: 'Website' }), 'https://the.food.court.com');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(place!.website).toBe('https://the.food.court.com');
         });
@@ -682,7 +666,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), ' Dr.   ');
+          await user.type(screen.getByRole('textbox', { name: 'Line 1' }), ' Dr.');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
@@ -701,7 +685,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), ' 3    ');
+          await user.type(screen.getByRole('textbox', { name: 'Line 2' }), ' 3');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
@@ -720,7 +704,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'City' }), ' City   ');
+          await user.type(screen.getByRole('textbox', { name: 'City' }), ' City');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
@@ -741,7 +725,7 @@ describe('Place Editor', () => {
           );
           const inp = screen.getByRole('textbox', { name: 'State / Province' });
           await user.clear(inp);
-          await user.type(inp, '   MN  ');
+          await user.type(inp, 'MN');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({ ...TEST_PLACE, address: { ...TEST_PLACE.address, state: 'MN' } });
         });
@@ -757,7 +741,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '-1194  ');
+          await user.type(screen.getByRole('textbox', { name: 'Postal Code' }), '-1194');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({
             ...TEST_PLACE,
@@ -776,7 +760,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), ' ext-4273  ');
+          await user.type(screen.getByRole('textbox', { name: 'Phone Number' }), ' ext-4273');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({ ...TEST_PLACE, phoneNumber: TEST_PLACE.phoneNumber + ' ext-4273' });
         });
@@ -792,7 +776,7 @@ describe('Place Editor', () => {
               onConfirm={(p: Place) => (place = p)}
             />,
           );
-          await user.type(screen.getByRole('textbox', { name: 'Website' }), '?search=foobar  ');
+          await user.type(screen.getByRole('textbox', { name: 'Website' }), '?search=foobar');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(place).toEqual({ ...TEST_PLACE, website: TEST_PLACE.website + '?search=foobar' });
         });

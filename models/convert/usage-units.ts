@@ -7,5 +7,5 @@ export const convertToUsageUnits = (dto: UsageUnitsDTO): UsageUnits => ({
 
 export const convertToUsageUnitsDTO = (UsageUnits: UsageUnits): UsageUnitsDTO => ({
   id: UsageUnits.id,
-  name: UsageUnits.name,
+  name: UsageUnits.name.trim(),
 });

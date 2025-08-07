@@ -21,6 +21,11 @@ describe('Usage Units converters', () => {
         value: { id: 42, name: 'Do the needful' },
         expected: { id: 42, name: 'Do the needful' },
       },
+      {
+        name: 'trims the strings',
+        value: { id: 42, name: ' Do the needful ' },
+        expected: { id: 42, name: 'Do the needful' },
+      },
     ];
 
     it.each(testCases)('$name', ({ value, expected }) => expect(convertToUsageUnitsDTO(value)).toEqual(expected));

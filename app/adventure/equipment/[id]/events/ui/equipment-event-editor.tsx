@@ -189,11 +189,11 @@ const EquipmentEventEditor = ({
           onClick={() => {
             setBusy(true);
             const data: Omit<EquipmentEvent, 'equipment'> = {
-              name: name || '',
-              date: eventDate || '',
-              description: description || null,
-              cost: cost || null,
-              usage: usage || null,
+              name: name!,
+              date: eventDate!,
+              description: description,
+              cost: Number(cost),
+              usage: Number(usage),
               equipmentEventType: equipmentEventTypes.find((x) => x.id === +(eventTypeId || '1'))!,
               usageUnits: usage ? usageUnits.find((x) => x.id === +(usageUnitsId || '1'))! : undefined,
             };

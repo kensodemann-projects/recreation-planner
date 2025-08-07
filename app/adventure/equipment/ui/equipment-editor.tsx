@@ -27,7 +27,7 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
     equipment?.equipmentType.id || equipmentTypes[0].id,
   );
   const { value: description, setValue: setDescription } = useFormControl(equipment?.description || '');
-  const { value: purchaseDate, setValue: setPurchaseDate } = useFormControl(equipment?.purchaseDate || '');
+  const { value: purchaseDate, setValue: setPurchaseDate } = useFormControl<string>(equipment?.purchaseDate || '');
   const { value: cost, setValue: setCost } = useFormControl(equipment?.cost || '');
   const { value: manufacturer, setValue: setManufacturer } = useFormControl(equipment?.manufacturer || '');
   const { value: model, setValue: setModel } = useFormControl(equipment?.model || '');
@@ -277,21 +277,21 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             setBusy(true);
             const data: Equipment = {
               name: name!,
-              description: description || null,
-              purchaseDate: purchaseDate || null,
-              cost: Number(cost) || null,
-              manufacturer: manufacturer || null,
-              model: model || null,
-              identification: identification || null,
-              length: length || null,
-              weight: weight || null,
-              capacity: capacity || null,
-              licensePlateNumber: licensePlateNumber || null,
-              insuranceCarrier: insuranceCarrier || null,
-              insurancePolicyNumber: insurancePolicyNumber || null,
-              insuranceContactName: insuranceContactName || null,
-              insuranceContactPhoneNumber: insuranceContactPhoneNumber || null,
-              insuranceContactEmail: insuranceContactEmail || null,
+              description: description,
+              purchaseDate: purchaseDate,
+              cost: Number(cost),
+              manufacturer: manufacturer,
+              model: model,
+              identification: identification,
+              length: length,
+              weight: weight,
+              capacity: capacity,
+              licensePlateNumber: licensePlateNumber,
+              insuranceCarrier: insuranceCarrier,
+              insurancePolicyNumber: insurancePolicyNumber,
+              insuranceContactName: insuranceContactName,
+              insuranceContactPhoneNumber: insuranceContactPhoneNumber,
+              insuranceContactEmail: insuranceContactEmail,
               equipmentType: equipmentTypes.find((x) => x.id === equipmentTypeId)!,
             };
             onConfirm(equipment ? { ...equipment, ...data } : data);

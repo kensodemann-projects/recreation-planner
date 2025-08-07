@@ -15,9 +15,9 @@ export const convertToTodoCollection = (dto: Partial<TodoCollectionDTO>): Partia
 
 export const convertToTodoCollectionDTO = (collection: TodoCollection): TodoCollectionDTO => ({
   id: collection.id,
-  name: collection.name,
-  description: collection.description,
-  due_date: collection.dueDate,
+  name: collection.name.trim(),
+  description: collection.description?.trim() || null,
+  due_date: collection.dueDate?.trim() || null,
   event_rid: collection.eventRid || null,
   equipment_rid: collection.equipmentRid || null,
   is_complete: collection.isComplete,

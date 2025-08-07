@@ -330,41 +330,6 @@ describe('Equipment Editor', () => {
             },
           });
         });
-
-        it('uses null for optional items that are not entered', async () => {
-          let equipment: Equipment | null = null;
-          const user = userEvent.setup();
-          render(
-            <EquipmentEditor
-              equipmentTypes={EQUIPMENT_TYPES}
-              onCancel={() => null}
-              onConfirm={(e) => (equipment = e)}
-            />,
-          );
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Equipment');
-          await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(equipment).toEqual({
-            name: 'Test Equipment',
-            equipmentType: {
-              ...EQUIPMENT_TYPES[0],
-            },
-            description: null,
-            purchaseDate: null,
-            cost: null,
-            manufacturer: null,
-            model: null,
-            identification: null,
-            length: null,
-            weight: null,
-            capacity: null,
-            licensePlateNumber: null,
-            insuranceCarrier: null,
-            insurancePolicyNumber: null,
-            insuranceContactName: null,
-            insuranceContactPhoneNumber: null,
-            insuranceContactEmail: null,
-          });
-        });
       });
     });
 

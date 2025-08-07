@@ -26,12 +26,12 @@ export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
 };
 
 export const convertToEventDTO = (event: Event): EventDTO => ({
-  name: event.name,
-  description: event.description || null,
-  begin_date: event.beginDate,
+  name: event.name.trim(),
+  description: event.description?.trim() || null,
+  begin_date: event.beginDate.trim(),
   place_rid: event.place.id!,
   event_type_rid: event.type.id!,
-  begin_time: event.beginTime || null,
-  end_date: event.endDate || null,
-  end_time: event.endTime || null,
+  begin_time: event.beginTime?.trim() || null,
+  end_date: event.endDate?.trim() || null,
+  end_time: event.endTime?.trim() || null,
 });

@@ -87,9 +87,9 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
             setBusy(true);
             const data = {
               name: name!,
-              description: description || null,
-              isComplete: isComplete || false,
-              dueDate: dueDate || null,
+              description: description,
+              isComplete: isComplete,
+              dueDate: dueDate,
             };
             onConfirm(todoCollection ? { ...todoCollection, ...data } : { ...data, todoItems: [] });
           }}

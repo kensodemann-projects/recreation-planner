@@ -8,6 +8,6 @@ export const convertToEventType = (dto: EventTypeDTO): EventType => ({
 
 export const convertToEventTypeDTO = (eventType: EventType): EventTypeDTO => ({
   id: eventType.id,
-  name: eventType.name,
-  description: eventType.description,
+  name: eventType.name.trim(),
+  description: eventType.description?.trim(),
 });

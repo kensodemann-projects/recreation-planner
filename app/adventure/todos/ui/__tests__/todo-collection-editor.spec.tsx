@@ -186,21 +186,6 @@ describe('TODO Editor', () => {
             todoItems: [],
           });
         });
-
-        it('uses null for optional items that are not entered', async () => {
-          let collection: TodoCollection | null = null;
-          const user = userEvent.setup();
-          render(<TodoCollectionEditor onCancel={() => null} onConfirm={(c) => (collection = c)} />);
-          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
-          await user.click(screen.getByRole('button', { name: 'Create' }));
-          expect(collection).toEqual({
-            name: 'Test Collection',
-            description: null,
-            dueDate: null,
-            isComplete: false,
-            todoItems: [],
-          });
-        });
       });
     });
 

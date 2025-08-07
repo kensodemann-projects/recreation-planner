@@ -115,6 +115,46 @@ describe('event convertions', () => {
         },
       },
       {
+        name: 'trims the strings',
+        value: {
+          id: 42,
+          name: '  Build a by-pass ',
+          description: ' The Vogons should destroy the Earth to do this. ',
+          beginDate: '2017-07-04 ',
+          beginTime: ' 13:43  ',
+          endDate: ' 2017-07-05      ',
+          endTime: '  08:42 ',
+          place: {
+            id: 3,
+            name: 'Earth',
+            description: 'Third rock from Sol',
+            address: {
+              line1: 'Planet #3',
+              line2: null,
+              city: null,
+              state: 'Solar System',
+              postal: null,
+            },
+            website: 'https://solsys.gov',
+          },
+          type: {
+            id: 2,
+            name: 'Demolition',
+            description: 'Death and destrutction',
+          },
+        },
+        expected: {
+          name: 'Build a by-pass',
+          description: 'The Vogons should destroy the Earth to do this.',
+          begin_date: '2017-07-04',
+          begin_time: '13:43',
+          end_date: '2017-07-05',
+          end_time: '08:42',
+          place_rid: 3,
+          event_type_rid: 2,
+        },
+      },
+      {
         name: 'sets unspecified values to null',
         value: {
           id: 42,
