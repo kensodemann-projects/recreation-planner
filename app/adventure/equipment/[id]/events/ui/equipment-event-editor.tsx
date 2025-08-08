@@ -78,7 +78,7 @@ const EquipmentEventEditor = ({
   );
   const [busy, setBusy] = useState(false);
 
-  const requiredFieldsHaveNoValue = () =>
+  const requiredFieldsHaveNoValue =
     !name ||
     !eventDate ||
     (eventTypeId === 1 && !usage) ||
@@ -86,7 +86,7 @@ const EquipmentEventEditor = ({
     (eventTypeId === 4 && !cost) ||
     (eventTypeId === 5 && !description);
 
-  const isDirty = () =>
+  const isDirty =
     equipmentEvent?.equipmentEventType.id !== eventTypeId ||
     equipmentEvent?.name !== name ||
     equipmentEvent?.date !== eventDate ||
@@ -94,7 +94,7 @@ const EquipmentEventEditor = ({
     (equipmentEvent?.cost || '') !== cost ||
     (equipmentEvent?.usage || '') !== usage ||
     (usage && equipmentEvent?.usageUnits?.id !== usageUnitsId);
-  const disableConfirmButton = requiredFieldsHaveNoValue() || !isDirty();
+  const disableConfirmButton = requiredFieldsHaveNoValue || !isDirty;
 
   return (
     <div className="p-2 md:p-4">
