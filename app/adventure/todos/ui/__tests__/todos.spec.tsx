@@ -11,7 +11,6 @@ const verifyDisplayedCollections = (showArchived: boolean) =>
 
 describe('todos component', () => {
   beforeEach(() => vi.clearAllMocks());
-
   afterEach(() => cleanup());
 
   it('has reasonable test data', () => {

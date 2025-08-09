@@ -6,23 +6,13 @@ import { Note } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
 
-export interface NotesEditorProps {
+export interface NoteEditorProps {
   note?: Note;
-  equipmentId?: number;
-  eventId?: number;
-  placeId?: number;
   onConfirm: (n: Note) => void;
   onCancel: () => void;
 }
 
-const NotesEditor = ({
-  note,
-  onCancel,
-  onConfirm,
-  equipmentId: equipmentRid,
-  eventId: eventRid,
-  placeId: placeRid,
-}: NotesEditorProps) => {
+const NoteEditor = ({ note, onCancel, onConfirm }: NoteEditorProps) => {
   const {
     value: name,
     error: nameError,
@@ -36,9 +26,6 @@ const NotesEditor = ({
     ...note,
     name,
     description,
-    equipmentRid: note?.equipmentRid || equipmentRid,
-    eventRid: note?.eventRid || eventRid,
-    placeRid: note?.placeRid || placeRid,
   });
 
   const isDirty = name.trim() !== (note?.name || '') || description.trim() !== (note?.description || '');
@@ -88,4 +75,4 @@ const NotesEditor = ({
   );
 };
 
-export default NotesEditor;
+export default NoteEditor;

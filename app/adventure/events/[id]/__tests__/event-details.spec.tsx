@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import EventDetails from '../event-details';
-import { TodoCollection, TodoItem } from '@/models';
+import { Note, TodoCollection, TodoItem } from '@/models';
 
 const testEvent = {
   id: 314,
@@ -16,6 +16,7 @@ const testEvent = {
     name: 'Richard Bong State Park',
     address: {
       line1: '26313 Burlington Rd.',
+      line2: null,
       city: 'Kansasville',
       state: 'WI',
       postal: '53139',
@@ -111,50 +112,64 @@ const testTodoCollections: TodoCollection[] = [
   },
 ];
 
+const notes: Note[] = [];
+
 describe('Event Details', () => {
   afterEach(() => cleanup());
 
   it('renders the name', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
     expect(screen.getByRole('heading', { level: 2, name: testEvent.name })).toBeDefined();
   });
 
   it('renders the event type', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
     expect(screen.getByText(testEvent.type.name)).toBeDefined();
   });
 
   it('renders the date information', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
     expect(screen.getByText('Sep 28, 2024 at 6:30 PM - Sep 30, 2024 at 10:30 PM')).toBeDefined();
   });
 
   it('renders the description', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
     expect(screen.getByText(testEvent.description)).toBeDefined();
   });
 
   it('renders a location section', () => {
-    render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
     expect(screen.getByRole('heading', { level: 2, name: 'Location' })).toBeDefined();
   });
 
   describe('todo section', () => {
     it('renders the section header', () => {
-      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+      render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
       expect(screen.getByRole('heading', { level: 2, name: 'Todos' })).toBeDefined();
     });
 
-    it('renders the section header', () => {
-      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+    it('renders the add button', () => {
+      render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
       expect(screen.getByRole('button', { name: 'Add Todo Collection' })).toBeDefined();
     });
 
     it('renders the todo collections', () => {
-      render(<EventDetails event={testEvent} todoCollections={testTodoCollections} />);
+      render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
       testTodoCollections
         .filter((x) => !x.isComplete)
         .forEach((c) => expect(screen.getByRole('heading', { level: 3, name: c.name })).toBeDefined());
+    });
+  });
+
+  describe('notes section', () => {
+    it('renders the section header', () => {
+      render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
+    });
+
+    it('renders the add button', () => {
+      render(<EventDetails event={testEvent} notes={notes} todoCollections={testTodoCollections} />);
+      expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();
     });
   });
 });

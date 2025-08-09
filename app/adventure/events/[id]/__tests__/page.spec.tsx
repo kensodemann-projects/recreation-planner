@@ -1,7 +1,7 @@
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchEvent, fetchTodoCollectionsForEvent } from '../../data';
+import { fetchEvent, fetchNotesForEvent, fetchTodoCollectionsForEvent } from '../../data';
 import EventPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
@@ -27,6 +27,11 @@ describe('Event Page', () => {
     it('fetches the todo collections for the event', async () => {
       await EventPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchTodoCollectionsForEvent).toHaveBeenCalledExactlyOnceWith(2);
+    });
+
+    it('fetches the notes for the event', async () => {
+      await EventPage({ params: Promise.resolve({ id: '2' }) });
+      expect(fetchNotesForEvent).toHaveBeenCalledExactlyOnceWith(2);
     });
 
     it('renders the page header', async () => {
@@ -65,6 +70,7 @@ describe('Event Page', () => {
       await EventPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchEvent).not.toHaveBeenCalled();
       expect(fetchTodoCollectionsForEvent).not.toHaveBeenCalled();
+      expect(fetchNotesForEvent).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {

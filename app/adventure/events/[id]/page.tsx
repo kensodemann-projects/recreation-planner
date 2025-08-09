@@ -4,7 +4,7 @@ import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { fetchEvent, fetchTodoCollectionsForEvent } from '../data';
+import { fetchEvent, fetchNotesForEvent, fetchTodoCollectionsForEvent } from '../data';
 import EventDetails from './event-details';
 
 const EventPage = async (props: { params: Promise<{ id: string }> }) => {
@@ -21,6 +21,7 @@ const EventPage = async (props: { params: Promise<{ id: string }> }) => {
   }
 
   const todoCollections = (await fetchTodoCollectionsForEvent(id)) || [];
+  const notes = (await fetchNotesForEvent(id)) || [];
 
   return (
     <>
@@ -28,7 +29,7 @@ const EventPage = async (props: { params: Promise<{ id: string }> }) => {
         <TitleHeading>Trip / Event Details</TitleHeading>
       </PageHeader>
 
-      <EventDetails event={event} todoCollections={todoCollections} />
+      <EventDetails event={event} notes={notes} todoCollections={todoCollections} />
 
       <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/events`}>
         <ArrowUturnLeftIcon className="w-6" />

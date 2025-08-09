@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import NotesEditor from '../notes-editor';
+import NotesEditor from '../note-editor';
 import userEvent from '@testing-library/user-event';
 import { Note } from '@/models';
 
@@ -112,53 +112,11 @@ describe('Notes Editor', () => {
     it('will not create a note with an empty topic', async () => {
       let note: Note | null = null;
       const user = userEvent.setup();
-      render(<NotesEditor onCancel={() => null} onConfirm={(n) => (note = n)} equipmentId={23} />);
+      render(<NotesEditor onCancel={() => null} onConfirm={(n) => (note = n)} />);
       await user.type(topicInput(), '  ');
       await user.type(descriptionInput(), 'Testing this is just a good idea.');
       await user.click(createButton());
       expect(note).toBeNull();
-    });
-
-    it('can create a new note for equipment', async () => {
-      let note: Note | null = null;
-      const user = userEvent.setup();
-      render(<NotesEditor onCancel={() => null} onConfirm={(n) => (note = n)} equipmentId={23} />);
-      await user.type(topicInput(), 'This is a test note');
-      await user.type(descriptionInput(), 'Testing this is just a good idea.');
-      await user.click(createButton());
-      expect(note).toEqual({
-        name: 'This is a test note',
-        description: 'Testing this is just a good idea.',
-        equipmentRid: 23,
-      });
-    });
-
-    it('can create a new note for an event', async () => {
-      let note: Note | null = null;
-      const user = userEvent.setup();
-      render(<NotesEditor onCancel={() => null} onConfirm={(n) => (note = n)} eventId={3} />);
-      await user.type(topicInput(), 'This is a test note');
-      await user.type(descriptionInput(), 'Testing this is just a good idea.');
-      await user.click(createButton());
-      expect(note).toEqual({
-        name: 'This is a test note',
-        description: 'Testing this is just a good idea.',
-        eventRid: 3,
-      });
-    });
-
-    it('can create a new note for a place', async () => {
-      let note: Note | null = null;
-      const user = userEvent.setup();
-      render(<NotesEditor onCancel={() => null} onConfirm={(n) => (note = n)} placeId={19} />);
-      await user.type(topicInput(), 'This is a test note');
-      await user.type(descriptionInput(), 'Testing this is just a good idea.');
-      await user.click(createButton());
-      expect(note).toEqual({
-        name: 'This is a test note',
-        description: 'Testing this is just a good idea.',
-        placeRid: 19,
-      });
     });
   });
 

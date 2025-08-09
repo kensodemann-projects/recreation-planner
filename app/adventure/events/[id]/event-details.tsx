@@ -1,18 +1,20 @@
 import Address from '@/app/ui/address';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { Event, TodoCollection } from '@/models';
+import { Event, Note, TodoCollection } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Todos from '../../todos/ui/todos';
+import Notes from '../../notes/ui/notes';
 
 interface EventDetailsProps {
   event: Event;
+  notes: Note[];
   todoCollections: TodoCollection[];
 }
 
-const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
+const EventDetails = ({ event, notes, todoCollections }: EventDetailsProps) => {
   const addressInformation =
     event.place.address &&
     (event.place.address.line1 ||
@@ -53,6 +55,21 @@ const EventDetails = ({ event, todoCollections }: EventDetailsProps) => {
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
             Add Todo Collection
+          </button>
+        </Link>
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Notes</SubtitleHeading>
+        </SectionHeader>
+
+        <Notes notes={notes} />
+
+        <Link href={`${event.id}/notes/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Note
           </button>
         </Link>
       </section>

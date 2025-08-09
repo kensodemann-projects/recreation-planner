@@ -1,7 +1,16 @@
 'use server';
 
-import { Event, EventDTO, EventType, SelectablePlace, TodoCollection, TodoCollectionDTO } from '@/models';
-import { convertToEvent, convertToEventDTO, convertToTodoCollection } from '@/models/convert';
+import {
+  Event,
+  EventDTO,
+  EventType,
+  Note,
+  NoteDTO,
+  SelectablePlace,
+  TodoCollection,
+  TodoCollectionDTO,
+} from '@/models';
+import { convertToEvent, convertToEventDTO, convertToNote, convertToTodoCollection } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
@@ -44,12 +53,15 @@ const eventDelete = (supabase: SupabaseClient, event: Event): any => {
   return supabase.from(eventsTable).delete().eq('id', event.id);
 };
 
+const notesForEventQuery = (supabase: SupabaseClient, eventRid: number): any => {
+  return supabase.from('notes').select('*').eq('event_rid', eventRid).order('created_at', { ascending: false });
+};
+
 const todoCollectionsForEventQuery = (supabase: SupabaseClient, eventRid: number): any => {
   return supabase
     .from('todo_collections')
     .select('*, todo_items(*)')
     .eq('event_rid', eventRid)
-    .eq('is_complete', false)
     .order('due_date', { nullsFirst: false })
     .order('created_at', { referencedTable: 'todo_items' });
 };
@@ -93,6 +105,17 @@ export const fetchEvent = async (id: number): Promise<Event | null> => {
   const query = eventQuery(supabase, id);
   const data = await executeQuery<EventDTO>(query);
   return data ? (convertToEvent(data) as Event) : null;
+};
+
+export const fetchNotesForEvent = async (eventRid: number): Promise<Note[]> => {
+  if (await isNotLoggedIn()) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const query = notesForEventQuery(supabase, eventRid);
+  const data = await executeQuery<NoteDTO[]>(query);
+  return (data || []).map((p) => convertToNote(p));
 };
 
 export const fetchTodoCollectionsForEvent = async (eventRid: number): Promise<TodoCollection[]> => {
