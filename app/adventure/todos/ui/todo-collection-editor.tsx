@@ -24,14 +24,15 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
   const { value: isComplete, setValue: setIsComplete } = useFormControl(todoCollection?.isComplete || false);
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton =
-    !name ||
-    !(
-      dueDate !== (todoCollection?.dueDate || '') ||
-      name !== (todoCollection?.name || '') ||
-      description !== (todoCollection?.description || '') ||
-      isComplete !== (todoCollection?.isComplete || false)
-    );
+  const requiredFieldsHaveValues = !!name.trim();
+
+  const isDirty =
+    dueDate.trim() !== (todoCollection?.dueDate || '') ||
+    name.trim() !== (todoCollection?.name || '') ||
+    description.trim() !== (todoCollection?.description || '') ||
+    isComplete !== (todoCollection?.isComplete || false);
+
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
     <div className="p-2 md:p-4">

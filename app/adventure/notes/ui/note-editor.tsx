@@ -28,8 +28,9 @@ const NoteEditor = ({ note, onCancel, onConfirm }: NoteEditorProps) => {
     description,
   });
 
+  const requiredFieldsHaveValues = !!name.trim();
   const isDirty = name.trim() !== (note?.name || '') || description.trim() !== (note?.description || '');
-  const disableConfirmButton = !(name.trim() && isDirty);
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
     <div className="p-2 md:p-4">

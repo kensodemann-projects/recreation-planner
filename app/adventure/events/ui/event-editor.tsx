@@ -39,19 +39,19 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
 
   const [busy, setBusy] = useState(false);
 
-  const disableButton =
-    !(eventName && eventBeginDate) ||
-    !!(eventNameError || eventBeginDateError) ||
-    !(
-      eventName !== (event?.name || '') ||
-      eventTypeId !== event?.type.id ||
-      eventPlaceId !== event?.place.id ||
-      eventBeginDate !== (event?.beginDate || '') ||
-      eventBeginTime !== (event?.beginTime || '') ||
-      eventEndDate !== (event?.endDate || '') ||
-      eventEndTime !== (event?.endTime || '') ||
-      eventDescription !== (event?.description || '')
-    );
+  const requiredFieldsHaveValues = !!(eventName.trim() && eventBeginDate.trim());
+
+  const isDirty =
+    eventName.trim() !== (event?.name || '') ||
+    eventTypeId !== event?.type.id ||
+    eventPlaceId !== event?.place.id ||
+    eventBeginDate.trim() !== (event?.beginDate || '') ||
+    eventBeginTime.trim() !== (event?.beginTime || '') ||
+    eventEndDate.trim() !== (event?.endDate || '') ||
+    eventEndTime.trim() !== (event?.endTime || '') ||
+    eventDescription.trim() !== (event?.description || '');
+
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   const handleConfirm = () => {
     const event = buildEvent();
@@ -162,7 +162,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
         </button>
         <button
           className="btn btn-primary min-w-24"
-          disabled={disableButton || busy}
+          disabled={disableConfirmButton || busy}
           onClick={() => {
             setBusy(true);
             handleConfirm();

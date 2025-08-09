@@ -78,23 +78,26 @@ const EquipmentEventEditor = ({
   );
   const [busy, setBusy] = useState(false);
 
-  const requiredFieldsHaveNoValue =
-    !name ||
-    !eventDate ||
-    (eventTypeId === 1 && !usage) ||
-    (eventTypeId === 3 && !cost) ||
-    (eventTypeId === 4 && !cost) ||
-    (eventTypeId === 5 && !description);
+  const requiredFieldsHaveValues = !!(
+    name.trim() &&
+    eventDate.trim() &&
+    ((eventTypeId === 1 && usage) ||
+      eventTypeId === 2 ||
+      (eventTypeId === 3 && cost) ||
+      (eventTypeId === 4 && cost) ||
+      (eventTypeId === 5 && description.trim()))
+  );
 
   const isDirty =
     equipmentEvent?.equipmentEventType.id !== eventTypeId ||
-    equipmentEvent?.name !== name ||
-    equipmentEvent?.date !== eventDate ||
-    equipmentEvent?.description !== description ||
+    equipmentEvent?.name !== name.trim() ||
+    equipmentEvent?.date !== eventDate.trim() ||
+    (equipmentEvent?.description || '') !== description.trim() ||
     (equipmentEvent?.cost || '') !== cost ||
     (equipmentEvent?.usage || '') !== usage ||
     (usage && equipmentEvent?.usageUnits?.id !== usageUnitsId);
-  const disableConfirmButton = requiredFieldsHaveNoValue || !isDirty;
+
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
     <div className="p-2 md:p-4">

@@ -53,25 +53,28 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
   );
   const [busy, setBusy] = useState(false);
 
-  const disableConfirmButton =
-    !name ||
-    (name === (equipment?.name || '') &&
-      equipmentTypeId === equipment?.equipmentType.id &&
-      description === (equipment?.description || '') &&
-      purchaseDate === (equipment?.purchaseDate || '') &&
-      cost === (equipment?.cost || '') &&
-      manufacturer === (equipment?.manufacturer || '') &&
-      model === (equipment?.model || '') &&
-      identification === (equipment?.identification || '') &&
-      licensePlateNumber === (equipment?.licensePlateNumber || '') &&
-      weight === (equipment?.weight || '') &&
-      length === (equipment?.length || '') &&
-      capacity === (equipment?.capacity || '') &&
-      insuranceCarrier === (equipment?.insuranceCarrier || '') &&
-      insurancePolicyNumber === (equipment?.insurancePolicyNumber || '') &&
-      insuranceContactName === (equipment?.insuranceContactName || '') &&
-      insuranceContactPhoneNumber === (equipment?.insuranceContactPhoneNumber || '') &&
-      insuranceContactEmail === (equipment?.insuranceContactEmail || ''));
+  const isDirty =
+    name.trim() !== (equipment?.name || '') ||
+    equipmentTypeId !== equipment?.equipmentType.id ||
+    description.trim() !== (equipment?.description || '') ||
+    purchaseDate.trim() !== (equipment?.purchaseDate || '') ||
+    cost !== (equipment?.cost || '') ||
+    manufacturer.trim() !== (equipment?.manufacturer || '') ||
+    model.trim() !== (equipment?.model || '') ||
+    identification.trim() !== (equipment?.identification || '') ||
+    licensePlateNumber.trim() !== (equipment?.licensePlateNumber || '') ||
+    weight.trim() !== (equipment?.weight || '') ||
+    length.trim() !== (equipment?.length || '') ||
+    capacity.trim() !== (equipment?.capacity || '') ||
+    insuranceCarrier.trim() !== (equipment?.insuranceCarrier || '') ||
+    insurancePolicyNumber.trim() !== (equipment?.insurancePolicyNumber || '') ||
+    insuranceContactName.trim() !== (equipment?.insuranceContactName || '') ||
+    insuranceContactPhoneNumber.trim() !== (equipment?.insuranceContactPhoneNumber || '') ||
+    insuranceContactEmail.trim() !== (equipment?.insuranceContactEmail || '');
+
+  const requiredFieldsHaveValues = !!name.trim();
+
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
     <div className="p-2 md:p-4">

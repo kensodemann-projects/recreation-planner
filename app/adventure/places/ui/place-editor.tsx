@@ -36,21 +36,21 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
 
   const [busy, setBusy] = useState(false);
 
-  const disableButton =
-    !placeName ||
-    !!placeNameError ||
-    !(
-      placeName !== (place?.name || '') ||
-      description !== (place?.description || '') ||
-      addressLine1 !== (place?.address?.line1 || '') ||
-      addressLine2 !== (place?.address?.line2 || '') ||
-      addressCity !== (place?.address?.city || '') ||
-      addressState !== (place?.address?.state || '') ||
-      addressPostal !== (place?.address?.postal || '') ||
-      phoneNumber !== (place?.phoneNumber || '') ||
-      website !== (place?.website || '') ||
-      placeTypeId !== place?.type.id
-    );
+  const requiredFieldsHaveValues = !!placeName.trim();
+
+  const isDirty =
+    placeName.trim() !== (place?.name || '') ||
+    description.trim() !== (place?.description || '') ||
+    addressLine1.trim() !== (place?.address?.line1 || '') ||
+    addressLine2.trim() !== (place?.address?.line2 || '') ||
+    addressCity.trim() !== (place?.address?.city || '') ||
+    addressState.trim() !== (place?.address?.state || '') ||
+    addressPostal.trim() !== (place?.address?.postal || '') ||
+    phoneNumber.trim() !== (place?.phoneNumber || '') ||
+    website.trim() !== (place?.website || '') ||
+    placeTypeId !== place?.type.id;
+
+  const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   const buildPlace = (): Place => ({
     id: place?.id,
@@ -170,7 +170,7 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
         </button>
         <button
           className="btn btn-primary min-w-24"
-          disabled={disableButton || busy}
+          disabled={disableConfirmButton || busy}
           onClick={() => {
             setBusy(true);
             const place = buildPlace();
