@@ -1,22 +1,14 @@
 'use server';
 
-import {
-  Event,
-  EventDTO,
-  EventType,
-  Note,
-  NoteDTO,
-  SelectablePlace,
-  TodoCollection,
-  TodoCollectionDTO,
-} from '@/models';
-import { convertToEvent, convertToEventDTO, convertToNote, convertToTodoCollection } from '@/models/convert';
+import { Event, EventDTO, EventType, SelectablePlace } from '@/models';
+import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const selectColumns = '*, places!inner(*), event_types!inner(*)';
+const childTableColumns = ', notes(*), todo_collections(*, todo_items(*))';
 const eventsTable = 'events';
 
 const upcomingEventsQuery = (supabase: SupabaseClient, dt: string): any => {
@@ -41,6 +33,15 @@ const eventQuery = (supabase: SupabaseClient, id: number): any => {
   return supabase.from(eventsTable).select(selectColumns).eq('id', id).single();
 };
 
+const fullEventQuery = (supabase: SupabaseClient, id: number): any => {
+  return supabase
+    .from(eventsTable)
+    .select(selectColumns + childTableColumns)
+    .eq('id', id)
+    .order('created_at', { referencedTable: 'notes' })
+    .single();
+};
+
 const eventInsert = (supabase: SupabaseClient, event: Event): any => {
   return supabase.from(eventsTable).insert(convertToEventDTO(event)).select(selectColumns).single();
 };
@@ -51,19 +52,6 @@ const eventUpdate = (supabase: SupabaseClient, event: Event): any => {
 
 const eventDelete = (supabase: SupabaseClient, event: Event): any => {
   return supabase.from(eventsTable).delete().eq('id', event.id);
-};
-
-const notesForEventQuery = (supabase: SupabaseClient, eventRid: number): any => {
-  return supabase.from('notes').select('*').eq('event_rid', eventRid).order('created_at', { ascending: false });
-};
-
-const todoCollectionsForEventQuery = (supabase: SupabaseClient, eventRid: number): any => {
-  return supabase
-    .from('todo_collections')
-    .select('*, todo_items(*)')
-    .eq('event_rid', eventRid)
-    .order('due_date', { nullsFirst: false })
-    .order('created_at', { referencedTable: 'todo_items' });
 };
 
 const eventTypesQuery = (supabase: SupabaseClient): any => {
@@ -96,37 +84,15 @@ export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
-export const fetchEvent = async (id: number): Promise<Event | null> => {
+export const fetchEvent = async (id: number, full: boolean = false): Promise<Event | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = eventQuery(supabase, id);
+  const query = full ? fullEventQuery(supabase, id) : eventQuery(supabase, id);
   const data = await executeQuery<EventDTO>(query);
   return data ? (convertToEvent(data) as Event) : null;
-};
-
-export const fetchNotesForEvent = async (eventRid: number): Promise<Note[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = notesForEventQuery(supabase, eventRid);
-  const data = await executeQuery<NoteDTO[]>(query);
-  return (data || []).map((p) => convertToNote(p));
-};
-
-export const fetchTodoCollectionsForEvent = async (eventRid: number): Promise<TodoCollection[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionsForEventQuery(supabase, eventRid);
-  const data = await executeQuery<TodoCollectionDTO[]>(query);
-  return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
 };
 
 export const addEvent = async (event: Event): Promise<Event | null> => {

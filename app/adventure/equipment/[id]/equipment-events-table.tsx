@@ -19,7 +19,7 @@ const EquipmentEventsTable = ({ className, equipmentEvents }: EquipmentEventsLis
         {equipmentEvents.map((current) => (
           <tr key={current.id}>
             <th>
-              <Link href={`${current.equipment.id}/events/${current.id}/update`}>{current.name}</Link>
+              <Link href={`${current.equipmentRid}/events/${current.id}/update`}>{current.name}</Link>
             </th>
             <td>{current.date && formatDate(current.date)}</td>
             <td>{current.equipmentEventType.name}</td>

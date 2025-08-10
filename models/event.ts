@@ -1,6 +1,8 @@
-import { EventType, EventTypeDTO } from './event-type';
 import { CommonData, CommonDataDTO } from './common-data';
+import { EventType, EventTypeDTO } from './event-type';
+import { Note, NoteDTO } from './note';
 import { Place, PlaceDTO } from './place';
+import { TodoCollection, TodoCollectionDTO } from './todo-collection';
 
 export interface EventDTO extends CommonDataDTO {
   begin_date: string;
@@ -11,6 +13,8 @@ export interface EventDTO extends CommonDataDTO {
   event_type_rid: number;
   places?: Partial<PlaceDTO>;
   event_types?: EventTypeDTO;
+  notes?: NoteDTO[];
+  todo_collections?: TodoCollectionDTO[];
 }
 
 export interface Event extends CommonData {
@@ -20,4 +24,6 @@ export interface Event extends CommonData {
   endTime?: string | null;
   place: Partial<Place>;
   type: EventType;
+  notes?: Note[];
+  todoCollections?: TodoCollection[];
 }

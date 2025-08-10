@@ -25,7 +25,7 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
     <>
       <PageHeader>
         <TitleHeading>Add a New Maintenance Event</TitleHeading>
-        <SubtitleHeading>For: {equipment?.name || ''}</SubtitleHeading>
+        <SubtitleHeading>For: {equipment.name || ''}</SubtitleHeading>
       </PageHeader>
       <CreateEquipmentEvent equipment={equipment!} equipmentEventTypes={equipmentEventTypes} usageUnits={usageUnits} />
     </>

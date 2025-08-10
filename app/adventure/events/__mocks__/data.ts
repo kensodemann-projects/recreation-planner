@@ -82,9 +82,10 @@ export const EVENTS: Array<Event> = [
 
 export const fetchPriorEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchUpcomingEvents = vi.fn().mockResolvedValue(EVENTS);
-export const fetchEvent = vi.fn().mockImplementation((id: number) => Promise.resolve(EVENTS.find((x) => x.id === id)));
-export const fetchNotesForEvent = vi.fn().mockResolvedValue([]);
-export const fetchTodoCollectionsForEvent = vi.fn().mockResolvedValue([]);
+export const fetchEvent = vi.fn().mockImplementation((id: number, full: boolean = false) => {
+  const event = EVENTS.find((x) => x.id === id);
+  return Promise.resolve(event && (full ? { ...event, notes: [], todoCollections: [] } : { ...event }));
+});
 export const addEvent = vi.fn();
 export const deleteEvent = vi.fn();
 export const canDeleteEvent = vi.fn().mockResolvedValue(false);

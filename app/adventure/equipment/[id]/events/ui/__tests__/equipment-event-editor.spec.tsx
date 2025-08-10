@@ -202,7 +202,7 @@ describe('Equipment Editor', () => {
   describe('for create', () => {
     let user: UserEvent;
     let cancelFired = false;
-    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipment'> | null = null;
+    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipmentRid'> | null = null;
     beforeEach(() => {
       user = userEvent.setup();
       savedEvent = null;
@@ -422,7 +422,7 @@ describe('Equipment Editor', () => {
 
   describe('for update', () => {
     let user: UserEvent;
-    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipment'> | null = null;
+    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipmentRid'> | null = null;
     beforeEach(() => {
       user = userEvent.setup();
       savedEvent = null;

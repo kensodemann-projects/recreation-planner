@@ -38,6 +38,55 @@ describe('event convertions', () => {
           },
           event_type_rid: 2,
           event_types: { id: 2, name: 'Demolition', description: 'Death and destrutction' },
+          notes: [
+            {
+              id: 16,
+              name: 'Test note 1',
+              description: 'This is a test note.',
+              event_rid: 42,
+              equipment_rid: null,
+              place_rid: null,
+            },
+            {
+              id: 18,
+              name: 'Test note 2',
+              description: null,
+              event_rid: 42,
+              equipment_rid: null,
+              place_rid: null,
+            },
+          ],
+          todo_collections: [
+            {
+              id: 1,
+              name: 'Stuff I need to do',
+              description: 'This is a thing, and I need to do things that are stuff',
+              due_date: '2025-05-23',
+              is_complete: false,
+              event_rid: 42,
+              equipment_rid: null,
+              todo_items: [
+                {
+                  id: 42,
+                  name: 'Do the needful',
+                  is_complete: false,
+                  todo_collection_rid: 1,
+                },
+                {
+                  id: 73,
+                  name: 'Bite the unbitten',
+                  is_complete: true,
+                  todo_collection_rid: 1,
+                },
+                {
+                  id: 314159,
+                  name: 'Eat the pi',
+                  is_complete: false,
+                  todo_collection_rid: 1,
+                },
+              ],
+            },
+          ],
         },
         expected: {
           id: 42,
@@ -65,6 +114,55 @@ describe('event convertions', () => {
             name: 'Demolition',
             description: 'Death and destrutction',
           },
+          notes: [
+            {
+              id: 16,
+              name: 'Test note 1',
+              description: 'This is a test note.',
+              eventRid: 42,
+              equipmentRid: null,
+              placeRid: null,
+            },
+            {
+              id: 18,
+              name: 'Test note 2',
+              description: null,
+              eventRid: 42,
+              equipmentRid: null,
+              placeRid: null,
+            },
+          ],
+          todoCollections: [
+            {
+              id: 1,
+              name: 'Stuff I need to do',
+              description: 'This is a thing, and I need to do things that are stuff',
+              dueDate: '2025-05-23',
+              isComplete: false,
+              eventRid: 42,
+              equipmentRid: null,
+              todoItems: [
+                {
+                  id: 42,
+                  name: 'Do the needful',
+                  isComplete: false,
+                  todoCollectionRid: 1,
+                },
+                {
+                  id: 73,
+                  name: 'Bite the unbitten',
+                  isComplete: true,
+                  todoCollectionRid: 1,
+                },
+                {
+                  id: 314159,
+                  name: 'Eat the pi',
+                  isComplete: false,
+                  todoCollectionRid: 1,
+                },
+              ],
+            },
+          ],
         },
       },
     ];

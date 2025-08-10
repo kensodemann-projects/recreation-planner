@@ -9,7 +9,6 @@ import {
   EquipmentEventTypeDTO,
   EquipmentType,
   EquipmentTypeDTO,
-  TodoCollection,
   UsageUnits,
   UsageUnitsDTO,
 } from '@/models';
@@ -20,7 +19,6 @@ import {
   convertToEquipmentEventDTO,
   convertToEquipmentEventType,
   convertToEquipmentType,
-  convertToTodoCollection,
   convertToUsageUnits,
 } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
@@ -29,12 +27,22 @@ import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const equipmentSelectColumns = '*, equipment_types!inner(*)';
-const equipmentEventsSelectColumns = '*, equipment_event_types!inner(*), usage_units(*), equipment(*)!inner';
+const equipmentEventsSelectColumns = '*, equipment_event_types!inner(*), usage_units(*)';
+const childTableColumns = `, equipment_events(${equipmentEventsSelectColumns}), todo_collections(*, todo_items(*))`;
 const equipmentTable = 'equipment';
 const equipmentEventsTable = 'equipment_events';
 
 const equipmentQuery = (supabase: SupabaseClient, id?: number): any => {
   const query = supabase.from(equipmentTable).select(equipmentSelectColumns);
+  if (id) {
+    return query.eq('id', id).single();
+  } else {
+    return query.order('name');
+  }
+};
+
+const fullEquipmentQuery = (supabase: SupabaseClient, id?: number): any => {
+  const query = supabase.from(equipmentTable).select(equipmentSelectColumns + childTableColumns);
   if (id) {
     return query.eq('id', id).single();
   } else {
@@ -56,15 +64,6 @@ const equipmentUpdate = (supabase: SupabaseClient, equipment: Equipment): any =>
     .select(equipmentSelectColumns)
     .single();
 
-const todoCollectionsQuery = (supabase: SupabaseClient, equipmentRid: number): any =>
-  supabase
-    .from('todo_collections')
-    .select('*, todo_items(*)')
-    .eq('equipment_rid', equipmentRid)
-    .eq('is_complete', false)
-    .order('due_date', { nullsFirst: false })
-    .order('created_at', { referencedTable: 'todo_items' });
-
 const equipmentTypesQuery = (supabase: SupabaseClient): any =>
   supabase.from('equipment_types').select('*').order('name');
 
@@ -72,14 +71,6 @@ const equipmentEventTypesQuery = (supabase: SupabaseClient): any =>
   supabase.from('equipment_event_types').select('*').order('name');
 
 const usageUnitsQuery = (supabase: SupabaseClient): any => supabase.from('usage_units').select('*').order('id');
-
-const equipmentEventsQuery = (supabase: SupabaseClient, equipmentRid: number): any =>
-  supabase
-    .from(equipmentEventsTable)
-    .select(equipmentEventsSelectColumns)
-    .eq('equipment_rid', equipmentRid)
-    .order('date')
-    .order('name');
 
 const equipmentEventQuery = (supabase: SupabaseClient, id: number): any =>
   supabase.from(equipmentEventsTable).select(equipmentEventsSelectColumns).eq('id', id).single();
@@ -113,13 +104,13 @@ export const fetchAllEquipment = async (): Promise<Equipment[]> => {
   return (data || []).map((p) => convertToEquipment(p) as Equipment);
 };
 
-export const fetchEquipment = async (id: number): Promise<Equipment | null> => {
+export const fetchEquipment = async (id: number, full?: boolean): Promise<Equipment | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = equipmentQuery(supabase, id);
+  const query = full ? fullEquipmentQuery(supabase, id) : equipmentQuery(supabase, id);
   const data = await executeQuery<EquipmentDTO>(query);
   return data ? (convertToEquipment(data) as Equipment) : null;
 };
@@ -172,28 +163,6 @@ export const fetchEquipmentTypes = async (): Promise<EquipmentType[]> => {
   const query = equipmentTypesQuery(supabase);
   const data = await executeQuery<EquipmentTypeDTO[]>(query);
   return (data || []).map((p) => convertToEquipmentType(p) as EquipmentType);
-};
-
-export const fetchTodoCollectionsForEquipment = async (equipmentRid: number): Promise<TodoCollection[] | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionsQuery(supabase, equipmentRid);
-  const data = await executeQuery<EquipmentDTO[]>(query);
-  return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
-};
-
-export const fetchEquipmentEvents = async (equipmentRid: number): Promise<EquipmentEvent[] | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = equipmentEventsQuery(supabase, equipmentRid);
-  const data = await executeQuery<EquipmentEventDTO[]>(query);
-  return (data || []).map((p) => convertToEquipmentEvent(p));
 };
 
 export const fetchEquipmentEvent = async (id: number): Promise<EquipmentEvent | null> => {

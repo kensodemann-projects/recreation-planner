@@ -1,5 +1,4 @@
 import { CommonData, CommonDataDTO } from './common-data';
-import { Equipment, EquipmentDTO } from './equipment';
 import { EquipmentEventType, EquipmentEventTypeDTO } from './equipment-event-type';
 import { UsageUnits, UsageUnitsDTO } from './usage-units';
 
@@ -12,7 +11,6 @@ export interface EquipmentEventDTO extends CommonDataDTO {
   equipment_event_type_rid: number;
   equipment_event_types?: EquipmentEventTypeDTO;
   equipment_rid: number;
-  equipment?: EquipmentDTO;
 }
 
 export interface EquipmentEvent extends CommonData {
@@ -21,5 +19,5 @@ export interface EquipmentEvent extends CommonData {
   usage: number | null;
   usageUnits?: UsageUnits;
   equipmentEventType: EquipmentEventType;
-  equipment: Omit<Equipment, 'equipmentType'>;
+  equipmentRid: number;
 }

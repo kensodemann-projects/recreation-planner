@@ -1,9 +1,13 @@
 import { Event, EventDTO } from '../event';
 import { EventType, EventTypeDTO } from '../event-type';
+import { Note } from '../note';
 import { Place } from '../place';
 import { PlaceTypeDTO } from '../place-type';
+import { TodoCollection } from '../todo-collection';
 import { convertToEventType } from './event-type';
+import { convertToNote } from './note';
 import { convertToPlace } from './place';
+import { convertToTodoCollection } from './todo-collection';
 
 export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
   const place: Partial<Place> | undefined = dto.place_rid
@@ -11,6 +15,10 @@ export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
     : undefined;
 
   const type: EventType | undefined = dto.event_types ? convertToEventType(dto.event_types) : undefined;
+  const notes: Note[] | undefined = dto.notes ? dto.notes.map((n) => convertToNote(n)) : undefined;
+  const todoCollections: TodoCollection[] | undefined = dto.todo_collections
+    ? dto.todo_collections.map((c) => convertToTodoCollection(c) as TodoCollection)
+    : undefined;
 
   return {
     id: dto.id,
@@ -22,6 +30,8 @@ export const convertToEvent = (dto: Partial<EventDTO>): Partial<Event> => {
     endTime: dto.end_time,
     place,
     type,
+    notes,
+    todoCollections,
   };
 };
 

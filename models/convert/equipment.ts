@@ -1,5 +1,8 @@
 import { Equipment, EquipmentDTO } from '../equipment';
+import { TodoCollection } from '../todo-collection';
+import { convertToEquipmentEvent } from './equipment-event';
 import { convertToEquipmentType } from './equipment-type';
+import { convertToTodoCollection } from './todo-collection';
 
 export const convertToEquipment = (dto: Partial<EquipmentDTO>): Partial<Equipment> => ({
   id: dto.id,
@@ -20,6 +23,9 @@ export const convertToEquipment = (dto: Partial<EquipmentDTO>): Partial<Equipmen
   insuranceContactPhoneNumber: dto.insurance_contact_phone_number,
   insuranceContactEmail: dto.insurance_contact_email,
   equipmentType: dto.equipment_types && convertToEquipmentType(dto.equipment_types),
+  equipmentEvents: dto.equipment_events && dto.equipment_events.map((e) => convertToEquipmentEvent(e)),
+  todoCollections:
+    dto.todo_collections && dto.todo_collections.map((c) => convertToTodoCollection(c) as TodoCollection),
 });
 
 export const convertToEquipmentDTO = (equipment: Equipment): EquipmentDTO => ({

@@ -161,7 +161,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     id: 1,
     name: 'Spring Inspection',
     description: 'Generally in good condition.',
-    equipment: EQUIPMENT[2],
+    equipmentRid: EQUIPMENT[2].id!,
     date: '2025-05-20',
     usage: null,
     cost: null,
@@ -170,7 +170,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
   {
     id: 2,
     name: '2025 Fall Oil Change',
-    equipment: EQUIPMENT[2],
+    equipmentRid: EQUIPMENT[2].id!,
     date: '2025-08-15',
     usage: 12834.3,
     cost: 123.43,
@@ -181,7 +181,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     id: 3,
     name: 'Spring Inspection',
     description: 'The brakes squeak a bit, but it does not seem to be a problem overall.',
-    equipment: EQUIPMENT[3],
+    equipmentRid: EQUIPMENT[3].id!,
     date: '2025-03-17',
     usage: 12.7,
     cost: null,
@@ -191,20 +191,17 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
 ];
 
 export const fetchAllEquipment = vi.fn().mockResolvedValue(EQUIPMENT);
-export const fetchEquipment = vi
-  .fn()
-  .mockImplementation((id: number) => Promise.resolve(EQUIPMENT.find((d) => d.id === id)));
+export const fetchEquipment = vi.fn().mockImplementation((id: number, full?: boolean) => {
+  const equipment = EQUIPMENT.find((e) => e.id === id);
+  return Promise.resolve(
+    equipment && (full ? { ...equipment, todoCollections: [], equipmentEvents: [] } : { ...equipment }),
+  );
+});
 export const fetchEquipmentTypes = vi.fn().mockResolvedValue(EQUIPMENT_TYPES);
-export const fetchTodoCollectionsForEquipment = vi.fn().mockResolvedValue([]);
 export const addEquipment = vi.fn();
 export const updateEquipment = vi.fn();
 export const deleteEquipment = vi.fn();
 export const canDeleteEquipment = vi.fn().mockResolvedValue(false);
-export const fetchEquipmentEvents = vi
-  .fn()
-  .mockImplementation((equipmentRid: number) =>
-    Promise.resolve(EQUIPMENT_EVENTS.filter((d) => d.equipment.id === equipmentRid)),
-  );
 export const fetchEquipmentEvent = vi
   .fn()
   .mockImplementation((id: number) => Promise.resolve(EQUIPMENT_EVENTS.find((d) => d.id === id)));

@@ -2,7 +2,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { EQUIPMENT } from '../../__mocks__/data';
-import { fetchEquipment, fetchEquipmentEvents, fetchTodoCollectionsForEquipment } from '../../data';
+import { fetchEquipment } from '../../data';
 import EquipmentPage from '../page';
 
 vi.mock('@/utils/supabase/auth');
@@ -20,17 +20,7 @@ describe('Equipment Page', () => {
 
     it('fetches the equipment', async () => {
       await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(2);
-    });
-
-    it('fetches the maintenance events for the equipment', async () => {
-      await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchEquipmentEvents).toHaveBeenCalledExactlyOnceWith(2);
-    });
-
-    it('fetches the todo collection for the equipment', async () => {
-      await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchTodoCollectionsForEquipment).toHaveBeenCalledExactlyOnceWith(2);
+      expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(2, true);
     });
 
     it('renders the page header', async () => {
@@ -75,7 +65,6 @@ describe('Equipment Page', () => {
     it('does not fetch any data', async () => {
       await EquipmentPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchEquipment).not.toHaveBeenCalled();
-      // expect(fetchTodoCollectionsForEvent).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {

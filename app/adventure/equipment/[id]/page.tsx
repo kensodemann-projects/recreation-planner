@@ -4,7 +4,7 @@ import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { fetchEquipment, fetchEquipmentEvents, fetchTodoCollectionsForEquipment } from '../data';
+import { fetchEquipment } from '../data';
 import EquipmentDetails from './equipment-details';
 
 const EquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
@@ -14,14 +14,11 @@ const EquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
 
   const params = await props.params;
   const id = +params.id;
-  const equipment = await fetchEquipment(id);
+  const equipment = await fetchEquipment(id, true);
 
   if (!equipment) {
     return <div>Failed to fetch the equipment</div>;
   }
-
-  const events = (await fetchEquipmentEvents(id)) || [];
-  const todoCollections = (await fetchTodoCollectionsForEquipment(id)) || [];
 
   return (
     <>
@@ -29,7 +26,7 @@ const EquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
         <TitleHeading>Equipment Details</TitleHeading>
       </PageHeader>
 
-      <EquipmentDetails equipment={equipment} equipmentEvents={events} todoCollections={todoCollections} />
+      <EquipmentDetails equipment={equipment} />
 
       <Link className="fixed top-4 right-4 link-secondary" href={`/adventure/equipment`}>
         <ArrowUturnLeftIcon className="w-6" />

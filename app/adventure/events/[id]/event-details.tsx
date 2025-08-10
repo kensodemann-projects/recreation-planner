@@ -10,11 +10,9 @@ import Notes from '../../notes/ui/notes';
 
 interface EventDetailsProps {
   event: Event;
-  notes: Note[];
-  todoCollections: TodoCollection[];
 }
 
-const EventDetails = ({ event, notes, todoCollections }: EventDetailsProps) => {
+const EventDetails = ({ event }: EventDetailsProps) => {
   const addressInformation =
     event.place.address &&
     (event.place.address.line1 ||
@@ -50,7 +48,7 @@ const EventDetails = ({ event, notes, todoCollections }: EventDetailsProps) => {
         <SectionHeader>
           <SubtitleHeading>Todos</SubtitleHeading>
         </SectionHeader>
-        <Todos collections={todoCollections} baseHref={`/adventure/events/${event.id}/todos`} />
+        <Todos collections={event.todoCollections || []} baseHref={`/adventure/events/${event.id}/todos`} />
         <Link href={`${event.id}/todos/create`}>
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
@@ -64,7 +62,7 @@ const EventDetails = ({ event, notes, todoCollections }: EventDetailsProps) => {
           <SubtitleHeading>Notes</SubtitleHeading>
         </SectionHeader>
 
-        <Notes notes={notes} />
+        <Notes notes={event.notes || []} />
 
         <Link href={`${event.id}/notes/create`}>
           <button className="btn btn-primary">

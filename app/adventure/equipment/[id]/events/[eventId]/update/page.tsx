@@ -1,4 +1,9 @@
-import { fetchEquipmentEvent, fetchEquipmentEventTypes, fetchUsageUnits } from '@/app/adventure/equipment/data';
+import {
+  fetchEquipment,
+  fetchEquipmentEvent,
+  fetchEquipmentEventTypes,
+  fetchUsageUnits,
+} from '@/app/adventure/equipment/data';
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
@@ -25,12 +30,13 @@ const UpdateEquipmentEventPage = async (props: { params: Promise<RouteParams> })
 
   const eventTypes = await fetchEquipmentEventTypes();
   const usageUnits = await fetchUsageUnits();
+  const equipment = await fetchEquipment(event.equipmentRid);
 
   return (
     <>
       <PageHeader>
         <TitleHeading>Update Maintenance Event</TitleHeading>
-        <SubtitleHeading>For: {event.equipment.name || ''}</SubtitleHeading>
+        <SubtitleHeading>For: {equipment?.name || ''}</SubtitleHeading>
       </PageHeader>
       <UpdateEquipmentEvent equipmentEvent={event} equipmentEventTypes={eventTypes} usageUnits={usageUnits} />
     </>

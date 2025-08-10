@@ -4,11 +4,15 @@ import EquipmentDetails from '../equipment-details';
 import { Equipment, EquipmentEvent, TodoCollection } from '@/models';
 import { EQUIPMENT, EQUIPMENT_EVENTS } from '../../__mocks__/data';
 
-const testEquipment: Equipment = EQUIPMENT.find((x) => x.name === 'My Truck')!;
-const minimalEquipment: Equipment = EQUIPMENT.find((x) => x.name === 'The bare minimum')!;
-const testEquipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipment.id === testEquipment.id);
-
-const testTodoCollections: TodoCollection[] = [];
+const truck: Equipment = EQUIPMENT.find((x) => x.name === 'My Truck')!;
+const equipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipmentRid === truck.id);
+const todoCollections: TodoCollection[] = [];
+const testEquipment = { ...truck, equipmentEvents, todoCollections };
+const minimalEquipment: Equipment = {
+  ...EQUIPMENT.find((x) => x.name === 'The bare minimum')!,
+  equipmentEvents: [],
+  todoCollections: [],
+};
 
 describe('EquipmentDetails', () => {
   afterEach(() => cleanup());
@@ -19,48 +23,24 @@ describe('EquipmentDetails', () => {
   });
 
   it('renders the name', () => {
-    render(
-      <EquipmentDetails
-        equipment={testEquipment}
-        equipmentEvents={testEquipmentEvents}
-        todoCollections={testTodoCollections}
-      />,
-    );
+    render(<EquipmentDetails equipment={testEquipment} />);
     expect(screen.getByRole('heading', { level: 2, name: testEquipment.name })).toBeDefined();
   });
 
   it('renders the description', () => {
-    render(
-      <EquipmentDetails
-        equipment={testEquipment}
-        equipmentEvents={testEquipmentEvents}
-        todoCollections={testTodoCollections}
-      />,
-    );
+    render(<EquipmentDetails equipment={testEquipment} />);
     expect(screen.getByText(testEquipment.description!)).toBeDefined();
   });
 
   describe('details section', () => {
     it('has a header', () => {
-      render(
-        <EquipmentDetails
-          equipment={testEquipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('details-section');
       expect(within(section).getByRole('heading', { level: 2, name: 'Details' })).toBeDefined();
     });
 
     it('renders the equipment type', () => {
-      render(
-        <EquipmentDetails
-          equipment={testEquipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('details-section');
       const element = within(section).getByText(testEquipment.equipmentType.name);
       expect(element).toBeDefined();
@@ -94,13 +74,7 @@ describe('EquipmentDetails', () => {
         if (overrideValue) {
           (eq as any)[field] = overrideValue;
         }
-        render(
-          <EquipmentDetails
-            equipment={eq}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={eq} />);
         const section = screen.getByTestId('details-section');
         const element = within(section).getByText(outputValue || (eq as any)[field]);
         expect(element).toBeDefined();
@@ -110,13 +84,7 @@ describe('EquipmentDetails', () => {
       it('is not rendered if the value is null', () => {
         const eq = { ...testEquipment };
         (eq as any)[field] = null;
-        render(
-          <EquipmentDetails
-            equipment={eq}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={eq} />);
         const section = screen.getByTestId('details-section');
         expect(within(section).queryByText(`${label}:`)).toBeNull();
       });
@@ -125,13 +93,7 @@ describe('EquipmentDetails', () => {
 
   describe('specification section', () => {
     it('is not rendered if there is no specifications data', () => {
-      render(
-        <EquipmentDetails
-          equipment={{ ...testEquipment, weight: null, length: null, capacity: null }}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={{ ...testEquipment, weight: null, length: null, capacity: null }} />);
       expect(screen.queryByTestId('specifications-section')).toBeNull();
     });
 
@@ -149,13 +111,7 @@ describe('EquipmentDetails', () => {
         equipment: { ...minimalEquipment, capacity: '1/2 ton total cargo' },
       },
     ])('is rendered when ' + '$name', ({ equipment }) => {
-      render(
-        <EquipmentDetails
-          equipment={equipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={equipment} />);
       const section = screen.getByTestId('specifications-section');
       expect(within(section).getByRole('heading', { level: 2, name: 'Specifications' })).toBeDefined();
     });
@@ -175,13 +131,7 @@ describe('EquipmentDetails', () => {
       },
     ])('$field', ({ field, label }) => {
       it('renders with a value', () => {
-        render(
-          <EquipmentDetails
-            equipment={testEquipment}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={testEquipment} />);
         const section = screen.getByTestId('specifications-section');
         const element = within(section).getByText((testEquipment as any)[field]);
         expect(element).toBeDefined();
@@ -191,13 +141,7 @@ describe('EquipmentDetails', () => {
       it('is not rendered if the value is null', () => {
         const eq = { ...testEquipment };
         (eq as any)[field] = null;
-        render(
-          <EquipmentDetails
-            equipment={eq}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={eq} />);
         const section = screen.getByTestId('specifications-section');
         expect(within(section).queryByText(`${label}:`)).toBeNull();
       });
@@ -216,8 +160,6 @@ describe('EquipmentDetails', () => {
             insuranceContactPhoneNumber: null,
             insuranceContactEmail: null,
           }}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
         />,
       );
       expect(screen.queryByTestId('insurance-section')).toBeNull();
@@ -245,13 +187,7 @@ describe('EquipmentDetails', () => {
         equipment: { ...minimalEquipment, insuranceContactEmail: 'robert.greenfield@state.farm.ins' },
       },
     ])('is rendered when ' + '$name', ({ equipment }) => {
-      render(
-        <EquipmentDetails
-          equipment={equipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={equipment} />);
       const section = screen.getByTestId('insurance-section');
       expect(within(section).getByRole('heading', { level: 2, name: 'Insurance Information' })).toBeDefined();
     });
@@ -279,13 +215,7 @@ describe('EquipmentDetails', () => {
       },
     ])('$field', ({ field, label }) => {
       it('renders with a value', () => {
-        render(
-          <EquipmentDetails
-            equipment={testEquipment}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={testEquipment} />);
         const section = screen.getByTestId('insurance-section');
         const element = within(section).getByText((testEquipment as any)[field]);
         expect(element).toBeDefined();
@@ -295,13 +225,7 @@ describe('EquipmentDetails', () => {
       it('is not rendered if the value is null', () => {
         const eq = { ...testEquipment };
         (eq as any)[field] = null;
-        render(
-          <EquipmentDetails
-            equipment={eq}
-            equipmentEvents={testEquipmentEvents}
-            todoCollections={testTodoCollections}
-          />,
-        );
+        render(<EquipmentDetails equipment={eq} />);
         const section = screen.getByTestId('insurance-section');
         expect(within(section).queryByText(`${label}:`)).toBeNull();
       });
@@ -310,25 +234,13 @@ describe('EquipmentDetails', () => {
 
   describe('maintenance events section', () => {
     it('renders a section header', () => {
-      render(
-        <EquipmentDetails
-          equipment={testEquipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('maintenance-events-section');
       expect(within(section).getByRole('heading', { level: 2, name: 'Maintenance Events' })).toBeDefined();
     });
 
     it('renders an add button', () => {
-      render(
-        <EquipmentDetails
-          equipment={testEquipment}
-          equipmentEvents={testEquipmentEvents}
-          todoCollections={testTodoCollections}
-        />,
-      );
+      render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('maintenance-events-section');
       expect(within(section).getByRole('button', { name: 'Add Event' })).toBeDefined();
     });

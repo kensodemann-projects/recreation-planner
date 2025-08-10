@@ -1,4 +1,4 @@
-import { Equipment, EquipmentDTO, EquipmentEvent, EquipmentEventDTO } from '@/models';
+import { EquipmentDTO, EquipmentEvent, EquipmentEventDTO } from '@/models';
 import { describe, expect, it } from 'vitest';
 import { convertToEquipmentEvent, convertToEquipmentEventDTO } from '../equipment-event';
 
@@ -70,26 +70,6 @@ describe('equipment event conversions', () => {
   });
 });
 
-const equipment: Omit<Equipment, 'equipmentType'> = {
-  id: 99403,
-  name: 'Planet Destroyer',
-  description: 'The Vogons should destroy the Earth using this.',
-  purchaseDate: '2025-03-28',
-  cost: 2954932.34,
-  manufacturer: 'Vogon Vehicles',
-  model: 'DST-X3',
-  identification: '1994-ff8ge-1234',
-  length: '7 Miles, 4 feet',
-  weight: '1.1 Million Tons (Roughly)',
-  capacity: 'A full crew',
-  licensePlateNumber: 'I<3DST',
-  insuranceCarrier: 'Contructors Insurance',
-  insurancePolicyNumber: '8849950-29934',
-  insuranceContactName: 'Bob',
-  insuranceContactPhoneNumber: '555-930-2994',
-  insuranceContactEmail: 'bob@conins.com',
-};
-
 const equipmentDTO: EquipmentDTO = {
   id: 99403,
   name: 'Planet Destroyer',
@@ -132,7 +112,6 @@ const conditionReportFetchDTO: EquipmentEventDTO = {
     name: 'Condition Report',
     description: 'Inspect the equipment and provide a report of its current condition based on this assessment.',
   },
-  equipment: equipmentDTO,
 };
 
 const conditionReport: EquipmentEvent = {
@@ -147,7 +126,7 @@ const conditionReport: EquipmentEvent = {
     name: 'Condition Report',
     description: 'Inspect the equipment and provide a report of its current condition based on this assessment.',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const repairDTO: EquipmentEventDTO = {
@@ -171,7 +150,6 @@ const repairFetchDTO: EquipmentEventDTO = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
-  equipment: equipmentDTO,
 };
 
 const repair: EquipmentEvent = {
@@ -186,7 +164,7 @@ const repair: EquipmentEvent = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const usageDTO: EquipmentEventDTO = {
@@ -215,7 +193,6 @@ const usageFetchDTO: EquipmentEventDTO = {
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Miles',
   },
-  equipment: equipmentDTO,
 };
 
 const usage: EquipmentEvent = {
@@ -234,7 +211,7 @@ const usage: EquipmentEvent = {
     id: 1,
     name: 'Miles',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const maintenanceDTO: EquipmentEventDTO = {
@@ -263,7 +240,6 @@ const maintenanceFetchDTO: EquipmentEventDTO = {
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Miles',
   },
-  equipment: equipmentDTO,
 };
 
 const maintenance: EquipmentEvent = {
@@ -282,7 +258,7 @@ const maintenance: EquipmentEvent = {
     name: 'Periodic Maintenance',
     description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const untrimmed: EquipmentEvent = {
@@ -297,7 +273,7 @@ const untrimmed: EquipmentEvent = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const trimmedDTO: EquipmentEventDTO = {
@@ -323,7 +299,7 @@ const noDescription: EquipmentEvent = {
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
   },
-  equipment,
+  equipmentRid: 99403,
 };
 
 const noDescriptionDTO: EquipmentEventDTO = {

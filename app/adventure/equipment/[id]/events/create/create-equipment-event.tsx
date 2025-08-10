@@ -19,7 +19,7 @@ const CreateEquipmentEvent = ({ equipment, equipmentEventTypes, usageUnits }: Cr
       <EquipmentEventEditor
         equipmentEventTypes={equipmentEventTypes}
         usageUnits={usageUnits}
-        onConfirm={(evt) => createConfirmed({ ...evt, equipment })}
+        onConfirm={(evt) => createConfirmed({ ...evt, equipmentRid: equipment.id! })}
         onCancel={() => router.back()}
       />
     </>

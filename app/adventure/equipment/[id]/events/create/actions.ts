@@ -6,7 +6,7 @@ import { addEquipmentEvent } from '../../../data';
 
 export const createConfirmed = async (equipmentEvent: EquipmentEvent) => {
   if (await addEquipmentEvent(equipmentEvent)) {
-    redirect(`/adventure/equipment/${equipmentEvent.equipment.id}`);
+    redirect(`/adventure/equipment/${equipmentEvent.equipmentRid}`);
   } else {
     redirect('/error');
   }

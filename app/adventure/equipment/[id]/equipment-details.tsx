@@ -10,8 +10,6 @@ import Todos from '../../todos/ui/todos';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;
-  equipmentEvents: EquipmentEvent[];
-  todoCollections: TodoCollection[];
 }
 
 const detailsSection = (equipment: Equipment) => (
@@ -61,7 +59,7 @@ const insuranceSection = (equipment: Equipment) =>
     </section>
   );
 
-const EquipmentDetails = ({ equipment, equipmentEvents, todoCollections }: EquipmentDetailsProps) => {
+const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
   return (
     <>
       <section>
@@ -82,7 +80,7 @@ const EquipmentDetails = ({ equipment, equipmentEvents, todoCollections }: Equip
           <SubtitleHeading>Maintenance Events</SubtitleHeading>
         </SectionHeader>
 
-        <EquipmentEventsWrapper equipmentEvents={equipmentEvents} />
+        <EquipmentEventsWrapper equipmentEvents={equipment.equipmentEvents!} />
 
         <Link href={`${equipment.id}/events/create`}>
           <button className="btn btn-primary">
@@ -96,7 +94,7 @@ const EquipmentDetails = ({ equipment, equipmentEvents, todoCollections }: Equip
         <SectionHeader>
           <SubtitleHeading>Todos</SubtitleHeading>
         </SectionHeader>
-        <Todos collections={todoCollections} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
+        <Todos collections={equipment.todoCollections!} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
         <Link href={`${equipment.id}/todos/create`}>
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
