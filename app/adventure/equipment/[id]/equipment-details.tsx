@@ -7,6 +7,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import EquipmentEventsWrapper from './equipment-events-wrapper';
 import Todos from '../../todos/ui/todos';
+import Notes from '../../notes/ui/notes';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;
@@ -99,6 +100,21 @@ const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
           <button className="btn btn-primary">
             <PlusCircleIcon className="w-6" />
             Add Todo Collection
+          </button>
+        </Link>
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Notes</SubtitleHeading>
+        </SectionHeader>
+
+        <Notes notes={equipment.notes || []} />
+
+        <Link href={`${equipment.id}/notes/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Note
           </button>
         </Link>
       </section>

@@ -245,4 +245,16 @@ describe('EquipmentDetails', () => {
       expect(within(section).getByRole('button', { name: 'Add Event' })).toBeDefined();
     });
   });
+
+  describe('notes section', () => {
+    it('renders the section header', () => {
+      render(<EquipmentDetails equipment={testEquipment} />);
+      expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
+    });
+
+    it('renders the add button', () => {
+      render(<EquipmentDetails equipment={testEquipment} />);
+      expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();
+    });
+  });
 });
