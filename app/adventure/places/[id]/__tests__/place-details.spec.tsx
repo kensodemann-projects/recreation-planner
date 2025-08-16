@@ -9,6 +9,7 @@ const testPlace: Place = {
   description: 'A very large state park named after a WWII flying ace.',
   address: {
     line1: '26313 Burlington Rd.',
+    line2: null,
     city: 'Kansasville',
     state: 'WI',
     postal: '53139',
@@ -99,6 +100,18 @@ describe('Place', () => {
       const { website, ...place } = testPlace;
       render(<PlaceDetails place={place} />);
       expect(screen.queryByText('Website:')).toBeNull();
+    });
+  });
+
+  describe('notes section', () => {
+    it('renders the section header', () => {
+      render(<PlaceDetails place={testPlace} />);
+      expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
+    });
+
+    it('renders the add button', () => {
+      render(<PlaceDetails place={testPlace} />);
+      expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();
     });
   });
 });

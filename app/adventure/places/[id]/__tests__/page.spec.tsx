@@ -21,7 +21,7 @@ describe('Place Page', () => {
 
     it('fetches the place', async () => {
       await PlacePage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchPlace).toHaveBeenCalledExactlyOnceWith(2);
+      expect(fetchPlace).toHaveBeenCalledExactlyOnceWith(2, true);
     });
 
     it('renders the page header', async () => {

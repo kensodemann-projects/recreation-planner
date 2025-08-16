@@ -4,7 +4,7 @@ import { Equipment } from '@/models';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import CreateNoteForEventPage from '../page';
+import CreateNoteForEquipmentPage from '../page';
 
 vi.mock('@/app/adventure/equipment/data');
 vi.mock('@/utils/supabase/auth');
@@ -26,34 +26,34 @@ describe('Create Notes Page', () => {
     });
 
     it('fetches the equipment', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(1);
     });
 
-    it('renders the event fetch failure message if the event fetch fails', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '7342' }) });
+    it('renders the equipment fetch failure message if the equipment fetch fails', async () => {
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
       render(jsx);
-      expect(screen.getByText('Failed to fetch the event')).toBeDefined();
+      expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
     });
 
     it('renders the create note component', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'Add a New Note' })).toBeDefined();
       expect(screen.getByRole('heading', { level: 2, name: `For Equipment: ${testEquipment.name}` })).toBeDefined();
     });
 
     it('does not render the must be logged in component', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
 
-    it('does not render event fetch failure message', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+    it('does not render equipment fetch failure message', async () => {
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
-      expect(screen.queryByText('Failed to fetch the event')).toBeNull();
+      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
     });
   });
 
@@ -62,28 +62,28 @@ describe('Create Notes Page', () => {
       (isNotLoggedIn as Mock).mockResolvedValue(true);
     });
 
-    it('does not fetche the event', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+    it('does not fetch the equipment', async () => {
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(fetchEquipment).not.toHaveBeenCalled();
     });
 
     it('renders the must be logged in component', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
     });
 
     it('does not render the create note component', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '1' }) });
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Add a New Note' })).toBeNull();
     });
 
-    it('does not render event fetch failure message', async () => {
-      const jsx = await CreateNoteForEventPage({ params: Promise.resolve({ id: '7342' }) });
+    it('does not render equipment fetch failure message', async () => {
+      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
       render(jsx);
-      expect(screen.queryByText('Failed to fetch the event')).toBeNull();
+      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
     });
   });
 });

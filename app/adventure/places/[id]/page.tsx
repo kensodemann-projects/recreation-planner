@@ -13,7 +13,7 @@ const PlacePage = async (props: { params: Promise<{ id: string }> }) => {
   }
 
   const params = await props.params;
-  const place = await fetchPlace(+params.id);
+  const place = await fetchPlace(+params.id, true);
 
   if (!place) {
     return <div>Failed to fetch the place</div>;

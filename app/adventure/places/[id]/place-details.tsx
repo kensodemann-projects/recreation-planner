@@ -3,6 +3,9 @@ import LabeledField from '@/app/ui/labeled-field';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Place as PlaceModel } from '@/models';
+import Notes from '../../notes/ui/notes';
+import Link from 'next/link';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 const Place = ({ place }: { place: PlaceModel }) => {
   const addressInformation = place.address ? (
@@ -38,6 +41,21 @@ const Place = ({ place }: { place: PlaceModel }) => {
             </a>
           </LabeledField>
         )}
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Notes</SubtitleHeading>
+        </SectionHeader>
+
+        <Notes notes={place.notes || []} />
+
+        <Link href={`${place.id}/notes/create`}>
+          <button className="btn btn-primary">
+            <PlusCircleIcon className="w-6" />
+            Add Note
+          </button>
+        </Link>
       </section>
     </>
   );
