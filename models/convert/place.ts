@@ -1,6 +1,7 @@
 import { Address } from '../address';
 import { Place, PlaceDTO } from '../place';
 import { PlaceType } from '../place-type';
+import { convertToNote } from './note';
 import { convertToPlaceType } from './place-type';
 
 export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
@@ -24,6 +25,7 @@ export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
     website: dto.website,
     address,
     type,
+    notes: dto.notes && dto.notes.map((n) => convertToNote(n)),
   };
 };
 

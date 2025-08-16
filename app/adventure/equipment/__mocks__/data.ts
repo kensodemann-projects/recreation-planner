@@ -194,7 +194,7 @@ export const fetchAllEquipment = vi.fn().mockResolvedValue(EQUIPMENT);
 export const fetchEquipment = vi.fn().mockImplementation((id: number, full?: boolean) => {
   const equipment = EQUIPMENT.find((e) => e.id === id);
   return Promise.resolve(
-    equipment && (full ? { ...equipment, todoCollections: [], equipmentEvents: [] } : { ...equipment }),
+    equipment && (full ? { ...equipment, todoCollections: [], notes: [], equipmentEvents: [] } : { ...equipment }),
   );
 });
 export const fetchEquipmentTypes = vi.fn().mockResolvedValue(EQUIPMENT_TYPES);

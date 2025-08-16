@@ -30,6 +30,7 @@ export const PLACES: Array<Place> = [
     name: 'Burnet State Park',
     address: {
       line1: '23125 255th St.',
+      line2: null,
       city: 'Cornell',
       state: 'WI',
       postal: '54732',
@@ -42,8 +43,10 @@ export const PLACES: Array<Place> = [
     name: 'Indianapolis Motor Speedway',
     address: {
       line1: '4790 West 16th Street',
+      line2: null,
       city: 'Speedway',
       state: 'IN',
+      postal: null,
     },
     type: PLACE_TYPES[1],
   },
@@ -52,6 +55,7 @@ export const PLACES: Array<Place> = [
     name: 'Richard Bong State Park',
     address: {
       line1: '26313 Burlington Rd.',
+      line2: null,
       city: 'Kansasville',
       state: 'WI',
       postal: '53139',
@@ -64,6 +68,7 @@ export const PLACES: Array<Place> = [
     name: 'LaBahn Arena',
     address: {
       line1: '105 East Campus Mall',
+      line2: null,
       city: 'Madison',
       state: 'WI',
       postal: '53715',
@@ -73,7 +78,10 @@ export const PLACES: Array<Place> = [
 ];
 
 export const fetchPlaces = vi.fn().mockResolvedValue(PLACES);
-export const fetchPlace = vi.fn().mockImplementation((id: number) => Promise.resolve(PLACES.find((d) => d.id === id)));
+export const fetchPlace = vi.fn().mockImplementation((id: number, full?: boolean) => {
+  const place = PLACES.find((d) => d.id === id);
+  return Promise.resolve(place && (full ? { ...place, notes: [] } : { ...place }));
+});
 export const addPlace = vi.fn();
 export const updatePlace = vi.fn();
 export const deletePlace = vi.fn();

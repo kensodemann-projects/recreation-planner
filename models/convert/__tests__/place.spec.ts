@@ -1,9 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { convertToPlace, convertToPlaceDTO } from '../place';
+import { Place, PlaceDTO } from '@/models/place';
 
 describe('place convertions', () => {
   describe('to place', () => {
-    const testCases = [
+    const testCases: {
+      name: string;
+      input: PlaceDTO | Pick<PlaceDTO, 'id' | 'name' | 'description'>;
+      expected: Place | Pick<Place, 'id' | 'name' | 'description'>;
+    }[] = [
       {
         name: 'handles a "selectable item" conversion',
         input: { id: 42, name: 'Earth' },
@@ -74,6 +79,32 @@ describe('place convertions', () => {
           place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
           phone_number: '(262) 339-9943',
           website: 'https://foo.bar',
+          notes: [
+            {
+              id: 84,
+              name: 'Mostly harmless, but only mostly',
+              description: 'They are very good at harming themselves if you ask me.',
+              equipment_rid: null,
+              event_rid: null,
+              place_rid: 42,
+            },
+            {
+              id: 101,
+              name: 'The end',
+              description: 'It is the end of the world as we know it, and I feel fine.',
+              equipment_rid: null,
+              event_rid: null,
+              place_rid: 42,
+            },
+            {
+              id: 84,
+              name: 'Pointless',
+              description: 'There is really no point in saving this place, though the fjords are very nice.',
+              equipment_rid: null,
+              event_rid: null,
+              place_rid: 42,
+            },
+          ],
         },
         expected: {
           id: 42,
@@ -93,6 +124,32 @@ describe('place convertions', () => {
           },
           phoneNumber: '(262) 339-9943',
           website: 'https://foo.bar',
+          notes: [
+            {
+              id: 84,
+              name: 'Mostly harmless, but only mostly',
+              description: 'They are very good at harming themselves if you ask me.',
+              equipmentRid: null,
+              eventRid: null,
+              placeRid: 42,
+            },
+            {
+              id: 101,
+              name: 'The end',
+              description: 'It is the end of the world as we know it, and I feel fine.',
+              equipmentRid: null,
+              eventRid: null,
+              placeRid: 42,
+            },
+            {
+              id: 84,
+              name: 'Pointless',
+              description: 'There is really no point in saving this place, though the fjords are very nice.',
+              equipmentRid: null,
+              eventRid: null,
+              placeRid: 42,
+            },
+          ],
         },
       },
     ];
@@ -101,7 +158,7 @@ describe('place convertions', () => {
   });
 
   describe('to DTO', () => {
-    const testCases = [
+    const testCases: { name: string; input: Place; expected: PlaceDTO }[] = [
       {
         name: 'converts a full Place for CRUD',
         input: {

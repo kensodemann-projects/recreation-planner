@@ -9,9 +9,19 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 const placesTable = 'places';
 const selectColumns = '*, place_types!inner(*)';
+const childTableColumns = ', notes(*)';
 
 const placeQuery = (supabase: SupabaseClient, id?: number): any => {
   const query = supabase.from(placesTable).select(selectColumns);
+  if (id) {
+    return query.eq('id', id).single();
+  } else {
+    return query.order('name');
+  }
+};
+
+const fullPlaceQuery = (supabase: SupabaseClient, id?: number): any => {
+  const query = supabase.from(placesTable).select(selectColumns + childTableColumns);
   if (id) {
     return query.eq('id', id).single();
   } else {
@@ -50,13 +60,13 @@ export const fetchPlaces = async (): Promise<Place[]> => {
   return (data || []).map((p) => convertToPlace(p) as Place);
 };
 
-export const fetchPlace = async (id: number): Promise<Place | null> => {
+export const fetchPlace = async (id: number, full?: boolean): Promise<Place | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = placeQuery(supabase, id);
+  const query = full ? fullPlaceQuery(supabase, id) : placeQuery(supabase, id);
   const data = await executeQuery<PlaceDTO>(query);
   return data ? (convertToPlace(data) as Place) : null;
 };

@@ -1,5 +1,6 @@
 import { Address } from './address';
 import { CommonData, CommonDataDTO } from './common-data';
+import { Note, NoteDTO } from './note';
 import { PlaceType, PlaceTypeDTO } from './place-type';
 
 export interface PlaceDTO extends CommonDataDTO {
@@ -12,6 +13,7 @@ export interface PlaceDTO extends CommonDataDTO {
   website: string | null;
   place_type_rid: number;
   place_types?: PlaceTypeDTO;
+  notes?: NoteDTO[];
 }
 
 export interface Place extends CommonData {
@@ -19,6 +21,7 @@ export interface Place extends CommonData {
   phoneNumber?: string | null;
   website?: string | null;
   type: PlaceType;
+  notes?: Note[];
 }
 
 export type SelectablePlace = Pick<Place, 'id' | 'name'>;

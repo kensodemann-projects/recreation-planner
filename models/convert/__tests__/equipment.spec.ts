@@ -134,6 +134,24 @@ describe('equipment convertions', () => {
               ],
             },
           ],
+          notes: [
+            {
+              id: 14,
+              name: 'Hope springs eternal',
+              description: 'If all goes well, the Vogons will destroy us. We can only hope.',
+              equipment_rid: 42,
+              event_rid: null,
+              place_rid: null,
+            },
+            {
+              id: 27,
+              name: 'Bring a towel',
+              description: 'Be sure to bring a towel as we leave Earth.',
+              equipment_rid: 42,
+              event_rid: null,
+              place_rid: null,
+            },
+          ],
           equipment_events: [
             {
               id: 1,
@@ -254,6 +272,24 @@ describe('equipment convertions', () => {
                 description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
               },
               usageUnits: { id: 2, name: 'Hours' },
+            },
+          ],
+          notes: [
+            {
+              id: 14,
+              name: 'Hope springs eternal',
+              description: 'If all goes well, the Vogons will destroy us. We can only hope.',
+              equipmentRid: 42,
+              eventRid: null,
+              placeRid: null,
+            },
+            {
+              id: 27,
+              name: 'Bring a towel',
+              description: 'Be sure to bring a towel as we leave Earth.',
+              equipmentRid: 42,
+              eventRid: null,
+              placeRid: null,
             },
           ],
           todoCollections: [
