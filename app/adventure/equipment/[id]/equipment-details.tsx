@@ -109,7 +109,7 @@ const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
           <SubtitleHeading>Notes</SubtitleHeading>
         </SectionHeader>
 
-        <Notes notes={equipment.notes || []} />
+        <Notes notes={equipment.notes || []} baseHref={`/adventure/equipment/${equipment.id}/notes`} />
 
         <Link href={`${equipment.id}/notes/create`}>
           <button className="btn btn-primary">

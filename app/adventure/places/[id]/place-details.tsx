@@ -48,7 +48,7 @@ const Place = ({ place }: { place: PlaceModel }) => {
           <SubtitleHeading>Notes</SubtitleHeading>
         </SectionHeader>
 
-        <Notes notes={place.notes || []} />
+        <Notes notes={place.notes || []} baseHref={`/adventure/places/${place.id}/notes`} />
 
         <Link href={`${place.id}/notes/create`}>
           <button className="btn btn-primary">

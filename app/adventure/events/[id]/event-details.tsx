@@ -62,7 +62,7 @@ const EventDetails = ({ event }: EventDetailsProps) => {
           <SubtitleHeading>Notes</SubtitleHeading>
         </SectionHeader>
 
-        <Notes notes={event.notes || []} />
+        <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
 
         <Link href={`${event.id}/notes/create`}>
           <button className="btn btn-primary">
