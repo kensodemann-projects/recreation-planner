@@ -64,7 +64,7 @@ describe('Update Equipment Page', () => {
       expect(fetchEquipment).not.toHaveBeenCalled();
     });
 
-    it('does not fetche the equipment types', async () => {
+    it('does not fetch the equipment types', async () => {
       await UpdateEquipmentPage({ params: Promise.resolve({ id: '2' }) });
       expect(fetchEquipmentTypes).not.toHaveBeenCalled();
     });

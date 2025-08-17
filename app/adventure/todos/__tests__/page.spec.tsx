@@ -52,7 +52,7 @@ describe('Todos Page', () => {
       expect(screen.queryByRole('heading', { level: 1, name: 'Todos' })).toBeNull();
     });
 
-    it('does not fetche the open TODO collections', async () => {
+    it('does not fetch the open TODO collections', async () => {
       await TodosPage();
       expect(fetchTodoCollections).not.toHaveBeenCalled();
     });

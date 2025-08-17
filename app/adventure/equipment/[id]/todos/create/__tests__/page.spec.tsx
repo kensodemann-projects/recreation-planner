@@ -44,7 +44,7 @@ describe('Create Todo Collection Page', () => {
       (isNotLoggedIn as Mock).mockResolvedValue(true);
     });
 
-    it('does not fetche the equipment', async () => {
+    it('does not fetch the equipment', async () => {
       const jsx = await CreateTodoCollectionForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
       render(jsx);
       expect(fetchEquipment).not.toHaveBeenCalled();

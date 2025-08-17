@@ -62,7 +62,7 @@ describe('Create Notes Page', () => {
       (isNotLoggedIn as Mock).mockResolvedValue(true);
     });
 
-    it('does not fetche the event', async () => {
+    it('does not fetch the place', async () => {
       const jsx = await CreateNoteForPlacePage({ params: Promise.resolve({ id: '1' }) });
       render(jsx);
       expect(fetchPlace).not.toHaveBeenCalled();
