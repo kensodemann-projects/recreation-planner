@@ -1,9 +1,9 @@
 'use client';
 
+import { Equipment, EquipmentEventType, UsageUnits } from '@/models';
 import { useRouter } from 'next/navigation';
 import EquipmentEventEditor from '../ui/equipment-event-editor';
 import { createConfirmed } from './actions';
-import { Equipment, EquipmentEventType, EquipmentType, UsageUnits } from '@/models';
 
 type CreateEquipmentEventProperties = {
   equipment: Equipment;
