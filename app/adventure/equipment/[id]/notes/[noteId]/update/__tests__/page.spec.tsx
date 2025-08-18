@@ -106,7 +106,7 @@ describe('equipment notes update page', () => {
     it('does not render the page headers', async () => {
       const jsx = await UpdateNotePage({ params: Promise.resolve({ id: '2', noteId }) });
       render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'Update Maintenance Event' })).toBeNull();
+      expect(screen.queryByRole('heading', { level: 1, name: 'Update Note' })).toBeNull();
     });
 
     it('does not renders a fetch failure message', async () => {
