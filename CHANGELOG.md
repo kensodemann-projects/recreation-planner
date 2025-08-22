@@ -1,5 +1,14 @@
 # recreation-planner
 
+## 0.4.0
+
+### Minor Changes
+
+- add notes to equpiment, events, and places
+- 0fb5d7a: Add tracking of maintenance events for equipment.
+- add todo collections
+- fb805f9: Add equipment tracking
+
 ## 0.3.0
 
 ### Minor Changes
