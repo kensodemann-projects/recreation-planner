@@ -3,8 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import PageHeader from './ui/page-header';
 import TitleHeading from './ui/title-heading';
+import { isNotLoggedIn } from '@/utils/supabase/auth';
 
-const LandingPage = () => {
+const LandingPage = async () => {
+  const needsLogin = await isNotLoggedIn();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-top p-6 gap-8">
       <PageHeader>
@@ -33,11 +36,11 @@ const LandingPage = () => {
           alt="A generic IndyCar on the track"
         />
       </div>
-      <Link href="/login" className="btn btn-primary mt-16 lg:mt-32">
-        Login
+      <Link href={needsLogin ? '/login' : '/adventure'} className="btn btn-primary mt-16 lg:mt-32">
+        {needsLogin ? 'Login' : 'Start Your Adventures'}
         <ArrowRightIcon className="w-6" />
       </Link>
-      <p>Log in to start planning your next adventure</p>
+      <p>{needsLogin ? 'Log in to start planning your next adventure' : 'Your adventures await'}</p>
     </main>
   );
 };

@@ -8,9 +8,8 @@ vi.mock('@/utils/supabase/auth');
 vi.mock('../data');
 
 describe('Todos Page', () => {
-  beforeEach(() => vi.clearAllMocks());
-
   afterEach(() => cleanup());
+  beforeEach(() => vi.clearAllMocks());
 
   describe('when logged in', () => {
     beforeEach(() => {
