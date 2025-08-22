@@ -11,13 +11,16 @@ const selectColumns = '*, places!inner(*), event_types!inner(*)';
 const childTableColumns = ', notes(*), todo_collections(*, todo_items(*))';
 const eventsTable = 'events';
 
-const upcomingEventsQuery = (supabase: SupabaseClient, dt: string): any => {
-  return supabase
+const upcomingEventsQuery = (supabase: SupabaseClient, startDate: string, endDate?: string): any => {
+  let query = supabase
     .from(eventsTable)
     .select(selectColumns)
-    .or(`end_date.gte."${dt}",and(end_date.is.null,begin_date.gte."${dt}")`)
-    .order('begin_date')
-    .order('begin_time', { nullsFirst: true });
+    .or(`end_date.gte."${startDate}",and(end_date.is.null,begin_date.gte."${startDate}")`);
+  if (endDate) {
+    query = query.or(`end_date.lte."${endDate}",and(end_date.is.null,begin_date.lte."${endDate}")`);
+  }
+
+  return query.order('begin_date').order('begin_time', { nullsFirst: true });
 };
 
 const priorEventsQuery = (supabase: SupabaseClient, dt: string): any => {
@@ -62,13 +65,13 @@ const selectablePlacesQuery = (supabase: SupabaseClient): any => {
   return supabase.from('places').select('id, name').order('name');
 };
 
-export const fetchUpcomingEvents = async (dt: string): Promise<Event[]> => {
+export const fetchUpcomingEvents = async (startDate: string, endDate?: string): Promise<Event[]> => {
   if (await isNotLoggedIn()) {
     return [];
   }
 
   const supabase = createClient();
-  const query = upcomingEventsQuery(supabase, dt);
+  const query = upcomingEventsQuery(supabase, startDate, endDate);
   const data = await executeQuery<EventDTO[]>(query);
   return (data || []).map((p) => convertToEvent(p) as Event);
 };

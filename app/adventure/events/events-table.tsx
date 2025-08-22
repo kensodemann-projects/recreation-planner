@@ -19,17 +19,17 @@ const EventsTable = ({ className, events }: EventsListProps) => {
         {events.map((event) => (
           <tr key={event.id}>
             <th>
-              <Link href={`events/${event.id}`}>
+              <Link href={`/adventure/events/${event.id}`}>
                 {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
               </Link>
             </th>
             <td>
-              <Link href={`events/${event.id}`}>{event.name}</Link>
+              <Link href={`/adventure/events/${event.id}`}>{event.name}</Link>
             </td>
             <td>{event.place.name}</td>
             <td>{event.type.name}</td>
             <td>
-              <EntityDropdownMenu href={`events/${event.id}`} />
+              <EntityDropdownMenu href={`/adventure/events/${event.id}`} />
             </td>
           </tr>
         ))}
