@@ -5,7 +5,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { canDeleteTodoCollection, fetchTodoCollection } from '../../data';
 import DeleteTodoCollection from './delete-todo-collection';
 
-const RemoveTodoCollectionPage = async (props: { params: Promise<{ id: string }> }) => {
+const DeleteTodoCollectionPage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -29,4 +29,4 @@ const RemoveTodoCollectionPage = async (props: { params: Promise<{ id: string }>
   );
 };
 
-export default RemoveTodoCollectionPage;
+export default DeleteTodoCollectionPage;

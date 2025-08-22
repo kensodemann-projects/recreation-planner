@@ -5,7 +5,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { canDeletePlace, fetchPlace } from '../../data';
 import DeletePlace from './delete-place';
 
-const RemovePlacePage = async (props: { params: Promise<{ id: string }> }) => {
+const DeletePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -29,4 +29,4 @@ const RemovePlacePage = async (props: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default RemovePlacePage;
+export default DeletePlacePage;

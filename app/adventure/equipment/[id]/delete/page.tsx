@@ -5,7 +5,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { canDeleteEquipment, fetchEquipment } from '../../data';
 import DeleteEquipment from './delete-equipment';
 
-const RemoveEquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
+const DeleteEquipmentPage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -29,4 +29,4 @@ const RemoveEquipmentPage = async (props: { params: Promise<{ id: string }> }) =
   );
 };
 
-export default RemoveEquipmentPage;
+export default DeleteEquipmentPage;

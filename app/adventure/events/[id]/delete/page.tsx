@@ -5,7 +5,7 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { canDeleteEvent, fetchEvent } from '../../data';
 import DeleteEvent from './delete-event';
 
-const RemoveEventPage = async (props: { params: Promise<{ id: string }> }) => {
+const DeleteEventPage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -29,4 +29,4 @@ const RemoveEventPage = async (props: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default RemoveEventPage;
+export default DeleteEventPage;

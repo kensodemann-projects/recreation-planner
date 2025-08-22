@@ -5,7 +5,7 @@ import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import DeleteTodoCollection from './delete-todo-collection';
 
-const RemoveTodoCollectionPage = async (props: { params: Promise<{ id: string; collectionId: string }> }) => {
+const DeleteTodoCollectionPage = async (props: { params: Promise<{ id: string; collectionId: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -29,4 +29,4 @@ const RemoveTodoCollectionPage = async (props: { params: Promise<{ id: string; c
   );
 };
 
-export default RemoveTodoCollectionPage;
+export default DeleteTodoCollectionPage;
