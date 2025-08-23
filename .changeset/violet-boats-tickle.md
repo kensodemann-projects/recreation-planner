@@ -2,4 +2,4 @@
 'recreation-planner': minor
 ---
 
-display current events on the dashboard
+Display current events on the dashboard.

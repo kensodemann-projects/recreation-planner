@@ -73,8 +73,8 @@ export const EVENTS: Array<Event> = [
     beginTime: '18:30',
     endDate: '2025-09-30',
     endTime: '22:30',
-    name: "Women's Hockey Tournament",
-    description: 'A three day long tournament of women playing hockey',
+    name: "Men's Hockey Tournament",
+    description: 'A three day long tournament of men playing hockey',
     place: PLACES[3],
     type: EVENT_TYPES[1],
   },
@@ -82,6 +82,7 @@ export const EVENTS: Array<Event> = [
 
 export const fetchPriorEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchUpcomingEvents = vi.fn().mockResolvedValue(EVENTS);
+export const fetchLatestEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchEvent = vi.fn().mockImplementation((id: number, full: boolean = false) => {
   const event = EVENTS.find((x) => x.id === id);
   return Promise.resolve(event && (full ? { ...event, notes: [], todoCollections: [] } : { ...event }));

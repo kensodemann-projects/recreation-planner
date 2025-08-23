@@ -6,20 +6,39 @@ import EventsList from '@/app/adventure/events/events-list';
 
 interface DashboardProps {
   currentEvents: Event[];
+  latestEvents: Event[];
 }
 
-const Dashboard = ({ currentEvents }: DashboardProps) => {
+const Dashboard = ({ currentEvents, latestEvents }: DashboardProps) => {
   return (
     <>
-      {currentEvents.length ? (
-        <section>
-          <SectionHeader>
-            <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
-          </SectionHeader>
-          <EventsTable className="hidden md:table" events={currentEvents} callingPage="Home" />
-          <EventsList className="block md:hidden" events={currentEvents} callingPage="Home" />
-        </section>
-      ) : undefined}
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Upcoming Events</SubtitleHeading>
+        </SectionHeader>
+        {currentEvents.length ? (
+          <>
+            <EventsTable className="hidden md:table" events={currentEvents} callingPage="Home" />
+            <EventsList className="block md:hidden" events={currentEvents} callingPage="Home" />
+          </>
+        ) : (
+          <div>You have no upcoming events.</div>
+        )}
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Most Recent Events</SubtitleHeading>
+        </SectionHeader>
+        {latestEvents.length ? (
+          <>
+            <EventsTable className="hidden md:table" events={latestEvents} callingPage="Home" />
+            <EventsList className="block md:hidden" events={latestEvents} callingPage="Home" />
+          </>
+        ) : (
+          <div>You have no events.</div>
+        )}
+      </section>
     </>
   );
 };

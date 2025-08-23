@@ -3,6 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import HomePage from '../page';
 import { fetchUpcomingEvents } from '@/app/adventure/events/data';
+import { fetchLatestEvents } from '../events/__mocks__/data';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('@/app/adventure/events/data');
@@ -27,6 +28,12 @@ describe('Adventures Home Page', () => {
       vi.setSystemTime(new Date(2024, 8, 3));
       await HomePage();
       expect(fetchUpcomingEvents).toHaveBeenCalledExactlyOnceWith('2024-09-01', '2024-09-28');
+    });
+
+    it('fetchs the latest three created events', async () => {
+      vi.setSystemTime(new Date(2024, 8, 3));
+      await HomePage();
+      expect(fetchLatestEvents).toHaveBeenCalledExactlyOnceWith(3);
     });
 
     it('renders the dashboard component', async () => {
