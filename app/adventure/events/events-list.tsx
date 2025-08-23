@@ -3,12 +3,12 @@ import { formatDateRange } from '@/utils/formatters';
 import Link from 'next/link';
 import { EventsListProps } from './events-list-props';
 
-const EventsList = ({ className, events }: EventsListProps) => {
+const EventsList = ({ callingPage, className, events }: EventsListProps) => {
   return (
     <ul className={`list-none ${className}`}>
       {events.map((event) => (
         <li key={event.id} className="py-2 border-solid first:border-t border-b border-primary flex">
-          <Link className="grow" href={`/adventure/events/${event.id}`}>
+          <Link className="grow" href={`/adventure/events/${event.id}?callingPage=${callingPage}`}>
             <div className="font-bold">
               {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
             </div>
@@ -18,7 +18,7 @@ const EventsList = ({ className, events }: EventsListProps) => {
             <div>{event.place.name}</div>
           </Link>
           <div className="self-center">
-            <EntityDropdownMenu href={`/adventure/events/${event.id}`} />
+            <EntityDropdownMenu href={`/adventure/events/${event.id}`} callingPage={callingPage} />
           </div>
         </li>
       ))}

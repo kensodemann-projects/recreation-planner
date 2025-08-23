@@ -3,7 +3,7 @@ import { formatDateRange } from '@/utils/formatters';
 import Link from 'next/link';
 import { EventsListProps } from './events-list-props';
 
-const EventsTable = ({ className, events }: EventsListProps) => {
+const EventsTable = ({ callingPage, className, events }: EventsListProps) => {
   return (
     <table className={`table-zebra ${className || ''}`}>
       <thead>
@@ -19,17 +19,17 @@ const EventsTable = ({ className, events }: EventsListProps) => {
         {events.map((event) => (
           <tr key={event.id}>
             <th>
-              <Link href={`/adventure/events/${event.id}`}>
+              <Link href={`/adventure/events/${event.id}?callingPage=${callingPage}`}>
                 {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
               </Link>
             </th>
             <td>
-              <Link href={`/adventure/events/${event.id}`}>{event.name}</Link>
+              <Link href={`/adventure/events/${event.id}?callingPage=${callingPage}`}>{event.name}</Link>
             </td>
             <td>{event.place.name}</td>
             <td>{event.type.name}</td>
             <td>
-              <EntityDropdownMenu href={`/adventure/events/${event.id}`} />
+              <EntityDropdownMenu href={`/adventure/events/${event.id}`} callingPage={callingPage} />
             </td>
           </tr>
         ))}

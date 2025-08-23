@@ -16,8 +16,8 @@ const Dashboard = ({ currentEvents }: DashboardProps) => {
           <SectionHeader>
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
           </SectionHeader>
-          <EventsTable className="hidden md:table" events={currentEvents} />
-          <EventsList className="block md:hidden" events={currentEvents} />
+          <EventsTable className="hidden md:table" events={currentEvents} callingPage="Home" />
+          <EventsList className="block md:hidden" events={currentEvents} callingPage="Home" />
         </section>
       ) : undefined}
     </>

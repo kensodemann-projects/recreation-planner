@@ -3,9 +3,12 @@ import Link from 'next/link';
 
 interface EntityDropdownMenuProps {
   href: string;
+  callingPage?: string;
 }
 
-const EntityDropdownMenu = ({ href }: EntityDropdownMenuProps) => {
+const EntityDropdownMenu = ({ callingPage, href }: EntityDropdownMenuProps) => {
+  const buildHref = (base: string): string => base + (callingPage ? `?callingPage=${callingPage}` : '');
+
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost ">
@@ -13,13 +16,13 @@ const EntityDropdownMenu = ({ href }: EntityDropdownMenuProps) => {
       </div>
       <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
         <li>
-          <Link href={href}>View</Link>
+          <Link href={buildHref(href)}>View</Link>
         </li>
         <li>
-          <Link href={`${href}/update`}>Edit</Link>
+          <Link href={buildHref(`${href}/update`)}>Edit</Link>
         </li>
         <li>
-          <Link className="text-error" href={`${href}/delete`}>
+          <Link className="text-error" href={buildHref(`${href}/delete`)}>
             Delete
           </Link>
         </li>

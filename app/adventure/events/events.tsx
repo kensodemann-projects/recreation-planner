@@ -17,8 +17,8 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <SectionHeader>
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
           </SectionHeader>
-          <EventsTable className="hidden md:table" events={upcomingEvents} />
-          <EventsList className="block md:hidden" events={upcomingEvents} />
+          <EventsTable className="hidden md:table" events={upcomingEvents} callingPage="Events" />
+          <EventsList className="block md:hidden" events={upcomingEvents} callingPage="Events" />
         </section>
       ) : undefined}
       {priorEvents.length ? (
@@ -26,8 +26,8 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <SectionHeader>
             <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
           </SectionHeader>
-          <EventsTable className="hidden md:table" events={priorEvents} />
-          <EventsList className="block md:hidden" events={priorEvents} />
+          <EventsTable className="hidden md:table" events={priorEvents} callingPage="Events" />
+          <EventsList className="block md:hidden" events={priorEvents} callingPage="Events" />
         </section>
       ) : undefined}
     </>
