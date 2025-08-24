@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import {
@@ -126,6 +127,7 @@ export const addEquipment = async (equipment: Equipment): Promise<Equipment | nu
   return data ? (convertToEquipment(data) as Equipment) : null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEquipment = async (equipment: Equipment): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;
@@ -187,6 +189,7 @@ export const addEquipmentEvent = async (event: EquipmentEvent): Promise<Equipmen
   return data ? convertToEquipmentEvent(data) : null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEquipmentEvent = async (event: EquipmentEvent): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;

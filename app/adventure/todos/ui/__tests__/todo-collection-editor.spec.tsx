@@ -310,7 +310,6 @@ describe('TODO Editor', () => {
             />,
           );
           const name = screen.getByRole('textbox', { name: 'Name' });
-          const description = screen.getByRole('textbox', { name: 'Description' });
           await user.clear(name);
           await user.type(name, 'Test Collection');
           await user.click(screen.getByRole('button', { name: 'Update' }));

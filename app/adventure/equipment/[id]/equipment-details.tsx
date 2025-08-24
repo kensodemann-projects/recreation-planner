@@ -1,13 +1,13 @@
 import LabeledField from '@/app/ui/labeled-field';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { Equipment, EquipmentEvent, TodoCollection } from '@/models';
+import { Equipment } from '@/models';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import EquipmentEventsWrapper from './equipment-events-wrapper';
-import Todos from '../../todos/ui/todos';
 import Notes from '../../notes/ui/notes';
+import Todos from '../../todos/ui/todos';
+import EquipmentEventsWrapper from './equipment-events-wrapper';
 
 interface EquipmentDetailsProps {
   equipment: Equipment;

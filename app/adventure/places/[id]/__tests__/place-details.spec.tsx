@@ -77,6 +77,7 @@ describe('Place', () => {
     });
 
     it('is not displayed if there is no phone number', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { phoneNumber, ...place } = testPlace;
       render(<PlaceDetails place={place} />);
       expect(screen.queryByText('Phone Number:')).toBeNull();
@@ -96,7 +97,8 @@ describe('Place', () => {
       expect(screen.getByRole('link', { name: 'https://dnr.wisconsin.gov/topic/parks/richardbong' })).toBeDefined();
     });
 
-    it('is not displayed if there is no phone number', () => {
+    it('is not displayed if there is no website', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { website, ...place } = testPlace;
       render(<PlaceDetails place={place} />);
       expect(screen.queryByText('Website:')).toBeNull();

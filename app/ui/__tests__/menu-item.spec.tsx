@@ -32,6 +32,3 @@ describe('Menu Item', () => {
     });
   });
 });
-function befoerEach(arg0: () => any) {
-  throw new Error('Function not implemented.');
-}

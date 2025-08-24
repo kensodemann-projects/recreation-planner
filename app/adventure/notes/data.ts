@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import { Note, NoteDTO } from '@/models';
@@ -48,6 +49,7 @@ export const addNote = async (note: Note): Promise<Note | null> => {
   return data ? convertToNote(data) : null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteNote = async (note: Note): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;

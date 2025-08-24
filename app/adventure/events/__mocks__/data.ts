@@ -1,4 +1,4 @@
-import { Event, EventType, Place, PlaceType, SelectablePlace } from '@/models';
+import { Event, EventType, SelectablePlace } from '@/models';
 import { vi } from 'vitest';
 
 export const PLACES: Array<SelectablePlace> = [

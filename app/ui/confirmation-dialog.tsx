@@ -7,7 +7,7 @@ interface ConfirmationDialogProperties extends ComponentPropsWithoutRef<'dialog'
   onResponse: (value: boolean) => void;
 }
 
-const ConfirmationDialog = ({ title, message, isOpen, onResponse, ...props }: ConfirmationDialogProperties) => {
+const ConfirmationDialog = ({ title, message, isOpen, onResponse }: ConfirmationDialogProperties) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {

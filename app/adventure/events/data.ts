@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import { Event, EventDTO, EventType, SelectablePlace } from '@/models';
@@ -124,6 +125,7 @@ export const addEvent = async (event: Event): Promise<Event | null> => {
   return data ? (convertToEvent(data) as Event) : null;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;

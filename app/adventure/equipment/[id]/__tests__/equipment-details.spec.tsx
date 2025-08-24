@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cleanup, getByText, render, screen, within } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
 import EquipmentDetails from '../equipment-details';

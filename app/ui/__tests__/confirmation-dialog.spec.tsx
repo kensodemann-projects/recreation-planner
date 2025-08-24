@@ -57,7 +57,7 @@ describe('conformation dialog', () => {
   });
 
   it('responds true on "yes"', async () => {
-    var response: boolean | null = null;
+    let response: boolean | null = null;
     const user = userEvent.setup();
     render(
       <ConfirmationDialog
@@ -73,7 +73,7 @@ describe('conformation dialog', () => {
   });
 
   it('responds false on "no"', async () => {
-    var response: boolean | null = null;
+    let response: boolean | null = null;
     const user = userEvent.setup();
     render(
       <ConfirmationDialog

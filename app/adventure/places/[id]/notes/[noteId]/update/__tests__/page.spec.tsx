@@ -1,13 +1,12 @@
-import { PLACES } from '@/app/adventure/places/__mocks__/data';
-import { fetchEvent } from '@/app/adventure/events/data';
 import { NOTES } from '@/app/adventure/notes/__mocks__/data';
 import { fetchNote } from '@/app/adventure/notes/data';
+import { PLACES } from '@/app/adventure/places/__mocks__/data';
+import { fetchPlace } from '@/app/adventure/places/data';
 import { Note } from '@/models';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import UpdateNotePage from '../page';
-import { fetchPlace } from '@/app/adventure/places/data';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('@/app/adventure/places/data');

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import { TodoCollection, TodoCollectionDTO, TodoItem, TodoItemDTO } from '@/models';
@@ -90,6 +91,7 @@ export const addTodoCollection = async (collection: TodoCollection): Promise<Tod
   return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteTodoCollection = async (collection: TodoCollection): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;
@@ -129,6 +131,7 @@ export const addTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {
   return data && (convertToTodoItem(data) as TodoItem);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteTodoItem = async (item: TodoItem): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;

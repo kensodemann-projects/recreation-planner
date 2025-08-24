@@ -1,4 +1,4 @@
-import { EquipmentDTO, EquipmentEvent, EquipmentEventDTO } from '@/models';
+import { EquipmentEvent, EquipmentEventDTO } from '@/models';
 import { describe, expect, it } from 'vitest';
 import { convertToEquipmentEvent, convertToEquipmentEventDTO } from '../equipment-event';
 
@@ -69,27 +69,6 @@ describe('equipment event conversions', () => {
     });
   });
 });
-
-const equipmentDTO: EquipmentDTO = {
-  id: 99403,
-  name: 'Planet Destroyer',
-  description: 'The Vogons should destroy the Earth using this.',
-  purchase_date: '2025-03-28',
-  cost: 2954932.34,
-  manufacturer: 'Vogon Vehicles',
-  model: 'DST-X3',
-  identification: '1994-ff8ge-1234',
-  length: '7 Miles, 4 feet',
-  weight: '1.1 Million Tons (Roughly)',
-  capacity: 'A full crew',
-  license_plate_number: 'I<3DST',
-  insurance_carrier: 'Contructors Insurance',
-  insurance_policy_number: '8849950-29934',
-  insurance_contact_name: 'Bob',
-  insurance_contact_phone_number: '555-930-2994',
-  insurance_contact_email: 'bob@conins.com',
-  equipment_type_rid: 4,
-};
 
 const conditionReportDTO: EquipmentEventDTO = {
   name: 'Spring Inspection',

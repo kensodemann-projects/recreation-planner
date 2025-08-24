@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const performQuery = async <T>(query: any): Promise<T | null> => {
   const { data, error } = await query;
   if (error) {

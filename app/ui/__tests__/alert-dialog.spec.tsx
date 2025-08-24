@@ -37,7 +37,7 @@ describe('alert dialog', () => {
   });
 
   it('responds true on "OK"', async () => {
-    var response: boolean | null = null;
+    let response: boolean | null = null;
     const user = userEvent.setup();
     render(
       <AlertDialog

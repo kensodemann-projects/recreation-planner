@@ -1,5 +1,5 @@
 import { Event, EventDTO } from '../event';
-import { EventType, EventTypeDTO } from '../event-type';
+import { EventType } from '../event-type';
 import { Note } from '../note';
 import { Place } from '../place';
 import { PlaceTypeDTO } from '../place-type';

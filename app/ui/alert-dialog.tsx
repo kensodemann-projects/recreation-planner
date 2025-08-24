@@ -9,7 +9,7 @@ interface AlertDialogProperties extends ComponentPropsWithoutRef<'dialog'> {
   onResponse: (value: boolean) => void;
 }
 
-const AlertDialog = ({ title, message, isOpen, alertType, onResponse, ...props }: AlertDialogProperties) => {
+const AlertDialog = ({ title, message, isOpen, alertType, onResponse }: AlertDialogProperties) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {

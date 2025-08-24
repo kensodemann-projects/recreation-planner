@@ -1,4 +1,3 @@
-import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
 import { formatCurrency, formatDate, formatNumber } from '@/utils/formatters';
 import Link from 'next/link';
 import { EquipmentEventsListProps } from './equipment-events-list-props';

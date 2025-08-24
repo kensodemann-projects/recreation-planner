@@ -1,4 +1,4 @@
-import { Equipment, EquipmentEvent, EquipmentEventType, EquipmentType, Note, UsageUnits } from '@/models';
+import { Note } from '@/models';
 import { vi } from 'vitest';
 
 export const NOTES: Note[] = [

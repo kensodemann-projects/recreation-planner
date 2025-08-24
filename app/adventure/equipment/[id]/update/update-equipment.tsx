@@ -1,6 +1,6 @@
 'use client';
 
-import { Equipment, EquipmentType, Place, PlaceType } from '@/models';
+import { Equipment, EquipmentType } from '@/models';
 import { useRouter } from 'next/navigation';
 import EquipmentEditor from '../../ui/equipment-editor';
 import { updateConfirmed } from './actions';

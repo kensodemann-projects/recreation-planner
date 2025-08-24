@@ -1,12 +1,12 @@
 import Address from '@/app/ui/address';
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { Event, Note, TodoCollection } from '@/models';
+import { Event } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Todos from '../../todos/ui/todos';
 import Notes from '../../notes/ui/notes';
+import Todos from '../../todos/ui/todos';
 
 interface EventDetailsProps {
   event: Event;
