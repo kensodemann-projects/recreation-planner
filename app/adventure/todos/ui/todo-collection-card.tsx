@@ -11,10 +11,12 @@ import { addTodoItem, deleteTodoItem, updateTodoItem } from '../data';
 export interface TodoCollectionCardProps {
   baseHref: string;
   todoCollection: TodoCollection;
+  callingPage?: string;
 }
 
-const TodoCollectionCard = ({ baseHref, todoCollection }: TodoCollectionCardProps) => {
+const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoCollectionCardProps) => {
   const [todoItems, setTodoItems] = useState(todoCollection.todoItems);
+  const searchParams = callingPage ? `?callingPage=${callingPage}` : '';
 
   const addItemClicked = async () => {
     const item = await addTodoItem({ isComplete: false, name: '', todoCollectionRid: todoCollection.id! });
@@ -78,12 +80,12 @@ const TodoCollectionCard = ({ baseHref, todoCollection }: TodoCollectionCardProp
             ))}
         </div>
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={`${baseHref}/${todoCollection.id}/delete`}>
+          <Link href={`${baseHref}/${todoCollection.id}/delete${searchParams}`}>
             <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
               <TrashIcon className="w-6" />
             </button>
           </Link>
-          <Link href={`${baseHref}/${todoCollection.id}/update`}>
+          <Link href={`${baseHref}/${todoCollection.id}/update${searchParams}`}>
             <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
               <PencilSquareIcon className="w-6" />
             </button>

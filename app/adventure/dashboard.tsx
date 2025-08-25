@@ -1,15 +1,17 @@
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { Event } from '@/models';
+import { Event, TodoCollection } from '@/models';
 import EventsTable from '@/app/adventure/events/events-table';
 import EventsList from '@/app/adventure/events/events-list';
+import Todos from './todos/ui/todos';
 
 interface DashboardProps {
   currentEvents: Event[];
   latestEvents: Event[];
+  dueTodoCollections: TodoCollection[];
 }
 
-const Dashboard = ({ currentEvents, latestEvents }: DashboardProps) => {
+const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: DashboardProps) => {
   return (
     <>
       <section>
@@ -37,6 +39,22 @@ const Dashboard = ({ currentEvents, latestEvents }: DashboardProps) => {
           </>
         ) : (
           <div>You have no events.</div>
+        )}
+      </section>
+
+      <section>
+        <SectionHeader>
+          <SubtitleHeading>Due TODOs</SubtitleHeading>
+        </SectionHeader>
+        {dueTodoCollections.length ? (
+          <Todos
+            collections={dueTodoCollections!}
+            baseHref={`/adventure/todos`}
+            callingPage="Home"
+            disableArchived={true}
+          />
+        ) : (
+          <div>You have no TODOs due at this time.</div>
         )}
       </section>
     </>

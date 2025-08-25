@@ -5,23 +5,28 @@ import TitleHeading from '../ui/title-heading';
 import Dashboard from './dashboard';
 import { addWeeks, endOfWeek, formatISO, startOfWeek } from 'date-fns';
 import { fetchLatestEvents, fetchUpcomingEvents } from './events/data';
+import { fetchDueTodoCollections } from './todos/data';
+
+const dateToString = (dt: Date) => formatISO(dt, { representation: 'date' });
 
 const HomePage = async () => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
 
-  const startDate = formatISO(startOfWeek(Date.now()), { representation: 'date' });
-  const endDate = formatISO(addWeeks(endOfWeek(Date.now()), 3), { representation: 'date' });
-  const currentEvents = await fetchUpcomingEvents(startDate, endDate);
+  const weekStartDate = startOfWeek(Date.now());
+  const weekEndDate = endOfWeek(Date.now());
+
+  const currentEvents = await fetchUpcomingEvents(dateToString(weekStartDate), dateToString(addWeeks(weekEndDate, 3)));
   const latestEvents = await fetchLatestEvents(3);
+  const todoCollections = await fetchDueTodoCollections(dateToString(weekEndDate));
 
   return (
     <>
       <PageHeader>
         <TitleHeading>Dashboard</TitleHeading>
       </PageHeader>
-      <Dashboard currentEvents={currentEvents} latestEvents={latestEvents} />
+      <Dashboard currentEvents={currentEvents} latestEvents={latestEvents} dueTodoCollections={todoCollections} />
     </>
   );
 };

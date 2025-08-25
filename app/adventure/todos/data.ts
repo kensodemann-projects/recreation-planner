@@ -27,6 +27,14 @@ const todoCollectionQuery = (supabase: SupabaseClient, id?: number): any => {
   }
 };
 
+const dueTodoCollectionQuery = (supabase: SupabaseClient, endDate: string): any =>
+  supabase
+    .from(collectionTable)
+    .select(collectionSelectColumns)
+    .lt('due_date', endDate)
+    .order('due_date')
+    .order('created_at');
+
 const todoCollectionInsert = (supabase: SupabaseClient, collection: TodoCollection): any => {
   return supabase
     .from(collectionTable)
@@ -78,6 +86,17 @@ export const fetchTodoCollection = async (id: number): Promise<TodoCollection | 
   const query = todoCollectionQuery(supabase, id);
   const data = await executeQuery<TodoCollectionDTO>(query);
   return data && (convertToTodoCollection(data) as TodoCollection);
+};
+
+export const fetchDueTodoCollections = async (dueDate: string): Promise<TodoCollection[]> => {
+  if (await isNotLoggedIn()) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const query = dueTodoCollectionQuery(supabase, dueDate);
+  const data = await executeQuery<TodoCollectionDTO[]>(query);
+  return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
 };
 
 export const addTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {

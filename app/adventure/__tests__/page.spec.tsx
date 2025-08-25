@@ -4,9 +4,11 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import HomePage from '../page';
 import { fetchUpcomingEvents } from '@/app/adventure/events/data';
 import { fetchLatestEvents } from '../events/__mocks__/data';
+import { fetchDueTodoCollections } from '../todos/data';
 
 vi.mock('@/utils/supabase/auth');
 vi.mock('@/app/adventure/events/data');
+vi.mock('@/app/adventure/todos/data');
 
 describe('Adventures Home Page', () => {
   beforeEach(() => {
@@ -31,9 +33,14 @@ describe('Adventures Home Page', () => {
     });
 
     it('fetchs the latest three created events', async () => {
-      vi.setSystemTime(new Date(2024, 8, 3));
       await HomePage();
       expect(fetchLatestEvents).toHaveBeenCalledExactlyOnceWith(3);
+    });
+
+    it('fetches due todo collections', async () => {
+      vi.setSystemTime(new Date(2024, 8, 3));
+      await HomePage();
+      expect(fetchDueTodoCollections).toHaveBeenCalledExactlyOnceWith('2024-09-07');
     });
 
     it('renders the dashboard component', async () => {
