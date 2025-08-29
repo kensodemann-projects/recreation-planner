@@ -1,8 +1,9 @@
+import { fetchPlaces } from '@/app/adventure/places/data';
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { fetchEvent, fetchEventTypes, fetchPlaces } from '../../data';
+import { fetchEvent, fetchEventTypes } from '../../data';
 import UpdateEvent from './update-event';
 
 const UpdateEventPage = async (props: { params: Promise<{ id: string }> }) => {

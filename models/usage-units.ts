@@ -1,4 +1,4 @@
 import { CommonData, CommonDataDTO } from './common-data';
 
-export interface UsageUnits extends CommonData {}
-export interface UsageUnitsDTO extends CommonDataDTO {}
+export type UsageUnits = Omit<CommonData, 'description'>;
+export type UsageUnitsDTO = Omit<CommonDataDTO, 'description'>;

@@ -106,6 +106,9 @@ describe('Notes Editor', () => {
       expect(note).toEqual({
         name: 'This is a test note',
         description: '',
+        equipmentRid: null,
+        eventRid: null,
+        placeRid: null,
       });
     });
 
@@ -124,7 +127,14 @@ describe('Notes Editor', () => {
     it('has an update button', () => {
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={() => null}
         />,
@@ -136,7 +146,14 @@ describe('Notes Editor', () => {
     it('initializes the input fields', () => {
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={() => null}
         />,
@@ -150,7 +167,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -167,7 +191,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -181,7 +212,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -197,7 +235,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', equipmentRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            equipmentRid: 19,
+            eventRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -210,6 +255,8 @@ describe('Notes Editor', () => {
         name: 'So Long and...',
         description: 'Thanks for the fish, all of them',
         equipmentRid: 19,
+        eventRid: null,
+        placeRid: null,
       });
     });
 
@@ -218,7 +265,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', eventRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            eventRid: 19,
+            equipmentRid: null,
+            placeRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -231,6 +285,8 @@ describe('Notes Editor', () => {
         name: 'So Long and...',
         description: 'Thanks for the fish, all of them',
         eventRid: 19,
+        equipmentRid: null,
+        placeRid: null,
       });
     });
 
@@ -239,7 +295,14 @@ describe('Notes Editor', () => {
       const user = userEvent.setup();
       render(
         <NotesEditor
-          note={{ id: 42, name: 'So Long', description: 'Thanks for the fish', placeRid: 19 }}
+          note={{
+            id: 42,
+            name: 'So Long',
+            description: 'Thanks for the fish',
+            placeRid: 19,
+            equipmentRid: null,
+            eventRid: null,
+          }}
           onCancel={() => null}
           onConfirm={(n) => (note = n)}
         />,
@@ -252,6 +315,8 @@ describe('Notes Editor', () => {
         name: 'So Long and...',
         description: 'Thanks for the fish, all of them',
         placeRid: 19,
+        equipmentRid: null,
+        eventRid: null,
       });
     });
   });

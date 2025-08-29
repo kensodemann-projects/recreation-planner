@@ -26,6 +26,9 @@ const NoteEditor = ({ note, onCancel, onConfirm }: NoteEditorProps) => {
     ...note,
     name,
     description,
+    eventRid: note?.eventRid || null,
+    equipmentRid: note?.equipmentRid || null,
+    placeRid: note?.placeRid || null,
   });
 
   const requiredFieldsHaveValues = !!name.trim();

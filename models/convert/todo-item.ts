@@ -1,6 +1,6 @@
 import { TodoItem, TodoItemDTO } from '../todo-item';
 
-export const convertToTodoItem = (dto: Partial<TodoItemDTO>): Partial<TodoItem> => ({
+export const convertToTodoItem = (dto: TodoItemDTO): TodoItem => ({
   id: dto.id,
   name: dto.name,
   isComplete: dto.is_complete,

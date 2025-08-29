@@ -17,11 +17,9 @@ export interface PlaceDTO extends CommonDataDTO {
 }
 
 export interface Place extends CommonData {
-  address?: Address;
-  phoneNumber?: string | null;
-  website?: string | null;
+  address: Address;
+  phoneNumber: string | null;
+  website: string | null;
   type: PlaceType;
   notes?: Note[];
 }
-
-export type SelectablePlace = Pick<Place, 'id' | 'name'>;

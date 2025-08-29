@@ -1,12 +1,14 @@
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import { fetchEvent, fetchEventTypes, fetchPlaces } from '../../../data';
+import { fetchEvent, fetchEventTypes } from '../../../data';
 import UpdateEventPage from '../page';
+import { fetchPlaces } from '@/app/adventure/places/data';
 
 vi.mock('../../../data');
 vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
+vi.mock('@/app/adventure/places/data');
 
 describe('Update Trip / Event Page', () => {
   beforeEach(() => vi.clearAllMocks());

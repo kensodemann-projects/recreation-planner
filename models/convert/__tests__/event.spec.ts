@@ -1,22 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { convertToEvent, convertToEventDTO } from '../event';
+import { Event, EventDTO } from '@/models/event';
 
 describe('event convertions', () => {
   describe('to event', () => {
-    const testCases = [
-      {
-        name: 'handles a "common data" conversion',
-        value: {
-          id: 42,
-          name: 'Build a by-pass',
-          description: 'The Vogons should destroy the Earth to do this.',
-        },
-        expected: {
-          id: 42,
-          name: 'Build a by-pass',
-          description: 'The Vogons should destroy the Earth to do this.',
-        },
-      },
+    const testCases: { name: string; value: EventDTO; expected: Event }[] = [
       {
         name: 'converts a full event',
         value: {
@@ -33,8 +21,14 @@ describe('event convertions', () => {
             name: 'Earth',
             description: 'Third rock from Sol',
             address_line_1: 'Planet #3',
+            address_line_2: null,
+            city: null,
             state: 'Solar System',
+            postal_code: null,
+            phone_number: null,
             website: 'https://solsys.gov',
+            place_type_rid: 3,
+            place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
           },
           event_type_rid: 2,
           event_types: { id: 2, name: 'Demolition', description: 'Death and destrutction' },
@@ -107,7 +101,13 @@ describe('event convertions', () => {
               state: 'Solar System',
               postal: null,
             },
+            phoneNumber: null,
             website: 'https://solsys.gov',
+            type: {
+              id: 3,
+              name: 'Planet',
+              description: 'Big globe thing',
+            },
           },
           type: {
             id: 2,
@@ -165,13 +165,75 @@ describe('event convertions', () => {
           ],
         },
       },
+      {
+        name: 'converts a full event without children',
+        value: {
+          id: 42,
+          name: 'Build a by-pass',
+          description: 'The Vogons should destroy the Earth to do this.',
+          begin_date: '2017-07-04',
+          begin_time: '13:43',
+          end_date: '2017-07-05',
+          end_time: '08:42',
+          place_rid: 3,
+          places: {
+            id: 3,
+            name: 'Earth',
+            description: 'Third rock from Sol',
+            address_line_1: 'Planet #3',
+            address_line_2: null,
+            city: null,
+            state: 'Solar System',
+            postal_code: null,
+            phone_number: null,
+            website: 'https://solsys.gov',
+            place_type_rid: 3,
+            place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
+          },
+          event_type_rid: 2,
+          event_types: { id: 2, name: 'Demolition', description: 'Death and destrutction' },
+        },
+        expected: {
+          id: 42,
+          name: 'Build a by-pass',
+          description: 'The Vogons should destroy the Earth to do this.',
+          beginDate: '2017-07-04',
+          beginTime: '13:43',
+          endDate: '2017-07-05',
+          endTime: '08:42',
+          place: {
+            id: 3,
+            name: 'Earth',
+            description: 'Third rock from Sol',
+            address: {
+              line1: 'Planet #3',
+              line2: null,
+              city: null,
+              state: 'Solar System',
+              postal: null,
+            },
+            phoneNumber: null,
+            website: 'https://solsys.gov',
+            type: {
+              id: 3,
+              name: 'Planet',
+              description: 'Big globe thing',
+            },
+          },
+          type: {
+            id: 2,
+            name: 'Demolition',
+            description: 'Death and destrutction',
+          },
+        },
+      },
     ];
 
     it.each(testCases)('$name', ({ value, expected }) => expect(convertToEvent(value)).toEqual(expected));
   });
 
   describe('to DTO', () => {
-    const testCases = [
+    const testCases: { name: string; value: Event; expected: EventDTO }[] = [
       {
         name: 'converts a full event for CRUD',
         value: {
@@ -193,7 +255,9 @@ describe('event convertions', () => {
               state: 'Solar System',
               postal: null,
             },
+            phoneNumber: null,
             website: 'https://solsys.gov',
+            type: { id: 3, name: 'Planet', description: 'Big globe thing' },
           },
           type: {
             id: 2,
@@ -233,7 +297,9 @@ describe('event convertions', () => {
               state: 'Solar System',
               postal: null,
             },
+            phoneNumber: null,
             website: 'https://solsys.gov',
+            type: { id: 3, name: 'Planet', description: 'Big globe thing' },
           },
           type: {
             id: 2,
@@ -257,6 +323,7 @@ describe('event convertions', () => {
         value: {
           id: 42,
           name: 'Build a by-pass',
+          description: null,
           beginDate: '2017-07-04',
           endDate: '',
           place: {
@@ -271,6 +338,8 @@ describe('event convertions', () => {
               postal: null,
             },
             website: 'https://solsys.gov',
+            phoneNumber: null,
+            type: { id: 3, name: 'Planet', description: 'Big globe thing' },
           },
           type: {
             id: 2,

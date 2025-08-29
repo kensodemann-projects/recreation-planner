@@ -59,6 +59,8 @@ export const TODO_COLLECTIONS: TodoCollection[] = [
     description: 'Make it so',
     isComplete: true,
     dueDate: '2025-05-31',
+    eventRid: null,
+    equipmentRid: null,
     todoItems: TODO_ITEMS.filter((x) => x.todoCollectionRid === 1),
   },
   {
@@ -67,6 +69,8 @@ export const TODO_COLLECTIONS: TodoCollection[] = [
     description: 'Running through the various tests associated with todods',
     isComplete: false,
     dueDate: '2025-07-09',
+    eventRid: null,
+    equipmentRid: null,
     todoItems: TODO_ITEMS.filter((x) => x.todoCollectionRid === 2),
   },
   {
@@ -75,6 +79,8 @@ export const TODO_COLLECTIONS: TodoCollection[] = [
     description: 'Release the feature to the general public',
     isComplete: false,
     dueDate: null,
+    eventRid: null,
+    equipmentRid: null,
     todoItems: TODO_ITEMS.filter((x) => x.todoCollectionRid === 3),
   },
 ];

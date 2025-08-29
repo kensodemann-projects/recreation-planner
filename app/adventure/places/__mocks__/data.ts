@@ -28,6 +28,7 @@ export const PLACES: Array<Place> = [
   {
     id: 1,
     name: 'Burnet State Park',
+    description: null,
     address: {
       line1: '23125 255th St.',
       line2: null,
@@ -37,10 +38,12 @@ export const PLACES: Array<Place> = [
     },
     type: PLACE_TYPES[0],
     phoneNumber: '(715) 239-6888',
+    website: null,
   },
   {
     id: 2,
     name: 'Indianapolis Motor Speedway',
+    description: null,
     address: {
       line1: '4790 West 16th Street',
       line2: null,
@@ -49,10 +52,13 @@ export const PLACES: Array<Place> = [
       postal: null,
     },
     type: PLACE_TYPES[1],
+    phoneNumber: null,
+    website: null,
   },
   {
     id: 3,
     name: 'Richard Bong State Park',
+    description: null,
     address: {
       line1: '26313 Burlington Rd.',
       line2: null,
@@ -62,10 +68,12 @@ export const PLACES: Array<Place> = [
     },
     type: PLACE_TYPES[0],
     phoneNumber: '(262) 878-5600',
+    website: null,
   },
   {
     id: 4,
     name: 'LaBahn Arena',
+    description: null,
     address: {
       line1: '105 East Campus Mall',
       line2: null,
@@ -74,6 +82,8 @@ export const PLACES: Array<Place> = [
       postal: '53715',
     },
     type: PLACE_TYPES[2],
+    phoneNumber: null,
+    website: null,
   },
 ];
 

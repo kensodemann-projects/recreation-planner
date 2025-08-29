@@ -17,9 +17,11 @@ const testPlace: Place = {
   type: {
     id: 1,
     name: 'State Park',
+    description: 'Camping and flowers and trees and bears',
   },
   phoneNumber: '(262) 878-5600',
   website: 'https://dnr.wisconsin.gov/topic/parks/richardbong',
+  notes: [],
 };
 
 describe('Place', () => {
@@ -54,7 +56,16 @@ describe('Place', () => {
 
   describe('if the address information is empty', () => {
     it('does not display the address header', () => {
-      const place = { ...testPlace, address: undefined };
+      const place = {
+        ...testPlace,
+        address: {
+          line1: null,
+          line2: null,
+          city: null,
+          state: null,
+          postal: null,
+        },
+      };
       render(<PlaceDetails place={place} />);
       expect(screen.queryByRole('heading', { level: 2, name: 'Address' })).toBeNull();
     });
@@ -77,8 +88,7 @@ describe('Place', () => {
     });
 
     it('is not displayed if there is no phone number', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { phoneNumber, ...place } = testPlace;
+      const place = { ...testPlace, phoneNumber: null };
       render(<PlaceDetails place={place} />);
       expect(screen.queryByText('Phone Number:')).toBeNull();
     });
@@ -98,8 +108,7 @@ describe('Place', () => {
     });
 
     it('is not displayed if there is no website', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { website, ...place } = testPlace;
+      const place = { ...testPlace, website: null };
       render(<PlaceDetails place={place} />);
       expect(screen.queryByText('Website:')).toBeNull();
     });

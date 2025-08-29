@@ -1,6 +1,6 @@
 'use client';
 
-import { Event, EventType, SelectablePlace } from '@/models';
+import { Event, EventType, Place } from '@/models';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EventEditor from '../../ui/event-editor';
 import { updateConfirmed } from './actions';
@@ -8,7 +8,7 @@ import { updateConfirmed } from './actions';
 type CreateEventProps = {
   event: Event;
   types: Array<EventType>;
-  places: Array<SelectablePlace>;
+  places: Array<Place>;
 };
 
 const UpdateEvent = ({ event, types, places }: CreateEventProps) => {

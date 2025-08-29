@@ -4,18 +4,15 @@ import { PlaceType } from '../place-type';
 import { convertToNote } from './note';
 import { convertToPlaceType } from './place-type';
 
-export const convertToPlace = (dto: Partial<PlaceDTO>): Partial<Place> => {
-  const address: Address | undefined =
-    dto.address_line_1 || dto.address_line_2 || dto.city || dto.state || dto.postal_code
-      ? {
-          line1: dto.address_line_1 || null,
-          line2: dto.address_line_2 || null,
-          city: dto.city || null,
-          state: dto.state || null,
-          postal: dto.postal_code || null,
-        }
-      : undefined;
-  const type: PlaceType | undefined = dto.place_types && convertToPlaceType(dto.place_types);
+export const convertToPlace = (dto: PlaceDTO): Place => {
+  const address: Address = {
+    line1: dto.address_line_1 || null,
+    line2: dto.address_line_2 || null,
+    city: dto.city || null,
+    state: dto.state || null,
+    postal: dto.postal_code || null,
+  };
+  const type: PlaceType = convertToPlaceType(dto.place_types!);
 
   return {
     id: dto.id,

@@ -13,7 +13,8 @@ import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const collectionSelectColumns = '*, todo_items(*)';
+const collectionSelectColumns =
+  '*, equipment(*, equipment_types!inner(*)), events(*, event_types!inner(*), places(*, place_types(*))  ), todo_items(*)';
 const collectionTable = 'todo_collections';
 const itemTable = 'todo_items';
 

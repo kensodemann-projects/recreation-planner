@@ -1,24 +1,6 @@
-import { Event, EventType, SelectablePlace } from '@/models';
+import { Event, EventType } from '@/models';
 import { vi } from 'vitest';
-
-export const PLACES: Array<SelectablePlace> = [
-  {
-    id: 1,
-    name: 'Burnet State Park',
-  },
-  {
-    id: 2,
-    name: 'Indianapolis Motor Speedway',
-  },
-  {
-    id: 3,
-    name: 'Richard Bong State Park',
-  },
-  {
-    id: 4,
-    name: 'LaBahn Arena',
-  },
-];
+import { PLACES } from '../../places/__mocks__/data';
 
 export const EVENT_TYPES: Array<EventType> = [
   {
@@ -91,4 +73,3 @@ export const addEvent = vi.fn();
 export const deleteEvent = vi.fn();
 export const canDeleteEvent = vi.fn().mockResolvedValue(false);
 export const fetchEventTypes = vi.fn().mockResolvedValue(EVENT_TYPES);
-export const fetchPlaces = vi.fn().mockResolvedValue(PLACES);

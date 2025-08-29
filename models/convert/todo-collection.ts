@@ -1,16 +1,20 @@
 import { TodoCollection, TodoCollectionDTO } from '../todo-collection';
 import { TodoItem } from '../todo-item';
+import { convertToEquipment } from './equipment';
+import { convertToEvent } from './event';
 import { convertToTodoItem } from './todo-item';
 
-export const convertToTodoCollection = (dto: Partial<TodoCollectionDTO>): Partial<TodoCollection> => ({
+export const convertToTodoCollection = (dto: TodoCollectionDTO): TodoCollection => ({
   id: dto.id,
   name: dto.name,
   description: dto.description,
   dueDate: dto.due_date,
   isComplete: dto.is_complete,
   eventRid: dto.event_rid,
+  event: dto.events ? convertToEvent(dto.events) : undefined,
   equipmentRid: dto.equipment_rid,
-  todoItems: dto.todo_items ? dto.todo_items.map((x) => convertToTodoItem(x) as TodoItem) : undefined,
+  equipment: dto.equipment ? convertToEquipment(dto.equipment) : undefined,
+  todoItems: dto.todo_items ? dto.todo_items.map((x) => convertToTodoItem(x) as TodoItem) : [],
 });
 
 export const convertToTodoCollectionDTO = (collection: TodoCollection): TodoCollectionDTO => ({

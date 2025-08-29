@@ -53,8 +53,6 @@ The primary entity DTO Model shall contain the RID and a representation of the a
 
 The primary entity Domain Model shall contain representation of the attribute entity as an object property but shall not contain the RID.
 
-If the primary entity is being queried for a purpose where the attribute entity is not needed, it can be omitted. Favor using a TypeScript `Omit` or `Partial` type rather than making the property optional in the model.
-
 The attribute entity models shall not reference a collection of matching primary entities in any way.
 
 ### Parent / Child Relationships

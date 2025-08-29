@@ -4,20 +4,7 @@ import { Equipment, EquipmentDTO } from '@/models/equipment';
 
 describe('equipment convertions', () => {
   describe('to equipment', () => {
-    const testCases: { name: string; value: Partial<EquipmentDTO>; expected: Partial<Equipment> }[] = [
-      {
-        name: 'handles a "common data" convertion',
-        value: {
-          id: 42,
-          name: 'Planet Destroyer',
-          description: 'The Vogons should destroy the Earth using this.',
-        },
-        expected: {
-          id: 42,
-          name: 'Planet Destroyer',
-          description: 'The Vogons should destroy the Earth using this.',
-        },
-      },
+    const testCases: { name: string; value: EquipmentDTO; expected: Equipment }[] = [
       {
         name: 'converts the full equipment data',
         value: {
@@ -173,6 +160,7 @@ describe('equipment convertions', () => {
             {
               id: 2,
               name: '2025 Fall Oil Change',
+              description: null,
               equipment_rid: 42,
               date: '2025-08-15',
               usage: 12834.3,
@@ -247,6 +235,7 @@ describe('equipment convertions', () => {
             {
               id: 2,
               name: '2025 Fall Oil Change',
+              description: null,
               equipmentRid: 42,
               date: '2025-08-15',
               usage: 12834.3,
@@ -433,48 +422,6 @@ describe('equipment convertions', () => {
             name: 'Intergallactic Space Cruiser',
             description: 'A large, wasteful space craft.',
           },
-        },
-      },
-      {
-        name: 'converts the full equipment data w/o joins',
-        value: {
-          id: 42,
-          name: 'Planet Destroyer',
-          description: 'The Vogons should destroy the Earth using this.',
-          purchase_date: '2025-03-28',
-          cost: 2954932.34,
-          manufacturer: 'Vogon Vehicles',
-          model: 'DST-X3',
-          identification: '1994-ff8ge-1234',
-          length: '7 Miles, 4 feet',
-          weight: '1.1 Million Tons (Roughly)',
-          capacity: 'A full crew',
-          license_plate_number: 'I<3DST',
-          insurance_carrier: 'Contructors Insurance',
-          insurance_policy_number: '8849950-29934',
-          insurance_contact_name: 'Bob',
-          insurance_contact_phone_number: '555-930-2994',
-          insurance_contact_email: 'bob@conins.com',
-          equipment_type_rid: 4,
-        },
-        expected: {
-          id: 42,
-          name: 'Planet Destroyer',
-          description: 'The Vogons should destroy the Earth using this.',
-          purchaseDate: '2025-03-28',
-          cost: 2954932.34,
-          manufacturer: 'Vogon Vehicles',
-          model: 'DST-X3',
-          identification: '1994-ff8ge-1234',
-          length: '7 Miles, 4 feet',
-          weight: '1.1 Million Tons (Roughly)',
-          capacity: 'A full crew',
-          licensePlateNumber: 'I<3DST',
-          insuranceCarrier: 'Contructors Insurance',
-          insurancePolicyNumber: '8849950-29934',
-          insuranceContactName: 'Bob',
-          insuranceContactPhoneNumber: '555-930-2994',
-          insuranceContactEmail: 'bob@conins.com',
         },
       },
     ];

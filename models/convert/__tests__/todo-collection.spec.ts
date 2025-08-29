@@ -1,20 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { convertToTodoCollection, convertToTodoCollectionDTO } from '../todo-collection';
+import { TodoCollection, TodoCollectionDTO } from '@/models/todo-collection';
 
 describe('todo collection converters', () => {
   describe('to todo Collection', () => {
-    const testCases = [
-      {
-        name: 'converts a basic collection',
-        input: {
-          id: 1,
-          name: 'Stuff I need to do',
-        },
-        expected: {
-          id: 1,
-          name: 'Stuff I need to do',
-        },
-      },
+    const testCases: { name: string; input: TodoCollectionDTO; expected: TodoCollection }[] = [
       {
         name: 'converts a full base collection without todos',
         input: {
@@ -23,6 +13,8 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           is_complete: false,
+          event_rid: null,
+          equipment_rid: null,
         },
         expected: {
           id: 1,
@@ -30,6 +22,9 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           dueDate: '2025-05-23',
           isComplete: false,
+          eventRid: null,
+          equipmentRid: null,
+          todoItems: [],
         },
       },
       {
@@ -40,6 +35,7 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           event_rid: 4273,
+          equipment_rid: null,
           is_complete: false,
         },
         expected: {
@@ -49,6 +45,89 @@ describe('todo collection converters', () => {
           dueDate: '2025-05-23',
           isComplete: false,
           eventRid: 4273,
+          equipmentRid: null,
+          todoItems: [],
+        },
+      },
+      {
+        name: 'converts an event related collection with event data',
+        input: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          event_rid: 4273,
+          events: {
+            id: 4273,
+            name: 'Build a by-pass',
+            description: 'The Vogons should destroy the Earth to do this.',
+            begin_date: '2017-07-04',
+            begin_time: '13:43',
+            end_date: '2017-07-05',
+            end_time: '08:42',
+            place_rid: 3,
+            places: {
+              id: 3,
+              name: 'Earth',
+              description: 'Third rock from Sol',
+              address_line_1: 'Planet #3',
+              address_line_2: null,
+              city: null,
+              state: 'Solar System',
+              postal_code: null,
+              phone_number: null,
+              website: 'https://solsys.gov',
+              place_type_rid: 3,
+              place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
+            },
+            event_type_rid: 2,
+            event_types: { id: 2, name: 'Demolition', description: 'Death and destrutction' },
+          },
+          equipment_rid: null,
+          is_complete: false,
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          eventRid: 4273,
+          event: {
+            id: 4273,
+            name: 'Build a by-pass',
+            description: 'The Vogons should destroy the Earth to do this.',
+            beginDate: '2017-07-04',
+            beginTime: '13:43',
+            endDate: '2017-07-05',
+            endTime: '08:42',
+            place: {
+              id: 3,
+              name: 'Earth',
+              description: 'Third rock from Sol',
+              address: {
+                line1: 'Planet #3',
+                line2: null,
+                city: null,
+                state: 'Solar System',
+                postal: null,
+              },
+              phoneNumber: null,
+              website: 'https://solsys.gov',
+              type: {
+                id: 3,
+                name: 'Planet',
+                description: 'Big globe thing',
+              },
+            },
+            type: {
+              id: 2,
+              name: 'Demolition',
+              description: 'Death and destrutction',
+            },
+          },
+          equipmentRid: null,
+          todoItems: [],
         },
       },
       {
@@ -59,6 +138,7 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           equipment_rid: 4273,
+          event_rid: null,
           is_complete: false,
         },
         expected: {
@@ -68,6 +148,79 @@ describe('todo collection converters', () => {
           dueDate: '2025-05-23',
           isComplete: false,
           equipmentRid: 4273,
+          eventRid: null,
+          todoItems: [],
+        },
+      },
+      {
+        name: 'converts an equipment related collection with equipment data',
+        input: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          due_date: '2025-05-23',
+          equipment_rid: 4273,
+          equipment: {
+            id: 4273,
+            name: 'Planet Destroyer',
+            description: 'The Vogons should destroy the Earth using this.',
+            purchase_date: '2025-03-28',
+            cost: 2954932.34,
+            manufacturer: 'Vogon Vehicles',
+            model: 'DST-X3',
+            identification: '1994-ff8ge-1234',
+            length: '7 Miles, 4 feet',
+            weight: '1.1 Million Tons (Roughly)',
+            capacity: 'A full crew',
+            license_plate_number: 'I<3DST',
+            insurance_carrier: 'Contructors Insurance',
+            insurance_policy_number: '8849950-29934',
+            insurance_contact_name: 'Bob',
+            insurance_contact_phone_number: '555-930-2994',
+            insurance_contact_email: 'bob@conins.com',
+            equipment_type_rid: 4,
+            equipment_types: {
+              id: 4,
+              name: 'Intergallactic Space Cruiser',
+              description: 'A large, wasteful space craft.',
+            },
+          },
+          event_rid: null,
+          is_complete: false,
+        },
+        expected: {
+          id: 1,
+          name: 'Stuff I need to do',
+          description: 'This is a thing, and I need to do things that are stuff',
+          dueDate: '2025-05-23',
+          isComplete: false,
+          equipmentRid: 4273,
+          equipment: {
+            id: 4273,
+            name: 'Planet Destroyer',
+            description: 'The Vogons should destroy the Earth using this.',
+            purchaseDate: '2025-03-28',
+            cost: 2954932.34,
+            manufacturer: 'Vogon Vehicles',
+            model: 'DST-X3',
+            identification: '1994-ff8ge-1234',
+            length: '7 Miles, 4 feet',
+            weight: '1.1 Million Tons (Roughly)',
+            capacity: 'A full crew',
+            licensePlateNumber: 'I<3DST',
+            insuranceCarrier: 'Contructors Insurance',
+            insurancePolicyNumber: '8849950-29934',
+            insuranceContactName: 'Bob',
+            insuranceContactPhoneNumber: '555-930-2994',
+            insuranceContactEmail: 'bob@conins.com',
+            equipmentType: {
+              id: 4,
+              name: 'Intergallactic Space Cruiser',
+              description: 'A large, wasteful space craft.',
+            },
+          },
+          eventRid: null,
+          todoItems: [],
         },
       },
       {
@@ -78,6 +231,8 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           due_date: '2025-05-23',
           is_complete: false,
+          equipment_rid: null,
+          event_rid: null,
           todo_items: [
             {
               id: 42,
@@ -104,6 +259,8 @@ describe('todo collection converters', () => {
           name: 'Stuff I need to do',
           description: 'This is a thing, and I need to do things that are stuff',
           dueDate: '2025-05-23',
+          equipmentRid: null,
+          eventRid: null,
           isComplete: false,
           todoItems: [
             {
@@ -133,7 +290,7 @@ describe('todo collection converters', () => {
   });
 
   describe('to DTO', () => {
-    const testCases = [
+    const testCases: { name: string; input: TodoCollection; expected: TodoCollectionDTO }[] = [
       {
         name: 'converts the full collection without the children',
         input: {
@@ -142,6 +299,8 @@ describe('todo collection converters', () => {
           description: 'This is a thing, and I need to do things that are stuff',
           dueDate: '2025-05-23',
           isComplete: false,
+          equipmentRid: null,
+          eventRid: null,
           todoItems: [
             {
               id: 42,
@@ -181,6 +340,8 @@ describe('todo collection converters', () => {
           description: ' This is a thing, and I need to do things that are stuff',
           dueDate: '2025-05-23   ',
           isComplete: false,
+          equipmentRid: null,
+          eventRid: null,
           todoItems: [
             {
               id: 42,
@@ -221,6 +382,7 @@ describe('todo collection converters', () => {
           dueDate: '2025-05-23',
           isComplete: false,
           eventRid: 4273,
+          equipmentRid: null,
           todoItems: [
             {
               id: 42,
@@ -261,6 +423,7 @@ describe('todo collection converters', () => {
           dueDate: '2025-05-23',
           isComplete: false,
           equipmentRid: 4273,
+          eventRid: null,
           todoItems: [
             {
               id: 42,

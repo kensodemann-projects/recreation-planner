@@ -1,4 +1,5 @@
-import { Event, EventType, SelectablePlace } from '@/models';
+import { PLACES } from '@/app/adventure/places/__mocks__/data';
+import { Event, EventType, Place } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -7,8 +8,8 @@ import EventEditor from '../event-editor';
 describe('Activity Editor', () => {
   afterEach(() => cleanup());
 
-  const eventTypes: Array<EventType> = [...EVENT_TYPES];
-  const places: Array<SelectablePlace> = [...PLACES];
+  const eventTypes: EventType[] = [...EVENT_TYPES];
+  const places: Place[] = [...PLACES];
 
   it('exists', () => {
     const res = render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
@@ -406,7 +407,7 @@ describe('Activity Editor', () => {
           );
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '32');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '3');
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.place).toEqual(PLACES[2]);
         });
@@ -565,7 +566,7 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '21');
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '2');
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
@@ -737,7 +738,7 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '32');
+          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '3');
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, place: PLACES[2] });
         });
@@ -869,25 +870,6 @@ const EVENT_TYPES: Array<EventType> = [
     id: 1,
     name: 'Vacation',
     description: 'Visit a destination for the sole purpose of visiting the location.',
-  },
-];
-
-const PLACES: Array<SelectablePlace> = [
-  {
-    id: 13,
-    name: 'Burnet State Park',
-  },
-  {
-    id: 21,
-    name: 'Indianapolis Motor Speedway',
-  },
-  {
-    id: 32,
-    name: 'Richard Bong State Park',
-  },
-  {
-    id: 24,
-    name: 'LaBahn Arena',
   },
 ];
 

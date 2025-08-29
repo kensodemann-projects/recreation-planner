@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
-import { Event, EventDTO, EventType, SelectablePlace } from '@/models';
+import { Event, EventDTO, EventType } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const selectColumns = '*, places!inner(*), event_types!inner(*)';
+const selectColumns = '*, places!inner(*, place_types!inner(*)), event_types!inner(*)';
 const childTableColumns = ', notes(*), todo_collections(*, todo_items(*))';
 const eventsTable = 'events';
 
@@ -64,10 +64,6 @@ const eventDelete = (supabase: SupabaseClient, event: Event): any => {
 
 const eventTypesQuery = (supabase: SupabaseClient): any => {
   return supabase.from('event_types').select('id, name, description').order('name');
-};
-
-const selectablePlacesQuery = (supabase: SupabaseClient): any => {
-  return supabase.from('places').select('id, name').order('name');
 };
 
 export const fetchUpcomingEvents = async (startDate: string, endDate?: string): Promise<Event[]> => {
@@ -151,17 +147,6 @@ export const fetchEventTypes = async (): Promise<EventType[]> => {
   const supabase = createClient();
   const query = eventTypesQuery(supabase);
   const data = await executeQuery<EventType[]>(query);
-  return data || [];
-};
-
-export const fetchPlaces = async (): Promise<SelectablePlace[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = selectablePlacesQuery(supabase);
-  const data = await executeQuery<SelectablePlace[]>(query);
   return data || [];
 };
 

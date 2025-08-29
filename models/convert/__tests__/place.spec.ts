@@ -6,19 +6,9 @@ describe('place convertions', () => {
   describe('to place', () => {
     const testCases: {
       name: string;
-      input: PlaceDTO | Pick<PlaceDTO, 'id' | 'name' | 'description'>;
-      expected: Place | Pick<Place, 'id' | 'name' | 'description'>;
+      input: PlaceDTO;
+      expected: Place;
     }[] = [
-      {
-        name: 'handles a "selectable item" conversion',
-        input: { id: 42, name: 'Earth' },
-        expected: { id: 42, name: 'Earth' },
-      },
-      {
-        name: 'handles a "common data" conversion',
-        input: { id: 42, name: 'Earth', description: 'Mostly harmless' },
-        expected: { id: 42, name: 'Earth', description: 'Mostly harmless' },
-      },
       {
         name: 'includes the address',
         input: {
@@ -30,6 +20,10 @@ describe('place convertions', () => {
           city: 'Cornell',
           state: 'WI',
           postal_code: '54732',
+          phone_number: null,
+          website: null,
+          place_type_rid: 3,
+          place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
         },
         expected: {
           id: 42,
@@ -42,14 +36,28 @@ describe('place convertions', () => {
             state: 'WI',
             postal: '54732',
           },
+          phoneNumber: null,
+          website: null,
+          type: {
+            id: 3,
+            name: 'Planet',
+            description: 'Big globe thing',
+          },
         },
       },
       {
-        name: 'includes the place type',
+        name: 'handles having no address data',
         input: {
           id: 42,
           name: 'Earth',
           description: 'Mostly harmless',
+          address_line_1: null,
+          address_line_2: null,
+          city: null,
+          state: null,
+          postal_code: null,
+          phone_number: null,
+          website: null,
           place_type_rid: 3,
           place_types: { id: 3, name: 'Planet', description: 'Big globe thing' },
         },
@@ -57,6 +65,15 @@ describe('place convertions', () => {
           id: 42,
           name: 'Earth',
           description: 'Mostly harmless',
+          phoneNumber: null,
+          website: null,
+          address: {
+            line1: null,
+            line2: null,
+            city: null,
+            state: null,
+            postal: null,
+          },
           type: {
             id: 3,
             name: 'Planet',
@@ -228,11 +245,20 @@ describe('place convertions', () => {
         },
       },
       {
-        name: 'sets unspecified or blank items to NULL',
+        name: 'sets blank items to NULL',
         input: {
           id: 42,
           name: 'Earth',
           description: '',
+          phoneNumber: '',
+          website: '',
+          address: {
+            line1: '',
+            line2: '',
+            city: '',
+            state: '',
+            postal: '',
+          },
           type: {
             id: 3,
             name: 'Planet',

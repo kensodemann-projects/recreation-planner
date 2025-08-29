@@ -4,12 +4,12 @@ import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
 import { useFormControl } from '@/hooks/use-form-control';
-import { Event, EventType, SelectablePlace } from '@/models';
+import { Event, EventType, Place } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
 
 export interface EventEditorProps {
-  places: Array<SelectablePlace>;
+  places: Array<Place>;
   types: Array<EventType>;
   event?: Event;
   onConfirm: (event: Event) => void;

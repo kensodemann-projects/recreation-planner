@@ -5,9 +5,3 @@ export const convertToEquipmentEventType = (dto: EquipmentEventTypeDTO): Equipme
   name: dto.name,
   description: dto.description,
 });
-
-export const convertToEquipmentEventTypeDTO = (equipmentType: EquipmentEventType): EquipmentEventTypeDTO => ({
-  id: equipmentType.id,
-  name: equipmentType.name.trim(),
-  description: equipmentType.description?.trim(),
-});

@@ -1,13 +1,13 @@
 'use client';
 
-import { EventType, SelectablePlace } from '@/models';
+import { EventType, Place } from '@/models';
 import { useRouter } from 'next/navigation';
 import EventEditor from '../ui/event-editor';
 import { createConfirmed } from './actions';
 
 type CreateEventProps = {
   types: Array<EventType>;
-  places: Array<SelectablePlace>;
+  places: Array<Place>;
 };
 
 const CreateEvent = ({ types, places }: CreateEventProps) => {

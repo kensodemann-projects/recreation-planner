@@ -86,13 +86,17 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           className="btn btn-primary min-w-24"
           onClick={() => {
             setBusy(true);
-            const data = {
+            const data: Pick<TodoCollection, 'name' | 'description' | 'isComplete' | 'dueDate'> = {
               name: name!,
               description: description,
               isComplete: isComplete,
               dueDate: dueDate,
             };
-            onConfirm(todoCollection ? { ...todoCollection, ...data } : { ...data, todoItems: [] });
+            onConfirm(
+              todoCollection
+                ? { ...todoCollection, ...data }
+                : { ...data, equipmentRid: null, eventRid: null, todoItems: [] },
+            );
           }}
           disabled={disableConfirmButton || busy}
         >

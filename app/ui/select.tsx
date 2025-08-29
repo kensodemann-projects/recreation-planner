@@ -1,9 +1,9 @@
-import { CommonData } from '@/models/common-data';
+import { SelectableData } from '@/models/common-data';
 import { ComponentPropsWithoutRef } from 'react';
 
 interface SelectProperties extends ComponentPropsWithoutRef<'select'> {
   label: string;
-  values: Array<CommonData>;
+  values: Array<SelectableData>;
   error?: string | undefined;
 }
 

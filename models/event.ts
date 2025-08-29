@@ -11,7 +11,7 @@ export interface EventDTO extends CommonDataDTO {
   end_time: string | null;
   place_rid: number;
   event_type_rid: number;
-  places?: Partial<PlaceDTO>;
+  places?: PlaceDTO;
   event_types?: EventTypeDTO;
   notes?: NoteDTO[];
   todo_collections?: TodoCollectionDTO[];
@@ -22,7 +22,7 @@ export interface Event extends CommonData {
   beginTime?: string | null;
   endDate?: string | null;
   endTime?: string | null;
-  place: Partial<Place>;
+  place: Place;
   type: EventType;
   notes?: Note[];
   todoCollections?: TodoCollection[];

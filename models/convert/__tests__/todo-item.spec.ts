@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { convertToTodoItem, convertToTodoItemDTO } from '../todo-item';
+import { TodoItem, TodoItemDTO } from '@/models/todo-item';
 
 describe('todo item converters', () => {
   describe('to TodoItem', () => {
-    const testCases = [
-      {
-        name: 'converts a base object',
-        value: { id: 42, name: 'Do the needful' },
-        expected: { id: 42, name: 'Do the needful' },
-      },
+    const testCases: { name: string; value: TodoItemDTO; expected: TodoItem }[] = [
       {
         name: 'converts a full object',
         value: { id: 42, name: 'Do the needful', is_complete: false, todo_collection_rid: 3 },
@@ -20,7 +16,7 @@ describe('todo item converters', () => {
   });
 
   describe('to TodoItem DTO', () => {
-    const testCases = [
+    const testCases: { name: string; value: TodoItem; expected: TodoItemDTO }[] = [
       {
         name: 'converts the item and adds the collection ref ID',
         value: { id: 42, name: 'Do the needful', isComplete: false, todoCollectionRid: 3 },
