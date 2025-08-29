@@ -1,5 +1,16 @@
 # recreation-planner
 
+## 0.5.0
+
+### Minor Changes
+
+- 65bd37b: Display most recently created events on the dashboard.
+- c4beeb7: Display current events on the dashboard.
+
+### Patch Changes
+
+- 3c2f552: Refactor the navigatin back to calling pages for multiple possible sources.
+
 ## 0.4.0
 
 ### Minor Changes
