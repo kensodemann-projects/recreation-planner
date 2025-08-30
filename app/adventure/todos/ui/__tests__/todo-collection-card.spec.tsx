@@ -1,9 +1,11 @@
+import { EQUIPMENT } from '@/app/adventure/equipment/__mocks__/data';
 import { TodoCollection } from '@/models';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { addTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
+import { EVENTS } from '@/app/adventure/events/__mocks__/data';
 
 vi.mock('../../data');
 
@@ -29,6 +31,7 @@ describe('TODO Collection Card', () => {
       />,
     );
     expect(screen.getByText('Due Date:')).toBeDefined();
+    expect(screen.getByText('Mar 17, 2025')).toBeDefined();
   });
 
   it('does not render the due date if the collection does not have one', () => {
@@ -74,6 +77,28 @@ describe('TODO Collection Card', () => {
     expect(elements[1].parentElement!.textContent).toEqual('Create an item');
     expect(elements[2].parentElement!.textContent).toEqual('Fetch the data');
     expect(elements[3].parentElement!.textContent).toEqual('Create the collection');
+  });
+
+  describe('when rendered as a primary entity', () => {
+    it('displays the equipment name for equipment related collections', () => {
+      const collection = { ...TEST_COLLECTION, equipmentRid: EQUIPMENT[0].id!, equipment: EQUIPMENT[0] };
+      render(<TodoCollectionCard baseHref="/adventure/todos" todoCollection={collection} />);
+      expect(screen.getByText('For Equipment:')).toBeDefined();
+      expect(screen.getByText(EQUIPMENT[0].name)).toBeDefined();
+    });
+
+    it('displays the event name for event related collections', () => {
+      const collection = { ...TEST_COLLECTION, eventRid: EVENTS[0].id!, event: EVENTS[0] };
+      render(<TodoCollectionCard baseHref="/adventure/todos" todoCollection={collection} />);
+      expect(screen.getByText('For Event:')).toBeDefined();
+      expect(screen.getByText(EVENTS[0].name)).toBeDefined();
+    });
+
+    it('does not display an assoication if there is not one', () => {
+      render(<TodoCollectionCard baseHref="/adventure/todos" todoCollection={TEST_COLLECTION} />);
+      expect(screen.queryByText('For Equipment:')).toBeNull();
+      expect(screen.queryByText('For Event:')).toBeNull();
+    });
   });
 
   it('allows the user to update todo item text', async () => {
@@ -163,6 +188,8 @@ const TEST_COLLECTION: TodoCollection = {
   description: 'The point of this collection is simply to do a thing',
   dueDate: '2025-03-17',
   isComplete: false,
+  eventRid: null,
+  equipmentRid: null,
   todoItems: [
     {
       id: 17,

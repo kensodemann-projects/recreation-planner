@@ -39,9 +39,19 @@ const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoColle
     setTodoItems(items);
   };
 
+  const Association = todoCollection.equipment ? (
+    <p className="grow-0">
+      <span className="font-bold">For Equipment:</span> {todoCollection.equipment.name}
+    </p>
+  ) : todoCollection.event ? (
+    <p className="grow-0">
+      <span className="font-bold">For Event:</span> {todoCollection.event.name}
+    </p>
+  ) : undefined;
+
   const DueDate = todoCollection.dueDate ? (
     <p className="grow-0">
-      <span className="font-bold">Due Date:</span> {todoCollection.dueDate ? formatDate(todoCollection.dueDate) : null}
+      <span className="font-bold">Due Date:</span> {formatDate(todoCollection.dueDate)}
     </p>
   ) : null;
 
@@ -49,6 +59,7 @@ const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoColle
     <div className="card card-border bg-base-100 m-2">
       <div className="card-body">
         <h3 className="card-title">{todoCollection.name}</h3>
+        {Association}
         <p className="grow-0">{todoCollection.description}</p>
         {DueDate}
         <div className="grow" data-testid="todo-items">

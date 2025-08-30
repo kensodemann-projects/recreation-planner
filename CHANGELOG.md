@@ -1,5 +1,16 @@
 # recreation-planner
 
+## 0.6.0
+
+### Minor Changes
+
+- b851665: Show the associations when TODO collections are shown as primary parent entities.
+
+### Patch Changes
+
+- 15b977b: Clean up the modeling.
+- 15b977b: When a TODO collection for an Event or Equipment is displayed in the general TODO list or the dashboard, specify the Event or Equipment it is associated with.
+
 ## 0.5.0
 
 ### Minor Changes
