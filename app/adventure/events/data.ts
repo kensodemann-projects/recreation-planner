@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const selectColumns = '*, places!inner(*, place_types!inner(*)), event_types!inner(*)';
-const childTableColumns = ', notes(*), todo_collections(*, todo_items(*))';
+const childTableColumns = ', itinerary_items(*), notes(*), todo_collections(*, todo_items(*))';
 const eventsTable = 'events';
 
 const upcomingEventsQuery = (supabase: SupabaseClient, startDate: string, endDate?: string): any => {
