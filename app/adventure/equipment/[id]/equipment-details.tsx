@@ -76,48 +76,41 @@ const EquipmentDetails = ({ equipment }: EquipmentDetailsProps) => {
         {insuranceSection(equipment)}
       </div>
 
-      <section data-testid="maintenance-events-section">
-        <SectionHeader>
-          <SubtitleHeading>Maintenance Events</SubtitleHeading>
-        </SectionHeader>
+      <div className="tabs tabs-border mt-5">
+        <input type="radio" name="equipment-tabs" className="tab" aria-label="Todos" defaultChecked />
+        <section className="tab-content" data-testid="todos-section">
+          <Todos collections={equipment.todoCollections!} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
+          <Link href={`${equipment.id}/todos/create`}>
+            <button className="btn btn-primary mt-5">
+              <PlusCircleIcon className="w-6" />
+              Add Todo Collection
+            </button>
+          </Link>
+        </section>
 
-        <EquipmentEventsWrapper equipmentEvents={equipment.equipmentEvents!} />
+        <input type="radio" name="equipment-tabs" className="tab" aria-label="Maintenance" />
+        <section className="tab-content" data-testid="maintenance-events-section">
+          <EquipmentEventsWrapper equipmentEvents={equipment.equipmentEvents!} />
+          <Link href={`${equipment.id}/events/create`}>
+            <button className="btn btn-primary mt-5">
+              <PlusCircleIcon className="w-6" />
+              Add Event
+            </button>
+          </Link>
+        </section>
 
-        <Link href={`${equipment.id}/events/create`}>
-          <button className="btn btn-primary">
-            <PlusCircleIcon className="w-6" />
-            Add Event
-          </button>
-        </Link>
-      </section>
+        <input type="radio" name="equipment-tabs" className="tab" aria-label="Notes" />
+        <section className="tab-content">
+          <Notes notes={equipment.notes || []} baseHref={`/adventure/equipment/${equipment.id}/notes`} />
 
-      <section data-testid="todos-section">
-        <SectionHeader>
-          <SubtitleHeading>Todos</SubtitleHeading>
-        </SectionHeader>
-        <Todos collections={equipment.todoCollections!} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
-        <Link href={`${equipment.id}/todos/create`}>
-          <button className="btn btn-primary">
-            <PlusCircleIcon className="w-6" />
-            Add Todo Collection
-          </button>
-        </Link>
-      </section>
-
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Notes</SubtitleHeading>
-        </SectionHeader>
-
-        <Notes notes={equipment.notes || []} baseHref={`/adventure/equipment/${equipment.id}/notes`} />
-
-        <Link href={`${equipment.id}/notes/create`}>
-          <button className="btn btn-primary">
-            <PlusCircleIcon className="w-6" />
-            Add Note
-          </button>
-        </Link>
-      </section>
+          <Link href={`${equipment.id}/notes/create`}>
+            <button className="btn btn-primary mt-5">
+              <PlusCircleIcon className="w-6" />
+              Add Note
+            </button>
+          </Link>
+        </section>
+      </div>
     </>
   );
 };

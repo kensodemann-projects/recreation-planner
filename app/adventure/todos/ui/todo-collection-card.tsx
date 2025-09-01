@@ -56,7 +56,7 @@ const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoColle
   ) : null;
 
   return (
-    <div className="card card-border bg-base-100 m-2">
+    <div className="card card-border bg-base-100">
       <div className="card-body">
         <h3 className="card-title">{todoCollection.name}</h3>
         {Association}
@@ -92,7 +92,7 @@ const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoColle
         </div>
         <div className="card-actions justify-end items-center mt-6">
           <Link href={`${baseHref}/${todoCollection.id}/delete${searchParams}`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
+            <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the collection">
               <TrashIcon className="w-6" />
             </button>
           </Link>

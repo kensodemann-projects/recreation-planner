@@ -1,6 +1,5 @@
 import { Note } from '@/models';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+import NoteCard from './note-card';
 
 export interface NotesProps {
   notes: Note[];
@@ -9,24 +8,13 @@ export interface NotesProps {
 
 const Notes = ({ baseHref, notes }: NotesProps) => {
   return (
-    <ul className="list">
-      {notes.map((note) => (
-        <li className="list-row" key={note.id}>
-          <div className="font-bold text-lg list-col-grow">{note.name}</div>
-          {note.description && <p className="list-col-wrap whitespace-pre-line text-sm">{note.description}</p>}
-          <Link href={`${baseHref}/${note.id}/delete`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
-              <TrashIcon className="w-6" />
-            </button>
-          </Link>
-          <Link href={`${baseHref}/${note.id}/update`}>
-            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
-              <PencilSquareIcon className="w-6" />
-            </button>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <section className="md:px-2">
+      <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+        {notes.map((x) => (
+          <NoteCard baseHref={baseHref} note={x} key={x.id} />
+        ))}
+      </div>
+    </section>
   );
 };
 

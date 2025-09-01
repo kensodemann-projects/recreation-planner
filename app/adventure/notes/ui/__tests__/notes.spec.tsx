@@ -9,7 +9,7 @@ describe('notes list', () => {
 
   it('displays each note', () => {
     render(<Notes notes={TEST_NOTES} baseHref="/adventure/events/42/notes" />);
-    expect(screen.queryAllByRole('listitem').length).toBe(TEST_NOTES.length);
+    expect(screen.queryAllByRole('heading', { level: 3 }).length).toBe(TEST_NOTES.length);
   });
 });
 

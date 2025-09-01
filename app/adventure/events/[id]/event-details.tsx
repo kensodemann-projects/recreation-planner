@@ -44,33 +44,30 @@ const EventDetails = ({ event }: EventDetailsProps) => {
         <div>{event.place.phoneNumber}</div>
       </section>
 
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Todos</SubtitleHeading>
-        </SectionHeader>
-        <Todos collections={event.todoCollections || []} baseHref={`/adventure/events/${event.id}/todos`} />
-        <Link href={`${event.id}/todos/create`}>
-          <button className="btn btn-primary">
-            <PlusCircleIcon className="w-6" />
-            Add Todo Collection
-          </button>
-        </Link>
-      </section>
+      <div className="tabs tabs-border mt-5">
+        <input type="radio" name="event-tabs" className="tab" aria-label="Todos" defaultChecked />
+        <section className="tab-content">
+          <Todos collections={event.todoCollections || []} baseHref={`/adventure/events/${event.id}/todos`} />
+          <Link href={`${event.id}/todos/create`}>
+            <button className="btn btn-primary mt-5">
+              <PlusCircleIcon className="w-6" />
+              Add Todo Collection
+            </button>
+          </Link>
+        </section>
 
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Notes</SubtitleHeading>
-        </SectionHeader>
+        <input type="radio" name="event-tabs" className="tab" aria-label="Notes" />
+        <section className="tab-content">
+          <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
 
-        <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
-
-        <Link href={`${event.id}/notes/create`}>
-          <button className="btn btn-primary">
-            <PlusCircleIcon className="w-6" />
-            Add Note
-          </button>
-        </Link>
-      </section>
+          <Link href={`${event.id}/notes/create`}>
+            <button className="btn btn-primary mt-5">
+              <PlusCircleIcon className="w-6" />
+              Add Note
+            </button>
+          </Link>
+        </section>
+      </div>
     </>
   );
 };

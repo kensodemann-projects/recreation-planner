@@ -55,7 +55,7 @@ const EditableCheckbox = ({ label, onLabelChanged, onRemove, removeVerification,
             </button>
           </div>
         ) : (
-          <div className="label min-w-28 min-h-4" tabIndex={0} onClick={() => setEditMode(true)}>
+          <div className="label text-wrap min-w-28 min-h-4" tabIndex={0} onClick={() => setEditMode(true)}>
             {label}
           </div>
         )}

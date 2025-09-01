@@ -63,6 +63,7 @@ const todoCollections: TodoCollection[] = [
     dueDate: '2025-05-31',
     todoItems: testTodoItems.filter((x) => x.todoCollectionRid === 1),
     eventRid: 314,
+    equipmentRid: null,
   },
   {
     id: 2,
@@ -72,6 +73,7 @@ const todoCollections: TodoCollection[] = [
     dueDate: '2025-07-09',
     todoItems: testTodoItems.filter((x) => x.todoCollectionRid === 2),
     eventRid: 314,
+    equipmentRid: null,
   },
   {
     id: 3,
@@ -81,6 +83,7 @@ const todoCollections: TodoCollection[] = [
     dueDate: null,
     todoItems: testTodoItems.filter((x) => x.todoCollectionRid === 3),
     eventRid: 314,
+    equipmentRid: null,
   },
 ];
 
@@ -97,6 +100,7 @@ const testEvent = {
   place: {
     id: 32,
     name: 'Richard Bong State Park',
+    description: null,
     address: {
       line1: '26313 Burlington Rd.',
       line2: null,
@@ -106,6 +110,11 @@ const testEvent = {
     },
     phoneNumber: '(262) 878-5600',
     website: 'https://dnr.wisconsin.gov/topic/parks/richardbong',
+    type: {
+      id: 1,
+      name: 'State Park',
+      description: 'A state owned property for camping and recreation.',
+    },
   },
   type: {
     id: 2,
@@ -145,11 +154,6 @@ describe('Event Details', () => {
   });
 
   describe('todo section', () => {
-    it('renders the section header', () => {
-      render(<EventDetails event={testEvent} />);
-      expect(screen.getByRole('heading', { level: 2, name: 'Todos' })).toBeDefined();
-    });
-
     it('renders the add button', () => {
       render(<EventDetails event={testEvent} />);
       expect(screen.getByRole('button', { name: 'Add Todo Collection' })).toBeDefined();
@@ -164,11 +168,6 @@ describe('Event Details', () => {
   });
 
   describe('notes section', () => {
-    it('renders the section header', () => {
-      render(<EventDetails event={testEvent} />);
-      expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
-    });
-
     it('renders the add button', () => {
       render(<EventDetails event={testEvent} />);
       expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();

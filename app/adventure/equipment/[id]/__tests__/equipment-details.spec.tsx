@@ -234,12 +234,6 @@ describe('EquipmentDetails', () => {
   });
 
   describe('maintenance events section', () => {
-    it('renders a section header', () => {
-      render(<EquipmentDetails equipment={testEquipment} />);
-      const section = screen.getByTestId('maintenance-events-section');
-      expect(within(section).getByRole('heading', { level: 2, name: 'Maintenance Events' })).toBeDefined();
-    });
-
     it('renders an add button', () => {
       render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('maintenance-events-section');
@@ -248,11 +242,6 @@ describe('EquipmentDetails', () => {
   });
 
   describe('notes section', () => {
-    it('renders the section header', () => {
-      render(<EquipmentDetails equipment={testEquipment} />);
-      expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
-    });
-
     it('renders the add button', () => {
       render(<EquipmentDetails equipment={testEquipment} />);
       expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();

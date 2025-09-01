@@ -16,9 +16,9 @@ const Todos = ({ collections, baseHref, callingPage, disableArchived }: TodosPro
 
   return (
     <>
-      <section className="px-2">
+      <section className="md:px-2">
         {disableArchived ? undefined : (
-          <div className="w-full text-right">
+          <div className="w-full text-right mb-2">
             <label className="label">
               <input
                 type="checkbox"
@@ -30,7 +30,7 @@ const Todos = ({ collections, baseHref, callingPage, disableArchived }: TodosPro
             </label>
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+        <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
           {collections
             .filter((x) => showArchived || !x.isComplete)
             .map((x) => (
