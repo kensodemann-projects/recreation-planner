@@ -17,7 +17,6 @@ describe('Note Card', () => {
   it('renders the description', () => {
     render(<NoteCard baseHref={`/adventure/event/${TEST_NOTE.eventRid}/notes`} note={TEST_NOTE} />);
     expect(screen.getByText(TEST_NOTE.description!)).toBeDefined();
-    const links = screen.queryAllByRole('link');
   });
 
   it('includes delete and update links', () => {

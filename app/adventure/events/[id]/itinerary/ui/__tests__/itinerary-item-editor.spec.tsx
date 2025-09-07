@@ -1,8 +1,8 @@
+import { ItineraryItem } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ItineraryItemEditor from '../itinerary-item-editor';
-import userEvent from '@testing-library/user-event';
-import { ItineraryItem, Note } from '@/models';
 
 const activityInput = () => screen.getByRole('textbox', { name: 'Activity' });
 const descriptionInput = () => screen.getByRole('textbox', { name: 'Description' });
