@@ -7,6 +7,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Notes from '../../notes/ui/notes';
 import Todos from '../../todos/ui/todos';
+import Message from '@/app/ui/message';
 
 interface EventDetailsProps {
   event: Event;
@@ -54,6 +55,11 @@ const EventDetails = ({ event }: EventDetailsProps) => {
               Add Todo Collection
             </button>
           </Link>
+        </section>
+
+        <input type="radio" name="event-tabs" className="tab" aria-label="Itinerary" />
+        <section className="tab-content">
+          <Message>You have not defined an itinerary for this event.</Message>
         </section>
 
         <input type="radio" name="event-tabs" className="tab" aria-label="Notes" />

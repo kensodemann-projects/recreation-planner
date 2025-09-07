@@ -4,6 +4,7 @@ import { Event, TodoCollection } from '@/models';
 import EventsTable from '@/app/adventure/events/events-table';
 import EventsList from '@/app/adventure/events/events-list';
 import Todos from './todos/ui/todos';
+import Message from '../ui/message';
 
 interface DashboardProps {
   currentEvents: Event[];
@@ -24,7 +25,7 @@ const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: Dashboar
             <EventsList className="block md:hidden" events={currentEvents} callingPage="Home" />
           </>
         ) : (
-          <div>You have no upcoming events.</div>
+          <Message>You have no upcoming events.</Message>
         )}
       </section>
 
@@ -38,7 +39,7 @@ const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: Dashboar
             <EventsList className="block md:hidden" events={latestEvents} callingPage="Home" />
           </>
         ) : (
-          <div>You have no events.</div>
+          <Message>You have no events.</Message>
         )}
       </section>
 
@@ -54,7 +55,7 @@ const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: Dashboar
             disableArchived={true}
           />
         ) : (
-          <div>You have no TODOs due at this time.</div>
+          <Message>You have no TODOs due at this time.</Message>
         )}
       </section>
     </>
