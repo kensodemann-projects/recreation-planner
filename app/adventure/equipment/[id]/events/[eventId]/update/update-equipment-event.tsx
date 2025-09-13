@@ -1,8 +1,8 @@
 'use client';
 
 import { EquipmentEvent, EquipmentEventType, UsageUnits } from '@/models';
-import { useRouter } from 'next/navigation';
 import EquipmentEventEditor from '../../ui/equipment-event-editor';
+import { redirectToEquipmentDetails } from '../../utils';
 import { updateConfirmed } from './actions';
 
 type UpdateEquipmentEventProperties = {
@@ -12,8 +12,6 @@ type UpdateEquipmentEventProperties = {
 };
 
 const UpdateEquipmentEvent = ({ equipmentEvent, equipmentEventTypes, usageUnits }: UpdateEquipmentEventProperties) => {
-  const router = useRouter();
-
   return (
     <>
       <EquipmentEventEditor
@@ -21,7 +19,7 @@ const UpdateEquipmentEvent = ({ equipmentEvent, equipmentEventTypes, usageUnits 
         equipmentEventTypes={equipmentEventTypes}
         usageUnits={usageUnits}
         onConfirm={(evt) => updateConfirmed(evt as EquipmentEvent)}
-        onCancel={() => router.back()}
+        onCancel={() => redirectToEquipmentDetails(equipmentEvent.equipmentRid)}
       />
     </>
   );

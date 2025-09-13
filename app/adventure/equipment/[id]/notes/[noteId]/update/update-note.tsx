@@ -2,7 +2,7 @@
 
 import NoteEditor from '@/app/adventure/notes/ui/note-editor';
 import { Note } from '@/models';
-import { useRouter } from 'next/navigation';
+import { redirectToEquipmentDetails } from '../../utils';
 import { updateConfirmed } from './actions';
 
 type UpdateNoteProperties = {
@@ -10,11 +10,13 @@ type UpdateNoteProperties = {
 };
 
 const UpdateNote = ({ note }: UpdateNoteProperties) => {
-  const router = useRouter();
-
   return (
     <>
-      <NoteEditor note={note} onConfirm={(evt) => updateConfirmed(evt as Note)} onCancel={() => router.back()} />
+      <NoteEditor
+        note={note}
+        onConfirm={(evt) => updateConfirmed(evt as Note)}
+        onCancel={() => redirectToEquipmentDetails(note.equipmentRid!)}
+      />
     </>
   );
 };

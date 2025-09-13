@@ -2,13 +2,13 @@
 
 import { deleteNote } from '@/app/adventure/notes/data';
 import { Note } from '@/models';
-import { redirect } from 'next/navigation';
+import { redirectToEquipmentDetails } from '../../utils';
 
 export const deleteConfirmed = async (equipmentId: number, n: Note) => {
   await deleteNote(n);
-  redirect(`/adventure/equipment/${equipmentId}`);
+  redirectToEquipmentDetails(equipmentId);
 };
 
 export const deleteAborted = async (equipmentId: number) => {
-  redirect(`/adventure/equipment/${equipmentId}`);
+  redirectToEquipmentDetails(equipmentId);
 };

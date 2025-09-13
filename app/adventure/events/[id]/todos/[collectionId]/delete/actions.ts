@@ -2,13 +2,13 @@
 
 import { deleteTodoCollection } from '@/app/adventure/todos/data';
 import { TodoCollection } from '@/models';
-import { redirect } from 'next/navigation';
+import { redirectToEventDetails } from '../../utils';
 
 export const deleteConfirmed = async (eventId: number, c: TodoCollection) => {
   await deleteTodoCollection(c);
-  redirect(`/adventure/events/${eventId}`);
+  redirectToEventDetails(eventId);
 };
 
 export const deleteAborted = async (eventId: number) => {
-  redirect(`/adventure/events/${eventId}`);
+  redirectToEventDetails(eventId);
 };

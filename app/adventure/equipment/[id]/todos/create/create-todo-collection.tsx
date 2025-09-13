@@ -1,21 +1,19 @@
 'use client';
 
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
-import { useRouter } from 'next/navigation';
+import { redirectToEquipmentDetails } from '../utils';
 import { createConfirmed } from './actions';
 
 type CreateTodoCollectionProps = {
-  equipmentRid: number | null;
+  equipmentRid: number;
 };
 
 const CreateTodoCollection = ({ equipmentRid }: CreateTodoCollectionProps) => {
-  const router = useRouter();
-
   return (
     <>
       <TodoCollectionEditor
         onConfirm={(collection) => createConfirmed({ ...collection, equipmentRid: equipmentRid })}
-        onCancel={() => router.back()}
+        onCancel={() => redirectToEquipmentDetails(equipmentRid)}
       />
     </>
   );
