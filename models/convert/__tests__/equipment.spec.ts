@@ -139,7 +139,7 @@ describe('equipment convertions', () => {
               place_rid: null,
             },
           ],
-          equipment_events: [
+          maintenance_items: [
             {
               id: 1,
               name: 'Spring Inspection',
@@ -148,8 +148,8 @@ describe('equipment convertions', () => {
               date: '2025-05-20',
               usage: null,
               cost: null,
-              equipment_event_type_rid: 5,
-              equipment_event_types: {
+              maintenance_type_rid: 5,
+              maintenance_types: {
                 id: 5,
                 name: 'Condition Report',
                 description:
@@ -165,8 +165,8 @@ describe('equipment convertions', () => {
               date: '2025-08-15',
               usage: 12834.3,
               cost: 123.43,
-              equipment_event_type_rid: 2,
-              equipment_event_types: {
+              maintenance_type_rid: 2,
+              maintenance_types: {
                 id: 2,
                 name: 'Periodic Maintenance',
                 description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
@@ -182,8 +182,8 @@ describe('equipment convertions', () => {
               date: '2025-03-17',
               usage: 12.7,
               cost: null,
-              equipment_event_type_rid: 2,
-              equipment_event_types: {
+              maintenance_type_rid: 2,
+              maintenance_types: {
                 id: 2,
                 name: 'Periodic Maintenance',
                 description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
@@ -216,7 +216,7 @@ describe('equipment convertions', () => {
             name: 'Intergallactic Space Cruiser',
             description: 'A large, wasteful space craft.',
           },
-          equipmentEvents: [
+          maintenanceItems: [
             {
               id: 1,
               name: 'Spring Inspection',
@@ -225,7 +225,7 @@ describe('equipment convertions', () => {
               date: '2025-05-20',
               usage: null,
               cost: null,
-              equipmentEventType: {
+              maintenanceType: {
                 id: 5,
                 name: 'Condition Report',
                 description:
@@ -240,7 +240,7 @@ describe('equipment convertions', () => {
               date: '2025-08-15',
               usage: 12834.3,
               cost: 123.43,
-              equipmentEventType: {
+              maintenanceType: {
                 id: 2,
                 name: 'Periodic Maintenance',
                 description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
@@ -255,7 +255,7 @@ describe('equipment convertions', () => {
               date: '2025-03-17',
               usage: 12.7,
               cost: null,
-              equipmentEventType: {
+              maintenanceType: {
                 id: 2,
                 name: 'Periodic Maintenance',
                 description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',

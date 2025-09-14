@@ -3,10 +3,10 @@
 import { Equipment } from '@/models';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import Notes from '../../notes/ui/notes';
 import Todos from '../../todos/ui/todos';
-import EquipmentEventsWrapper from './equipment-events-wrapper';
-import { useSearchParams } from 'next/navigation';
+import MaintenanceItemsWrapper from './maintenance-items-wrapper';
 
 interface EquipmentDetailsTabsProps {
   equipment: Equipment;
@@ -41,9 +41,9 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
         aria-label="Maintenance"
         defaultChecked={activeTab === 'Maintenance'}
       />
-      <section className="tab-content" data-testid="maintenance-events-section">
-        <EquipmentEventsWrapper equipmentEvents={equipment.equipmentEvents!} />
-        <Link href={`${equipment.id}/events/create`}>
+      <section className="tab-content" data-testid="maintenance-items-section">
+        <MaintenanceItemsWrapper maintenanceItems={equipment.maintenanceItems!} />
+        <Link href={`${equipment.id}/maintenance/create`}>
           <button className="btn btn-primary mt-5">
             <PlusCircleIcon className="w-6" />
             Add Event

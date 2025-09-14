@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { convertToEquipmentEventType } from '../equipment-event-type';
+import { convertToMaintenanceType } from '../maintenance-type';
 
-describe('equipment event type converters', () => {
-  describe('to EquipmentEventType', () => {
+describe('maintenance type converters', () => {
+  describe('to MaintenanceType', () => {
     const testCases = [
       {
         name: 'converts a full object',
@@ -11,6 +11,6 @@ describe('equipment event type converters', () => {
       },
     ];
 
-    it.each(testCases)('$name', ({ value, expected }) => expect(convertToEquipmentEventType(value)).toEqual(expected));
+    it.each(testCases)('$name', ({ value, expected }) => expect(convertToMaintenanceType(value)).toEqual(expected));
   });
 });

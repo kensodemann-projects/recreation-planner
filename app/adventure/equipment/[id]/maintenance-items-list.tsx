@@ -1,13 +1,13 @@
 import { formatCurrency, formatDate, formatNumber } from '@/utils/formatters';
 import Link from 'next/link';
-import { EquipmentEventsListProps } from './equipment-events-list-props';
+import { MaintenanceItemsListProps } from './maintenance-items-list-props';
 
-const EquipmentList = ({ className, equipmentEvents }: EquipmentEventsListProps) => {
+const MaintenanceItemsList = ({ className, maintenanceItems }: MaintenanceItemsListProps) => {
   return (
     <ul className={`list-none ${className}`}>
-      {equipmentEvents.map((current) => (
+      {maintenanceItems.map((current) => (
         <li key={current.id} className="py-2 border-solid first:border-t border-b border-primary flex">
-          <Link className="grow" href={`${current.equipmentRid}/events/${current.id}/update`}>
+          <Link className="grow" href={`${current.equipmentRid}/maintenance/${current.id}/update`}>
             <div className="font-bold">{current.name}</div>
             <div>
               <span className="label">Date:</span> {formatDate(current.date)}
@@ -29,4 +29,4 @@ const EquipmentList = ({ className, equipmentEvents }: EquipmentEventsListProps)
   );
 };
 
-export default EquipmentList;
+export default MaintenanceItemsList;

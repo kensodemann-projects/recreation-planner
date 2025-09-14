@@ -1,11 +1,11 @@
-import { EQUIPMENT_EVENT_TYPES, EQUIPMENT_EVENTS, USAGE_UNITS } from '@/app/adventure/equipment/__mocks__/data';
-import { EquipmentEvent } from '@/models';
+import { MAINTENANCE_TYPES, MAINTENANCE_ITEMS, USAGE_UNITS } from '@/app/adventure/equipment/__mocks__/data';
+import { MaintenanceItem } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import EquipmentEventEditor from '../equipment-event-editor';
+import MaintenanceItemEditor from '../maintenance-item-editor';
 
-describe('Equipment Editor', () => {
+describe('Maintenace Item Editor', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
@@ -27,15 +27,15 @@ describe('Equipment Editor', () => {
     describe('initial value', () => {
       it('has the name of the event', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(getNameInput().value).toBe(EQUIPMENT_EVENTS[0].name);
+        expect(getNameInput().value).toBe(MAINTENANCE_ITEMS[0].name);
       });
     });
   });
@@ -44,15 +44,15 @@ describe('Equipment Editor', () => {
     describe('initial value', () => {
       it('has the date of the event', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(getDateInput().value).toBe(EQUIPMENT_EVENTS[0].date);
+        expect(getDateInput().value).toBe(MAINTENANCE_ITEMS[0].date);
       });
     });
   });
@@ -61,15 +61,15 @@ describe('Equipment Editor', () => {
     describe('initial value', () => {
       it('is set to the equipment event type of the event', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(+getTypeOfEventSelect().value).toBe(EQUIPMENT_EVENTS[0].equipmentEventType.id);
+        expect(+getTypeOfEventSelect().value).toBe(MAINTENANCE_ITEMS[0].maintenanceType.id);
       });
     });
   });
@@ -77,24 +77,24 @@ describe('Equipment Editor', () => {
   describe('Description Input', () => {
     describe('initial value', () => {
       it('has the description of the equipment event', () => {
-        expect(EQUIPMENT_EVENTS[0].description).toBeTruthy();
+        expect(MAINTENANCE_ITEMS[0].description).toBeTruthy();
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(getDescriptionInput().value).toBe(EQUIPMENT_EVENTS[0].description);
+        expect(getDescriptionInput().value).toBe(MAINTENANCE_ITEMS[0].description);
       });
 
       it('is blank if the equipment description is null', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={{ ...EQUIPMENT_EVENTS[0], description: null }}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={{ ...MAINTENANCE_ITEMS[0], description: null }}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
@@ -108,25 +108,25 @@ describe('Equipment Editor', () => {
   describe('Usage Input', () => {
     describe('initial value', () => {
       it('has the usage of the equipment event', () => {
-        expect(EQUIPMENT_EVENTS[1].usage).toBeTruthy();
+        expect(MAINTENANCE_ITEMS[1].usage).toBeTruthy();
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[1]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[1]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(getUsageInput().valueAsNumber).toBe(EQUIPMENT_EVENTS[1].usage);
+        expect(getUsageInput().valueAsNumber).toBe(MAINTENANCE_ITEMS[1].usage);
       });
 
       it('is blank if the equipment usage is null', () => {
-        expect(EQUIPMENT_EVENTS[0].usage).toBeNull();
+        expect(MAINTENANCE_ITEMS[0].usage).toBeNull();
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
@@ -141,9 +141,9 @@ describe('Equipment Editor', () => {
     describe('initial value', () => {
       it('is set to the first usage units value when there is no usage units on the event', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
@@ -154,15 +154,15 @@ describe('Equipment Editor', () => {
 
       it('is set to the usage units of the event', () => {
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[1]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[1]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(+getUsageUnitsSelect().value).toBe(EQUIPMENT_EVENTS[1].usageUnits!.id);
+        expect(+getUsageUnitsSelect().value).toBe(MAINTENANCE_ITEMS[1].usageUnits!.id);
       });
     });
   });
@@ -170,25 +170,25 @@ describe('Equipment Editor', () => {
   describe('Cost Input', () => {
     describe('initial value', () => {
       it('has the cost of the equipment event', () => {
-        expect(EQUIPMENT_EVENTS[1].cost).toBeTruthy();
+        expect(MAINTENANCE_ITEMS[1].cost).toBeTruthy();
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[1]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[1]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
           />,
         );
-        expect(getCostInput().valueAsNumber).toBe(EQUIPMENT_EVENTS[1].cost);
+        expect(getCostInput().valueAsNumber).toBe(MAINTENANCE_ITEMS[1].cost);
       });
 
       it('is blank if the equipment cost is null', () => {
-        expect(EQUIPMENT_EVENTS[0].cost).toBeNull();
+        expect(MAINTENANCE_ITEMS[0].cost).toBeNull();
         render(
-          <EquipmentEventEditor
-            equipmentEvent={EQUIPMENT_EVENTS[0]}
-            equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+          <MaintenanceItemEditor
+            maintenanceItem={MAINTENANCE_ITEMS[0]}
+            maintenanceTypes={MAINTENANCE_TYPES}
             usageUnits={USAGE_UNITS}
             onCancel={() => null}
             onConfirm={() => null}
@@ -202,13 +202,13 @@ describe('Equipment Editor', () => {
   describe('for create', () => {
     let user: UserEvent;
     let cancelFired = false;
-    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipmentRid'> | null = null;
+    let savedEvent: MaintenanceItem | Omit<MaintenanceItem, 'equipmentRid'> | null = null;
     beforeEach(() => {
       user = userEvent.setup();
       savedEvent = null;
       render(
-        <EquipmentEventEditor
-          equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+        <MaintenanceItemEditor
+          maintenanceTypes={MAINTENANCE_TYPES}
           usageUnits={USAGE_UNITS}
           onCancel={() => (cancelFired = true)}
           onConfirm={(evt) => (savedEvent = evt)}
@@ -239,7 +239,7 @@ describe('Equipment Editor', () => {
     it('has default values for all fields', () => {
       expect(getNameInput().value).toBe('');
       expect(getDateInput().value).toBe('');
-      expect(+getTypeOfEventSelect().value).toBe(EQUIPMENT_EVENT_TYPES[0].id);
+      expect(+getTypeOfEventSelect().value).toBe(MAINTENANCE_TYPES[0].id);
       expect(getDescriptionInput().value).toBe('');
       expect(getCostInput().value).toBe('');
       expect(getUsageInput().value).toBe('');
@@ -302,7 +302,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Check the miles',
         date: '2025-03-18',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         description: '',
         cost: 0,
         usage: 13435.3,
@@ -320,7 +320,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Check the hours',
         date: '2025-03-18',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         description: '',
         cost: 0,
         usage: 143.5,
@@ -338,7 +338,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Wash the windows',
         date: '2025-03-31',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 2),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 2),
         description: '',
         cost: 0,
         usage: 0,
@@ -356,7 +356,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Realign the main deflectors',
         date: '2025-06-15',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 3),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 3),
         description: '',
         cost: 4883.39,
         usage: 0,
@@ -374,7 +374,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Add a massive death ray',
         date: '2025-07-04',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 4),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 4),
         description: '',
         cost: 51993.99,
         usage: 0,
@@ -392,7 +392,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Fall condition report',
         date: '2025-10-15',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 5),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 5),
         description: 'Completely winterized and clean. Death ray is disconnected.',
         cost: 0,
         usage: 0,
@@ -411,7 +411,7 @@ describe('Equipment Editor', () => {
       expect(savedEvent).toEqual({
         name: 'Realign the main deflectors',
         date: '2025-06-15',
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 3),
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 3),
         description: 'The main deflectors are required to stop the empire.',
         cost: 48849.49,
         usage: 499,
@@ -422,14 +422,14 @@ describe('Equipment Editor', () => {
 
   describe('for update', () => {
     let user: UserEvent;
-    let savedEvent: EquipmentEvent | Omit<EquipmentEvent, 'equipmentRid'> | null = null;
+    let savedEvent: MaintenanceItem | Omit<MaintenanceItem, 'equipmentRid'> | null = null;
     beforeEach(() => {
       user = userEvent.setup();
       savedEvent = null;
       render(
-        <EquipmentEventEditor
-          equipmentEvent={EQUIPMENT_EVENTS[0]}
-          equipmentEventTypes={EQUIPMENT_EVENT_TYPES}
+        <MaintenanceItemEditor
+          maintenanceItem={MAINTENANCE_ITEMS[0]}
+          maintenanceTypes={MAINTENANCE_TYPES}
           usageUnits={USAGE_UNITS}
           onCancel={() => null}
           onConfirm={(evt) => (savedEvent = evt)}
@@ -457,8 +457,8 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 1),
+        ...MAINTENANCE_ITEMS[0],
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         usage: 99340.9,
         usageUnits: USAGE_UNITS[0],
         cost: 0,
@@ -470,8 +470,8 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
-        equipmentEventType: EQUIPMENT_EVENT_TYPES.find((x) => x.id === 2),
+        ...MAINTENANCE_ITEMS[0],
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 2),
         cost: 0,
         usage: 0,
       });
@@ -483,8 +483,8 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
-        name: EQUIPMENT_EVENTS[0].name + 'i',
+        ...MAINTENANCE_ITEMS[0],
+        name: MAINTENANCE_ITEMS[0].name + 'i',
         cost: 0,
         usage: 0,
       });
@@ -497,7 +497,7 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
+        ...MAINTENANCE_ITEMS[0],
         date: '2025-01-03',
         cost: 0,
         usage: 0,
@@ -510,8 +510,8 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
-        description: EQUIPMENT_EVENTS[0].description + 'x',
+        ...MAINTENANCE_ITEMS[0],
+        description: MAINTENANCE_ITEMS[0].description + 'x',
         cost: 0,
         usage: 0,
       });
@@ -523,7 +523,7 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
+        ...MAINTENANCE_ITEMS[0],
         cost: 0,
         usage: 42,
         usageUnits: USAGE_UNITS[0],
@@ -536,7 +536,7 @@ describe('Equipment Editor', () => {
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
-        ...EQUIPMENT_EVENTS[0],
+        ...MAINTENANCE_ITEMS[0],
         cost: 73,
         usage: 0,
       });

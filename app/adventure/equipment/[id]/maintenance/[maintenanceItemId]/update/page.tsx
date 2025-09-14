@@ -1,36 +1,36 @@
 import {
   fetchEquipment,
-  fetchEquipmentEvent,
-  fetchEquipmentEventTypes,
+  fetchMaintenanceItem,
+  fetchMaintenanceTypes,
   fetchUsageUnits,
 } from '@/app/adventure/equipment/data';
 import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
-import UpdateEquipmentEvent from './update-equipment-event';
+import UpdateMaintenanceItem from './update-maintenance-item';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 
 type RouteParams = {
   id: string;
-  eventId: string;
+  maintenanceItemId: string;
 };
 
-const UpdateEquipmentEventPage = async (props: { params: Promise<RouteParams> }) => {
+const UpdateMaintenanceItemPage = async (props: { params: Promise<RouteParams> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
 
   const params = await props.params;
-  const event = await fetchEquipmentEvent(+params.eventId);
+  const maintenaceItem = await fetchMaintenanceItem(+params.maintenanceItemId);
 
-  if (!event) {
+  if (!maintenaceItem) {
     return <div>Failed to fetch the maintenance event</div>;
   }
 
-  const eventTypes = await fetchEquipmentEventTypes();
+  const eventTypes = await fetchMaintenanceTypes();
   const usageUnits = await fetchUsageUnits();
-  const equipment = await fetchEquipment(event.equipmentRid);
+  const equipment = await fetchEquipment(maintenaceItem.equipmentRid);
 
   return (
     <>
@@ -38,9 +38,9 @@ const UpdateEquipmentEventPage = async (props: { params: Promise<RouteParams> })
         <TitleHeading>Update Maintenance Event</TitleHeading>
         <SubtitleHeading>For: {equipment?.name || ''}</SubtitleHeading>
       </PageHeader>
-      <UpdateEquipmentEvent equipmentEvent={event} equipmentEventTypes={eventTypes} usageUnits={usageUnits} />
+      <UpdateMaintenanceItem maintenanceItem={maintenaceItem} maintenanceTypes={eventTypes} usageUnits={usageUnits} />
     </>
   );
 };
 
-export default UpdateEquipmentEventPage;
+export default UpdateMaintenanceItemPage;

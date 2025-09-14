@@ -4,21 +4,21 @@
 import {
   Equipment,
   EquipmentDTO,
-  EquipmentEvent,
-  EquipmentEventDTO,
-  EquipmentEventType,
-  EquipmentEventTypeDTO,
+  MaintenanceItem,
+  MaintenanceItemDTO,
   EquipmentType,
   EquipmentTypeDTO,
+  MaintenanceType,
+  MaintenanceTypeDTO,
   UsageUnits,
   UsageUnitsDTO,
 } from '@/models';
 import {
   convertToEquipment,
   convertToEquipmentDTO,
-  convertToEquipmentEvent,
-  convertToEquipmentEventDTO,
-  convertToEquipmentEventType,
+  convertToMaintenance,
+  convertToMaintenanceDTO,
+  convertToMaintenanceType,
   convertToEquipmentType,
   convertToUsageUnits,
 } from '@/models/convert';
@@ -28,10 +28,10 @@ import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const equipmentSelectColumns = '*, equipment_types!inner(*)';
-const equipmentEventsSelectColumns = '*, equipment_event_types!inner(*), usage_units(*)';
-const childTableColumns = `, equipment_events(${equipmentEventsSelectColumns}), notes(*), todo_collections(*, todo_items(*))`;
+const maintenanceItemsSelectColumns = '*, maintenance_types!inner(*), usage_units(*)';
+const childTableColumns = `, maintenance_items(${maintenanceItemsSelectColumns}), notes(*), todo_collections(*, todo_items(*))`;
 const equipmentTable = 'equipment';
-const equipmentEventsTable = 'equipment_events';
+const maintenanceItemsTable = 'maintenance_items';
 
 const equipmentQuery = (supabase: SupabaseClient, id?: number): any => {
   const query = supabase.from(equipmentTable).select(equipmentSelectColumns);
@@ -68,30 +68,30 @@ const equipmentUpdate = (supabase: SupabaseClient, equipment: Equipment): any =>
 const equipmentTypesQuery = (supabase: SupabaseClient): any =>
   supabase.from('equipment_types').select('*').order('name');
 
-const equipmentEventTypesQuery = (supabase: SupabaseClient): any =>
-  supabase.from('equipment_event_types').select('*').order('name');
+const maintenanceTypesQuery = (supabase: SupabaseClient): any =>
+  supabase.from('maintenance_types').select('*').order('name');
 
 const usageUnitsQuery = (supabase: SupabaseClient): any => supabase.from('usage_units').select('*').order('id');
 
-const equipmentEventQuery = (supabase: SupabaseClient, id: number): any =>
-  supabase.from(equipmentEventsTable).select(equipmentEventsSelectColumns).eq('id', id).single();
+const maintenanceItemQuery = (supabase: SupabaseClient, id: number): any =>
+  supabase.from(maintenanceItemsTable).select(maintenanceItemsSelectColumns).eq('id', id).single();
 
-const equipmentEventInsert = (supabase: SupabaseClient, event: EquipmentEvent): any =>
+const maintenanceItemInsert = (supabase: SupabaseClient, item: MaintenanceItem): any =>
   supabase
-    .from(equipmentEventsTable)
-    .insert(convertToEquipmentEventDTO(event))
-    .select(equipmentEventsSelectColumns)
+    .from(maintenanceItemsTable)
+    .insert(convertToMaintenanceDTO(item))
+    .select(maintenanceItemsSelectColumns)
     .single();
 
-const equipmentEventDelete = (supabase: SupabaseClient, event: EquipmentEvent): any =>
-  supabase.from('equipment_events').delete().eq('id', event.id);
+const maintenanceItemDelete = (supabase: SupabaseClient, item: MaintenanceItem): any =>
+  supabase.from(maintenanceItemsTable).delete().eq('id', item.id);
 
-const equipmentEventUpdate = (supabase: SupabaseClient, event: EquipmentEvent): any =>
+const maintenanceItemUpdate = (supabase: SupabaseClient, item: MaintenanceItem): any =>
   supabase
-    .from(equipmentEventsTable)
-    .update(convertToEquipmentEventDTO(event))
-    .eq('id', event.id)
-    .select(equipmentEventsSelectColumns)
+    .from(maintenanceItemsTable)
+    .update(convertToMaintenanceDTO(item))
+    .eq('id', item.id)
+    .select(maintenanceItemsSelectColumns)
     .single();
 
 export const fetchAllEquipment = async (): Promise<Equipment[]> => {
@@ -167,66 +167,66 @@ export const fetchEquipmentTypes = async (): Promise<EquipmentType[]> => {
   return (data || []).map((p) => convertToEquipmentType(p) as EquipmentType);
 };
 
-export const fetchEquipmentEvent = async (id: number): Promise<EquipmentEvent | null> => {
+export const fetchMaintenanceItem = async (id: number): Promise<MaintenanceItem | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = equipmentEventQuery(supabase, id);
-  const data = await executeQuery<EquipmentEventDTO>(query);
-  return data && convertToEquipmentEvent(data);
+  const query = maintenanceItemQuery(supabase, id);
+  const data = await executeQuery<MaintenanceItemDTO>(query);
+  return data && convertToMaintenance(data);
 };
 
-export const addEquipmentEvent = async (event: EquipmentEvent): Promise<EquipmentEvent | null> => {
+export const addMaintenanceItem = async (item: MaintenanceItem): Promise<MaintenanceItem | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = equipmentEventInsert(supabase, event);
-  const data = await executeQuery<EquipmentEventDTO>(query);
-  return data ? convertToEquipmentEvent(data) : null;
+  const query = maintenanceItemInsert(supabase, item);
+  const data = await executeQuery<MaintenanceItemDTO>(query);
+  return data ? convertToMaintenance(data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const canDeleteEquipmentEvent = async (event: EquipmentEvent): Promise<boolean> => {
+export const canDeleteMaintenanceItem = async (item: MaintenanceItem): Promise<boolean> => {
   if (await isNotLoggedIn()) {
     return false;
   }
   return true;
 };
 
-export const deleteEquipmentEvent = async (event: EquipmentEvent): Promise<void> => {
+export const deleteMaintenanceItem = async (item: MaintenanceItem): Promise<void> => {
   if (await isNotLoggedIn()) {
     return;
   }
 
   const supabase = createClient();
-  const query = equipmentEventDelete(supabase, event);
+  const query = maintenanceItemDelete(supabase, item);
   await executeQuery(query);
 };
 
-export const updateEquipmentEvent = async (event: EquipmentEvent): Promise<EquipmentEvent | null> => {
+export const updateMaintenanceItem = async (item: MaintenanceItem): Promise<MaintenanceItem | null> => {
   if (await isNotLoggedIn()) {
     return null;
   }
 
   const supabase = createClient();
-  const query = equipmentEventUpdate(supabase, event);
-  const data = await executeQuery<EquipmentEventDTO>(query);
-  return data ? convertToEquipmentEvent(data) : null;
+  const query = maintenanceItemUpdate(supabase, item);
+  const data = await executeQuery<MaintenanceItemDTO>(query);
+  return data ? convertToMaintenance(data) : null;
 };
 
-export const fetchEquipmentEventTypes = async (): Promise<EquipmentEventType[]> => {
+export const fetchMaintenanceTypes = async (): Promise<MaintenanceType[]> => {
   if (await isNotLoggedIn()) {
     return [];
   }
 
   const supabase = createClient();
-  const query = equipmentEventTypesQuery(supabase);
-  const data = await executeQuery<EquipmentEventTypeDTO[]>(query);
-  return (data || []).map((p) => convertToEquipmentEventType(p) as EquipmentEventType);
+  const query = maintenanceTypesQuery(supabase);
+  const data = await executeQuery<MaintenanceTypeDTO[]>(query);
+  return (data || []).map((p) => convertToMaintenanceType(p) as MaintenanceType);
 };
 
 export const fetchUsageUnits = async (): Promise<UsageUnits[]> => {

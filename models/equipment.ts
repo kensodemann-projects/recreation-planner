@@ -1,5 +1,5 @@
 import { CommonData, CommonDataDTO } from './common-data';
-import { EquipmentEvent, EquipmentEventDTO } from './equipment-event';
+import { MaintenanceItem, MaintenanceItemDTO } from './maintenance-item';
 import { EquipmentType, EquipmentTypeDTO } from './equipment-type';
 import { Note, NoteDTO } from './note';
 import { TodoCollection, TodoCollectionDTO } from './todo-collection';
@@ -21,7 +21,7 @@ export interface EquipmentDTO extends CommonDataDTO {
   insurance_contact_email: string | null;
   equipment_type_rid: number;
   equipment_types?: EquipmentTypeDTO;
-  equipment_events?: EquipmentEventDTO[];
+  maintenance_items?: MaintenanceItemDTO[];
   notes?: NoteDTO[];
   todo_collections?: TodoCollectionDTO[];
 }
@@ -42,7 +42,7 @@ export interface Equipment extends CommonData {
   insuranceContactPhoneNumber: string | null;
   insuranceContactEmail: string | null;
   equipmentType: EquipmentType;
-  equipmentEvents?: EquipmentEvent[];
+  maintenanceItems?: MaintenanceItem[];
   notes?: Note[];
   todoCollections?: TodoCollection[];
 }

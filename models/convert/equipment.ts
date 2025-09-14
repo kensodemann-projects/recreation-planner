@@ -1,6 +1,6 @@
 import { Equipment, EquipmentDTO } from '../equipment';
 import { TodoCollection } from '../todo-collection';
-import { convertToEquipmentEvent } from './equipment-event';
+import { convertToMaintenance } from './maintenance-item';
 import { convertToEquipmentType } from './equipment-type';
 import { convertToNote } from './note';
 import { convertToTodoCollection } from './todo-collection';
@@ -24,7 +24,7 @@ export const convertToEquipment = (dto: EquipmentDTO): Equipment => ({
   insuranceContactPhoneNumber: dto.insurance_contact_phone_number,
   insuranceContactEmail: dto.insurance_contact_email,
   equipmentType: convertToEquipmentType(dto.equipment_types!),
-  equipmentEvents: dto.equipment_events && dto.equipment_events.map((e) => convertToEquipmentEvent(e)),
+  maintenanceItems: dto.maintenance_items && dto.maintenance_items.map((e) => convertToMaintenance(e)),
   notes: dto.notes && dto.notes.map((n) => convertToNote(n)),
   todoCollections:
     dto.todo_collections && dto.todo_collections.map((c) => convertToTodoCollection(c) as TodoCollection),

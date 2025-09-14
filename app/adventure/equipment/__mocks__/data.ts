@@ -1,4 +1,4 @@
-import { Equipment, EquipmentEvent, EquipmentEventType, EquipmentType, UsageUnits } from '@/models';
+import { Equipment, MaintenanceItem, EquipmentType, MaintenanceType, UsageUnits } from '@/models';
 import { vi } from 'vitest';
 
 export const EQUIPMENT_TYPES: EquipmentType[] = [
@@ -34,9 +34,9 @@ export const EQUIPMENT_TYPES: EquipmentType[] = [
   },
 ];
 
-// Note: Due to logic within the application, the test equipment event types must match the equipment event types
+// Note: Due to logic within the application, the test maintenance types must match the maintenance types
 //       that are defined within the database.
-export const EQUIPMENT_EVENT_TYPES: EquipmentEventType[] = [
+export const MAINTENANCE_TYPES: MaintenanceType[] = [
   { id: 1, name: 'Mileage/Usage Reading', description: 'Periodic reading of the odometer or usage timer.' },
   {
     id: 2,
@@ -156,7 +156,7 @@ export const EQUIPMENT: Equipment[] = [
   },
 ];
 
-export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
+export const MAINTENANCE_ITEMS: MaintenanceItem[] = [
   {
     id: 1,
     name: 'Spring Inspection',
@@ -165,16 +165,17 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     date: '2025-05-20',
     usage: null,
     cost: null,
-    equipmentEventType: EQUIPMENT_EVENT_TYPES[4],
+    maintenanceType: MAINTENANCE_TYPES[4],
   },
   {
     id: 2,
     name: '2025 Fall Oil Change',
+    description: null,
     equipmentRid: EQUIPMENT[2].id!,
     date: '2025-08-15',
     usage: 12834.3,
     cost: 123.43,
-    equipmentEventType: EQUIPMENT_EVENT_TYPES[1],
+    maintenanceType: MAINTENANCE_TYPES[1],
     usageUnits: USAGE_UNITS[0],
   },
   {
@@ -185,7 +186,7 @@ export const EQUIPMENT_EVENTS: EquipmentEvent[] = [
     date: '2025-03-17',
     usage: 12.7,
     cost: null,
-    equipmentEventType: EQUIPMENT_EVENT_TYPES[1],
+    maintenanceType: MAINTENANCE_TYPES[1],
     usageUnits: USAGE_UNITS[1],
   },
 ];
@@ -194,7 +195,7 @@ export const fetchAllEquipment = vi.fn().mockResolvedValue(EQUIPMENT);
 export const fetchEquipment = vi.fn().mockImplementation((id: number, full?: boolean) => {
   const equipment = EQUIPMENT.find((e) => e.id === id);
   return Promise.resolve(
-    equipment && (full ? { ...equipment, todoCollections: [], notes: [], equipmentEvents: [] } : { ...equipment }),
+    equipment && (full ? { ...equipment, todoCollections: [], notes: [], maintenanceItems: [] } : { ...equipment }),
   );
 });
 export const fetchEquipmentTypes = vi.fn().mockResolvedValue(EQUIPMENT_TYPES);
@@ -202,12 +203,12 @@ export const addEquipment = vi.fn();
 export const updateEquipment = vi.fn();
 export const deleteEquipment = vi.fn();
 export const canDeleteEquipment = vi.fn().mockResolvedValue(false);
-export const fetchEquipmentEvent = vi
+export const fetchMaintenanceItem = vi
   .fn()
-  .mockImplementation((id: number) => Promise.resolve(EQUIPMENT_EVENTS.find((d) => d.id === id)));
-export const addEquipmentEvent = vi.fn();
-export const updateEquipmentEvent = vi.fn();
-export const deleteEquipmentEvent = vi.fn();
-export const canDeleteEquipmentEvent = vi.fn().mockResolvedValue(false);
-export const fetchEquipmentEventTypes = vi.fn().mockResolvedValue(EQUIPMENT_EVENT_TYPES);
+  .mockImplementation((id: number) => Promise.resolve(MAINTENANCE_ITEMS.find((d) => d.id === id)));
+export const addMaintenanceItem = vi.fn();
+export const updateMaintenanceItem = vi.fn();
+export const deleteMaintenanceItem = vi.fn();
+export const canDeleteMaintenanceItem = vi.fn().mockResolvedValue(false);
+export const fetchMaintenanceTypes = vi.fn().mockResolvedValue(MAINTENANCE_TYPES);
 export const fetchUsageUnits = vi.fn().mockResolvedValue(USAGE_UNITS);

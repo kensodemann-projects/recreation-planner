@@ -2,16 +2,16 @@
 import { cleanup, getByText, render, screen, within } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
 import EquipmentDetails from '../equipment-details';
-import { Equipment, EquipmentEvent, TodoCollection } from '@/models';
-import { EQUIPMENT, EQUIPMENT_EVENTS } from '../../__mocks__/data';
+import { Equipment, MaintenanceItem, TodoCollection } from '@/models';
+import { EQUIPMENT, MAINTENANCE_ITEMS } from '../../__mocks__/data';
 
 const truck: Equipment = EQUIPMENT.find((x) => x.name === 'My Truck')!;
-const equipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipmentRid === truck.id);
+const maintenanceItems: MaintenanceItem[] = MAINTENANCE_ITEMS.filter((x) => x.equipmentRid === truck.id);
 const todoCollections: TodoCollection[] = [];
-const testEquipment = { ...truck, equipmentEvents, todoCollections };
+const testEquipment = { ...truck, maintenanceItems, todoCollections };
 const minimalEquipment: Equipment = {
   ...EQUIPMENT.find((x) => x.name === 'The bare minimum')!,
-  equipmentEvents: [],
+  maintenanceItems: [],
   todoCollections: [],
 };
 
@@ -236,7 +236,7 @@ describe('EquipmentDetails', () => {
   describe('maintenance events section', () => {
     it('renders an add button', () => {
       render(<EquipmentDetails equipment={testEquipment} />);
-      const section = screen.getByTestId('maintenance-events-section');
+      const section = screen.getByTestId('maintenance-items-section');
       expect(within(section).getByRole('button', { name: 'Add Event' })).toBeDefined();
     });
   });

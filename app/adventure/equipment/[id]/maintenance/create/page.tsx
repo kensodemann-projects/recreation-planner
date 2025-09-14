@@ -3,10 +3,10 @@ import PageHeader from '@/app/ui/page-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import TitleHeading from '@/app/ui/title-heading';
 import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { fetchEquipment, fetchEquipmentEventTypes, fetchUsageUnits } from '../../../data';
-import CreateEquipmentEvent from './create-equipment-event';
+import { fetchEquipment, fetchMaintenanceTypes, fetchUsageUnits } from '../../../data';
+import CreateMaintenanceItem from './create-maintenance-item';
 
-const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: string }> }) => {
+const CreateMaintenanceItemPage = async (props: { params: Promise<{ id: string }> }) => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
@@ -18,7 +18,7 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
     return <div>Failed to fetch the equipment</div>;
   }
 
-  const equipmentEventTypes = await fetchEquipmentEventTypes();
+  const maintenanceTypes = await fetchMaintenanceTypes();
   const usageUnits = await fetchUsageUnits();
 
   return (
@@ -27,9 +27,9 @@ const CreateTodoCollectionForEventPage = async (props: { params: Promise<{ id: s
         <TitleHeading>Add a New Maintenance Event</TitleHeading>
         <SubtitleHeading>For: {equipment.name || ''}</SubtitleHeading>
       </PageHeader>
-      <CreateEquipmentEvent equipment={equipment!} equipmentEventTypes={equipmentEventTypes} usageUnits={usageUnits} />
+      <CreateMaintenanceItem equipment={equipment!} maintenanceTypes={maintenanceTypes} usageUnits={usageUnits} />
     </>
   );
 };
 
-export default CreateTodoCollectionForEventPage;
+export default CreateMaintenanceItemPage;

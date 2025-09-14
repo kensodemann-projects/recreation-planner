@@ -1,10 +1,10 @@
-import { EquipmentEvent, EquipmentEventDTO } from '@/models';
+import { MaintenanceItem, MaintenanceItemDTO } from '@/models';
 import { describe, expect, it } from 'vitest';
-import { convertToEquipmentEvent, convertToEquipmentEventDTO } from '../equipment-event';
+import { convertToMaintenance, convertToMaintenanceDTO } from '../maintenance-item';
 
-describe('equipment event conversions', () => {
-  describe('to equipment events', () => {
-    const testCases: { name: string; value: EquipmentEventDTO; expected: EquipmentEvent }[] = [
+describe('maintenance item conversions', () => {
+  describe('to maintenance item', () => {
+    const testCases: { name: string; value: MaintenanceItemDTO; expected: MaintenanceItem }[] = [
       {
         name: 'converts a condition report',
         value: conditionReportFetchDTO,
@@ -27,12 +27,12 @@ describe('equipment event conversions', () => {
       },
     ];
     it.each(testCases)('$name', ({ value, expected }) => {
-      expect(convertToEquipmentEvent(value)).toEqual(expected);
+      expect(convertToMaintenance(value)).toEqual(expected);
     });
   });
 
   describe('to DTO', () => {
-    const testCases: { name: string; value: EquipmentEvent; expected: EquipmentEventDTO }[] = [
+    const testCases: { name: string; value: MaintenanceItem; expected: MaintenanceItemDTO }[] = [
       {
         name: 'converts a condition report',
         value: conditionReport,
@@ -65,12 +65,12 @@ describe('equipment event conversions', () => {
       },
     ];
     it.each(testCases)('$name', ({ expected, value }) => {
-      expect(convertToEquipmentEventDTO(value)).toEqual(expected);
+      expect(convertToMaintenanceDTO(value)).toEqual(expected);
     });
   });
 });
 
-const conditionReportDTO: EquipmentEventDTO = {
+const conditionReportDTO: MaintenanceItemDTO = {
   name: 'Spring Inspection',
   description: 'Generally in good condition. Table needs reconditioning',
   equipment_rid: 99403,
@@ -78,14 +78,14 @@ const conditionReportDTO: EquipmentEventDTO = {
   usage: null,
   cost: null,
   usage_units_rid: null,
-  equipment_event_type_rid: 5,
+  maintenance_type_rid: 5,
 };
 
-const conditionReportFetchDTO: EquipmentEventDTO = {
+const conditionReportFetchDTO: MaintenanceItemDTO = {
   ...conditionReportDTO,
   id: 42,
   created_at: '2025-07-10T12:33:18.98179900',
-  equipment_event_types: {
+  maintenance_types: {
     id: 5,
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Condition Report',
@@ -93,14 +93,14 @@ const conditionReportFetchDTO: EquipmentEventDTO = {
   },
 };
 
-const conditionReport: EquipmentEvent = {
+const conditionReport: MaintenanceItem = {
   id: 42,
   name: 'Spring Inspection',
   description: 'Generally in good condition. Table needs reconditioning',
   date: '2025-05-20',
   usage: null,
   cost: null,
-  equipmentEventType: {
+  maintenanceType: {
     id: 5,
     name: 'Condition Report',
     description: 'Inspect the equipment and provide a report of its current condition based on this assessment.',
@@ -108,7 +108,7 @@ const conditionReport: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const repairDTO: EquipmentEventDTO = {
+const repairDTO: MaintenanceItemDTO = {
   name: 'Fix the wall',
   description: 'Repair wall damaged by a ball strike.',
   equipment_rid: 99403,
@@ -116,14 +116,14 @@ const repairDTO: EquipmentEventDTO = {
   usage: null,
   cost: 352.03,
   usage_units_rid: null,
-  equipment_event_type_rid: 3,
+  maintenance_type_rid: 3,
 };
 
-const repairFetchDTO: EquipmentEventDTO = {
+const repairFetchDTO: MaintenanceItemDTO = {
   ...repairDTO,
   id: 73,
   created_at: '2027-06-15T14:54:19.66535470',
-  equipment_event_types: {
+  maintenance_types: {
     id: 3,
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Repair',
@@ -131,14 +131,14 @@ const repairFetchDTO: EquipmentEventDTO = {
   },
 };
 
-const repair: EquipmentEvent = {
+const repair: MaintenanceItem = {
   id: 73,
   name: 'Fix the wall',
   description: 'Repair wall damaged by a ball strike.',
   date: '2027-06-13',
   usage: null,
   cost: 352.03,
-  equipmentEventType: {
+  maintenanceType: {
     id: 3,
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
@@ -146,7 +146,7 @@ const repair: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const usageDTO: EquipmentEventDTO = {
+const usageDTO: MaintenanceItemDTO = {
   name: 'July Mileage Reading',
   description: null,
   equipment_rid: 99403,
@@ -154,14 +154,14 @@ const usageDTO: EquipmentEventDTO = {
   usage: 14394.3,
   cost: null,
   usage_units_rid: 1,
-  equipment_event_type_rid: 1,
+  maintenance_type_rid: 1,
 };
 
-const usageFetchDTO: EquipmentEventDTO = {
+const usageFetchDTO: MaintenanceItemDTO = {
   ...usageDTO,
   id: 3884,
   created_at: '2027-07-02T14:54:19.66535470',
-  equipment_event_types: {
+  maintenance_types: {
     id: 1,
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Mileage/Usage Reading',
@@ -174,14 +174,14 @@ const usageFetchDTO: EquipmentEventDTO = {
   },
 };
 
-const usage: EquipmentEvent = {
+const usage: MaintenanceItem = {
   id: 3884,
   name: 'July Mileage Reading',
   description: null,
   date: '2025-07-01',
   usage: 14394.3,
   cost: null,
-  equipmentEventType: {
+  maintenanceType: {
     id: 1,
     name: 'Mileage/Usage Reading',
     description: 'Periodic reading of the odometer or usage timer.',
@@ -193,7 +193,7 @@ const usage: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const maintenanceDTO: EquipmentEventDTO = {
+const maintenanceDTO: MaintenanceItemDTO = {
   name: '2025 Oil Change',
   description: null,
   equipment_rid: 99403,
@@ -201,14 +201,14 @@ const maintenanceDTO: EquipmentEventDTO = {
   usage: 11374.2,
   cost: 115.45,
   usage_units_rid: 1,
-  equipment_event_type_rid: 2,
+  maintenance_type_rid: 2,
 };
 
-const maintenanceFetchDTO: EquipmentEventDTO = {
+const maintenanceFetchDTO: MaintenanceItemDTO = {
   ...maintenanceDTO,
   id: 341,
   created_at: '2027-05-15T14:54:19.66535470',
-  equipment_event_types: {
+  maintenance_types: {
     id: 2,
     created_at: '2025-03-17T08:42:21.9934837',
     name: 'Periodic Maintenance',
@@ -221,7 +221,7 @@ const maintenanceFetchDTO: EquipmentEventDTO = {
   },
 };
 
-const maintenance: EquipmentEvent = {
+const maintenance: MaintenanceItem = {
   id: 341,
   name: '2025 Oil Change',
   description: null,
@@ -232,7 +232,7 @@ const maintenance: EquipmentEvent = {
     id: 1,
     name: 'Miles',
   },
-  equipmentEventType: {
+  maintenanceType: {
     id: 2,
     name: 'Periodic Maintenance',
     description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
@@ -240,14 +240,14 @@ const maintenance: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const untrimmed: EquipmentEvent = {
+const untrimmed: MaintenanceItem = {
   id: 73,
   name: '   Fix the wall  ',
   description: '      Repair wall damaged by a ball strike. ',
   date: '    2027-06-13 ',
   usage: null,
   cost: 352.03,
-  equipmentEventType: {
+  maintenanceType: {
     id: 3,
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
@@ -255,7 +255,7 @@ const untrimmed: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const trimmedDTO: EquipmentEventDTO = {
+const trimmedDTO: MaintenanceItemDTO = {
   name: 'Fix the wall',
   description: 'Repair wall damaged by a ball strike.',
   equipment_rid: 99403,
@@ -263,17 +263,17 @@ const trimmedDTO: EquipmentEventDTO = {
   usage: null,
   cost: 352.03,
   usage_units_rid: null,
-  equipment_event_type_rid: 3,
+  maintenance_type_rid: 3,
 };
 
-const noDescription: EquipmentEvent = {
+const noDescription: MaintenanceItem = {
   id: 73,
   name: '   Fix the wall  ',
   description: '      ',
   date: '    2027-06-13 ',
   usage: null,
   cost: 352.03,
-  equipmentEventType: {
+  maintenanceType: {
     id: 3,
     name: 'Repair',
     description: 'Unscheduled repair due to damage or breakdown.',
@@ -281,7 +281,7 @@ const noDescription: EquipmentEvent = {
   equipmentRid: 99403,
 };
 
-const noDescriptionDTO: EquipmentEventDTO = {
+const noDescriptionDTO: MaintenanceItemDTO = {
   name: 'Fix the wall',
   description: null,
   equipment_rid: 99403,
@@ -289,5 +289,5 @@ const noDescriptionDTO: EquipmentEventDTO = {
   usage: null,
   cost: 352.03,
   usage_units_rid: null,
-  equipment_event_type_rid: 3,
+  maintenance_type_rid: 3,
 };

@@ -2,13 +2,13 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import EquipmentDetailsTabs from '../eqipment-details-tabs';
 import { useSearchParams } from 'next/navigation';
-import { Equipment, EquipmentEvent, TodoCollection } from '@/models';
-import { EQUIPMENT, EQUIPMENT_EVENTS } from '../../__mocks__/data';
+import { Equipment, MaintenanceItem, TodoCollection } from '@/models';
+import { EQUIPMENT, MAINTENANCE_ITEMS } from '../../__mocks__/data';
 
 const truck: Equipment = EQUIPMENT.find((x) => x.name === 'My Truck')!;
-const equipmentEvents: EquipmentEvent[] = EQUIPMENT_EVENTS.filter((x) => x.equipmentRid === truck.id);
+const maintenanceItems: MaintenanceItem[] = MAINTENANCE_ITEMS.filter((x) => x.equipmentRid === truck.id);
 const todoCollections: TodoCollection[] = [];
-const testEquipment = { ...truck, equipmentEvents, todoCollections };
+const testEquipment = { ...truck, maintenanceItems, todoCollections };
 
 vi.mock('next/navigation');
 
