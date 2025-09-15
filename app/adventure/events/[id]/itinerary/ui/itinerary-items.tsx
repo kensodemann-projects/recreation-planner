@@ -1,4 +1,6 @@
+import Message from '@/app/ui/message';
 import { ItineraryItem } from '@/models';
+import { formatDate } from '@/utils/formatters';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -8,11 +10,14 @@ export interface ItineraryItemsProps {
 }
 
 const ItineraryItems = ({ baseHref, items }: ItineraryItemsProps) => {
-  return (
+  return items?.length ? (
     <ul className="list">
       {items.map((item) => (
         <li className="list-row" key={item.id}>
-          <div className="font-bold text-lg list-col-grow">{item.name}</div>
+          <div className="list-col-grow">
+            <div className="font-bold text-lg"> {item.name}</div>
+            <div className="font-bold">{formatDate(item.date, item.time)}</div>
+          </div>
           {item.description && <p className="list-col-wrap whitespace-pre-line text-sm">{item.description}</p>}
           <Link href={`${baseHref}/${item.id}/delete`}>
             <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
@@ -27,6 +32,8 @@ const ItineraryItems = ({ baseHref, items }: ItineraryItemsProps) => {
         </li>
       ))}
     </ul>
+  ) : (
+    <Message>You have not defined an itinerary for this event.</Message>
   );
 };
 

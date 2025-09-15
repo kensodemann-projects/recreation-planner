@@ -47,6 +47,8 @@ const fullEventQuery = (supabase: SupabaseClient, id: number): any => {
     .select(selectColumns + childTableColumns)
     .eq('id', id)
     .order('created_at', { referencedTable: 'notes' })
+    .order('date', { referencedTable: 'itinerary_items' })
+    .order('time', { referencedTable: 'itinerary_items' })
     .single();
 };
 

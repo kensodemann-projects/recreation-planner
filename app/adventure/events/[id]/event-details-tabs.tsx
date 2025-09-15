@@ -1,12 +1,12 @@
 'use client';
 
-import Message from '@/app/ui/message';
 import { Event } from '@/models';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import Notes from '../../notes/ui/notes';
 import Todos from '../../todos/ui/todos';
-import { useSearchParams } from 'next/navigation';
+import ItineraryItems from './itinerary/ui/itinerary-items';
 
 interface EventDetailsTabsProps {
   event: Event;
@@ -36,13 +36,18 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
         defaultChecked={activeTab === 'Itinerary'}
       />
       <section className="tab-content">
-        <Message>You have not defined an itinerary for this event.</Message>
+        <ItineraryItems items={event.itinerary || []} baseHref={`/adventure/events/${event.id}/itinerary`} />
+        <Link href={`${event.id}/itinerary/create`}>
+          <button className="btn btn-primary mt-5">
+            <PlusCircleIcon className="w-6" />
+            Add Itinerary Item
+          </button>
+        </Link>
       </section>
 
       <input type="radio" name="event-tabs" className="tab" aria-label="Notes" defaultChecked={activeTab === 'Notes'} />
       <section className="tab-content">
         <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
-
         <Link href={`${event.id}/notes/create`}>
           <button className="btn btn-primary mt-5">
             <PlusCircleIcon className="w-6" />
