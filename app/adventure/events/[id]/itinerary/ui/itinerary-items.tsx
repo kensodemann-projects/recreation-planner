@@ -1,8 +1,7 @@
+import EntityDropdownMenu from '@/app/ui/entity-dropdown-menu';
 import Message from '@/app/ui/message';
 import { ItineraryItem } from '@/models';
 import { formatDate } from '@/utils/formatters';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 
 export interface ItineraryItemsProps {
   items: ItineraryItem[];
@@ -11,24 +10,21 @@ export interface ItineraryItemsProps {
 
 const ItineraryItems = ({ baseHref, items }: ItineraryItemsProps) => {
   return items?.length ? (
-    <ul className="list">
+    <ul className="mt-2 list-none">
       {items.map((item) => (
-        <li className="list-row" key={item.id}>
-          <div className="list-col-grow">
+        <li
+          key={item.id}
+          className="py-2 border-solid first:border-t border-b border-primary flex"
+          data-testid="itinerary item"
+        >
+          <div className="grow">
             <div className="font-bold text-lg"> {item.name}</div>
             <div className="font-bold">{formatDate(item.date, item.time)}</div>
+            {item.description && <p className="mt-2 whitespace-pre-line text-sm">{item.description}</p>}
           </div>
-          {item.description && <p className="list-col-wrap whitespace-pre-line text-sm">{item.description}</p>}
-          <Link href={`${baseHref}/${item.id}/delete`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Edit the collection">
-              <TrashIcon className="w-6" />
-            </button>
-          </Link>
-          <Link href={`${baseHref}/${item.id}/update`}>
-            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
-              <PencilSquareIcon className="w-6" />
-            </button>
-          </Link>
+          <div className="self-center">
+            <EntityDropdownMenu href={`${baseHref}/${item.id}`} />
+          </div>
         </li>
       ))}
     </ul>

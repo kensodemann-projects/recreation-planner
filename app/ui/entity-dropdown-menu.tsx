@@ -16,9 +16,6 @@ const EntityDropdownMenu = ({ callingPage, href }: EntityDropdownMenuProps) => {
       </div>
       <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
         <li>
-          <Link href={buildHref(href)}>View</Link>
-        </li>
-        <li>
           <Link href={buildHref(`${href}/update`)}>Edit</Link>
         </li>
         <li>

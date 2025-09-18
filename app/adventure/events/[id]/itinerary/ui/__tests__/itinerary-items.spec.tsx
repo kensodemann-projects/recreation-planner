@@ -9,7 +9,7 @@ describe('itinerary items list', () => {
 
   it('displays each item', () => {
     render(<ItineraryItems items={TEST_ITEMS} baseHref="/adventure/events/42/itinerary-items" />);
-    expect(screen.queryAllByRole('listitem').length).toBe(TEST_ITEMS.length);
+    expect(screen.queryAllByTestId('itinerary item').length).toBe(TEST_ITEMS.length);
     expect(screen.queryByText('You have not defined an itinerary for this event.')).toBeNull();
   });
 
