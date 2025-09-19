@@ -1,18 +1,17 @@
 'use client';
 
+import { logout } from '@/app/login/actions';
+import MenuItem from '@/app/ui/menu-item';
 import {
+  ArrowRightStartOnRectangleIcon,
   Bars3Icon,
-  CalendarDaysIcon,
+  CalendarIcon,
+  ClipboardDocumentCheckIcon,
   HomeIcon,
   MapIcon,
   TruckIcon,
-  ArrowRightStartOnRectangleIcon,
-  CalendarIcon,
-  ClipboardDocumentCheckIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import MenuItem from '@/app/ui/menu-item';
-import { logout } from '@/app/login/actions';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
