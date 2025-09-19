@@ -45,9 +45,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <MenuItem href="/adventure/equipment" onClick={() => setMenuOpen(false)} icon={TruckIcon}>
               Equipment
             </MenuItem>
-            <MenuItem href="/adventure/reservations" onClick={() => setMenuOpen(false)} icon={CalendarDaysIcon}>
-              Reservations
-            </MenuItem>
             <MenuItem href="/adventure/todos" onClick={() => setMenuOpen(false)} icon={ClipboardDocumentCheckIcon}>
               Todos
             </MenuItem>
