@@ -1,5 +1,17 @@
 # recreation-planner
 
+## 1.0.0
+
+### Major Changes
+
+- beddeac: clean up for the first major release of this app
+
+### Minor Changes
+
+- 20b3fde: Rename "equipement event" to "maintenance" to clarify what it actually is.
+- 6937bc8: Add event itineraries.
+- ba55c0c: switch the view of child items into tabs
+
 ## 0.6.0
 
 ### Minor Changes
