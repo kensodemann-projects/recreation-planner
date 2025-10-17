@@ -25,6 +25,11 @@ describe('maintenance item conversions', () => {
         value: maintenanceFetchDTO,
         expected: maintenance,
       },
+      {
+        name: 'handles zero cost and units',
+        value: zeroCostPeriodicFetchDTO,
+        expected: zeroCostPeriodic,
+      },
     ];
     it.each(testCases)('$name', ({ value, expected }) => {
       expect(convertToMaintenance(value)).toEqual(expected);
@@ -62,6 +67,11 @@ describe('maintenance item conversions', () => {
         name: 'converts an empty description to null',
         value: noDescription,
         expected: noDescriptionDTO,
+      },
+      {
+        name: 'handles zero cost and units',
+        value: zeroCostPeriodic,
+        expected: zeroCostPeriodicDTO,
       },
     ];
     it.each(testCases)('$name', ({ expected, value }) => {
@@ -255,6 +265,25 @@ const untrimmed: MaintenanceItem = {
   equipmentRid: 99403,
 };
 
+const zeroCostPeriodic: MaintenanceItem = {
+  id: 512,
+  name: '2025 Tire Rotation',
+  description: null,
+  date: '2025-05-15',
+  usage: 0,
+  cost: 0,
+  usageUnits: {
+    id: 1,
+    name: 'Miles',
+  },
+  maintenanceType: {
+    id: 2,
+    name: 'Periodic Maintenance',
+    description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
+  },
+  equipmentRid: 99403,
+};
+
 const trimmedDTO: MaintenanceItemDTO = {
   name: 'Fix the wall',
   description: 'Repair wall damaged by a ball strike.',
@@ -290,4 +319,32 @@ const noDescriptionDTO: MaintenanceItemDTO = {
   cost: 352.03,
   usage_units_rid: null,
   maintenance_type_rid: 3,
+};
+
+const zeroCostPeriodicDTO: MaintenanceItemDTO = {
+  name: '2025 Tire Rotation',
+  description: null,
+  equipment_rid: 99403,
+  date: '2025-05-15',
+  usage: 0,
+  cost: 0,
+  usage_units_rid: 1,
+  maintenance_type_rid: 2,
+};
+
+const zeroCostPeriodicFetchDTO: MaintenanceItemDTO = {
+  ...zeroCostPeriodicDTO,
+  id: 512,
+  created_at: '2027-05-15T14:54:19.66535470',
+  maintenance_types: {
+    id: 2,
+    created_at: '2025-03-17T08:42:21.9934837',
+    name: 'Periodic Maintenance',
+    description: 'Periodic change of oil and other fluids. May also include related periodic maintenance.',
+  },
+  usage_units: {
+    id: 1,
+    created_at: '2025-03-17T08:42:21.9934837',
+    name: 'Miles',
+  },
 };

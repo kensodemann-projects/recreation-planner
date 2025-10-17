@@ -65,7 +65,7 @@ const MaintenanceItemEditor = ({
     error: usageError,
     setValue: setUsage,
     validate: validateUsage,
-  } = useFormControl(maintenanceItem?.usage || '', (value: string | number | undefined) =>
+  } = useFormControl(maintenanceItem?.usage ?? '', (value: string | number | undefined) =>
     checkUsageValidity(eventTypeId || 0, value),
   );
   const {
@@ -73,7 +73,7 @@ const MaintenanceItemEditor = ({
     error: costError,
     setValue: setCost,
     validate: validateCost,
-  } = useFormControl(maintenanceItem?.cost || '', (value: string | number | undefined) =>
+  } = useFormControl(maintenanceItem?.cost ?? '', (value: string | number | undefined) =>
     checkCostValidity(eventTypeId || 0, value),
   );
   const [busy, setBusy] = useState(false);
@@ -81,10 +81,10 @@ const MaintenanceItemEditor = ({
   const requiredFieldsHaveValues = !!(
     name.trim() &&
     eventDate.trim() &&
-    ((eventTypeId === 1 && usage) ||
+    ((eventTypeId === 1 && (usage || usage === 0)) ||
       eventTypeId === 2 ||
-      (eventTypeId === 3 && cost) ||
-      (eventTypeId === 4 && cost) ||
+      (eventTypeId === 3 && (cost || cost === 0)) ||
+      (eventTypeId === 4 && (cost || cost === 0)) ||
       (eventTypeId === 5 && description.trim()))
   );
 
@@ -195,10 +195,10 @@ const MaintenanceItemEditor = ({
               name: name!,
               date: eventDate!,
               description: description,
-              cost: Number(cost),
-              usage: Number(usage),
+              cost: cost || cost === 0 ? Number(cost) : null,
+              usage: usage || usage === 0 ? Number(usage) : null,
               maintenanceType: maintenanceTypes.find((x) => x.id === +(eventTypeId || '1'))!,
-              usageUnits: usage ? usageUnits.find((x) => x.id === +(usageUnitsId || '1'))! : undefined,
+              usageUnits: usage || usage === 0 ? usageUnits.find((x) => x.id === +(usageUnitsId || '1'))! : undefined,
             };
             onConfirm(maintenanceItem ? { ...maintenanceItem, ...data } : data);
           }}

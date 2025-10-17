@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.0.1
+
+### Patch Changes
+
+- f593f64: allow zero cost & units to be entered
+
 ## 1.0.0
 
 ### Major Changes

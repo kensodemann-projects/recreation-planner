@@ -304,7 +304,7 @@ describe('Maintenace Item Editor', () => {
         date: '2025-03-18',
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         description: '',
-        cost: 0,
+        cost: null,
         usage: 13435.3,
         usageUnits: USAGE_UNITS[0],
       });
@@ -322,7 +322,7 @@ describe('Maintenace Item Editor', () => {
         date: '2025-03-18',
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         description: '',
-        cost: 0,
+        cost: null,
         usage: 143.5,
         usageUnits: USAGE_UNITS[1],
       });
@@ -340,8 +340,8 @@ describe('Maintenace Item Editor', () => {
         date: '2025-03-31',
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 2),
         description: '',
-        cost: 0,
-        usage: 0,
+        cost: null,
+        usage: null,
       });
     });
 
@@ -359,7 +359,7 @@ describe('Maintenace Item Editor', () => {
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 3),
         description: '',
         cost: 4883.39,
-        usage: 0,
+        usage: null,
       });
     });
 
@@ -377,7 +377,7 @@ describe('Maintenace Item Editor', () => {
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 4),
         description: '',
         cost: 51993.99,
-        usage: 0,
+        usage: null,
       });
     });
 
@@ -394,8 +394,8 @@ describe('Maintenace Item Editor', () => {
         date: '2025-10-15',
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 5),
         description: 'Completely winterized and clean. Death ray is disconnected.',
-        cost: 0,
-        usage: 0,
+        cost: null,
+        usage: null,
       });
     });
 
@@ -415,6 +415,26 @@ describe('Maintenace Item Editor', () => {
         description: 'The main deflectors are required to stop the empire.',
         cost: 48849.49,
         usage: 499,
+        usageUnits: USAGE_UNITS.find((x) => x.id === 2),
+      });
+    });
+
+    it('allows entry of a fully specified zero cost/units event.', async () => {
+      await user.type(getNameInput(), 'Realign the main deflectors');
+      await user.type(getDateInput(), '2025-06-15');
+      await user.selectOptions(getTypeOfEventSelect(), '3');
+      await user.type(getDescriptionInput(), 'The main deflectors are required to stop the empire.');
+      await user.type(getCostInput(), '0');
+      await user.type(getUsageInput(), '0');
+      await user.selectOptions(getUsageUnitsSelect(), '2');
+      await user.click(getCreateButton());
+      expect(savedEvent).toEqual({
+        name: 'Realign the main deflectors',
+        date: '2025-06-15',
+        maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 3),
+        description: 'The main deflectors are required to stop the empire.',
+        cost: 0,
+        usage: 0,
         usageUnits: USAGE_UNITS.find((x) => x.id === 2),
       });
     });
@@ -461,19 +481,16 @@ describe('Maintenace Item Editor', () => {
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 1),
         usage: 99340.9,
         usageUnits: USAGE_UNITS[0],
-        cost: 0,
       });
     });
 
-    it('enables update if switching to a type that does not require unentred data', async () => {
+    it('enables update if switching to a type that does not require unentered data', async () => {
       await user.selectOptions(getTypeOfEventSelect(), '2');
       expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
         maintenanceType: MAINTENANCE_TYPES.find((x) => x.id === 2),
-        cost: 0,
-        usage: 0,
       });
     });
 
@@ -485,8 +502,8 @@ describe('Maintenace Item Editor', () => {
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
         name: MAINTENANCE_ITEMS[0].name + 'i',
-        cost: 0,
-        usage: 0,
+        cost: null,
+        usage: null,
       });
     });
 
@@ -499,8 +516,6 @@ describe('Maintenace Item Editor', () => {
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
         date: '2025-01-03',
-        cost: 0,
-        usage: 0,
       });
     });
 
@@ -512,8 +527,6 @@ describe('Maintenace Item Editor', () => {
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
         description: MAINTENANCE_ITEMS[0].description + 'x',
-        cost: 0,
-        usage: 0,
       });
     });
 
@@ -524,8 +537,19 @@ describe('Maintenace Item Editor', () => {
       await user.click(getUpdateButton());
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
-        cost: 0,
         usage: 42,
+        usageUnits: USAGE_UNITS[0],
+      });
+    });
+
+    it('enables the update if modifying the usage to zero', async () => {
+      expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeTruthy();
+      await user.type(getUsageInput(), '0');
+      expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeFalsy();
+      await user.click(getUpdateButton());
+      expect(savedEvent).toEqual({
+        ...MAINTENANCE_ITEMS[0],
+        usage: 0,
         usageUnits: USAGE_UNITS[0],
       });
     });
@@ -538,7 +562,6 @@ describe('Maintenace Item Editor', () => {
       expect(savedEvent).toEqual({
         ...MAINTENANCE_ITEMS[0],
         cost: 73,
-        usage: 0,
       });
     });
 
