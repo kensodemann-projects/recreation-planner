@@ -77,6 +77,14 @@ describe('Formatters', () => {
         endTime: '15:34',
         expected: 'Sep 26, 2024 at 8:42 AM to 3:34 PM',
       },
+      {
+        name: 'formats a begin and end date / time with the same dates',
+        beginDate: '2024-09-26',
+        beginTime: '15:42',
+        endDate: '2024-09-26',
+        endTime: '20:34',
+        expected: 'Sep 26, 2024 at 3:42 PM to 8:34 PM',
+      },
     ];
 
     it.each(testCases)('$name', ({ beginDate, beginTime, endDate, endTime, expected }) =>

@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.1.0
+
+### Minor Changes
+
+- 0da1631: show just the single date and begin/end time if the begin and end dates are the same
+
 ## 1.0.1
 
 ### Patch Changes

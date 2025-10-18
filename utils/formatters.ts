@@ -14,7 +14,7 @@ export const formatDateRange = (
   endDate?: string | undefined | null,
   endTime?: string | undefined | null,
 ): string => {
-  if (beginDate && beginTime && !endDate && endTime) {
+  if (beginDate && beginTime && (!endDate || endDate === beginDate) && endTime) {
     const end = parseISO(beginDate + 'T' + endTime);
     return formatDate(beginDate, beginTime) + ' to ' + format(end, 'p');
   }
