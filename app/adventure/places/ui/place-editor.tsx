@@ -6,7 +6,7 @@ import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
 import { useFormControl } from '@/hooks/use-form-control';
 import { Place, PlaceType } from '@/models';
-import { isRequired } from '@/utils/input-validations';
+import { isHttpUrl, isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
 
 export interface PlaceEditorProps {
@@ -31,7 +31,12 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
   const { value: addressState, setValue: setState } = useFormControl(place?.address?.state || '');
   const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address?.postal || '');
   const { value: phoneNumber, setValue: setPhoneNumber } = useFormControl(place?.phoneNumber || '');
-  const { value: website, setValue: setWebsite } = useFormControl(place?.website || '');
+  const {
+    value: website,
+    error: websiteError,
+    setValue: setWebsite,
+    validate: validateWebsite,
+  } = useFormControl(place?.website || '', (value: string | undefined) => isHttpUrl(value));
   const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id!);
 
   const [busy, setBusy] = useState(false);
@@ -161,6 +166,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           disabled={busy}
           label="Website"
           value={website}
+          error={websiteError}
+          onBlur={validateWebsite}
           onChange={(evt) => setWebsite(evt.target.value)}
         />
       </div>

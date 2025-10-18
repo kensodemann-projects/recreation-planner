@@ -353,6 +353,39 @@ describe('Place Editor', () => {
         expect(inp.value).toBe('');
       });
     });
+
+    describe('URL format error', () => {
+      it('is not displayed initially', () => {
+        render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        const inp = screen.getByRole('textbox', { name: 'Website' });
+        expect(inp.classList).not.toContain('input-error');
+        expect(screen.queryByText('Please enter a valid URL.')).toBeNull();
+      });
+
+      it('is displayed after exit if a URL is invalid', async () => {
+        const user = userEvent.setup();
+        render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        const inp = screen.getByRole('textbox', { name: 'Website' });
+        await user.click(inp);
+        await user.type(inp, 'test.com');
+        await user.tab();
+        expect(inp.classList).toContain('input-error');
+        expect(screen.getByText('Please enter a valid URL.')).toBeDefined();
+      });
+
+      it('is no longer displayed after a valid URL is entered', async () => {
+        const user = userEvent.setup();
+        render(<PlaceEditor types={placeTypes} onCancel={() => null} onConfirm={() => null} />);
+        const inp = screen.getByRole('textbox', { name: 'Website' });
+        await user.click(inp);
+        await user.type(inp, 'test.com');
+        expect(inp.classList).toContain('input-error');
+        expect(screen.getByText('Please enter a valid URL.')).toBeDefined();
+        await user.clear(inp);
+        await user.type(inp, 'https://test.com');
+        expect(screen.queryByText('Please enter a valid URL.')).toBeNull();
+      });
+    });
   });
 
   describe('Confirm Button', () => {

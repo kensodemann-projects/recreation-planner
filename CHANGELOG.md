@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.2.0
+
+### Minor Changes
+
+- 871e5e2: display the place URL in a link
+
 ## 1.1.0
 
 ### Minor Changes

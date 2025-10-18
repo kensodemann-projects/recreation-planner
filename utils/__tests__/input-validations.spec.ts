@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isEmail, isRequired } from '../input-validations';
+import { isEmail, isHttpUrl, isRequired } from '../input-validations';
 
 describe('Input Validations', () => {
   describe('required', () => {
@@ -58,6 +58,16 @@ describe('Input Validations', () => {
         expected: '',
       },
       {
+        name: 'is empty if the value is empty',
+        value: '',
+        expected: '',
+      },
+      {
+        name: 'is empty if the value is null',
+        value: null,
+        expected: '',
+      },
+      {
         name: 'returns an error message if the value is a plain string',
         value: 'test',
         expected: 'Please enter a valid email address.',
@@ -69,5 +79,42 @@ describe('Input Validations', () => {
       },
     ];
     it.each(testCases)('$name', ({ value, expected }) => expect(isEmail(value)).toEqual(expected));
+  });
+
+  describe('httpUrl', () => {
+    const testCases = [
+      {
+        name: 'is empty if the value is a valid http URL',
+        value: 'http://test.com',
+        expected: '',
+      },
+      {
+        name: 'is empty if the value is a valid https URL',
+        value: 'https://test.com',
+        expected: '',
+      },
+      {
+        name: 'is empty if the value is empty',
+        value: '',
+        expected: '',
+      },
+      { name: 'is empty if the value is null', value: null, expected: '' },
+      {
+        name: 'returns an error message if the value is a plain string',
+        value: 'test',
+        expected: 'Please enter a valid URL.',
+      },
+      {
+        name: 'returns an error message if the protocol is missing',
+        value: 'test.com',
+        expected: 'Please enter a valid URL.',
+      },
+      {
+        name: 'returns an error message if the protocol something other than http or https',
+        value: 'ftp://test.com',
+        expected: 'Please enter a valid URL.',
+      },
+    ];
+    it.each(testCases)('$name', ({ value, expected }) => expect(isHttpUrl(value)).toEqual(expected));
   });
 });

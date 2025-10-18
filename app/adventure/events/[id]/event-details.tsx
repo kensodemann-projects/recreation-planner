@@ -37,7 +37,13 @@ const EventDetails = ({ event }: EventDetailsProps) => {
         </SectionHeader>
         <div>{event.place.name}</div>
         {addressInformation}
-        <div>{event.place.website}</div>
+        {event.place.website && (
+          <div>
+            <a className="link" href={event.place.website} target="_blank">
+              {event.place.website}
+            </a>
+          </div>
+        )}
         <div>{event.place.phoneNumber}</div>
       </section>
 
