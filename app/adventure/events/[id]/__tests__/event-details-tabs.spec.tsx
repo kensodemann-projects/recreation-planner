@@ -1,8 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import EventDetailsTabs from '../event-details-tabs';
 import { testEvent } from './test-data';
-import { beforeEach } from 'node:test';
 import { useSearchParams } from 'next/navigation';
 
 vi.mock('next/navigation');
