@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { fetchPriorEvents, fetchUpcomingEvents } from './data';
 import Events from './events';
 
-export const getEventsPageData = async () => {
+const getEventsPageData = async () => {
   const dt = formatISO(startOfWeek(Date.now()), { representation: 'date' });
   const upcomingEvents = await fetchUpcomingEvents(dt);
   const priorEvents = await fetchPriorEvents(dt);
