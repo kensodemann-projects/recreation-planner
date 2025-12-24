@@ -8,14 +8,19 @@ import Link from 'next/link';
 import { fetchPriorEvents, fetchUpcomingEvents } from './data';
 import Events from './events';
 
+const getEventsPageData = async () => {
+  const dt = formatISO(startOfWeek(Date.now()), { representation: 'date' });
+  const upcomingEvents = await fetchUpcomingEvents(dt);
+  const priorEvents = await fetchPriorEvents(dt);
+  return { upcomingEvents, priorEvents };
+};
+
 const EventsPage = async () => {
   if (await isNotLoggedIn()) {
     return <MustBeLoggedIn />;
   }
 
-  const dt = formatISO(startOfWeek(Date.now()), { representation: 'date' });
-  const upcomingEvents = await fetchUpcomingEvents(dt);
-  const priorEvents = await fetchPriorEvents(dt);
+  const { upcomingEvents, priorEvents } = await getEventsPageData();
 
   return (
     <>
