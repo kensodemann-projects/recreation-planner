@@ -1,5 +1,12 @@
 # recreation-planner
 
+## 1.2.1
+
+### Patch Changes
+
+- 5e5afcc: update TypeScript
+- 750acaa: update dependencies outside of TypeScript and ESLint
+
 ## 1.2.0
 
 ### Minor Changes
