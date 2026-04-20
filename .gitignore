@@ -28,6 +28,9 @@ yarn-error.log*
 # all env files
 .env*
 
+# Test local storage files
+vite-storage*
+
 # vercel
 .vercel
 

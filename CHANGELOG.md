@@ -1,5 +1,12 @@
 # recreation-planner
 
+## 1.2.2
+
+### Patch Changes
+
+- switch from middleware to proxy due to Next.js deprecation
+- deal with the localstorage warnings when performing tests (this only affects tests, there are no such warnings otherwise)
+
 ## 1.2.1
 
 ### Patch Changes

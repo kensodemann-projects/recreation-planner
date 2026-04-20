@@ -12,5 +12,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
+    env: {
+      NODE_OPTIONS: '--localstorage-file=./vite-storage',
+    },
   },
 });
