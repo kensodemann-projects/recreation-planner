@@ -1,17 +1,18 @@
 {
   "name": "recreation-planner",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "next build",
     "bump": "changeset version",
+    "clean:localstorage": "rm -f vite-storage*",
     "dev": "next dev --turbopack",
     "lint": "eslint .",
     "prepare": "husky",
     "start": "next start",
-    "test": "vitest run",
-    "test:dev": "vitest"
+    "test": "sh -c 'vitest run; code=$?; pnpm clean:localstorage; exit \"$code\"'",
+    "test:dev": "sh -c 'vitest; code=$?; pnpm clean:localstorage; exit \"$code\"'"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -65,5 +66,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.28.0"
+  "packageManager": "pnpm@10.33.0"
 }
