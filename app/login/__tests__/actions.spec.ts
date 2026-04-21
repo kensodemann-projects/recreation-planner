@@ -49,9 +49,9 @@ describe('login actions', () => {
         expect(revalidatePath).toHaveBeenCalledWith('/', 'layout');
       });
 
-      it('redirects to /adventure', async () => {
-        await login('test@example.com', 'mypassword').catch(() => {});
-        expect(redirect).toHaveBeenCalledWith('/adventure');
+      it('returns sucess: true', async () => {
+        const result = await login('test@example.com', 'mypassword').catch(() => {});
+        expect(result).toEqual({ success: true });
       });
     });
 

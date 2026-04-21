@@ -64,10 +64,12 @@ const LoginPage = () => {
               onClick={async () => {
                 setBusy(true);
                 const { success } = await login(email!, password!);
-                if (!success) {
+                setBusy(false);
+                setPassword('');
+                if (success) {
+                  router.replace('/adventure');
+                } else {
                   setAlertLoginFailed(true);
-                  setBusy(false);
-                  setPassword('');
                 }
               }}
             >

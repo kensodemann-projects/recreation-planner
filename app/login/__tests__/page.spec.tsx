@@ -1,11 +1,17 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useRouter } from 'next/navigation';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { login } from '../actions';
 import LoginPage from '../page';
 
 vi.mock('next/navigation');
 vi.mock('../actions');
+
+const router = {
+  back: vi.fn(),
+  replace: vi.fn(),
+};
 
 describe('Login Page', () => {
   afterEach(() => cleanup());
@@ -172,8 +178,9 @@ describe('Login Page', () => {
 
     describe('when clicked', () => {
       beforeEach(() => {
-        vi.mocked(login).mockReset();
+        vi.clearAllMocks();
         vi.mocked(login).mockResolvedValue({ success: true });
+        vi.mocked(useRouter).mockReturnValue(router as unknown as ReturnType<typeof useRouter>);
       });
 
       it('calls login with the entered email and password', async () => {
@@ -192,6 +199,15 @@ describe('Login Page', () => {
         await user.type(screen.getByLabelText('Password'), 'cats are people too');
         await user.click(screen.getByRole('button', { name: 'Login' }));
         expect(HTMLDialogElement.prototype.showModal as Mock).not.toHaveBeenCalled();
+      });
+
+      it('navigates to /adventure on successful login', async () => {
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+        await user.type(screen.getByLabelText('Password'), 'cats are people too');
+        await user.click(screen.getByRole('button', { name: 'Login' }));
+        expect(router.replace).toHaveBeenCalledExactlyOnceWith('/adventure');
       });
 
       it('shows a failure alert when login fails', async () => {
