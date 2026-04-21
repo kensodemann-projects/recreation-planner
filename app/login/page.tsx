@@ -65,11 +65,11 @@ const LoginPage = () => {
                 setBusy(true);
                 const { success } = await login(email!, password!);
                 setBusy(false);
-                setPassword('');
                 if (success) {
                   router.replace('/adventure');
                 } else {
                   setAlertLoginFailed(true);
+                  setPassword('');
                 }
               }}
             >
