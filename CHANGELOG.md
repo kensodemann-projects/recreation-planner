@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.3.0
+
+### Minor Changes
+
+- implement an improved login flow for situations where the user fails to log in
+
 ## 1.2.2
 
 ### Patch Changes

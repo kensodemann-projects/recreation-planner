@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { login } from './actions';
-import Input from '../ui/input';
-import { isEmail, isRequired } from '@/utils/input-validations';
-import BusyIndicator from '../ui/busy-indicator';
-import { useState } from 'react';
 import { useFormControl } from '@/hooks/use-form-control';
+import { isEmail, isRequired } from '@/utils/input-validations';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import AlertDialog from '../ui/alert-dialog';
+import BusyIndicator from '../ui/busy-indicator';
+import Input from '../ui/input';
+import { login } from './actions';
 
 const LoginPage = () => {
   const {
@@ -25,6 +26,7 @@ const LoginPage = () => {
 
   const loginDisabled = !(email && password) || !!(emailError || passwordError);
 
+  const [alertLoginFailed, setAlertLoginFailed] = useState(false);
   const [busy, setBusy] = useState(false);
 
   return (
@@ -59,9 +61,16 @@ const LoginPage = () => {
             <button
               className="btn btn-primary min-w-24"
               disabled={loginDisabled || busy}
-              onClick={() => {
+              onClick={async () => {
                 setBusy(true);
-                login(email!, password!);
+                const { success } = await login(email!, password!);
+                setBusy(false);
+                if (success) {
+                  router.replace('/adventure');
+                } else {
+                  setAlertLoginFailed(true);
+                  setPassword('');
+                }
               }}
             >
               {busy ? BusyIndicator : 'Login'}
@@ -69,6 +78,13 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <AlertDialog
+        title="Login Failed"
+        message="Please check your email and password and try again."
+        isOpen={alertLoginFailed}
+        alertType="error"
+        onResponse={() => setAlertLoginFailed(false)}
+      />
     </main>
   );
 };

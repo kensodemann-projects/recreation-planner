@@ -1,6 +1,6 @@
 {
   "name": "recreation-planner",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "prepare": "husky",
     "start": "next start",
-    "test": "sh -c 'vitest run; code=$?; pnpm clean:localstorage; exit \"$code\"'",
+    "test": "bash -c 'vitest run ${@:2}; code=$?; pnpm clean:localstorage; exit \"$code\"' bash",
     "test:dev": "sh -c 'vitest; code=$?; pnpm clean:localstorage; exit \"$code\"'"
   },
   "dependencies": {
