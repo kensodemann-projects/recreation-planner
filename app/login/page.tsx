@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { login } from './actions';
-import Input from '../ui/input';
-import { isEmail, isRequired } from '@/utils/input-validations';
-import BusyIndicator from '../ui/busy-indicator';
-import { useState } from 'react';
 import { useFormControl } from '@/hooks/use-form-control';
+import { isEmail, isRequired } from '@/utils/input-validations';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import AlertDialog from '../ui/alert-dialog';
+import BusyIndicator from '../ui/busy-indicator';
+import Input from '../ui/input';
+import { login } from './actions';
 
 const LoginPage = () => {
   const {
@@ -25,6 +26,7 @@ const LoginPage = () => {
 
   const loginDisabled = !(email && password) || !!(emailError || passwordError);
 
+  const [alertLoginFailed, setAlertLoginFailed] = useState(false);
   const [busy, setBusy] = useState(false);
 
   return (
@@ -69,6 +71,13 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <AlertDialog
+        title="Place will be generated"
+        message="Using this option will generate a minimally speciffied Place once the event is saved. Please modify the generated place as appropriate."
+        isOpen={alertLoginFailed}
+        alertType="info"
+        onResponse={() => setAlertLoginFailed(false)}
+      />
     </main>
   );
 };
