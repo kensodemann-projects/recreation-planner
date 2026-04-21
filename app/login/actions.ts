@@ -20,8 +20,6 @@ export const login = async (email: string, password: string): Promise<{ error?: 
 
   revalidatePath('/', 'layout');
   redirect('/adventure');
-
-  return { success: true };
 };
 
 export const logout = async () => {

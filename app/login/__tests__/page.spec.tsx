@@ -1,10 +1,11 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { login } from '../actions';
 import LoginPage from '../page';
 
 vi.mock('next/navigation');
-vi.mock('./actions');
+vi.mock('../actions');
 
 describe('Login Page', () => {
   afterEach(() => cleanup());
@@ -167,6 +168,51 @@ describe('Login Page', () => {
       await user.type(screen.getByLabelText('Email Address'), 'foobar.com');
       await user.type(screen.getByLabelText('Password'), 'cats are people too');
       expect(btn.attributes.getNamedItem('disabled')).toBeTruthy();
+    });
+
+    describe('when clicked', () => {
+      beforeEach(() => {
+        vi.mocked(login).mockReset();
+        vi.mocked(login).mockResolvedValue({ success: true });
+      });
+
+      it('calls login with the entered email and password', async () => {
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+        await user.type(screen.getByLabelText('Password'), 'cats are people too');
+        await user.click(screen.getByRole('button', { name: 'Login' }));
+        expect(login).toHaveBeenCalledWith('foo@bar.com', 'cats are people too');
+      });
+
+      it('does not show a failure alert on success', async () => {
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+        await user.type(screen.getByLabelText('Password'), 'cats are people too');
+        await user.click(screen.getByRole('button', { name: 'Login' }));
+        expect(HTMLDialogElement.prototype.showModal as Mock).not.toHaveBeenCalled();
+      });
+
+      it('shows a failure alert when login fails', async () => {
+        vi.mocked(login).mockResolvedValue({ success: false });
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+        await user.type(screen.getByLabelText('Password'), 'cats are people too');
+        await user.click(screen.getByRole('button', { name: 'Login' }));
+        expect(HTMLDialogElement.prototype.showModal as Mock).toHaveBeenCalled();
+      });
+
+      it('clears the password when login fails', async () => {
+        vi.mocked(login).mockResolvedValue({ success: false });
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.type(screen.getByLabelText('Email Address'), 'foo@bar.com');
+        await user.type(screen.getByLabelText('Password'), 'cats are people too');
+        await user.click(screen.getByRole('button', { name: 'Login' }));
+        expect((screen.getByLabelText('Password') as HTMLInputElement).value).toBe('');
+      });
     });
   });
 });
