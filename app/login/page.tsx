@@ -7,6 +7,7 @@ import { useState } from 'react';
 import AlertDialog from '../ui/alert-dialog';
 import BusyIndicator from '../ui/busy-indicator';
 import Input from '../ui/input';
+import PasswordInput from '../ui/password-input';
 import { login } from './actions';
 
 const LoginPage = () => {
@@ -44,10 +45,9 @@ const LoginPage = () => {
             onBlur={validateEmail}
             onChange={(evt) => setEmail(evt.target.value)}
           />
-          <Input
+          <PasswordInput
             id="password"
             disabled={busy}
-            type="password"
             label="Password"
             value={password}
             error={passwordError}
