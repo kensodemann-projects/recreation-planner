@@ -25,6 +25,7 @@ describe('login actions', () => {
         getUser: mockGetUser,
         signOut: mockSignOut,
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
   });
 
