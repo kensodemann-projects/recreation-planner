@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "prepare": "husky",
     "start": "next start",
-    "test": "bash -c 'vitest run ${@:2}; code=$?; run-p clean:localstorage; exit \"$code\"' bash",
+    "test": "bash -c 'vitest run ${@:2}; code=$?; pnpm clean:localstorage; exit \"$code\"' bash",
     "test:dev": "sh -c 'vitest; code=$?; pnpm clean:localstorage; exit \"$code\"'"
   },
   "dependencies": {
