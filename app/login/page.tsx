@@ -61,9 +61,14 @@ const LoginPage = () => {
             <button
               className="btn btn-primary min-w-24"
               disabled={loginDisabled || busy}
-              onClick={() => {
+              onClick={async () => {
                 setBusy(true);
-                login(email!, password!);
+                const { success } = await login(email!, password!);
+                if (!success) {
+                  setAlertLoginFailed(true);
+                  setBusy(false);
+                  setPassword('');
+                }
               }}
             >
               {busy ? BusyIndicator : 'Login'}
@@ -72,10 +77,10 @@ const LoginPage = () => {
         </div>
       </div>
       <AlertDialog
-        title="Place will be generated"
-        message="Using this option will generate a minimally speciffied Place once the event is saved. Please modify the generated place as appropriate."
+        title="Login Failed"
+        message="Please check your email and password and try again."
         isOpen={alertLoginFailed}
-        alertType="info"
+        alertType="error"
         onResponse={() => setAlertLoginFailed(false)}
       />
     </main>
