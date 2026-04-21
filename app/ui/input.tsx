@@ -8,7 +8,6 @@ interface InputProperties extends ComponentPropsWithoutRef<'input'> {
 }
 
 const Input = ({ label, className, error, ...props }: InputProperties) => {
-  console.log('Input rendering:', props.type);
   return (
     <div className={className}>
       <label className="floating-label">
