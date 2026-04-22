@@ -15,7 +15,7 @@ const note: Note = {
   eventRid: null,
 };
 
-describe('eqipment note: create', () => {
+describe('equipment note: create', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('calls addNote with the specified note', async () => {
