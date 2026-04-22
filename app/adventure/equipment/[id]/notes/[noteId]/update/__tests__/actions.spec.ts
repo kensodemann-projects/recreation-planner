@@ -24,7 +24,7 @@ describe('equipment notes: updateConfirmed', () => {
     expect(updateNote).toHaveBeenCalledExactlyOnceWith(note);
   });
 
-  describe('when  the update succeeds', () => {
+  describe('when the update succeeds', () => {
     beforeEach(() => {
       (updateNote as any).mockResolvedValue(note);
     });
