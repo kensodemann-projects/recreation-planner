@@ -58,7 +58,12 @@ const LoginPage = () => {
           <div className="card-actions justify-end mt-4">
             <div className="flex-1">
               <label className="label">
-                <input type="checkbox" className="checkbox" onClick={() => setShowPassword(!showPassword)} />
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={showPassword}
+                  onChange={(evt) => setShowPassword(evt.currentTarget.checked)}
+                />
                 Show password
               </label>
             </div>
