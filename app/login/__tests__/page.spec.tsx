@@ -95,6 +95,43 @@ describe('Login Page', () => {
       expect(screen.getByLabelText('Password')).toBeDefined();
     });
 
+    it('is masked by default', () => {
+      render(<LoginPage />);
+      const inp = screen.getByLabelText('Password') as HTMLInputElement;
+      expect(inp.type).toBe('password');
+    });
+
+    describe('show password checkbox', () => {
+      it('exists', () => {
+        render(<LoginPage />);
+        expect(screen.getByRole('checkbox', { name: 'Show password' })).toBeDefined();
+      });
+
+      it('is unchecked by default', () => {
+        render(<LoginPage />);
+        const checkbox = screen.getByRole('checkbox', { name: 'Show password' }) as HTMLInputElement;
+        expect(checkbox.checked).toBe(false);
+      });
+
+      it('reveals the password when checked', async () => {
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        await user.click(screen.getByRole('checkbox', { name: 'Show password' }));
+        const inp = screen.getByLabelText('Password') as HTMLInputElement;
+        expect(inp.type).toBe('text');
+      });
+
+      it('masks the password again when unchecked', async () => {
+        const user = userEvent.setup();
+        render(<LoginPage />);
+        const checkbox = screen.getByRole('checkbox', { name: 'Show password' });
+        await user.click(checkbox);
+        await user.click(checkbox);
+        const inp = screen.getByLabelText('Password') as HTMLInputElement;
+        expect(inp.type).toBe('password');
+      });
+    });
+
     describe('required error', () => {
       it('is not displayed initially', () => {
         render(<LoginPage />);

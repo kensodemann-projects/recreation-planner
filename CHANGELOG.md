@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.3.1
+
+### Patch Changes
+
+- b053898: add the show password checkbox
+
 ## 1.3.0
 
 ### Minor Changes

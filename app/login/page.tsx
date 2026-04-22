@@ -28,6 +28,7 @@ const LoginPage = () => {
 
   const [alertLoginFailed, setAlertLoginFailed] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex flex-col items-center mt-24">
@@ -47,7 +48,7 @@ const LoginPage = () => {
           <Input
             id="password"
             disabled={busy}
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             label="Password"
             value={password}
             error={passwordError}
@@ -55,6 +56,17 @@ const LoginPage = () => {
             onChange={(evt) => setPassword(evt.target.value)}
           />
           <div className="card-actions justify-end mt-4">
+            <div className="flex-1">
+              <label className="label">
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={showPassword}
+                  onChange={(evt) => setShowPassword(evt.currentTarget.checked)}
+                />
+                Show password
+              </label>
+            </div>
             <button className="btn min-w-24" disabled={busy} onClick={() => router.back()}>
               Cancel
             </button>
