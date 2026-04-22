@@ -28,7 +28,7 @@ const equipment: Equipment = {
   equipmentType: { id: 1, name: 'Kayak', description: 'A small boat' },
 };
 
-describe('createEquipmentConfirmed', () => {
+describe('equipment: createEquipmentConfirmed', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('calls addEquipment with the provided equipment', async () => {

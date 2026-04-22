@@ -28,7 +28,7 @@ const equipment: Equipment = {
   equipmentType: { id: 1, name: 'Kayak', description: 'A small boat' },
 };
 
-describe('equipment delete actions', () => {
+describe('equipment: delete actions', () => {
   beforeEach(() => vi.clearAllMocks());
 
   describe('deleteAborted', () => {
