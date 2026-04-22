@@ -8,7 +8,6 @@ vi.mock('@/app/adventure/notes/data');
 vi.mock('next/navigation');
 
 const note: Note = {
-  id: 1,
   name: 'Test Note',
   description: 'A note for testing',
   equipmentRid: 42,
@@ -26,7 +25,7 @@ describe('eqipment note: create', () => {
 
   describe('when addNote succeeds', () => {
     beforeEach(() => {
-      (addNote as any).mockResolvedValue(note);
+      (addNote as any).mockResolvedValue({ ...note, id: 73 });
     });
 
     it('redirects to the equipment details page', async () => {
