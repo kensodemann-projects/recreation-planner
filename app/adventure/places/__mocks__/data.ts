@@ -1,7 +1,7 @@
 import { Place, PlaceType } from '@/models';
 import { vi } from 'vitest';
 
-const PLACE_TYPES: Array<PlaceType> = [
+export const PLACE_TYPES: Array<PlaceType> = [
   {
     id: 1,
     name: 'State Park',
