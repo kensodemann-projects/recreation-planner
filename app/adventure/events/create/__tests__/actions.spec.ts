@@ -5,6 +5,7 @@ import { createConfirmed } from '../actions';
 import { addEvent } from '@/app/adventure/events/data';
 import { addPlace, fetchPlaceTypes } from '@/app/adventure/places/data';
 import { PLACE_TYPES } from '@/app/adventure/places/__mocks__/data';
+import { redirect } from 'next/navigation';
 
 vi.mock('@/app/adventure/events/data');
 vi.mock('@/app/adventure/places/data');
@@ -45,5 +46,27 @@ describe('events: createConfirmed', () => {
     expect(fetchPlaceTypes).toHaveBeenCalledExactlyOnceWith();
     expect(addPlace).toHaveBeenCalledExactlyOnceWith(place);
     expect(addEvent).toHaveBeenCalledExactlyOnceWith({ ...eventWithoutPlace, place: { ...place, id: 420 } });
+  });
+
+  describe('when addEvent succeeds', () => {
+    beforeEach(() => {
+      (addEvent as any).mockResolvedValue({ ...event, id: 73 });
+    });
+
+    it('redirects to the events list page', async () => {
+      await createConfirmed(event);
+      expect(redirect).toHaveBeenCalledExactlyOnceWith('/adventure/events');
+    });
+  });
+
+  describe('when addEvent fails', () => {
+    beforeEach(() => {
+      (addEvent as any).mockResolvedValue(null);
+    });
+
+    it('redirects to /error', async () => {
+      await createConfirmed(event);
+      expect(redirect).toHaveBeenCalledExactlyOnceWith('/error');
+    });
   });
 });
