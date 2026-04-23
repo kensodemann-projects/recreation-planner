@@ -20,7 +20,7 @@ describe('places: updateConfirmed', () => {
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updatePlace as any).mockResolvedValue(true);
+      (updatePlace as any).mockResolvedValue(place);
     });
 
     it('redirects to the places list page', async () => {
