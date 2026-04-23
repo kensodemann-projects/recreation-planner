@@ -73,3 +73,4 @@ export const addEvent = vi.fn();
 export const deleteEvent = vi.fn();
 export const canDeleteEvent = vi.fn().mockResolvedValue(false);
 export const fetchEventTypes = vi.fn().mockResolvedValue(EVENT_TYPES);
+export const updateEvent = vi.fn().mockResolvedValue(null);
