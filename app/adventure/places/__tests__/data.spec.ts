@@ -155,18 +155,18 @@ describe('places data', () => {
   // fetchPlace
   // ---------------------------------------------------------------------------
 
-  describe('fetchPlace', () => {
+  describe.each([true, false])('fetchPlace full: $0', (full: boolean) => {
     describe('when not logged in', () => {
       beforeEach(() => {
         (isNotLoggedIn as Mock).mockResolvedValue(true);
       });
 
       it('returns null', async () => {
-        expect(await fetchPlace(1)).toBeNull();
+        expect(await fetchPlace(1, full)).toBeNull();
       });
 
       it('does not access the database', async () => {
-        await fetchPlace(1);
+        await fetchPlace(1, full);
         expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
@@ -183,17 +183,17 @@ describe('places data', () => {
         });
 
         it('calls executeQuery', async () => {
-          await fetchPlace(1);
+          await fetchPlace(1, full);
           expect(executeQuery).toHaveBeenCalledOnce();
         });
 
         it('queries the places table', async () => {
-          await fetchPlace(1);
+          await fetchPlace(1, full);
           expect(mockFrom).toHaveBeenCalledWith('places');
         });
 
         it('returns the converted place', async () => {
-          expect(await fetchPlace(1)).toEqual(place);
+          expect(await fetchPlace(1, full)).toEqual(place);
         });
       });
 
@@ -220,7 +220,7 @@ describe('places data', () => {
         });
 
         it('returns null', async () => {
-          expect(await fetchPlace(1)).toBeNull();
+          expect(await fetchPlace(1, full)).toBeNull();
         });
       });
     });
