@@ -179,7 +179,7 @@ describe('places data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(placeDTO);
+          (executeQuery as Mock).mockResolvedValue(full ? placeWithNotesDTO : placeDTO);
         });
 
         it('calls executeQuery', async () => {
@@ -193,24 +193,7 @@ describe('places data', () => {
         });
 
         it('returns the converted place', async () => {
-          expect(await fetchPlace(1, full)).toEqual(place);
-        });
-      });
-
-      describe('when full data is requested', () => {
-        it('returns the converted place with notes', async () => {
-          (executeQuery as Mock).mockResolvedValue(placeWithNotesDTO);
-          expect(await fetchPlace(1, true)).toEqual(placeWithNotes);
-        });
-
-        it('returns null when no full data is returned', async () => {
-          (executeQuery as Mock).mockResolvedValue(null);
-          expect(await fetchPlace(1, true)).toBeNull();
-        });
-
-        it('throws when full query execution fails', async () => {
-          (executeQuery as Mock).mockRejectedValue(new Error('database error'));
-          await expect(fetchPlace(1, true)).rejects.toThrow('database error');
+          expect(await fetchPlace(1, full)).toEqual(full ? placeWithNotes : place);
         });
       });
 
