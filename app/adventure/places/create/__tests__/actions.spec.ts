@@ -1,11 +1,11 @@
 import { Place } from '@/models';
-import { PLACES } from '../../__mocks__/data';
+import { PLACES } from '@/app/adventure/places/__mocks__/data';
 import { createConfirmed } from '../actions';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { addPlace } from '../../data';
+import { addPlace } from '@/app/adventure/places/data';
 import { redirect } from 'next/navigation';
 
-vi.mock('../../data');
+vi.mock('@/app/adventure/places/data');
 vi.mock('next/navigation');
 
 const place: Place = { ...PLACES.find((p) => p.id === 2)!, id: undefined };
