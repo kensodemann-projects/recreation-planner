@@ -60,6 +60,16 @@ const todoCollection = {
   todoItems: [],
 };
 
+const todoCollectionDTOWithItems = {
+  ...todoCollectionDTO,
+  todo_items: [todoItemDTO],
+};
+
+const todoCollectionWithItems = {
+  ...todoCollection,
+  todoItems: [todoItem],
+};
+
 // --- Helpers ---
 
 const buildChainableMock = () => {
@@ -126,6 +136,11 @@ describe('todos data', () => {
         it('returns the converted todo collections', async () => {
           expect(await fetchTodoCollections()).toEqual([todoCollection]);
         });
+
+        it('converts nested todo items', async () => {
+          (executeQuery as Mock).mockResolvedValueOnce([todoCollectionDTOWithItems]);
+          expect(await fetchTodoCollections()).toEqual([todoCollectionWithItems]);
+        });
       });
 
       describe('when no data is returned', () => {
@@ -183,6 +198,11 @@ describe('todos data', () => {
 
         it('returns the converted todo collection', async () => {
           expect(await fetchTodoCollection(1)).toEqual(todoCollection);
+        });
+
+        it('converts nested todo items', async () => {
+          (executeQuery as Mock).mockResolvedValueOnce(todoCollectionDTOWithItems);
+          expect(await fetchTodoCollection(1)).toEqual(todoCollectionWithItems);
         });
       });
 
