@@ -90,6 +90,7 @@ describe('places data', () => {
     vi.clearAllMocks();
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
   });
 
@@ -220,11 +221,11 @@ describe('places data', () => {
       });
 
       it('returns null', async () => {
-        expect(await addPlace(place as any)).toBeNull();
+        expect(await addPlace(place)).toBeNull();
       });
 
       it('does not access the database', async () => {
-        await addPlace(place as any);
+        await addPlace(place);
         expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
@@ -241,17 +242,17 @@ describe('places data', () => {
         });
 
         it('calls executeQuery', async () => {
-          await addPlace(place as any);
+          await addPlace(place);
           expect(executeQuery).toHaveBeenCalledOnce();
         });
 
         it('inserts into the places table', async () => {
-          await addPlace(place as any);
+          await addPlace(place);
           expect(mockFrom).toHaveBeenCalledWith('places');
         });
 
         it('returns the converted place', async () => {
-          expect(await addPlace(place as any)).toEqual(place);
+          expect(await addPlace(place)).toEqual(place);
         });
       });
 
@@ -261,7 +262,7 @@ describe('places data', () => {
         });
 
         it('returns null', async () => {
-          expect(await addPlace(place as any)).toBeNull();
+          expect(await addPlace(place)).toBeNull();
         });
       });
     });
@@ -336,11 +337,11 @@ describe('places data', () => {
       });
 
       it('returns false', async () => {
-        expect(await canDeletePlace(place as any)).toBe(false);
+        expect(await canDeletePlace(place)).toBe(false);
       });
 
       it('does not access the database', async () => {
-        await canDeletePlace(place as any);
+        await canDeletePlace(place);
         expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
@@ -353,7 +354,7 @@ describe('places data', () => {
 
       it('queries the events table', async () => {
         (executeQuery as Mock).mockResolvedValue({ count: 0 });
-        await canDeletePlace(place as any);
+        await canDeletePlace(place);
         expect(mockFrom).toHaveBeenCalledWith('events');
       });
 
@@ -363,7 +364,7 @@ describe('places data', () => {
         });
 
         it('returns true', async () => {
-          expect(await canDeletePlace(place as any)).toBe(true);
+          expect(await canDeletePlace(place)).toBe(true);
         });
       });
 
@@ -373,7 +374,7 @@ describe('places data', () => {
         });
 
         it('returns false', async () => {
-          expect(await canDeletePlace(place as any)).toBe(false);
+          expect(await canDeletePlace(place)).toBe(false);
         });
       });
 
@@ -383,7 +384,7 @@ describe('places data', () => {
         });
 
         it('returns false', async () => {
-          expect(await canDeletePlace(place as any)).toBe(false);
+          expect(await canDeletePlace(place)).toBe(false);
         });
       });
     });
@@ -400,7 +401,7 @@ describe('places data', () => {
       });
 
       it('does not access the database', async () => {
-        await deletePlace(place as any);
+        await deletePlace(place);
         expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
@@ -413,12 +414,12 @@ describe('places data', () => {
       });
 
       it('calls executeQuery', async () => {
-        await deletePlace(place as any);
+        await deletePlace(place);
         expect(executeQuery).toHaveBeenCalledOnce();
       });
 
       it('deletes from the places table', async () => {
-        await deletePlace(place as any);
+        await deletePlace(place);
         expect(mockFrom).toHaveBeenCalledWith('places');
       });
     });
@@ -435,11 +436,11 @@ describe('places data', () => {
       });
 
       it('returns null', async () => {
-        expect(await updatePlace(place as any)).toBeNull();
+        expect(await updatePlace(place)).toBeNull();
       });
 
       it('does not access the database', async () => {
-        await updatePlace(place as any);
+        await updatePlace(place);
         expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
@@ -456,17 +457,17 @@ describe('places data', () => {
         });
 
         it('calls executeQuery', async () => {
-          await updatePlace(place as any);
+          await updatePlace(place);
           expect(executeQuery).toHaveBeenCalledOnce();
         });
 
         it('updates the places table', async () => {
-          await updatePlace(place as any);
+          await updatePlace(place);
           expect(mockFrom).toHaveBeenCalledWith('places');
         });
 
         it('returns the converted place', async () => {
-          expect(await updatePlace(place as any)).toEqual(place);
+          expect(await updatePlace(place)).toEqual(place);
         });
       });
 
@@ -476,7 +477,7 @@ describe('places data', () => {
         });
 
         it('returns null', async () => {
-          expect(await updatePlace(place as any)).toBeNull();
+          expect(await updatePlace(place)).toBeNull();
         });
       });
     });

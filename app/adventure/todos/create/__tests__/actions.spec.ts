@@ -1,9 +1,9 @@
-import { TodoCollection } from '@/models';
 import { TODO_COLLECTIONS } from '@/app/adventure/todos/__mocks__/data';
-import { redirect } from 'next/navigation';
-import { describe, beforeEach, vi, it, expect } from 'vitest';
-import { createConfirmed } from '../actions';
 import { addTodoCollection } from '@/app/adventure/todos/data';
+import { TodoCollection } from '@/models';
+import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { createConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/todos/data');
 vi.mock('next/navigation');
@@ -20,7 +20,7 @@ describe('todo collection: createConfirmed', () => {
 
   describe('when addTodoCollection succeeds', () => {
     beforeEach(() => {
-      (addTodoCollection as any).mockResolvedValue({ ...todoCollection, id: 73 });
+      (addTodoCollection as Mock).mockResolvedValue({ ...todoCollection, id: 73 });
     });
 
     it('redirects to the todo collections list page', async () => {
@@ -31,7 +31,7 @@ describe('todo collection: createConfirmed', () => {
 
   describe('when addTodoCollection fails', () => {
     beforeEach(() => {
-      (addTodoCollection as any).mockResolvedValue(null);
+      (addTodoCollection as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {
