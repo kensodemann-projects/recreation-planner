@@ -1,6 +1,7 @@
 import { Event, Place } from '@/models';
 import { EVENTS } from '@/app/adventure/events/__mocks__/data';
-import { describe, beforeEach, vi, it, expect, Mock } from 'vitest';
+import { describe, beforeEach, vi, it, expect } from 'vitest';
+import type { Mock } from 'vitest';
 import { createConfirmed } from '../actions';
 import { addEvent } from '@/app/adventure/events/data';
 import { addPlace, fetchPlaceTypes } from '@/app/adventure/places/data';
