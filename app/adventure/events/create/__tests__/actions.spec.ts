@@ -1,12 +1,11 @@
-import { Event, Place } from '@/models';
 import { EVENTS } from '@/app/adventure/events/__mocks__/data';
-import { describe, beforeEach, vi, it, expect } from 'vitest';
-import type { Mock } from 'vitest';
-import { createConfirmed } from '../actions';
 import { addEvent } from '@/app/adventure/events/data';
-import { addPlace, fetchPlaceTypes } from '@/app/adventure/places/data';
 import { PLACE_TYPES } from '@/app/adventure/places/__mocks__/data';
+import { addPlace, fetchPlaceTypes } from '@/app/adventure/places/data';
+import { Event, Place } from '@/models';
 import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { createConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/events/data');
 vi.mock('@/app/adventure/places/data');
@@ -51,7 +50,7 @@ describe('events: createConfirmed', () => {
 
   describe('when addEvent succeeds', () => {
     beforeEach(() => {
-      (addEvent as any).mockResolvedValue({ ...event, id: 73 });
+      (addEvent as Mock).mockResolvedValue({ ...event, id: 73 });
     });
 
     it('redirects to the events list page', async () => {
@@ -62,7 +61,7 @@ describe('events: createConfirmed', () => {
 
   describe('when addEvent fails', () => {
     beforeEach(() => {
-      (addEvent as any).mockResolvedValue(null);
+      (addEvent as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

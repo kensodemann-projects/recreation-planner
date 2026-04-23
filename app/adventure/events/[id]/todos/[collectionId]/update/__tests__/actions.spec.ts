@@ -1,9 +1,9 @@
 import { TODO_COLLECTIONS } from '@/app/adventure/todos/__mocks__/data';
+import { updateTodoCollection } from '@/app/adventure/todos/data';
 import { TodoCollection } from '@/models';
 import { redirect } from 'next/navigation';
-import { describe, beforeEach, vi, it, expect } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { updateConfirmed } from '../actions';
-import { updateTodoCollection } from '@/app/adventure/todos/data';
 
 vi.mock('@/app/adventure/todos/data');
 vi.mock('next/navigation');
@@ -20,7 +20,7 @@ describe('event todos: updateConfirmed', () => {
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updateTodoCollection as any).mockResolvedValue({ ...todos, id: 73 });
+      (updateTodoCollection as Mock).mockResolvedValue({ ...todos, id: 73 });
     });
 
     it('redirects to the event details page', async () => {
@@ -31,7 +31,7 @@ describe('event todos: updateConfirmed', () => {
 
   describe('when the update fails', () => {
     beforeEach(() => {
-      (updateTodoCollection as any).mockResolvedValue(null);
+      (updateTodoCollection as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

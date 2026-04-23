@@ -1,7 +1,7 @@
 import { updateNote } from '@/app/adventure/notes/data';
 import { Note } from '@/models';
 import { redirect } from 'next/navigation';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { updateConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/notes/data');
@@ -26,7 +26,7 @@ describe('equipment notes: updateConfirmed', () => {
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updateNote as any).mockResolvedValue(note);
+      (updateNote as Mock).mockResolvedValue(note);
     });
 
     it('redirects to the equipment details page', async () => {
@@ -37,7 +37,7 @@ describe('equipment notes: updateConfirmed', () => {
 
   describe('when the update fails', () => {
     beforeEach(() => {
-      (updateNote as any).mockResolvedValue(null);
+      (updateNote as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

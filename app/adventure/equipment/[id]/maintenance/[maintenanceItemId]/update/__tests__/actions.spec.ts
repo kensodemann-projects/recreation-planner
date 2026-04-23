@@ -2,7 +2,7 @@ import { MAINTENANCE_ITEMS } from '@/app/adventure/equipment/__mocks__/data';
 import { updateMaintenanceItem } from '@/app/adventure/equipment/data';
 import { MaintenanceItem } from '@/models';
 import { redirect } from 'next/navigation';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { updateConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/equipment/data');
@@ -23,7 +23,7 @@ describe('equipment maintenance: updateConfirmed', () => {
 
   describe('on success', () => {
     beforeEach(() => {
-      (updateMaintenanceItem as any).mockResolvedValue({ ...maintenanceItem });
+      (updateMaintenanceItem as Mock).mockResolvedValue({ ...maintenanceItem });
     });
 
     it('redirects to the equipment details page', async () => {
@@ -34,7 +34,7 @@ describe('equipment maintenance: updateConfirmed', () => {
 
   describe('on failure', () => {
     beforeEach(() => {
-      (updateMaintenanceItem as any).mockResolvedValue(null);
+      (updateMaintenanceItem as Mock).mockResolvedValue(null);
     });
 
     it('redirects to error', async () => {

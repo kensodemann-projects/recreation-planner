@@ -1,9 +1,9 @@
-import { ItineraryItem } from '@/models';
 import { ITINERARY_ITEMS } from '@/app/adventure/events/[id]/itinerary/__mocks__/data';
-import { redirect } from 'next/navigation';
-import { describe, beforeEach, vi, it, expect } from 'vitest';
-import { updateConfirmed } from '../actions';
 import { updateItineraryItem } from '@/app/adventure/events/[id]/itinerary/data';
+import { ItineraryItem } from '@/models';
+import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { updateConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/events/[id]/itinerary/data');
 vi.mock('next/navigation');
@@ -20,7 +20,7 @@ describe('itinerary item updateConfirmed', () => {
 
   describe('when updateItineraryItem succeeds', () => {
     beforeEach(() => {
-      (updateItineraryItem as any).mockResolvedValue(itineraryItem);
+      (updateItineraryItem as Mock).mockResolvedValue(itineraryItem);
     });
 
     it('redirects to the event details page', async () => {
@@ -31,7 +31,7 @@ describe('itinerary item updateConfirmed', () => {
 
   describe('when updateItineraryItem fails', () => {
     beforeEach(() => {
-      (updateItineraryItem as any).mockResolvedValue(null);
+      (updateItineraryItem as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

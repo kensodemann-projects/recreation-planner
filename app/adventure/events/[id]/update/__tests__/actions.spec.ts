@@ -1,5 +1,5 @@
 import { Event } from '@/models';
-import { describe, beforeEach, vi, it, expect } from 'vitest';
+import { describe, beforeEach, vi, it, expect, type Mock } from 'vitest';
 import { EVENTS } from '@/app/adventure/events/__mocks__/data';
 import { updateConfirmed } from '../actions';
 import { redirect } from 'next/navigation';
@@ -20,7 +20,7 @@ describe('events: updateConfirmed', () => {
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updateEvent as any).mockResolvedValue(event);
+      (updateEvent as Mock).mockResolvedValue(event);
     });
 
     it.each([
@@ -44,7 +44,7 @@ describe('events: updateConfirmed', () => {
 
   describe('when the update does not succeed', () => {
     beforeEach(() => {
-      (updateEvent as any).mockResolvedValue(null);
+      (updateEvent as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

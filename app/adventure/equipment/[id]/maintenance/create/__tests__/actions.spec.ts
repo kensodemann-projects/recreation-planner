@@ -1,9 +1,9 @@
 import { MAINTENANCE_ITEMS } from '@/app/adventure/equipment/__mocks__/data';
-import { createConfirmed } from '../actions';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { addMaintenanceItem } from '@/app/adventure/equipment/data';
-import { redirect } from 'next/navigation';
 import { MaintenanceItem } from '@/models';
+import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { createConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/equipment/data');
 vi.mock('next/navigation');
@@ -24,7 +24,7 @@ describe('equipment maintenance: createConfirmed', () => {
 
   describe('on success', () => {
     beforeEach(() => {
-      (addMaintenanceItem as any).mockResolvedValue({ ...maintenanceItem, id: 73 });
+      (addMaintenanceItem as Mock).mockResolvedValue({ ...maintenanceItem, id: 73 });
     });
 
     it('redirects to the equipment details page', async () => {
@@ -35,7 +35,7 @@ describe('equipment maintenance: createConfirmed', () => {
 
   describe('on failure', () => {
     beforeEach(() => {
-      (addMaintenanceItem as any).mockResolvedValue(null);
+      (addMaintenanceItem as Mock).mockResolvedValue(null);
     });
 
     it('redirects to error', async () => {

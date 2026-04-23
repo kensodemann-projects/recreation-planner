@@ -2,7 +2,7 @@ import { TODO_COLLECTIONS } from '@/app/adventure/todos/__mocks__/data';
 import { updateTodoCollection } from '@/app/adventure/todos/data';
 import { TodoCollection } from '@/models';
 import { redirect } from 'next/navigation';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { updateConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/todos/data');
@@ -20,7 +20,7 @@ describe('equipment TODOs: updateConfirmed', () => {
 
   describe('on success', () => {
     beforeEach(() => {
-      (updateTodoCollection as any).mockResolvedValue(collection);
+      (updateTodoCollection as Mock).mockResolvedValue(collection);
     });
 
     it('redirects to the equipment details page', async () => {
@@ -31,7 +31,7 @@ describe('equipment TODOs: updateConfirmed', () => {
 
   describe('on failure', () => {
     beforeEach(() => {
-      (updateTodoCollection as any).mockResolvedValue(null);
+      (updateTodoCollection as Mock).mockResolvedValue(null);
     });
 
     it('redirects to error', async () => {

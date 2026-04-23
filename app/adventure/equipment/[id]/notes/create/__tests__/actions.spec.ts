@@ -1,8 +1,8 @@
-import { Note } from '@/models';
-import { createConfirmed } from '../actions';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { addNote } from '@/app/adventure/notes/data';
+import { Note } from '@/models';
 import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { createConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/notes/data');
 vi.mock('next/navigation');
@@ -25,7 +25,7 @@ describe('equipment note: create', () => {
 
   describe('when addNote succeeds', () => {
     beforeEach(() => {
-      (addNote as any).mockResolvedValue({ ...note, id: 73 });
+      (addNote as Mock).mockResolvedValue({ ...note, id: 73 });
     });
 
     it('redirects to the equipment details page', async () => {
@@ -36,7 +36,7 @@ describe('equipment note: create', () => {
 
   describe('when addNote fails', () => {
     beforeEach(() => {
-      (addNote as any).mockResolvedValue(null);
+      (addNote as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {

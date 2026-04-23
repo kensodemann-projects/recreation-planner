@@ -1,9 +1,9 @@
-import { Place } from '@/models';
 import { PLACES } from '@/app/adventure/places/__mocks__/data';
-import { createConfirmed } from '../actions';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { addPlace } from '@/app/adventure/places/data';
+import { Place } from '@/models';
 import { redirect } from 'next/navigation';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { createConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/places/data');
 vi.mock('next/navigation');
@@ -20,7 +20,7 @@ describe('places: createConfirmed', () => {
 
   describe('on success', () => {
     beforeEach(() => {
-      (addPlace as any).mockResolvedValue({ ...place, id: 73 });
+      (addPlace as Mock).mockResolvedValue({ ...place, id: 73 });
     });
 
     it('redirects to the places page', async () => {
@@ -31,7 +31,7 @@ describe('places: createConfirmed', () => {
 
   describe('on failure', () => {
     beforeEach(() => {
-      (addPlace as any).mockResolvedValue(null);
+      (addPlace as Mock).mockResolvedValue(null);
     });
 
     it('redirects to the error page', async () => {

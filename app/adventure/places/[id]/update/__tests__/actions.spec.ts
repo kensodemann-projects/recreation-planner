@@ -2,7 +2,7 @@ import { PLACES } from '@/app/adventure/places/__mocks__/data';
 import { updatePlace } from '@/app/adventure/places/data';
 import { Place } from '@/models';
 import { redirect } from 'next/navigation';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { updateConfirmed } from '../actions';
 
 vi.mock('@/app/adventure/places/data');
@@ -20,7 +20,7 @@ describe('places: updateConfirmed', () => {
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updatePlace as any).mockResolvedValue(place);
+      (updatePlace as Mock).mockResolvedValue(place);
     });
 
     it('redirects to the places list page', async () => {
@@ -31,7 +31,7 @@ describe('places: updateConfirmed', () => {
 
   describe('when the update fails', () => {
     beforeEach(() => {
-      (updatePlace as any).mockResolvedValue(null);
+      (updatePlace as Mock).mockResolvedValue(null);
     });
 
     it('redirects to /error', async () => {
