@@ -29,7 +29,7 @@ describe.each([
 
   describe('when the update succeeds', () => {
     beforeEach(() => {
-      (updateTodoCollection as any).mockResolvedValue(true);
+      (updateTodoCollection as any).mockResolvedValue(todoCollection);
     });
 
     it('redirects to the todos list page', async () => {
