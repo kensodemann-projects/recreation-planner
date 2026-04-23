@@ -27,6 +27,20 @@ const placeDTO = {
   place_types: placeTypeDTO,
 };
 
+const placeWithNotesDTO = {
+  ...placeDTO,
+  notes: [
+    {
+      id: 8,
+      name: 'Bring firewood',
+      description: 'Check local restrictions',
+      place_rid: 1,
+      equipment_rid: null,
+      event_rid: null,
+    },
+  ],
+};
+
 const place = {
   id: 1,
   name: 'Test Campground',
@@ -41,6 +55,20 @@ const place = {
   phoneNumber: '555-555-5555',
   website: 'https://example.com',
   type: { id: 3, name: 'Campground', description: 'A place to camp' },
+};
+
+const placeWithNotes = {
+  ...place,
+  notes: [
+    {
+      id: 8,
+      name: 'Bring firewood',
+      description: 'Check local restrictions',
+      placeRid: 1,
+      equipmentRid: null,
+      eventRid: null,
+    },
+  ],
 };
 
 // --- Helpers ---
@@ -166,6 +194,23 @@ describe('places data', () => {
 
         it('returns the converted place', async () => {
           expect(await fetchPlace(1)).toEqual(place);
+        });
+      });
+
+      describe('when full data is requested', () => {
+        it('returns the converted place with notes', async () => {
+          (executeQuery as Mock).mockResolvedValue(placeWithNotesDTO);
+          expect(await fetchPlace(1, true)).toEqual(placeWithNotes);
+        });
+
+        it('returns null when no full data is returned', async () => {
+          (executeQuery as Mock).mockResolvedValue(null);
+          expect(await fetchPlace(1, true)).toBeNull();
+        });
+
+        it('throws when full query execution fails', async () => {
+          (executeQuery as Mock).mockRejectedValue(new Error('database error'));
+          await expect(fetchPlace(1, true)).rejects.toThrow('database error');
         });
       });
 
