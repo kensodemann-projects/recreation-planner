@@ -72,7 +72,7 @@ export const fetchUpcomingEvents = async (startDate: string, endDate?: string): 
   const data = await withAuth((supabase: SupabaseClient) => {
     const query = upcomingEventsQuery(supabase, startDate, endDate);
     return executeQuery<EventDTO[]>(query);
-  })();
+  });
 
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
@@ -81,7 +81,7 @@ export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
   const data = await withAuth((supabase: SupabaseClient) => {
     const query = priorEventsQuery(supabase, dt);
     return executeQuery<EventDTO[]>(query);
-  })();
+  });
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
