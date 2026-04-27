@@ -9,8 +9,7 @@ import {
   convertToTodoItemDTO,
 } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { createClient } from '@/utils/supabase/server';
+import { withAuth } from '@/utils/supabase/auth';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const collectionSelectColumns =
@@ -68,114 +67,64 @@ const todoItemDelete = (supabase: SupabaseClient, item: TodoItem): any =>
   supabase.from(itemTable).delete().eq('id', item.id);
 
 export const fetchTodoCollections = async (): Promise<TodoCollection[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionQuery(supabase);
-  const data = await executeQuery<TodoCollectionDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<TodoCollectionDTO[]>(todoCollectionQuery(supabase)),
+  );
   return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
 };
 
 export const fetchTodoCollection = async (id: number): Promise<TodoCollection | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionQuery(supabase, id);
-  const data = await executeQuery<TodoCollectionDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<TodoCollectionDTO>(todoCollectionQuery(supabase, id)),
+  );
   return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 export const fetchDueTodoCollections = async (dueDate: string): Promise<TodoCollection[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = dueTodoCollectionQuery(supabase, dueDate);
-  const data = await executeQuery<TodoCollectionDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<TodoCollectionDTO[]>(dueTodoCollectionQuery(supabase, dueDate)),
+  );
   return (data || []).map((p) => convertToTodoCollection(p) as TodoCollection);
 };
 
 export const addTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionInsert(supabase, collection);
-  const data = await executeQuery<TodoCollectionDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<TodoCollectionDTO>(todoCollectionInsert(supabase, collection)),
+  );
   return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteTodoCollection = async (collection: TodoCollection): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteTodoCollection = async (collection: TodoCollection): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionDelete(supabase, collection);
-  await executeQuery<void>(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoCollectionDelete(supabase, collection)));
 };
 
 export const updateTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoCollectionUpdate(supabase, collection);
-  const data = await executeQuery<TodoCollectionDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<TodoCollectionDTO>(todoCollectionUpdate(supabase, collection)),
+  );
   return data && (convertToTodoCollection(data) as TodoCollection);
 };
 
 export const addTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoItemInsert(supabase, item);
-  const data = await executeQuery<TodoItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<TodoItemDTO>(todoItemInsert(supabase, item)));
   return data && (convertToTodoItem(data) as TodoItem);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteTodoItem = async (item: TodoItem): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteTodoItem = async (item: TodoItem): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = todoItemDelete(supabase, item);
-  await executeQuery<void>(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoItemDelete(supabase, item)));
 };
 
 export const updateTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = todoItemUpdate(supabase, item);
-  const data = await executeQuery<TodoItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<TodoItemDTO>(todoItemUpdate(supabase, item)));
   return data && (convertToTodoItem(data) as TodoItem);
 };

@@ -4,10 +4,10 @@
 import {
   Equipment,
   EquipmentDTO,
-  MaintenanceItem,
-  MaintenanceItemDTO,
   EquipmentType,
   EquipmentTypeDTO,
+  MaintenanceItem,
+  MaintenanceItemDTO,
   MaintenanceType,
   MaintenanceTypeDTO,
   UsageUnits,
@@ -16,15 +16,14 @@ import {
 import {
   convertToEquipment,
   convertToEquipmentDTO,
+  convertToEquipmentType,
   convertToMaintenance,
   convertToMaintenanceDTO,
   convertToMaintenanceType,
-  convertToEquipmentType,
   convertToUsageUnits,
 } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { createClient } from '@/utils/supabase/server';
+import { withAuth } from '@/utils/supabase/auth';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const equipmentSelectColumns = '*, equipment_types!inner(*)';
@@ -95,147 +94,85 @@ const maintenanceItemUpdate = (supabase: SupabaseClient, item: MaintenanceItem):
     .single();
 
 export const fetchAllEquipment = async (): Promise<Equipment[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = equipmentQuery(supabase);
-  const data = await executeQuery<EquipmentDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EquipmentDTO[]>(equipmentQuery(supabase)));
   return (data || []).map((p) => convertToEquipment(p) as Equipment);
 };
 
 export const fetchEquipment = async (id: number, full?: boolean): Promise<Equipment | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = full ? fullEquipmentQuery(supabase, id) : equipmentQuery(supabase, id);
-  const data = await executeQuery<EquipmentDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EquipmentDTO>(full ? fullEquipmentQuery(supabase, id) : equipmentQuery(supabase, id)),
+  );
   return data ? (convertToEquipment(data) as Equipment) : null;
 };
 
 export const addEquipment = async (equipment: Equipment): Promise<Equipment | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = equipmentInsert(supabase, equipment);
-  const data = await executeQuery<EquipmentDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EquipmentDTO>(equipmentInsert(supabase, equipment)),
+  );
   return data ? (convertToEquipment(data) as Equipment) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEquipment = async (equipment: Equipment): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteEquipment = async (equipment: Equipment): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = equipmentDelete(supabase, equipment);
-  await executeQuery(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery(equipmentDelete(supabase, equipment)));
 };
 
 export const updateEquipment = async (equipment: Equipment): Promise<Equipment | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = equipmentUpdate(supabase, equipment);
-  const data = await executeQuery<EquipmentDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EquipmentDTO>(equipmentUpdate(supabase, equipment)),
+  );
   return data ? (convertToEquipment(data) as Equipment) : null;
 };
 
 export const fetchEquipmentTypes = async (): Promise<EquipmentType[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = equipmentTypesQuery(supabase);
-  const data = await executeQuery<EquipmentTypeDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EquipmentTypeDTO[]>(equipmentTypesQuery(supabase)),
+  );
   return (data || []).map((p) => convertToEquipmentType(p) as EquipmentType);
 };
 
 export const fetchMaintenanceItem = async (id: number): Promise<MaintenanceItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = maintenanceItemQuery(supabase, id);
-  const data = await executeQuery<MaintenanceItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<MaintenanceItemDTO>(maintenanceItemQuery(supabase, id)),
+  );
   return data && convertToMaintenance(data);
 };
 
 export const addMaintenanceItem = async (item: MaintenanceItem): Promise<MaintenanceItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = maintenanceItemInsert(supabase, item);
-  const data = await executeQuery<MaintenanceItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<MaintenanceItemDTO>(maintenanceItemInsert(supabase, item)),
+  );
   return data ? convertToMaintenance(data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteMaintenanceItem = async (item: MaintenanceItem): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteMaintenanceItem = async (item: MaintenanceItem): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = maintenanceItemDelete(supabase, item);
-  await executeQuery(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery(maintenanceItemDelete(supabase, item)));
 };
 
 export const updateMaintenanceItem = async (item: MaintenanceItem): Promise<MaintenanceItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = maintenanceItemUpdate(supabase, item);
-  const data = await executeQuery<MaintenanceItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<MaintenanceItemDTO>(maintenanceItemUpdate(supabase, item)),
+  );
   return data ? convertToMaintenance(data) : null;
 };
 
 export const fetchMaintenanceTypes = async (): Promise<MaintenanceType[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = maintenanceTypesQuery(supabase);
-  const data = await executeQuery<MaintenanceTypeDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<MaintenanceTypeDTO[]>(maintenanceTypesQuery(supabase)),
+  );
   return (data || []).map((p) => convertToMaintenanceType(p) as MaintenanceType);
 };
 
 export const fetchUsageUnits = async (): Promise<UsageUnits[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = usageUnitsQuery(supabase);
-  const data = await executeQuery<UsageUnitsDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<UsageUnitsDTO[]>(usageUnitsQuery(supabase)));
   return (data || []).map((p) => convertToUsageUnits(p) as UsageUnits);
 };

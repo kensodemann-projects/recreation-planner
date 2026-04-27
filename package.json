@@ -50,7 +50,8 @@
   "prettier": "@ionic/prettier-config",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,md,json}": [
-      "prettier --write"
+      "prettier --write",
+      "eslint"
     ]
   },
   "pnpm": {
@@ -66,5 +67,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.2"
 }

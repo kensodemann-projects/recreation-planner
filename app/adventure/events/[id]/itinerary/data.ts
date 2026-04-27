@@ -4,8 +4,7 @@
 import { ItineraryItem, ItineraryItemDTO } from '@/models';
 import { convertToItineraryItem, convertToItineraryItemDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
-import { createClient } from '@/utils/supabase/server';
+import { withAuth } from '@/utils/supabase/auth';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const selectColumns = '*';
@@ -33,52 +32,31 @@ const itineraryItemDelete = (supabase: SupabaseClient, item: ItineraryItem): any
 };
 
 export const fetchItineraryItem = async (id: number): Promise<ItineraryItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = itineraryItemQuery(supabase, id);
-  const data = await executeQuery<ItineraryItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<ItineraryItemDTO>(itineraryItemQuery(supabase, id)),
+  );
   return data ? convertToItineraryItem(data) : null;
 };
 
 export const addItineraryItem = async (item: ItineraryItem): Promise<ItineraryItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = itineraryItemInsert(supabase, item);
-  const data = await executeQuery<ItineraryItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<ItineraryItemDTO>(itineraryItemInsert(supabase, item)),
+  );
   return data ? convertToItineraryItem(data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteItineraryItem = async (item: ItineraryItem): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteItineraryItem = async (item: ItineraryItem): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = itineraryItemDelete(supabase, item);
-  await executeQuery<void>(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery<void>(itineraryItemDelete(supabase, item)));
 };
 
 export const updateItineraryItem = async (item: ItineraryItem): Promise<ItineraryItem | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = itineraryItemUpdate(supabase, item);
-  const data = await executeQuery<ItineraryItemDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<ItineraryItemDTO>(itineraryItemUpdate(supabase, item)),
+  );
   return data ? convertToItineraryItem(data) : null;
 };
