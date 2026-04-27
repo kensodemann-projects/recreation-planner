@@ -12,6 +12,7 @@ import {
   fetchUpcomingEvents,
   updateEvent,
 } from '../data';
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
@@ -82,28 +83,6 @@ const event = {
   itinerary: undefined,
   notes: undefined,
   todoCollections: undefined,
-};
-
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single', 'order', 'or', 'limit'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
-const setLoggedOut = () => {
-  const client = createClient();
-  (client.auth.getUser as Mock).mockResolvedValue({ data: { user: null }, error: null });
-  vi.clearAllMocks();
-};
-
-const setLoggedIn = () => {
-  const client = createClient();
-  (client.auth.getUser as Mock).mockResolvedValue({ data: { user: { id: 'foo', name: 'Bar Baz' } }, error: null });
-  vi.clearAllMocks();
 };
 
 // --- Tests ---
