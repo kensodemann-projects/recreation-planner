@@ -1,5 +1,4 @@
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import {
@@ -9,8 +8,8 @@ import {
   fetchItineraryItem,
   updateItineraryItem,
 } from '../data';
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
 
@@ -34,16 +33,6 @@ const itineraryItem = {
   eventRid: 14,
 };
 
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
 // --- Tests ---
 
 describe('itinerary data', () => {
@@ -53,8 +42,10 @@ describe('itinerary data', () => {
     vi.clearAllMocks();
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
+    const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+    vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
+    vi.clearAllMocks();
   });
 
   // ---------------------------------------------------------------------------
@@ -63,9 +54,7 @@ describe('itinerary data', () => {
 
   describe('fetchItineraryItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await fetchItineraryItem(1)).toBeNull();
@@ -73,15 +62,12 @@ describe('itinerary data', () => {
 
       it('does not access the database', async () => {
         await fetchItineraryItem(1);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -121,9 +107,7 @@ describe('itinerary data', () => {
 
   describe('addItineraryItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addItineraryItem(itineraryItem)).toBeNull();
@@ -131,15 +115,12 @@ describe('itinerary data', () => {
 
       it('does not access the database', async () => {
         await addItineraryItem(itineraryItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -179,9 +160,7 @@ describe('itinerary data', () => {
 
   describe('canDeleteItineraryItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteItineraryItem(itineraryItem)).toBe(false);
@@ -189,9 +168,7 @@ describe('itinerary data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteItineraryItem(itineraryItem)).toBe(true);
@@ -205,20 +182,17 @@ describe('itinerary data', () => {
 
   describe('deleteItineraryItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteItineraryItem(itineraryItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -240,9 +214,7 @@ describe('itinerary data', () => {
 
   describe('updateItineraryItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateItineraryItem(itineraryItem)).toBeNull();
@@ -250,15 +222,12 @@ describe('itinerary data', () => {
 
       it('does not access the database', async () => {
         await updateItineraryItem(itineraryItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {

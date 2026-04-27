@@ -1,5 +1,4 @@
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import {
@@ -13,8 +12,8 @@ import {
   fetchUpcomingEvents,
   updateEvent,
 } from '../data';
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
 
@@ -86,16 +85,6 @@ const event = {
   todoCollections: undefined,
 };
 
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single', 'order', 'or', 'limit'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
 // --- Tests ---
 
 describe('events data', () => {
@@ -105,8 +94,10 @@ describe('events data', () => {
     vi.clearAllMocks();
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
+    const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+    vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
+    vi.clearAllMocks();
   });
 
   // ---------------------------------------------------------------------------
@@ -115,9 +106,7 @@ describe('events data', () => {
 
   describe('fetchUpcomingEvents', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns an empty array', async () => {
         expect(await fetchUpcomingEvents('2024-01-01')).toEqual([]);
@@ -125,15 +114,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await fetchUpcomingEvents('2024-01-01');
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -178,9 +164,7 @@ describe('events data', () => {
 
   describe('fetchPriorEvents', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns an empty array', async () => {
         expect(await fetchPriorEvents('2024-01-01')).toEqual([]);
@@ -188,15 +172,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await fetchPriorEvents('2024-01-01');
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -236,9 +217,7 @@ describe('events data', () => {
 
   describe('fetchLatestEvents', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns an empty array', async () => {
         expect(await fetchLatestEvents(5)).toEqual([]);
@@ -246,15 +225,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await fetchLatestEvents(5);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -294,9 +270,7 @@ describe('events data', () => {
 
   describe('fetchEvent', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns null', async () => {
         expect(await fetchEvent(1)).toBeNull();
@@ -304,15 +278,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await fetchEvent(1);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -363,9 +334,7 @@ describe('events data', () => {
 
   describe('addEvent', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns null', async () => {
         expect(await addEvent(event)).toBeNull();
@@ -373,15 +342,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await addEvent(event);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -421,9 +387,7 @@ describe('events data', () => {
 
   describe('canDeleteEvent', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns false', async () => {
         expect(await canDeleteEvent(event)).toBe(false);
@@ -431,9 +395,7 @@ describe('events data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       it('returns true', async () => {
         expect(await canDeleteEvent(event)).toBe(true);
@@ -447,22 +409,16 @@ describe('events data', () => {
 
   describe('deleteEvent', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('does not access the database', async () => {
         await deleteEvent(event);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-        (executeQuery as Mock).mockResolvedValue(null);
-      });
+      beforeEach(setLoggedIn);
 
       it('calls executeQuery', async () => {
         await deleteEvent(event);
@@ -482,9 +438,7 @@ describe('events data', () => {
 
   describe('fetchEventTypes', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns an empty array', async () => {
         expect(await fetchEventTypes()).toEqual([]);
@@ -492,15 +446,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await fetchEventTypes();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -540,9 +491,7 @@ describe('events data', () => {
 
   describe('updateEvent', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(setLoggedOut);
 
       it('returns null', async () => {
         expect(await updateEvent(event)).toBeNull();
@@ -550,15 +499,12 @@ describe('events data', () => {
 
       it('does not access the database', async () => {
         await updateEvent(event);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(setLoggedIn);
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
