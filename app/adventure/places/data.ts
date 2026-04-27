@@ -4,7 +4,7 @@
 import { Place, PlaceDTO, PlaceType } from '@/models';
 import { convertToPlace, convertToPlaceDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -51,77 +51,39 @@ const placeTypesQuery = (supabase: SupabaseClient): any => {
 };
 
 export const fetchPlaces = async (): Promise<Place[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = placeQuery(supabase);
-  const data = await executeQuery<PlaceDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO[]>(placeQuery(supabase)));
   return (data || []).map((p) => convertToPlace(p) as Place);
 };
 
 export const fetchPlace = async (id: number, full?: boolean): Promise<Place | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = full ? fullPlaceQuery(supabase, id) : placeQuery(supabase, id);
-  const data = await executeQuery<PlaceDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<PlaceDTO>(full ? fullPlaceQuery(supabase, id) : placeQuery(supabase, id)),
+  );
   return data ? (convertToPlace(data) as Place) : null;
 };
 
 export const addPlace = async (place: Place): Promise<Place | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = placeInsert(supabase, place);
-  const data = await executeQuery<PlaceDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO>(placeInsert(supabase, place)));
   return data ? (convertToPlace(data) as Place) : null;
 };
 
 export const fetchPlaceTypes = async (): Promise<PlaceType[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = placeTypesQuery(supabase);
-  const data = await executeQuery<PlaceType[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceType[]>(placeTypesQuery(supabase)));
   return data || [];
 };
 
 export const canDeletePlace = async (place: Place): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-
-  const supabase = createClient();
-  const query = usageCountInEvents(supabase, place);
-  const data = await executeQuery<{ count: number }>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<{ count: number }>(usageCountInEvents(supabase, place)),
+  );
   return data?.count === 0;
 };
 
 export const deletePlace = async (place: Place): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = placeDelete(supabase, place);
-  await executeQuery(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery(placeDelete(supabase, place)));
 };
 
 export const updatePlace = async (place: Place): Promise<Place | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = placeUpdate(supabase, place);
-  const data = await executeQuery<PlaceDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO>(placeUpdate(supabase, place)));
   return data ? (convertToPlace(data) as Place) : null;
 };
