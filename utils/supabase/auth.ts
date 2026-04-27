@@ -11,14 +11,14 @@ export const isNotLoggedIn = async (): Promise<boolean> => {
   return !user;
 };
 
-export const withAuth = <TArgs extends unknown[], TResult>(
-  fn: (supabase: SupabaseClient, ...args: TArgs) => Promise<TResult>,
-): ((...args: TArgs) => Promise<TResult | null>) => {
-  return async (...args) => {
+export const withAuth = <TResult>(
+  fn: (supabase: SupabaseClient) => Promise<TResult>,
+): (() => Promise<TResult | null>) => {
+  return async () => {
     const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    return user ? fn(supabase, ...args) : null;
+    return user ? fn(supabase) : null;
   };
 };

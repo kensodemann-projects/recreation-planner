@@ -4,7 +4,7 @@
 import { Event, EventDTO, EventType } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -69,24 +69,19 @@ const eventTypesQuery = (supabase: SupabaseClient): any => {
 };
 
 export const fetchUpcomingEvents = async (startDate: string, endDate?: string): Promise<Event[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
+  const data = await withAuth((supabase: SupabaseClient) => {
+    const query = upcomingEventsQuery(supabase, startDate, endDate);
+    return executeQuery<EventDTO[]>(query);
+  })();
 
-  const supabase = createClient();
-  const query = upcomingEventsQuery(supabase, startDate, endDate);
-  const data = await executeQuery<EventDTO[]>(query);
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = priorEventsQuery(supabase, dt);
-  const data = await executeQuery<EventDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => {
+    const query = priorEventsQuery(supabase, dt);
+    return executeQuery<EventDTO[]>(query);
+  })();
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
