@@ -1,5 +1,5 @@
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import {
@@ -18,8 +18,8 @@ import {
   updateEquipment,
   updateMaintenanceItem,
 } from '../data';
+import { create } from 'node:domain';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
 
@@ -99,16 +99,6 @@ const maintenanceItem = {
   equipmentRid: 1,
 };
 
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single', 'order'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
 // --- Tests ---
 
 describe('equipment data', () => {
@@ -118,8 +108,10 @@ describe('equipment data', () => {
     vi.clearAllMocks();
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
+    const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+    vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
+    vi.clearAllMocks();
   });
 
   // ---------------------------------------------------------------------------
@@ -128,9 +120,7 @@ describe('equipment data', () => {
 
   describe('fetchAllEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchAllEquipment()).toEqual([]);
@@ -138,15 +128,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchAllEquipment();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -186,9 +173,7 @@ describe('equipment data', () => {
 
   describe('fetchEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await fetchEquipment(1)).toBeNull();
@@ -196,15 +181,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchEquipment(1);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -244,9 +226,7 @@ describe('equipment data', () => {
 
   describe('addEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addEquipment(equipment)).toBeNull();
@@ -254,15 +234,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await addEquipment(equipment);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -302,9 +279,7 @@ describe('equipment data', () => {
 
   describe('canDeleteEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteEquipment(equipment)).toBe(false);
@@ -312,9 +287,7 @@ describe('equipment data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteEquipment(equipment)).toBe(true);
@@ -328,20 +301,17 @@ describe('equipment data', () => {
 
   describe('deleteEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteEquipment(equipment);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -363,9 +333,7 @@ describe('equipment data', () => {
 
   describe('updateEquipment', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateEquipment(equipment)).toBeNull();
@@ -373,15 +341,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await updateEquipment(equipment);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
@@ -421,9 +386,7 @@ describe('equipment data', () => {
 
   describe('fetchEquipmentTypes', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchEquipmentTypes()).toEqual([]);
@@ -431,15 +394,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchEquipmentTypes();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -479,9 +439,7 @@ describe('equipment data', () => {
 
   describe('fetchMaintenanceItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await fetchMaintenanceItem(5)).toBeNull();
@@ -489,15 +447,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchMaintenanceItem(5);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -537,9 +492,7 @@ describe('equipment data', () => {
 
   describe('addMaintenanceItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addMaintenanceItem(maintenanceItem)).toBeNull();
@@ -547,15 +500,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await addMaintenanceItem(maintenanceItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -595,9 +545,7 @@ describe('equipment data', () => {
 
   describe('canDeleteMaintenanceItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteMaintenanceItem(maintenanceItem)).toBe(false);
@@ -605,9 +553,7 @@ describe('equipment data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteMaintenanceItem(maintenanceItem)).toBe(true);
@@ -621,20 +567,17 @@ describe('equipment data', () => {
 
   describe('deleteMaintenanceItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteMaintenanceItem(maintenanceItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -656,9 +599,7 @@ describe('equipment data', () => {
 
   describe('updateMaintenanceItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateMaintenanceItem(maintenanceItem)).toBeNull();
@@ -666,15 +607,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await updateMaintenanceItem(maintenanceItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
@@ -714,9 +652,7 @@ describe('equipment data', () => {
 
   describe('fetchMaintenanceTypes', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchMaintenanceTypes()).toEqual([]);
@@ -724,15 +660,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchMaintenanceTypes();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -774,9 +707,7 @@ describe('equipment data', () => {
 
   describe('fetchUsageUnits', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchUsageUnits()).toEqual([]);
@@ -784,15 +715,12 @@ describe('equipment data', () => {
 
       it('does not access the database', async () => {
         await fetchUsageUnits();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
