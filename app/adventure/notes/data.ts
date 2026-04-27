@@ -4,7 +4,7 @@
 import { Note, NoteDTO } from '@/models';
 import { convertToNote, convertToNoteDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -28,52 +28,25 @@ const noteDelete = (supabase: SupabaseClient, note: Note): any => {
 };
 
 export const fetchNote = async (id: number): Promise<Note | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = noteQuery(supabase, id);
-  const data = await executeQuery<NoteDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteQuery(supabase, id)));
   return data ? convertToNote(data) : null;
 };
 
 export const addNote = async (note: Note): Promise<Note | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = noteInsert(supabase, note);
-  const data = await executeQuery<NoteDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteInsert(supabase, note)));
   return data ? convertToNote(data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteNote = async (note: Note): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteNote = async (note: Note): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = noteDelete(supabase, note);
-  await executeQuery<void>(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery<void>(noteDelete(supabase, note)));
 };
 
 export const updateNote = async (note: Note): Promise<Note | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = noteUpdate(supabase, note);
-  const data = await executeQuery<NoteDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteUpdate(supabase, note)));
   return data ? convertToNote(data) : null;
 };

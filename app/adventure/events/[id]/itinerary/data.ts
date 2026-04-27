@@ -4,7 +4,7 @@
 import { ItineraryItem, ItineraryItemDTO } from '@/models';
 import { convertToItineraryItem, convertToItineraryItemDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
+import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -56,10 +56,7 @@ export const addItineraryItem = async (item: ItineraryItem): Promise<ItineraryIt
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteItineraryItem = async (item: ItineraryItem): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteItineraryItem = async (item: ItineraryItem): Promise<void> => {

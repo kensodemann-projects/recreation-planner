@@ -100,7 +100,7 @@ export const addEvent = async (event: Event): Promise<Event | null> => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
-  return !!(await withAuth(() => Promise.resolve(true)));
+  return !!(await withAuth(async () => true));
 };
 
 export const deleteEvent = async (event: Event): Promise<void> => {
