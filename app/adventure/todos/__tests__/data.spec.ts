@@ -1,5 +1,4 @@
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import {
@@ -15,8 +14,8 @@ import {
   updateTodoCollection,
   updateTodoItem,
 } from '../data';
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
 
@@ -70,16 +69,6 @@ const todoCollectionWithItems = {
   todoItems: [todoItem],
 };
 
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single', 'order', 'lt'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
 // --- Tests ---
 
 describe('todos data', () => {
@@ -89,8 +78,10 @@ describe('todos data', () => {
     vi.clearAllMocks();
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
+    const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+    vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
+    vi.clearAllMocks();
   });
 
   // ---------------------------------------------------------------------------
@@ -99,9 +90,7 @@ describe('todos data', () => {
 
   describe('fetchTodoCollections', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchTodoCollections()).toEqual([]);
@@ -109,15 +98,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await fetchTodoCollections();
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -162,9 +148,7 @@ describe('todos data', () => {
 
   describe('fetchTodoCollection', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await fetchTodoCollection(1)).toBeNull();
@@ -172,15 +156,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await fetchTodoCollection(1);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -225,9 +206,7 @@ describe('todos data', () => {
 
   describe('fetchDueTodoCollections', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns an empty array', async () => {
         expect(await fetchDueTodoCollections('2025-07-01')).toEqual([]);
@@ -235,15 +214,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await fetchDueTodoCollections('2025-07-01');
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -283,9 +259,7 @@ describe('todos data', () => {
 
   describe('addTodoCollection', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addTodoCollection(todoCollection)).toBeNull();
@@ -293,15 +267,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await addTodoCollection(todoCollection);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -341,9 +312,7 @@ describe('todos data', () => {
 
   describe('canDeleteTodoCollection', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteTodoCollection(todoCollection)).toBe(false);
@@ -351,9 +320,7 @@ describe('todos data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteTodoCollection(todoCollection)).toBe(true);
@@ -367,20 +334,17 @@ describe('todos data', () => {
 
   describe('deleteTodoCollection', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteTodoCollection(todoCollection);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -402,9 +366,7 @@ describe('todos data', () => {
 
   describe('updateTodoCollection', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateTodoCollection(todoCollection)).toBeNull();
@@ -412,15 +374,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await updateTodoCollection(todoCollection);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
@@ -460,9 +419,7 @@ describe('todos data', () => {
 
   describe('addTodoItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addTodoItem(todoItem)).toBeNull();
@@ -470,15 +427,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await addTodoItem(todoItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -518,9 +472,7 @@ describe('todos data', () => {
 
   describe('canDeleteTodoItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteTodoItem(todoItem)).toBe(false);
@@ -528,9 +480,7 @@ describe('todos data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteTodoItem(todoItem)).toBe(true);
@@ -544,20 +494,17 @@ describe('todos data', () => {
 
   describe('deleteTodoItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteTodoItem(todoItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -579,9 +526,7 @@ describe('todos data', () => {
 
   describe('updateTodoItem', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateTodoItem(todoItem)).toBeNull();
@@ -589,15 +534,12 @@ describe('todos data', () => {
 
       it('does not access the database', async () => {
         await updateTodoItem(todoItem);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {

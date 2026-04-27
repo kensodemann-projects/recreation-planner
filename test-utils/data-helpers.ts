@@ -3,7 +3,7 @@ import { type Mock, vi } from 'vitest';
 
 export const buildChainableMock = () => {
   const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single', 'order', 'or', 'limit'].forEach((method) => {
+  ['select', 'insert', 'update', 'delete', 'eq', 'gt', 'lt', 'single', 'order', 'or', 'limit'].forEach((method) => {
     chain[method] = vi.fn().mockReturnValue(chain);
   });
   return chain;
