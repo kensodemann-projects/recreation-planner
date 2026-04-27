@@ -11,12 +11,14 @@ export const buildChainableMock = () => {
 
 export const setLoggedOut = () => {
   const client = createClient();
+  (createClient as Mock).mockClear();
+  (client.auth.getUser as Mock).mockClear();
   (client.auth.getUser as Mock).mockResolvedValue({ data: { user: null }, error: null });
-  vi.clearAllMocks();
 };
 
 export const setLoggedIn = () => {
   const client = createClient();
+  (createClient as Mock).mockClear();
+  (client.auth.getUser as Mock).mockClear();
   (client.auth.getUser as Mock).mockResolvedValue({ data: { user: { id: 'foo', name: 'Bar Baz' } }, error: null });
-  vi.clearAllMocks();
 };
