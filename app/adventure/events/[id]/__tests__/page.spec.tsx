@@ -1,6 +1,5 @@
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchEvent } from '../../data';
 import EventPage from '../page';
 
@@ -14,56 +13,32 @@ describe('Event Page', () => {
 
   afterEach(() => cleanup());
 
-  describe('when logged in', () => {
-    beforeEach(() => {
-      (isNotLoggedIn as Mock).mockResolvedValue(false);
-    });
-
-    it('fetches the event', async () => {
-      await EventPage({ params: Promise.resolve({ id: '2' }) });
-      expect(fetchEvent).toHaveBeenCalledExactlyOnceWith(2, true);
-    });
-
-    it('renders the page header', async () => {
-      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
-      render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeDefined();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-    });
-
-    describe('if the event cannot be fetched', () => {
-      it('renders an error message', async () => {
-        const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
-        render(jsx);
-        expect(screen.getByText('Failed to fetch the event')).toBeDefined();
-      });
-
-      it('does not render the page header', async () => {
-        const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
-        render(jsx);
-        expect(screen.queryByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeNull();
-      });
-    });
+  it('fetches the event', async () => {
+    await EventPage({ params: Promise.resolve({ id: '2' }) });
+    expect(fetchEvent).toHaveBeenCalledExactlyOnceWith(2, true);
   });
 
-  describe('when not logged in', () => {
-    beforeEach(() => {
-      (isNotLoggedIn as Mock).mockResolvedValue(true);
-    });
+  it('renders the page header', async () => {
+    const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+    render(jsx);
+    expect(screen.getByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeDefined();
+  });
 
-    it('renders the must be logged in component', async () => {
-      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+  it('does not render the must be logged in component', async () => {
+    const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+    render(jsx);
+    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+  });
+
+  describe('if the event cannot be fetched', () => {
+    it('renders an error message', async () => {
+      const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
       render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
+      expect(screen.getByText('Failed to fetch the event')).toBeDefined();
     });
 
     it('does not render the page header', async () => {
-      const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
+      const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeNull();
     });

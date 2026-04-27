@@ -4,7 +4,6 @@ import { fetchAllEquipment } from '../data';
 import EquipmentPage from '../page';
 
 vi.mock('../data');
-vi.mock('@/utils/supabase/auth');
 
 describe('Equipment Page', () => {
   afterEach(() => cleanup());
