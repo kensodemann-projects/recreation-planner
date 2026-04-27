@@ -1,10 +1,9 @@
+import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { addNote, canDeleteNote, deleteNote, fetchNote, updateNote } from '../data';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
 
@@ -28,16 +27,6 @@ const note = {
   placeRid: null,
 };
 
-// --- Helpers ---
-
-const buildChainableMock = () => {
-  const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'single'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
-  return chain;
-};
-
 // --- Tests ---
 
 describe('notes data', () => {
@@ -48,7 +37,9 @@ describe('notes data', () => {
     const chain = buildChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(createClient).mockReturnValue({ from: mockFrom } as any);
+    const client = createClient();
+    vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
+    vi.clearAllMocks();
   });
 
   // ---------------------------------------------------------------------------
@@ -57,9 +48,7 @@ describe('notes data', () => {
 
   describe('fetchNote', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await fetchNote(1)).toBeNull();
@@ -67,15 +56,12 @@ describe('notes data', () => {
 
       it('does not access the database', async () => {
         await fetchNote(1);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when data is returned', () => {
         beforeEach(() => {
@@ -115,9 +101,7 @@ describe('notes data', () => {
 
   describe('addNote', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await addNote(note)).toBeNull();
@@ -125,15 +109,12 @@ describe('notes data', () => {
 
       it('does not access the database', async () => {
         await addNote(note);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
@@ -173,9 +154,7 @@ describe('notes data', () => {
 
   describe('canDeleteNote', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns false', async () => {
         expect(await canDeleteNote(note)).toBe(false);
@@ -183,9 +162,7 @@ describe('notes data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       it('returns true', async () => {
         expect(await canDeleteNote(note)).toBe(true);
@@ -199,20 +176,17 @@ describe('notes data', () => {
 
   describe('deleteNote', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('does not access the database', async () => {
         await deleteNote(note);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
       beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
+        setLoggedIn();
         (executeQuery as Mock).mockResolvedValue(null);
       });
 
@@ -234,9 +208,7 @@ describe('notes data', () => {
 
   describe('updateNote', () => {
     describe('when not logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(true);
-      });
+      beforeEach(() => setLoggedOut());
 
       it('returns null', async () => {
         expect(await updateNote(note)).toBeNull();
@@ -244,15 +216,12 @@ describe('notes data', () => {
 
       it('does not access the database', async () => {
         await updateNote(note);
-        expect(createClient).not.toHaveBeenCalled();
         expect(executeQuery).not.toHaveBeenCalled();
       });
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        (isNotLoggedIn as Mock).mockResolvedValue(false);
-      });
+      beforeEach(() => setLoggedIn());
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
