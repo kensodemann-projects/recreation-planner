@@ -1,17 +1,11 @@
-import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
+import { fetchPlaces } from '@/app/adventure/places/data';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
+import { Place } from '@/models';
 import { fetchEventTypes } from '../data';
 import CreateEvent from './create-event';
-import { fetchPlaces } from '@/app/adventure/places/data';
-import { Place } from '@/models';
 
 const CreateEventPage = async () => {
-  if (await isNotLoggedIn()) {
-    return <MustBeLoggedIn />;
-  }
-
   const eventTypes = await fetchEventTypes();
   const places = await fetchPlaces();
   const createNewPlace: Place = {
