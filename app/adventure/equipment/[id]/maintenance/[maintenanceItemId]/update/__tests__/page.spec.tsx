@@ -9,7 +9,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import UpdateMaintenanceItemPage from '../page';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('@/app/adventure/equipment/data');
 vi.mock('next/navigation');
 

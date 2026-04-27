@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchPriorEvents, fetchUpcomingEvents } from '../data';
 import EventsPage from '../page';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('../data');
 
 describe('Events Page', () => {

@@ -1,89 +1,54 @@
 import { EQUIPMENT } from '@/app/adventure/equipment/__mocks__/data';
 import { fetchEquipment } from '@/app/adventure/equipment/data';
 import { Equipment } from '@/models';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import CreateNoteForEquipmentPage from '../page';
 
 vi.mock('@/app/adventure/equipment/data');
-vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
 describe('Create Notes Page', () => {
   let testEquipment: Equipment;
-  beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  describe('when logged in', () => {
-    beforeEach(() => {
-      testEquipment = EQUIPMENT.find((x) => x.id === 1)!;
-      (isNotLoggedIn as Mock).mockResolvedValue(false);
-    });
-
-    it('finds a test equipment', () => {
-      expect(testEquipment).toBeTruthy();
-    });
-
-    it('fetches the equipment', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(1);
-    });
-
-    it('renders the equipment fetch failure message if the equipment fetch fails', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
-      render(jsx);
-      expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
-    });
-
-    it('renders the create note component', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Add a New Note' })).toBeDefined();
-      expect(screen.getByRole('heading', { level: 2, name: `For Equipment: ${testEquipment.name}` })).toBeDefined();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-    });
-
-    it('does not render equipment fetch failure message', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
-    });
+  beforeEach(() => {
+    testEquipment = EQUIPMENT.find((x) => x.id === 1)!;
+    vi.clearAllMocks();
   });
 
-  describe('when not logged in', () => {
-    beforeEach(() => {
-      (isNotLoggedIn as Mock).mockResolvedValue(true);
-    });
+  it('finds a test equipment', () => {
+    expect(testEquipment).toBeTruthy();
+  });
 
-    it('does not fetch the equipment', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(fetchEquipment).not.toHaveBeenCalled();
-    });
+  it('fetches the equipment', async () => {
+    const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
+    render(jsx);
+    expect(fetchEquipment).toHaveBeenCalledExactlyOnceWith(1);
+  });
 
-    it('renders the must be logged in component', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
-    });
+  it('renders the equipment fetch failure message if the equipment fetch fails', async () => {
+    const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
+    render(jsx);
+    expect(screen.getByText('Failed to fetch the equipment')).toBeDefined();
+  });
 
-    it('does not render the create note component', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'Add a New Note' })).toBeNull();
-    });
+  it('renders the create note component', async () => {
+    const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
+    render(jsx);
+    expect(screen.getByRole('heading', { level: 1, name: 'Add a New Note' })).toBeDefined();
+    expect(screen.getByRole('heading', { level: 2, name: `For Equipment: ${testEquipment.name}` })).toBeDefined();
+  });
 
-    it('does not render equipment fetch failure message', async () => {
-      const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '7342' }) });
-      render(jsx);
-      expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
-    });
+  it('does not render the must be logged in component', async () => {
+    const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
+    render(jsx);
+    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+  });
+
+  it('does not render equipment fetch failure message', async () => {
+    const jsx = await CreateNoteForEquipmentPage({ params: Promise.resolve({ id: '1' }) });
+    render(jsx);
+    expect(screen.queryByText('Failed to fetch the equipment')).toBeNull();
   });
 });

@@ -5,7 +5,6 @@ import { canDeleteEquipment, fetchEquipment } from '../../../data';
 import DeleteEquipmentPage from '../page';
 
 vi.mock('../../../data');
-vi.mock('@/utils/supabase/auth');
 vi.mock('next/navigation');
 
 describe('Delete Equipment Page', () => {
