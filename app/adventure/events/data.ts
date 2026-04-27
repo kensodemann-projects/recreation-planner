@@ -4,8 +4,7 @@
 import { Event, EventDTO, EventType } from '@/models';
 import { convertToEvent, convertToEventDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
-import { createClient } from '@/utils/supabase/server';
+import { withAuth } from '@/utils/supabase/auth';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const selectColumns = '*, places!inner(*, place_types!inner(*)), event_types!inner(*)';
@@ -69,91 +68,51 @@ const eventTypesQuery = (supabase: SupabaseClient): any => {
 };
 
 export const fetchUpcomingEvents = async (startDate: string, endDate?: string): Promise<Event[]> => {
-  const data = await withAuth((supabase: SupabaseClient) => {
-    const query = upcomingEventsQuery(supabase, startDate, endDate);
-    return executeQuery<EventDTO[]>(query);
-  });
-
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO[]>(upcomingEventsQuery(supabase, startDate, endDate)),
+  );
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
-  const data = await withAuth((supabase: SupabaseClient) => {
-    const query = priorEventsQuery(supabase, dt);
-    return executeQuery<EventDTO[]>(query);
-  });
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt)));
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchLatestEvents = async (count: number): Promise<Event[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = lastCreatedEventsQuery(supabase, count);
-  const data = await executeQuery<EventDTO[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO[]>(lastCreatedEventsQuery(supabase, count)),
+  );
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchEvent = async (id: number, full: boolean = false): Promise<Event | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = full ? fullEventQuery(supabase, id) : eventQuery(supabase, id);
-  const data = await executeQuery<EventDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO>(full ? fullEventQuery(supabase, id) : eventQuery(supabase, id)),
+  );
   return data ? (convertToEvent(data) as Event) : null;
 };
 
 export const addEvent = async (event: Event): Promise<Event | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = eventInsert(supabase, event);
-  const data = await executeQuery<EventDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO>(eventInsert(supabase, event)));
   return data ? (convertToEvent(data) as Event) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
-  if (await isNotLoggedIn()) {
-    return false;
-  }
-  return true;
+  return !!(await withAuth(() => Promise.resolve(true)));
 };
 
 export const deleteEvent = async (event: Event): Promise<void> => {
-  if (await isNotLoggedIn()) {
-    return;
-  }
-
-  const supabase = createClient();
-  const query = eventDelete(supabase, event);
-  await executeQuery<void>(query);
+  await withAuth((supabase: SupabaseClient) => executeQuery<void>(eventDelete(supabase, event)));
 };
 
 export const fetchEventTypes = async (): Promise<EventType[]> => {
-  if (await isNotLoggedIn()) {
-    return [];
-  }
-
-  const supabase = createClient();
-  const query = eventTypesQuery(supabase);
-  const data = await executeQuery<EventType[]>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventType[]>(eventTypesQuery(supabase)));
   return data || [];
 };
 
 export const updateEvent = async (event: Event): Promise<Event | null> => {
-  if (await isNotLoggedIn()) {
-    return null;
-  }
-
-  const supabase = createClient();
-  const query = eventUpdate(supabase, event);
-  const data = await executeQuery<EventDTO>(query);
+  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO>(eventUpdate(supabase, event)));
   return data ? (convertToEvent(data) as Event) : null;
 };
