@@ -28,6 +28,7 @@ describe('withAuth', () => {
 
   beforeEach(() => {
     mockFn.mockReset();
+    mockCreateClient.mockClear();
   });
 
   it('calls fn with the supabase client when a user is logged in', async () => {
