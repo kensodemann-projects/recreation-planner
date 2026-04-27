@@ -18,7 +18,6 @@ import {
   updateEquipment,
   updateMaintenanceItem,
 } from '../data';
-import { create } from 'node:domain';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
