@@ -4,8 +4,7 @@
 import { Place, PlaceDTO, PlaceType } from '@/models';
 import { convertToPlace, convertToPlaceDTO } from '@/models/convert';
 import { executeQuery } from '@/utils/data';
-import { isNotLoggedIn, withAuth } from '@/utils/supabase/auth';
-import { createClient } from '@/utils/supabase/server';
+import { withAuth } from '@/utils/supabase/auth';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const placesTable = 'places';
