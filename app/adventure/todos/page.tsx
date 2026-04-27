@@ -1,17 +1,11 @@
-import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { fetchTodoCollections } from './data';
 import Todos from './ui/todos';
 
 const EventsPage = async () => {
-  if (await isNotLoggedIn()) {
-    return <MustBeLoggedIn />;
-  }
-
   const collections = await fetchTodoCollections();
 
   return (

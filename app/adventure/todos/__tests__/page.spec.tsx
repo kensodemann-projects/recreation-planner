@@ -1,59 +1,28 @@
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchTodoCollections } from '../data';
 import TodosPage from '../page';
 
-vi.mock('@/utils/supabase/auth');
 vi.mock('../data');
 
 describe('Todos Page', () => {
   afterEach(() => cleanup());
   beforeEach(() => vi.clearAllMocks());
 
-  describe('when logged in', () => {
-    beforeEach(() => {
-      (isNotLoggedIn as Mock).mockResolvedValue(false);
-    });
-
-    it('renders the todos component', async () => {
-      const jsx = await TodosPage();
-      render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'Todos' })).toBeDefined();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await TodosPage();
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-    });
-
-    it('fetches the open TODO collections', async () => {
-      await TodosPage();
-      expect(fetchTodoCollections).toHaveBeenCalledExactlyOnceWith();
-    });
+  it('renders the todos component', async () => {
+    const jsx = await TodosPage();
+    render(jsx);
+    expect(screen.getByRole('heading', { level: 1, name: 'Todos' })).toBeDefined();
   });
 
-  describe('when not logged in', () => {
-    beforeEach(() => {
-      (isNotLoggedIn as Mock).mockResolvedValue(true);
-    });
+  it('does not render the must be logged in component', async () => {
+    const jsx = await TodosPage();
+    render(jsx);
+    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
+  });
 
-    it('renders the must be logged in component', async () => {
-      const jsx = await TodosPage();
-      render(jsx);
-      expect(screen.getByRole('heading', { level: 1, name: 'You must be logged in' })).toBeDefined();
-    });
-
-    it('does not render the todos component', async () => {
-      const jsx = await TodosPage();
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'Todos' })).toBeNull();
-    });
-
-    it('does not fetch the open TODO collections', async () => {
-      await TodosPage();
-      expect(fetchTodoCollections).not.toHaveBeenCalled();
-    });
+  it('fetches the open TODO collections', async () => {
+    await TodosPage();
+    expect(fetchTodoCollections).toHaveBeenCalledExactlyOnceWith();
   });
 });
