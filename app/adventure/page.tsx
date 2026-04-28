@@ -1,5 +1,3 @@
-import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { addWeeks, endOfWeek, formatISO, startOfWeek } from 'date-fns';
 import PageHeader from '../ui/page-header';
 import TitleHeading from '../ui/title-heading';
@@ -22,10 +20,6 @@ const getHomePageData = async () => {
 };
 
 const HomePage = async () => {
-  if (await isNotLoggedIn()) {
-    return <MustBeLoggedIn />;
-  }
-
   const { currentEvents, latestEvents, todoCollections } = await getHomePageData();
 
   return (
