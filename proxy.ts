@@ -1,12 +1,10 @@
-import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/utils/supabase/proxy';
-import { createClient } from './utils/supabase/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
-  const res = await updateSession(request);
+  const { response, supabase } = await updateSession(request);
 
-  if (request.nextUrl.pathname.startsWith('/adventure/')) {
-    const supabase = createClient();
+  if (request.nextUrl.pathname.startsWith('/adventure')) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -17,7 +15,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  return res;
+  return response;
 }
 
 export const config = {
