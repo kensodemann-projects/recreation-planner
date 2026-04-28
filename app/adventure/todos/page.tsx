@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { fetchTodoCollections } from './data';
 import Todos from './ui/todos';
 
-const EventsPage = async () => {
+const TodosPage = async () => {
   const collections = await fetchTodoCollections();
 
   return (
@@ -23,4 +23,4 @@ const EventsPage = async () => {
   );
 };
 
-export default EventsPage;
+export default TodosPage;

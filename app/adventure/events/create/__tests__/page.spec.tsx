@@ -8,7 +8,7 @@ vi.mock('../../data');
 vi.mock('next/navigation');
 vi.mock('@/app/adventure/places/data');
 
-describe('Create Place Page', () => {
+describe('Create Event Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
