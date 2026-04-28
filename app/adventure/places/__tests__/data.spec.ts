@@ -108,7 +108,7 @@ describe('places data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([placeDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [placeDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -128,7 +128,7 @@ describe('places data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns an empty array', async () => {
@@ -161,7 +161,9 @@ describe('places data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(full ? placeWithNotesDTO : placeDTO);
+          (executeQuery as Mock).mockResolvedValue(
+            full ? { success: true, data: placeWithNotesDTO } : { success: true, data: placeDTO },
+          );
         });
 
         it('calls executeQuery', async () => {
@@ -181,7 +183,7 @@ describe('places data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -214,7 +216,7 @@ describe('places data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(placeDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: placeDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -234,7 +236,7 @@ describe('places data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -267,7 +269,7 @@ describe('places data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([placeTypeDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [placeTypeDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -287,7 +289,7 @@ describe('places data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns an empty array', async () => {
@@ -319,14 +321,14 @@ describe('places data', () => {
       beforeEach(() => setLoggedIn());
 
       it('queries the events table', async () => {
-        (executeQuery as Mock).mockResolvedValue({ count: 0 });
+        (executeQuery as Mock).mockResolvedValue({ success: true, data: { count: 0 } });
         await canDeletePlace(place);
         expect(mockFrom).toHaveBeenCalledWith('events');
       });
 
       describe('when the place is not used in any events', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue({ count: 0 });
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: { count: 0 } });
         });
 
         it('returns true', async () => {
@@ -336,7 +338,7 @@ describe('places data', () => {
 
       describe('when the place is used in one or more events', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue({ count: 3 });
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: { count: 3 } });
         });
 
         it('returns false', async () => {
@@ -346,7 +348,7 @@ describe('places data', () => {
 
       describe('when the query returns no data', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns false', async () => {
@@ -373,7 +375,7 @@ describe('places data', () => {
     describe('when logged in', () => {
       beforeEach(() => {
         setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
       });
 
       it('calls executeQuery', async () => {
@@ -411,7 +413,7 @@ describe('places data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(placeDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: placeDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -431,7 +433,7 @@ describe('places data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {

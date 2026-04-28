@@ -32,22 +32,23 @@ const itineraryItemDelete = (supabase: SupabaseClient, item: ItineraryItem): any
 };
 
 export const fetchItineraryItem = async (id: number): Promise<ItineraryItem | null> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<ItineraryItemDTO>(itineraryItemQuery(supabase, id)),
   );
-  return data ? convertToItineraryItem(data) : null;
+  return success ? convertToItineraryItem(data) : null;
 };
 
 export const addItineraryItem = async (item: ItineraryItem): Promise<ItineraryItem | null> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<ItineraryItemDTO>(itineraryItemInsert(supabase, item)),
   );
-  return data ? convertToItineraryItem(data) : null;
+  return success ? convertToItineraryItem(data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteItineraryItem = async (item: ItineraryItem): Promise<boolean> => {
-  return !!(await withAuth(async () => true));
+  const { success } = await withAuth(async () => ({ success: true, data: true }));
+  return success;
 };
 
 export const deleteItineraryItem = async (item: ItineraryItem): Promise<void> => {
@@ -55,8 +56,8 @@ export const deleteItineraryItem = async (item: ItineraryItem): Promise<void> =>
 };
 
 export const updateItineraryItem = async (item: ItineraryItem): Promise<ItineraryItem | null> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<ItineraryItemDTO>(itineraryItemUpdate(supabase, item)),
   );
-  return data ? convertToItineraryItem(data) : null;
+  return success ? convertToItineraryItem(data) : null;
 };

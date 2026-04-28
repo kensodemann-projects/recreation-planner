@@ -136,7 +136,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([equipmentDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [equipmentDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -154,9 +154,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns an empty array', async () => {
@@ -189,7 +189,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(equipmentDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: equipmentDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -207,9 +207,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -242,7 +242,7 @@ describe('equipment data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(equipmentDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: equipmentDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -260,9 +260,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when the insert fails', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -311,7 +311,7 @@ describe('equipment data', () => {
     describe('when logged in', () => {
       beforeEach(() => {
         setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
       });
 
       it('calls executeQuery', async () => {
@@ -349,7 +349,7 @@ describe('equipment data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(equipmentDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: equipmentDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -367,9 +367,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when the update fails', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -402,7 +402,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([equipmentTypeDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [equipmentTypeDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -420,9 +420,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns an empty array', async () => {
@@ -455,7 +455,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(maintenanceItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: maintenanceItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -473,9 +473,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -508,7 +508,7 @@ describe('equipment data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(maintenanceItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: maintenanceItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -528,7 +528,7 @@ describe('equipment data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -577,7 +577,7 @@ describe('equipment data', () => {
     describe('when logged in', () => {
       beforeEach(() => {
         setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
       });
 
       it('calls executeQuery', async () => {
@@ -615,7 +615,7 @@ describe('equipment data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(maintenanceItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: maintenanceItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -635,7 +635,7 @@ describe('equipment data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -668,7 +668,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([maintenanceTypeDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [maintenanceTypeDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -688,9 +688,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns an empty array', async () => {
@@ -723,7 +723,7 @@ describe('equipment data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([usageUnitsDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [usageUnitsDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -741,9 +741,9 @@ describe('equipment data', () => {
         });
       });
 
-      describe('when no data is returned', () => {
+      describe('on error', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns an empty array', async () => {

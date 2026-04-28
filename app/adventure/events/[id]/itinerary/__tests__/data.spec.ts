@@ -71,7 +71,7 @@ describe('itinerary data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -91,7 +91,7 @@ describe('itinerary data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -124,7 +124,7 @@ describe('itinerary data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -144,7 +144,7 @@ describe('itinerary data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -193,7 +193,7 @@ describe('itinerary data', () => {
     describe('when logged in', () => {
       beforeEach(() => {
         setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
       });
 
       it('calls executeQuery', async () => {
@@ -231,7 +231,7 @@ describe('itinerary data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -251,7 +251,7 @@ describe('itinerary data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {

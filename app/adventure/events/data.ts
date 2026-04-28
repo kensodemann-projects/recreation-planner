@@ -68,39 +68,44 @@ const eventTypesQuery = (supabase: SupabaseClient): any => {
 };
 
 export const fetchUpcomingEvents = async (startDate: string, endDate?: string): Promise<Event[]> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<EventDTO[]>(upcomingEventsQuery(supabase, startDate, endDate)),
   );
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
-  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt)));
+  const { data } = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt)),
+  );
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchLatestEvents = async (count: number): Promise<Event[]> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<EventDTO[]>(lastCreatedEventsQuery(supabase, count)),
   );
   return (data || []).map((p) => convertToEvent(p) as Event);
 };
 
 export const fetchEvent = async (id: number, full: boolean = false): Promise<Event | null> => {
-  const data = await withAuth((supabase: SupabaseClient) =>
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
     executeQuery<EventDTO>(full ? fullEventQuery(supabase, id) : eventQuery(supabase, id)),
   );
-  return data ? (convertToEvent(data) as Event) : null;
+  return success ? (convertToEvent(data) as Event) : null;
 };
 
 export const addEvent = async (event: Event): Promise<Event | null> => {
-  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO>(eventInsert(supabase, event)));
-  return data ? (convertToEvent(data) as Event) : null;
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO>(eventInsert(supabase, event)),
+  );
+  return success ? (convertToEvent(data) as Event) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const canDeleteEvent = async (event: Event): Promise<boolean> => {
-  return !!(await withAuth(async () => true));
+  const { success } = await withAuth(async () => ({ success: true, data: true }));
+  return success;
 };
 
 export const deleteEvent = async (event: Event): Promise<void> => {
@@ -108,11 +113,13 @@ export const deleteEvent = async (event: Event): Promise<void> => {
 };
 
 export const fetchEventTypes = async (): Promise<EventType[]> => {
-  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventType[]>(eventTypesQuery(supabase)));
+  const { data } = await withAuth((supabase: SupabaseClient) => executeQuery<EventType[]>(eventTypesQuery(supabase)));
   return data || [];
 };
 
 export const updateEvent = async (event: Event): Promise<Event | null> => {
-  const data = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO>(eventUpdate(supabase, event)));
-  return data ? (convertToEvent(data) as Event) : null;
+  const { success, data } = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO>(eventUpdate(supabase, event)),
+  );
+  return success ? (convertToEvent(data) as Event) : null;
 };
