@@ -50,32 +50,32 @@ const placeTypesQuery = (supabase: SupabaseClient): any => {
 };
 
 export const fetchPlaces = async (): Promise<Place[]> => {
-  const { data } = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO[]>(placeQuery(supabase)));
-  return (data || []).map((p) => convertToPlace(p) as Place);
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO[]>(placeQuery(supabase)));
+  return (res.success ? res.data : []).map((p) => convertToPlace(p) as Place);
 };
 
 export const fetchPlace = async (id: number, full?: boolean): Promise<Place | null> => {
-  const { data } = await withAuth((supabase: SupabaseClient) =>
+  const res = await withAuth((supabase: SupabaseClient) =>
     executeQuery<PlaceDTO>(full ? fullPlaceQuery(supabase, id) : placeQuery(supabase, id)),
   );
-  return data ? (convertToPlace(data) as Place) : null;
+  return res.success ? (convertToPlace(res.data) as Place) : null;
 };
 
 export const addPlace = async (place: Place): Promise<Place | null> => {
-  const { data } = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO>(placeInsert(supabase, place)));
-  return data ? (convertToPlace(data) as Place) : null;
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO>(placeInsert(supabase, place)));
+  return res.success ? (convertToPlace(res.data) as Place) : null;
 };
 
 export const fetchPlaceTypes = async (): Promise<PlaceType[]> => {
-  const { data } = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceType[]>(placeTypesQuery(supabase)));
-  return data || [];
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceType[]>(placeTypesQuery(supabase)));
+  return res.success ? res.data : [];
 };
 
 export const canDeletePlace = async (place: Place): Promise<boolean> => {
-  const { data } = await withAuth((supabase: SupabaseClient) =>
+  const res = await withAuth((supabase: SupabaseClient) =>
     executeQuery<{ count: number }>(usageCountInEvents(supabase, place)),
   );
-  return !!(data?.count === 0);
+  return !!(res.success ? res.data.count === 0 : false);
 };
 
 export const deletePlace = async (place: Place): Promise<boolean> => {
@@ -84,8 +84,6 @@ export const deletePlace = async (place: Place): Promise<boolean> => {
 };
 
 export const updatePlace = async (place: Place): Promise<Place | null> => {
-  const { success, data } = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<PlaceDTO>(placeUpdate(supabase, place)),
-  );
-  return success ? (convertToPlace(data) as Place) : null;
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<PlaceDTO>(placeUpdate(supabase, place)));
+  return res.success ? (convertToPlace(res.data) as Place) : null;
 };

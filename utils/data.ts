@@ -1,6 +1,6 @@
 export type QueryResult<T> =
   | { success: true; data: T }
-  | { success: false; error: 'NOT_FOUND' | 'NOT_AUTHENTICATED' | 'SERVER_ERROR'; data?: never };
+  | { success: false; error: 'NOT_FOUND' | 'NOT_AUTHENTICATED' | 'SERVER_ERROR' };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const performQuery = async <T>(query: any): Promise<QueryResult<T>> => {
