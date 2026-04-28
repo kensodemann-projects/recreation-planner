@@ -92,9 +92,9 @@ export const fetchTodoCollection = vi
 export const fetchDueTodoCollections = vi.fn().mockResolvedValue(TODO_COLLECTIONS.filter((x) => !x.isComplete));
 export const addTodoCollection = vi.fn().mockResolvedValue(null);
 export const canDeleteTodoCollection = vi.fn().mockResolvedValue(false);
-export const deleteTodoCollection = vi.fn().mockResolvedValue(undefined);
+export const deleteTodoCollection = vi.fn().mockResolvedValue(true);
 export const updateTodoCollection = vi.fn().mockResolvedValue(null);
 export const addTodoItem = vi.fn().mockResolvedValue(null);
 export const canDeleteTodoItem = vi.fn().mockResolvedValue(false);
-export const deleteTodoItem = vi.fn().mockResolvedValue(undefined);
+export const deleteTodoItem = vi.fn().mockResolvedValue(true);
 export const updateTodoItem = vi.fn().mockResolvedValue(null);

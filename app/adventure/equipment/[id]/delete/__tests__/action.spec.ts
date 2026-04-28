@@ -1,6 +1,6 @@
 import { Equipment } from '@/models';
 import { redirect } from 'next/navigation';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { deleteEquipment } from '../../../data';
 import { deleteAborted, deleteConfirmed } from '../actions';
 
@@ -49,9 +49,16 @@ describe('equipment: delete actions', () => {
       expect(deleteEquipment).toHaveBeenCalledExactlyOnceWith(equipment);
     });
 
-    it('redirects to /adventure/equipment', async () => {
+    it('redirects to /adventure/equipment if the delete succeeds', async () => {
+      (deleteEquipment as Mock).mockResolvedValue(true);
       await deleteConfirmed(equipment).catch(() => {});
       expect(redirect).toHaveBeenCalledExactlyOnceWith('/adventure/equipment');
+    });
+
+    it('redirects to /error if the delete fails', async () => {
+      (deleteEquipment as Mock).mockResolvedValue(false);
+      await deleteConfirmed(equipment).catch(() => {});
+      expect(redirect).toHaveBeenCalledExactlyOnceWith('/error');
     });
   });
 });

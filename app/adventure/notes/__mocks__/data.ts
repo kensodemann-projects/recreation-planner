@@ -55,5 +55,5 @@ export const NOTES: Note[] = [
 export const fetchNote = vi.fn().mockImplementation((id: number) => Promise.resolve(NOTES.find((x) => x.id === id)));
 export const addNote = vi.fn();
 export const updateNote = vi.fn();
-export const deleteNote = vi.fn();
+export const deleteNote = vi.fn().mockResolvedValue(true);
 export const canDeleteNote = vi.fn().mockResolvedValue(false);
