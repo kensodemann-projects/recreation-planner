@@ -1,10 +1,8 @@
 import { fetchEvent } from '@/app/adventure/events/data';
 import { fetchNote } from '@/app/adventure/notes/data';
-import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import TitleHeading from '@/app/ui/title-heading';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import UpdateNote from './update-note';
 
 type RouteParams = {
@@ -13,10 +11,6 @@ type RouteParams = {
 };
 
 const UpdateNotePage = async (props: { params: Promise<RouteParams> }) => {
-  if (await isNotLoggedIn()) {
-    return <MustBeLoggedIn />;
-  }
-
   const params = await props.params;
   const note = await fetchNote(+params.noteId);
 

@@ -1,7 +1,5 @@
-import MustBeLoggedIn from '@/app/ui/must-be-logged-in';
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
-import { isNotLoggedIn } from '@/utils/supabase/auth';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { formatISO, startOfWeek } from 'date-fns';
 import Link from 'next/link';
@@ -16,10 +14,6 @@ const getEventsPageData = async () => {
 };
 
 const EventsPage = async () => {
-  if (await isNotLoggedIn()) {
-    return <MustBeLoggedIn />;
-  }
-
   const { upcomingEvents, priorEvents } = await getEventsPageData();
 
   return (
