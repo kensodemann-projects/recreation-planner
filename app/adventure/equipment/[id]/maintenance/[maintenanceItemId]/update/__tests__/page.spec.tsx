@@ -46,12 +46,6 @@ describe('maintenance item update page', () => {
     expect(screen.getByRole('heading', { level: 2, name: `For: ${EQUIPMENT[2].name}` })).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateMaintenanceItemPage({ params: Promise.resolve({ id: '2', maintenanceItemId: '42' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   it('does not renders a fetch failure message', async () => {
     const jsx = await UpdateMaintenanceItemPage({ params: Promise.resolve({ id: '2', maintenanceItemId: '42' }) });
     render(jsx);
@@ -81,12 +75,6 @@ describe('maintenance item update page', () => {
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Update Maintenance Event' })).toBeNull();
       expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await UpdateMaintenanceItemPage({ params: Promise.resolve({ id: '2', maintenanceItemId: '42' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
   });
 });

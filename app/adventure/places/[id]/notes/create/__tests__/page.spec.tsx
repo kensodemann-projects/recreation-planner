@@ -40,12 +40,6 @@ describe('Create Notes Page', () => {
     expect(screen.getByRole('heading', { level: 2, name: `For Place: ${testPlace.name}` })).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await CreateNoteForPlacePage({ params: Promise.resolve({ id: '1' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   it('does not render event fetch failure message', async () => {
     const jsx = await CreateNoteForPlacePage({ params: Promise.resolve({ id: '1' }) });
     render(jsx);

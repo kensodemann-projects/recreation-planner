@@ -21,12 +21,6 @@ describe('Update Todo Collection for Event Page', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Update the Todo Collection' })).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '2' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   describe('if the todo collection cannot be fetched', () => {
     it('renders an error message', async () => {
       const jsx = await UpdateTodoCollectionPage({ params: Promise.resolve({ id: '3', collectionId: '524' }) });

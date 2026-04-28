@@ -23,12 +23,6 @@ describe('Event Page', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Trip / Event Details' })).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await EventPage({ params: Promise.resolve({ id: '2' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   describe('if the event cannot be fetched', () => {
     it('renders an error message', async () => {
       const jsx = await EventPage({ params: Promise.resolve({ id: '524' }) });

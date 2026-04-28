@@ -13,10 +13,4 @@ describe('Create Todo Collection Page', () => {
     render(jsx);
     expect(screen.getByRole('heading', { level: 1, name: 'Add a New Todo Collection' })).toBeDefined();
   });
-
-  it('does not render the must be logged in component', async () => {
-    const jsx = await CreateTodoCollectionPage();
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
 });

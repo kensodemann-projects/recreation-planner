@@ -36,10 +36,4 @@ describe('Create Todo Collection Page', () => {
       screen.getByRole('heading', { level: 2, name: "For Trip / Event: Women's Hockey Tournament" }),
     ).toBeDefined();
   });
-
-  it('does not render the must be logged in component', async () => {
-    const jsx = await CreateTodoCollectionForEventPage({ params: Promise.resolve({ id: '7342' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
 });

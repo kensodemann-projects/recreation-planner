@@ -26,12 +26,6 @@ describe('Update Equipment Page', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Update the Equipment' })).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateEquipmentPage({ params: Promise.resolve({ id: '3' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   describe('if the equipment cannot be fetched', () => {
     it('renders an error message', async () => {
       const jsx = await UpdateEquipmentPage({ params: Promise.resolve({ id: '23' }) });

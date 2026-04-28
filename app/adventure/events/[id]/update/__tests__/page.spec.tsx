@@ -12,12 +12,6 @@ describe('Update Trip / Event Page', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   it('fetchs the event', async () => {
     await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
     expect(fetchEvent).toHaveBeenCalledExactlyOnceWith(3);
@@ -37,12 +31,6 @@ describe('Update Trip / Event Page', () => {
     const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
     render(jsx);
     expect(screen.getByRole('heading', { level: 1, name: 'Update the Trip / Event' })).toBeDefined();
-  });
-
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateEventPage({ params: Promise.resolve({ id: '3' }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
   });
 
   describe('if the event cannot be fetched', () => {

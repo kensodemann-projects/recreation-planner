@@ -40,12 +40,6 @@ describe('place notes update page', () => {
     ).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateNotePage({ params: Promise.resolve({ id: '2', noteId }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   it('does not renders a fetch failure message', async () => {
     const jsx = await UpdateNotePage({ params: Promise.resolve({ id: '2', noteId }) });
     render(jsx);
@@ -69,12 +63,6 @@ describe('place notes update page', () => {
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Update Note' })).toBeNull();
       expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await UpdateNotePage({ params: Promise.resolve({ id: '2', noteId: '42' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
   });
 });

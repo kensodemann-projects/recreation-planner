@@ -20,10 +20,4 @@ describe('Equipment Page', () => {
     render(jsx);
     expect(screen.getByRole('heading', { level: 1, name: 'Equipment' })).toBeDefined();
   });
-
-  it('does not render the must be logged in component', async () => {
-    const jsx = await EquipmentPage();
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
 });

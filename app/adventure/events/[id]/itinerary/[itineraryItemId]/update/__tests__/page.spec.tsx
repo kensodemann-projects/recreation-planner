@@ -40,12 +40,6 @@ describe('events itinerary item update page', () => {
     ).toBeDefined();
   });
 
-  it('does not render the must be logged in component', async () => {
-    const jsx = await UpdateItineraryItemPage({ params: Promise.resolve({ id: '4', itineraryItemId }) });
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
-
   it('does not renders a fetch failure message', async () => {
     const jsx = await UpdateItineraryItemPage({ params: Promise.resolve({ id: '4', itineraryItemId }) });
     render(jsx);
@@ -69,12 +63,6 @@ describe('events itinerary item update page', () => {
       render(jsx);
       expect(screen.queryByRole('heading', { level: 1, name: 'Update Itinerary Item' })).toBeNull();
       expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
-    });
-
-    it('does not render the must be logged in component', async () => {
-      const jsx = await UpdateItineraryItemPage({ params: Promise.resolve({ id: '4', itineraryItemId: '42' }) });
-      render(jsx);
-      expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
     });
   });
 });

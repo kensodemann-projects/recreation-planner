@@ -41,10 +41,4 @@ describe('Adventures Home Page', () => {
     render(jsx);
     expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeDefined();
   });
-
-  it('does not render the must be logged in component', async () => {
-    const jsx = await HomePage();
-    render(jsx);
-    expect(screen.queryByRole('heading', { level: 1, name: 'You must be logged in' })).toBeNull();
-  });
 });
