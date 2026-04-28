@@ -27,17 +27,13 @@ const noteDelete = (supabase: SupabaseClient, note: Note): any => {
 };
 
 export const fetchNote = async (id: number): Promise<Note | null> => {
-  const { success, data } = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<NoteDTO>(noteQuery(supabase, id)),
-  );
-  return success ? convertToNote(data) : null;
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteQuery(supabase, id)));
+  return res.success ? convertToNote(res.data) : null;
 };
 
 export const addNote = async (note: Note): Promise<Note | null> => {
-  const { success, data } = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<NoteDTO>(noteInsert(supabase, note)),
-  );
-  return success ? convertToNote(data) : null;
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteInsert(supabase, note)));
+  return res.success ? convertToNote(res.data) : null;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,8 +48,6 @@ export const deleteNote = async (note: Note): Promise<boolean> => {
 };
 
 export const updateNote = async (note: Note): Promise<Note | null> => {
-  const { success, data } = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<NoteDTO>(noteUpdate(supabase, note)),
-  );
-  return success ? convertToNote(data) : null;
+  const res = await withAuth((supabase: SupabaseClient) => executeQuery<NoteDTO>(noteUpdate(supabase, note)));
+  return res.success ? convertToNote(res.data) : null;
 };
