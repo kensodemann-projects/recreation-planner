@@ -1,5 +1,19 @@
 # recreation-planner
 
+## 1.3.2
+
+### Patch Changes
+
+- e468d93: add tests for the itinerary data layer and actions
+- a4c050c: Guard the database authorization by wrapping queries in a single higher order function.
+- 453ba08: add unit tests for the equipment data layer and actions
+- 55f9764: Centralize the auth checking to the middleware proxy.
+- be0b087: add tests for the places data layer and actions
+- cc93681: Return a QueryResult structure rather than just data. This allows the system to know the exact status of a data transaction.
+- 4c924b2: Add tests for the notes data layer and actions.
+- b1e64cd: Add tests for the todos data layer and actions.
+- 81b61ed: Add tests for the events data layer and actions.
+
 ## 1.3.1
 
 ### Patch Changes
