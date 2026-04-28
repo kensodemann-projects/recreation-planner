@@ -43,7 +43,7 @@ export const canDeleteNote = async (note: Note): Promise<boolean> => {
 };
 
 export const deleteNote = async (note: Note): Promise<boolean> => {
-  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<void>(noteDelete(supabase, note)));
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<null>(noteDelete(supabase, note)));
   return success;
 };
 

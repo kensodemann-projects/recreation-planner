@@ -102,7 +102,7 @@ export const canDeleteTodoCollection = async (collection: TodoCollection): Promi
 
 export const deleteTodoCollection = async (collection: TodoCollection): Promise<boolean> => {
   const { success } = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<void>(todoCollectionDelete(supabase, collection)),
+    executeQuery<null>(todoCollectionDelete(supabase, collection)),
   );
   return success;
 };
@@ -126,7 +126,7 @@ export const canDeleteTodoItem = async (item: TodoItem): Promise<boolean> => {
 };
 
 export const deleteTodoItem = async (item: TodoItem): Promise<boolean> => {
-  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoItemDelete(supabase, item)));
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<null>(todoItemDelete(supabase, item)));
   return success;
 };
 
