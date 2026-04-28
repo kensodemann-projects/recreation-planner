@@ -411,6 +411,10 @@ describe('events data', () => {
     describe('when not logged in', () => {
       beforeEach(setLoggedOut);
 
+      it('returns false', async () => {
+        expect(await deleteEvent(event)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteEvent(event);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -418,16 +422,36 @@ describe('events data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(setLoggedIn);
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
 
-      it('calls executeQuery', async () => {
-        await deleteEvent(event);
-        expect(executeQuery).toHaveBeenCalledOnce();
+        it('calls executeQuery', async () => {
+          await deleteEvent(event);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the events table', async () => {
+          await deleteEvent(event);
+          expect(mockFrom).toHaveBeenCalledWith('events');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteEvent(event)).toBe(true);
+        });
       });
 
-      it('deletes from the events table', async () => {
-        await deleteEvent(event);
-        expect(mockFrom).toHaveBeenCalledWith('events');
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
+
+        it('returns false', async () => {
+          expect(await deleteEvent(event)).toBe(false);
+        });
       });
     });
   });

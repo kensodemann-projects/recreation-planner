@@ -100,8 +100,11 @@ export const canDeleteTodoCollection = async (collection: TodoCollection): Promi
   return success;
 };
 
-export const deleteTodoCollection = async (collection: TodoCollection): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoCollectionDelete(supabase, collection)));
+export const deleteTodoCollection = async (collection: TodoCollection): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<void>(todoCollectionDelete(supabase, collection)),
+  );
+  return success;
 };
 
 export const updateTodoCollection = async (collection: TodoCollection): Promise<TodoCollection | null> => {
@@ -124,8 +127,9 @@ export const canDeleteTodoItem = async (item: TodoItem): Promise<boolean> => {
   return success;
 };
 
-export const deleteTodoItem = async (item: TodoItem): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoItemDelete(supabase, item)));
+export const deleteTodoItem = async (item: TodoItem): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<void>(todoItemDelete(supabase, item)));
+  return success;
 };
 
 export const updateTodoItem = async (item: TodoItem): Promise<TodoItem | null> => {

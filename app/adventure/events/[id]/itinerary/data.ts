@@ -51,8 +51,11 @@ export const canDeleteItineraryItem = async (item: ItineraryItem): Promise<boole
   return success;
 };
 
-export const deleteItineraryItem = async (item: ItineraryItem): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery<void>(itineraryItemDelete(supabase, item)));
+export const deleteItineraryItem = async (item: ItineraryItem): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<void>(itineraryItemDelete(supabase, item)),
+  );
+  return success;
 };
 
 export const updateItineraryItem = async (item: ItineraryItem): Promise<ItineraryItem | null> => {

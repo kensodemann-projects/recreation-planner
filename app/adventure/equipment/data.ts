@@ -118,8 +118,9 @@ export const canDeleteEquipment = async (equipment: Equipment): Promise<boolean>
   return success;
 };
 
-export const deleteEquipment = async (equipment: Equipment): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery(equipmentDelete(supabase, equipment)));
+export const deleteEquipment = async (equipment: Equipment): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery(equipmentDelete(supabase, equipment)));
+  return success;
 };
 
 export const updateEquipment = async (equipment: Equipment): Promise<Equipment | null> => {
@@ -156,8 +157,9 @@ export const canDeleteMaintenanceItem = async (item: MaintenanceItem): Promise<b
   return success;
 };
 
-export const deleteMaintenanceItem = async (item: MaintenanceItem): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery(maintenanceItemDelete(supabase, item)));
+export const deleteMaintenanceItem = async (item: MaintenanceItem): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery(maintenanceItemDelete(supabase, item)));
+  return success;
 };
 
 export const updateMaintenanceItem = async (item: MaintenanceItem): Promise<MaintenanceItem | null> => {

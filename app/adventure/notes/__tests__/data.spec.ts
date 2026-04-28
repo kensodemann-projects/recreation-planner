@@ -178,6 +178,10 @@ describe('notes data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteNote(note)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteNote(note);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -185,19 +189,36 @@ describe('notes data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteNote(note);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the notes table', async () => {
+          await deleteNote(note);
+          expect(mockFrom).toHaveBeenCalledWith('notes');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteNote(note)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteNote(note);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the notes table', async () => {
-        await deleteNote(note);
-        expect(mockFrom).toHaveBeenCalledWith('notes');
+        it('returns false', async () => {
+          expect(await deleteNote(note)).toBe(false);
+        });
       });
     });
   });

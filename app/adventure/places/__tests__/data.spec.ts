@@ -366,6 +366,10 @@ describe('places data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deletePlace(place)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deletePlace(place);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -373,19 +377,36 @@ describe('places data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deletePlace(place);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the places table', async () => {
+          await deletePlace(place);
+          expect(mockFrom).toHaveBeenCalledWith('places');
+        });
+
+        it('returns true', async () => {
+          expect(await deletePlace(place)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deletePlace(place);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the places table', async () => {
-        await deletePlace(place);
-        expect(mockFrom).toHaveBeenCalledWith('places');
+        it('returns false', async () => {
+          expect(await deletePlace(place)).toBe(false);
+        });
       });
     });
   });

@@ -108,8 +108,9 @@ export const canDeleteEvent = async (event: Event): Promise<boolean> => {
   return success;
 };
 
-export const deleteEvent = async (event: Event): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery<void>(eventDelete(supabase, event)));
+export const deleteEvent = async (event: Event): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery<void>(eventDelete(supabase, event)));
+  return success;
 };
 
 export const fetchEventTypes = async (): Promise<EventType[]> => {

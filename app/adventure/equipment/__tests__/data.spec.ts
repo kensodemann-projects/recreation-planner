@@ -302,6 +302,10 @@ describe('equipment data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteEquipment(equipment)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteEquipment(equipment);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -309,19 +313,36 @@ describe('equipment data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteEquipment(equipment);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the equipment table', async () => {
+          await deleteEquipment(equipment);
+          expect(mockFrom).toHaveBeenCalledWith('equipment');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteEquipment(equipment)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteEquipment(equipment);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the equipment table', async () => {
-        await deleteEquipment(equipment);
-        expect(mockFrom).toHaveBeenCalledWith('equipment');
+        it('returns false', async () => {
+          expect(await deleteEquipment(equipment)).toBe(false);
+        });
       });
     });
   });
@@ -568,6 +589,10 @@ describe('equipment data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteMaintenanceItem(maintenanceItem)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteMaintenanceItem(maintenanceItem);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -575,19 +600,36 @@ describe('equipment data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteMaintenanceItem(maintenanceItem);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the maintenance_items table', async () => {
+          await deleteMaintenanceItem(maintenanceItem);
+          expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteMaintenanceItem(maintenanceItem)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteMaintenanceItem(maintenanceItem);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the maintenance_items table', async () => {
-        await deleteMaintenanceItem(maintenanceItem);
-        expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+        it('returns false', async () => {
+          expect(await deleteMaintenanceItem(maintenanceItem)).toBe(false);
+        });
       });
     });
   });

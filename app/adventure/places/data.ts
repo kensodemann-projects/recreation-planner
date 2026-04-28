@@ -78,8 +78,9 @@ export const canDeletePlace = async (place: Place): Promise<boolean> => {
   return !!(data?.count === 0);
 };
 
-export const deletePlace = async (place: Place): Promise<void> => {
-  await withAuth((supabase: SupabaseClient) => executeQuery(placeDelete(supabase, place)));
+export const deletePlace = async (place: Place): Promise<boolean> => {
+  const { success } = await withAuth((supabase: SupabaseClient) => executeQuery(placeDelete(supabase, place)));
+  return success;
 };
 
 export const updatePlace = async (place: Place): Promise<Place | null> => {
