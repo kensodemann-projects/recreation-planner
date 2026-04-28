@@ -5,8 +5,11 @@ import { redirect } from 'next/navigation';
 import { deleteEquipment } from '../../data';
 
 export const deleteConfirmed = async (e: Equipment) => {
-  await deleteEquipment(e);
-  redirect('/adventure/equipment');
+  if (await deleteEquipment(e)) {
+    redirect('/adventure/equipment');
+  } else {
+    redirect('/error');
+  }
 };
 
 export const deleteAborted = async () => {

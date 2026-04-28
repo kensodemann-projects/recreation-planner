@@ -32,11 +32,11 @@ describe('withAuth', () => {
   });
 
   it('calls fn with the supabase client when a user is logged in', async () => {
-    mockFn.mockResolvedValue('result');
+    mockFn.mockResolvedValue({ success: true, data: 'result' });
     const result = await withAuth(mockFn);
 
     expect(mockFn).toHaveBeenCalledOnce();
-    expect(result).toBe('result');
+    expect(result).toEqual({ success: true, data: 'result' });
   });
 
   it('passes the supabase client to fn', async () => {
@@ -47,7 +47,7 @@ describe('withAuth', () => {
     expect(mockFn).toHaveBeenCalledWith(supabase);
   });
 
-  it('returns null when no user is logged in', async () => {
+  it('returns an error when no user is logged in', async () => {
     mockCreateClient.mockReturnValueOnce({
       auth: {
         getUser: vi.fn().mockResolvedValue({ data: { user: null } }),
@@ -58,6 +58,6 @@ describe('withAuth', () => {
     const result = await withAuth(mockFn);
 
     expect(mockFn).not.toHaveBeenCalled();
-    expect(result).toBeNull();
+    expect(result).toEqual({ success: false, error: 'NOT_AUTHENTICATED' });
   });
 });

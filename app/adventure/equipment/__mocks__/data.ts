@@ -201,7 +201,7 @@ export const fetchEquipment = vi.fn().mockImplementation((id: number, full?: boo
 export const fetchEquipmentTypes = vi.fn().mockResolvedValue(EQUIPMENT_TYPES);
 export const addEquipment = vi.fn();
 export const updateEquipment = vi.fn();
-export const deleteEquipment = vi.fn();
+export const deleteEquipment = vi.fn().mockResolvedValue(true);
 export const canDeleteEquipment = vi.fn().mockResolvedValue(false);
 export const fetchMaintenanceItem = vi
   .fn()

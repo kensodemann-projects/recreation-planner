@@ -107,7 +107,7 @@ describe('todos data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([todoCollectionDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [todoCollectionDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -125,14 +125,14 @@ describe('todos data', () => {
         });
 
         it('converts nested todo items', async () => {
-          (executeQuery as Mock).mockResolvedValueOnce([todoCollectionDTOWithItems]);
+          (executeQuery as Mock).mockResolvedValueOnce({ success: true, data: [todoCollectionDTOWithItems] });
           expect(await fetchTodoCollections()).toEqual([todoCollectionWithItems]);
         });
       });
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns an empty array', async () => {
@@ -165,7 +165,7 @@ describe('todos data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(todoCollectionDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: todoCollectionDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -183,14 +183,14 @@ describe('todos data', () => {
         });
 
         it('converts nested todo items', async () => {
-          (executeQuery as Mock).mockResolvedValueOnce(todoCollectionDTOWithItems);
+          (executeQuery as Mock).mockResolvedValueOnce({ success: true, data: todoCollectionDTOWithItems });
           expect(await fetchTodoCollection(1)).toEqual(todoCollectionWithItems);
         });
       });
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -223,7 +223,7 @@ describe('todos data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue([todoCollectionDTO]);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: [todoCollectionDTO] });
         });
 
         it('calls executeQuery', async () => {
@@ -243,7 +243,7 @@ describe('todos data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns an empty array', async () => {
@@ -276,7 +276,7 @@ describe('todos data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(todoCollectionDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: todoCollectionDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -296,7 +296,7 @@ describe('todos data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -336,6 +336,10 @@ describe('todos data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteTodoCollection(todoCollection)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteTodoCollection(todoCollection);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -343,19 +347,36 @@ describe('todos data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteTodoCollection(todoCollection);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the todo_collections table', async () => {
+          await deleteTodoCollection(todoCollection);
+          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteTodoCollection(todoCollection)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteTodoCollection(todoCollection);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the todo_collections table', async () => {
-        await deleteTodoCollection(todoCollection);
-        expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+        it('returns false', async () => {
+          expect(await deleteTodoCollection(todoCollection)).toBe(false);
+        });
       });
     });
   });
@@ -383,7 +404,7 @@ describe('todos data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(todoCollectionDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: todoCollectionDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -403,7 +424,7 @@ describe('todos data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -436,7 +457,7 @@ describe('todos data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(todoItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: todoItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -456,7 +477,7 @@ describe('todos data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -496,6 +517,10 @@ describe('todos data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteTodoItem(todoItem)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteTodoItem(todoItem);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -503,19 +528,36 @@ describe('todos data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteTodoItem(todoItem);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the todo_items table', async () => {
+          await deleteTodoItem(todoItem);
+          expect(mockFrom).toHaveBeenCalledWith('todo_items');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteTodoItem(todoItem)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteTodoItem(todoItem);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the todo_items table', async () => {
-        await deleteTodoItem(todoItem);
-        expect(mockFrom).toHaveBeenCalledWith('todo_items');
+        it('returns false', async () => {
+          expect(await deleteTodoItem(todoItem)).toBe(false);
+        });
       });
     });
   });
@@ -543,7 +585,7 @@ describe('todos data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(todoItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: todoItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -563,7 +605,7 @@ describe('todos data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
