@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from './server';
+import { QueryResult } from '../data';
 
 export const isNotLoggedIn = async (): Promise<boolean> => {
   const supabase = createClient();
@@ -11,12 +12,12 @@ export const isNotLoggedIn = async (): Promise<boolean> => {
   return !user;
 };
 
-export const withAuth = async <TResult>(
-  fn: (supabase: SupabaseClient) => Promise<TResult>,
-): Promise<TResult | null> => {
+export const withAuth = async <T>(
+  fn: (supabase: SupabaseClient) => Promise<QueryResult<T>>,
+): Promise<QueryResult<T>> => {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  return user ? await fn(supabase) : null;
+  return user ? await fn(supabase) : { success: false, error: 'NOT_AUTHENTICATED' };
 };

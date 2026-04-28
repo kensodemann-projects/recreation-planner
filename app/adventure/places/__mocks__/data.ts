@@ -94,7 +94,7 @@ export const fetchPlace = vi.fn().mockImplementation((id: number, full?: boolean
 });
 export const addPlace = vi.fn();
 export const updatePlace = vi.fn();
-export const deletePlace = vi.fn();
+export const deletePlace = vi.fn().mockResolvedValue(true);
 export const canDeletePlace = vi.fn().mockResolvedValue(false);
 
 export const fetchPlaceTypes = vi.fn().mockResolvedValue(PLACE_TYPES);

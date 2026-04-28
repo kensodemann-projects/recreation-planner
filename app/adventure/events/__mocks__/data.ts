@@ -70,7 +70,7 @@ export const fetchEvent = vi.fn().mockImplementation((id: number, full: boolean 
   return Promise.resolve(event && (full ? { ...event, notes: [], todoCollections: [] } : { ...event }));
 });
 export const addEvent = vi.fn();
-export const deleteEvent = vi.fn();
+export const deleteEvent = vi.fn().mockResolvedValue(true);
 export const canDeleteEvent = vi.fn().mockResolvedValue(false);
 export const fetchEventTypes = vi.fn().mockResolvedValue(EVENT_TYPES);
 export const updateEvent = vi.fn().mockResolvedValue(null);

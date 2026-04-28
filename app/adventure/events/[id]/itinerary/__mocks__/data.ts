@@ -57,5 +57,5 @@ export const fetchItineraryItem = vi
   .mockImplementation((id: number) => Promise.resolve(ITINERARY_ITEMS.find((x) => x.id === id)));
 export const addItineraryItem = vi.fn();
 export const updateItineraryItem = vi.fn();
-export const deleteItineraryItem = vi.fn();
+export const deleteItineraryItem = vi.fn().mockResolvedValue(true);
 export const canDeleteItineraryItem = vi.fn().mockResolvedValue(false);

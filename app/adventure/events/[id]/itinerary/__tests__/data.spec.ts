@@ -71,7 +71,7 @@ describe('itinerary data', () => {
 
       describe('when data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -91,7 +91,7 @@ describe('itinerary data', () => {
 
       describe('when no data is returned', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
         });
 
         it('returns null', async () => {
@@ -124,7 +124,7 @@ describe('itinerary data', () => {
 
       describe('when the insert succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -144,7 +144,7 @@ describe('itinerary data', () => {
 
       describe('when the insert fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
@@ -184,6 +184,10 @@ describe('itinerary data', () => {
     describe('when not logged in', () => {
       beforeEach(() => setLoggedOut());
 
+      it('returns false', async () => {
+        expect(await deleteItineraryItem(itineraryItem)).toBe(false);
+      });
+
       it('does not access the database', async () => {
         await deleteItineraryItem(itineraryItem);
         expect(executeQuery).not.toHaveBeenCalled();
@@ -191,19 +195,36 @@ describe('itinerary data', () => {
     });
 
     describe('when logged in', () => {
-      beforeEach(() => {
-        setLoggedIn();
-        (executeQuery as Mock).mockResolvedValue(null);
+      describe('when the delete succeeds', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: null });
+        });
+
+        it('calls executeQuery', async () => {
+          await deleteItineraryItem(itineraryItem);
+          expect(executeQuery).toHaveBeenCalledOnce();
+        });
+
+        it('deletes from the itinerary_items table', async () => {
+          await deleteItineraryItem(itineraryItem);
+          expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+        });
+
+        it('returns true', async () => {
+          expect(await deleteItineraryItem(itineraryItem)).toBe(true);
+        });
       });
 
-      it('calls executeQuery', async () => {
-        await deleteItineraryItem(itineraryItem);
-        expect(executeQuery).toHaveBeenCalledOnce();
-      });
+      describe('when the delete fails', () => {
+        beforeEach(() => {
+          setLoggedIn();
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
+        });
 
-      it('deletes from the itinerary_items table', async () => {
-        await deleteItineraryItem(itineraryItem);
-        expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+        it('returns false', async () => {
+          expect(await deleteItineraryItem(itineraryItem)).toBe(false);
+        });
       });
     });
   });
@@ -231,7 +252,7 @@ describe('itinerary data', () => {
 
       describe('when the update succeeds', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(itineraryItemDTO);
+          (executeQuery as Mock).mockResolvedValue({ success: true, data: itineraryItemDTO });
         });
 
         it('calls executeQuery', async () => {
@@ -251,7 +272,7 @@ describe('itinerary data', () => {
 
       describe('when the update fails', () => {
         beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue(null);
+          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'SERVER_ERROR' });
         });
 
         it('returns null', async () => {
