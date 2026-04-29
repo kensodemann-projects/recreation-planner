@@ -48,7 +48,7 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
   // Tracks the latest field values synchronously so validate() always runs
   // against the current value even when called immediately after setValue()
   // in the same React tick (before the state update is committed).
-  const valuesRef = useRef<FormValues<S>>(values);
+  const valuesRef = useRef<FormValues<S>>(buildValues(schema));
 
   const [errors, setErrors] = useState<FormErrors<S>>({} as FormErrors<S>);
 

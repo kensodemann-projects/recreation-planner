@@ -136,6 +136,7 @@ describe('useForm', () => {
         result.current.fields.name.setValue('');
         result.current.fields.name.validate();
       });
+      expect(result.current.fields.name.value).toBe('');
       expect(result.current.fields.name.error).toBe('Required');
     });
   });
