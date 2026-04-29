@@ -1,7 +1,7 @@
 import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { ItineraryItem } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -13,42 +13,26 @@ export interface ItineraryItemEditorProps {
 }
 
 const ItineraryItemEditor = ({ item, onCancel, onConfirm }: ItineraryItemEditorProps) => {
-  const {
-    value: name,
-    error: nameError,
-    setValue: setName,
-    validate: validateName,
-  } = useFormControl(item?.name || '', (value: string) => isRequired(value, 'Activity'));
-  const {
-    value: date,
-    error: dateError,
-    setValue: setDate,
-    validate: validateDate,
-  } = useFormControl(item?.date || '', (value: string) => isRequired(value, 'Date'));
-  const {
-    value: time,
-    error: timeError,
-    setValue: setTime,
-    validate: validateTime,
-  } = useFormControl(item?.time || '', (value: string) => isRequired(value, 'Time'));
-  const { value: description, setValue: setDescription } = useFormControl(item?.description || '');
+  const { fields, isDirty } = useForm({
+    name: { initialValue: item?.name || '', validate: (v: string) => isRequired(v, 'Activity') },
+    date: { initialValue: item?.date || '', validate: (v: string) => isRequired(v, 'Date') },
+    time: { initialValue: item?.time || '', validate: (v: string) => isRequired(v, 'Time') },
+    description: { initialValue: item?.description || '' },
+  });
+
   const [busy, setBusy] = useState(false);
 
   const buildItem = (): ItineraryItem => ({
     ...item,
-    name,
-    description,
+    name: fields.name.value,
+    description: fields.description.value,
     eventRid: item?.eventRid || -1,
-    date,
-    time,
+    date: fields.date.value,
+    time: fields.time.value,
   });
 
-  const requiredFieldsHaveValues = !!name.trim() && !!date.trim() && !!time.trim();
-  const isDirty =
-    name.trim() !== (item?.name || '') ||
-    description.trim() !== (item?.description || '') ||
-    date.trim() !== (item?.date || '') ||
-    time.trim() !== (item?.time || '');
+  const requiredFieldsHaveValues =
+    !!fields.name.value.trim() && !!fields.date.value.trim() && !!fields.time.value.trim();
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
@@ -59,41 +43,41 @@ const ItineraryItemEditor = ({ item, onCancel, onConfirm }: ItineraryItemEditorP
             id="item-name"
             label="Activity"
             className="col-span-4"
-            value={name}
+            value={fields.name.value}
             disabled={busy}
-            error={nameError}
-            onBlur={validateName}
-            onChange={(evt) => setName(evt.target.value)}
+            error={fields.name.error}
+            onBlur={fields.name.validate}
+            onChange={(evt) => fields.name.setValue(evt.target.value)}
           />
           <Input
             id="item-date"
             type="date"
             label="Date"
             className="col-span-4 md:col-span-2"
-            value={date}
+            value={fields.date.value}
             disabled={busy}
-            error={dateError}
-            onBlur={validateDate}
-            onChange={(evt) => setDate(evt.target.value)}
+            error={fields.date.error}
+            onBlur={fields.date.validate}
+            onChange={(evt) => fields.date.setValue(evt.target.value)}
           />
           <Input
             id="item-time"
             type="time"
             label="Time"
             className="col-span-4 md:col-span-2"
-            value={time}
+            value={fields.time.value}
             disabled={busy}
-            error={timeError}
-            onBlur={validateTime}
-            onChange={(evt) => setTime(evt.target.value)}
+            error={fields.time.error}
+            onBlur={fields.time.validate}
+            onChange={(evt) => fields.time.setValue(evt.target.value)}
           />
           <Description
             id="item-description"
             label="Description"
             className="col-span-4"
-            value={description}
+            value={fields.description.value}
             disabled={busy}
-            onChange={(evt) => setDescription(evt.target.value)}
+            onChange={(evt) => fields.description.setValue(evt.target.value)}
           />
         </div>
       </section>
