@@ -29,25 +29,21 @@ const defaultEquals = <T>(current: T, initial: T): boolean => {
   return current === initial;
 };
 
+const buildValues = <S extends SchemaBase>(schema: S): FormValues<S> => {
+  const init = {} as FormValues<S>;
+  for (const key in schema) {
+    (init as Record<string, unknown>)[key] = schema[key].initialValue;
+  }
+  return init;
+};
+
 export const useForm = <S extends SchemaBase>(schema: S) => {
   // Stable snapshot of initial values captured once at mount; only updated by
   // an explicit reset() call so isDirty never flips due to parent re-renders
   // supplying different initialValue props.
-  const [initialValues, setInitialValues] = useState<FormValues<S>>(() => {
-    const init = {} as FormValues<S>;
-    for (const key in schema) {
-      (init as Record<string, unknown>)[key] = schema[key].initialValue;
-    }
-    return init;
-  });
+  const [initialValues, setInitialValues] = useState<FormValues<S>>(() => buildValues(schema));
 
-  const [values, setValues] = useState<FormValues<S>>(() => {
-    const init = {} as FormValues<S>;
-    for (const key in schema) {
-      (init as Record<string, unknown>)[key] = schema[key].initialValue;
-    }
-    return init;
-  });
+  const [values, setValues] = useState<FormValues<S>>(() => buildValues(schema));
 
   const [errors, setErrors] = useState<FormErrors<S>>({} as FormErrors<S>);
 
@@ -92,10 +88,7 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
   };
 
   const reset = () => {
-    const newInit = {} as FormValues<S>;
-    for (const key in schema) {
-      (newInit as Record<string, unknown>)[key] = schema[key].initialValue;
-    }
+    const newInit = buildValues(schema);
     setInitialValues(newInit);
     setValues(newInit);
     setErrors({} as FormErrors<S>);
