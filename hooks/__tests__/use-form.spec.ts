@@ -42,7 +42,7 @@ describe('useForm', () => {
       expect(result.current.isValid).toBe(true);
     });
 
-    it("treats an empty string validation result as no error", () => {
+    it('treats an empty string validation result as no error', () => {
       const { result } = renderHook(() =>
         useForm({
           name: { initialValue: 'Alice', validate: (v) => (v ? '' : 'Required') },
@@ -162,6 +162,28 @@ describe('useForm', () => {
         }),
       );
       act(() => result.current.fields.name.setValue('Alice   '));
+      expect(result.current.isDirty).toBe(true);
+    });
+
+    it('does not flip isDirty when the schema initialValue changes between renders', () => {
+      const { result, rerender } = renderHook(
+        ({ initialName }: { initialName: string }) => useForm({ name: { initialValue: initialName } }),
+        { initialProps: { initialName: 'Alice' } },
+      );
+      expect(result.current.isDirty).toBe(false);
+      rerender({ initialName: 'Bob' });
+      expect(result.current.isDirty).toBe(false);
+    });
+
+    it('uses the updated schema initialValue as the baseline after reset', () => {
+      const { result, rerender } = renderHook(
+        ({ initialName }: { initialName: string }) => useForm({ name: { initialValue: initialName } }),
+        { initialProps: { initialName: 'Alice' } },
+      );
+      rerender({ initialName: 'Bob' });
+      act(() => result.current.reset());
+      expect(result.current.isDirty).toBe(false);
+      act(() => result.current.fields.name.setValue('Alice'));
       expect(result.current.isDirty).toBe(true);
     });
 

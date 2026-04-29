@@ -30,6 +30,17 @@ const defaultEquals = <T>(current: T, initial: T): boolean => {
 };
 
 export const useForm = <S extends SchemaBase>(schema: S) => {
+  // Stable snapshot of initial values captured once at mount; only updated by
+  // an explicit reset() call so isDirty never flips due to parent re-renders
+  // supplying different initialValue props.
+  const [initialValues, setInitialValues] = useState<FormValues<S>>(() => {
+    const init = {} as FormValues<S>;
+    for (const key in schema) {
+      (init as Record<string, unknown>)[key] = schema[key].initialValue;
+    }
+    return init;
+  });
+
   const [values, setValues] = useState<FormValues<S>>(() => {
     const init = {} as FormValues<S>;
     for (const key in schema) {
@@ -64,7 +75,7 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
     const eq =
       (schema[k].equals as ((c: InferValue<S[typeof k]>, i: InferValue<S[typeof k]>) => boolean) | undefined) ??
       defaultEquals;
-    return !eq(values[k], schema[k].initialValue as InferValue<S[typeof k]>);
+    return !eq(values[k], initialValues[k]);
   });
 
   const isValid = Object.keys(schema).every((key) => !errors[key as keyof S]);
@@ -81,11 +92,12 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
   };
 
   const reset = () => {
-    const init = {} as FormValues<S>;
+    const newInit = {} as FormValues<S>;
     for (const key in schema) {
-      (init as Record<string, unknown>)[key] = schema[key].initialValue;
+      (newInit as Record<string, unknown>)[key] = schema[key].initialValue;
     }
-    setValues(init);
+    setInitialValues(newInit);
+    setValues(newInit);
     setErrors({} as FormErrors<S>);
   };
 
