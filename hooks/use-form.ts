@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 export type FieldConfig<T> = {
   initialValue: T;
@@ -45,6 +45,11 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
 
   const [values, setValues] = useState<FormValues<S>>(() => buildValues(schema));
 
+  // Tracks the latest field values synchronously so validate() always runs
+  // against the current value even when called immediately after setValue()
+  // in the same React tick (before the state update is committed).
+  const valuesRef = useRef<FormValues<S>>(values);
+
   const [errors, setErrors] = useState<FormErrors<S>>({} as FormErrors<S>);
 
   const fields = Object.keys(schema).reduce((acc, key) => {
@@ -54,12 +59,13 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
       value: values[k],
       error: errors[k],
       setValue: (val: InferValue<S[typeof k]>) => {
+        valuesRef.current = { ...valuesRef.current, [k]: val };
         setValues((prev) => ({ ...prev, [k]: val }));
         const err = schema[k].validate ? schema[k].validate!(val) : undefined;
         setErrors((prev) => ({ ...prev, [k]: err }));
       },
       validate: () => {
-        const err = schema[k].validate ? schema[k].validate!(values[k]) : undefined;
+        const err = schema[k].validate ? schema[k].validate!(valuesRef.current[k]) : undefined;
         setErrors((prev) => ({ ...prev, [k]: err }));
       },
     };
@@ -81,7 +87,7 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
     for (const key in schema) {
       const k = key as keyof S;
       (newErrors as Record<string, string | undefined>)[key] = schema[k].validate
-        ? schema[k].validate!(values[k])
+        ? schema[k].validate!(valuesRef.current[k])
         : undefined;
     }
     setErrors(newErrors);
@@ -89,6 +95,7 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
 
   const reset = () => {
     const newInit = buildValues(schema);
+    valuesRef.current = newInit;
     setInitialValues(newInit);
     setValues(newInit);
     setErrors({} as FormErrors<S>);

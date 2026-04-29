@@ -125,6 +125,19 @@ describe('useForm', () => {
       act(() => result.current.fields.first.validate());
       expect(result.current.fields.last.error).toBeUndefined();
     });
+
+    it('uses the latest value when called immediately after setValue in the same tick', () => {
+      const { result } = renderHook(() =>
+        useForm({
+          name: { initialValue: 'Alice', validate: (v) => (!v ? 'Required' : undefined) },
+        }),
+      );
+      act(() => {
+        result.current.fields.name.setValue('');
+        result.current.fields.name.validate();
+      });
+      expect(result.current.fields.name.error).toBe('Required');
+    });
   });
 
   describe('isDirty', () => {
