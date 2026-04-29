@@ -7,7 +7,8 @@ export type FieldConfig<T> = {
   equals?: (current: T, initial: T) => boolean;
 };
 
-type SchemaBase = Record<string, FieldConfig<unknown>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SchemaBase = Record<string, FieldConfig<any>>;
 type InferValue<C> = C extends FieldConfig<infer T> ? T : never;
 type FormValues<S extends SchemaBase> = { [K in keyof S]: InferValue<S[K]> };
 type FormErrors<S extends SchemaBase> = { [K in keyof S]?: string };
@@ -41,7 +42,8 @@ export const useForm = <S extends SchemaBase>(schema: S) => {
 
   const fields = Object.keys(schema).reduce((acc, key) => {
     const k = key as keyof S;
-    (acc as Record<string, FieldState<unknown>>)[key] = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (acc as Record<string, FieldState<any>>)[key] = {
       value: values[k],
       error: errors[k],
       setValue: (val: InferValue<S[typeof k]>) => {
