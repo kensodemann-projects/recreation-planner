@@ -190,6 +190,23 @@ describe('TODO Editor', () => {
             todoItems: [],
           });
         });
+
+        it('passes dueDate as null when due date is left blank', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(<TodoCollectionEditor onCancel={() => null} onConfirm={(c) => (collection = c)} />);
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Collection');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
+          expect(collection).toEqual({
+            name: 'Test Collection',
+            description: '',
+            dueDate: null,
+            isComplete: false,
+            equipmentRid: null,
+            eventRid: null,
+            todoItems: [],
+          });
+        });
       });
     });
 
@@ -357,6 +374,24 @@ describe('TODO Editor', () => {
           expect(collection).toEqual({
             ...TEST_COLLECTION,
             isComplete: true,
+          });
+        });
+
+        it('passes dueDate as null when due date is cleared', async () => {
+          let collection: TodoCollection | null = null;
+          const user = userEvent.setup();
+          render(
+            <TodoCollectionEditor
+              todoCollection={TEST_COLLECTION}
+              onCancel={() => null}
+              onConfirm={(c) => (collection = c)}
+            />,
+          );
+          await user.clear(screen.getByLabelText('Due Date'));
+          await user.click(screen.getByRole('button', { name: 'Update' }));
+          expect(collection).toEqual({
+            ...TEST_COLLECTION,
+            dueDate: null,
           });
         });
       });

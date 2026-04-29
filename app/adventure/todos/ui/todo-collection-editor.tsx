@@ -1,7 +1,7 @@
 import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { TodoCollection } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -13,25 +13,15 @@ export interface TodoCollectionEditorProps {
 }
 
 const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoCollectionEditorProps) => {
-  const {
-    value: name,
-    error: nameError,
-    setValue: setName,
-    validate: validateName,
-  } = useFormControl(todoCollection?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const { value: dueDate, setValue: setDueDate } = useFormControl(todoCollection?.dueDate || '');
-  const { value: description, setValue: setDescription } = useFormControl(todoCollection?.description || '');
-  const { value: isComplete, setValue: setIsComplete } = useFormControl(todoCollection?.isComplete || false);
+  const { fields, isDirty } = useForm({
+    name: { initialValue: todoCollection?.name || '', validate: (v: string) => isRequired(v, 'Name') },
+    dueDate: { initialValue: todoCollection?.dueDate || '' },
+    description: { initialValue: todoCollection?.description || '' },
+    isComplete: { initialValue: todoCollection?.isComplete || false },
+  });
   const [busy, setBusy] = useState(false);
 
-  const requiredFieldsHaveValues = !!name.trim();
-
-  const isDirty =
-    dueDate.trim() !== (todoCollection?.dueDate || '') ||
-    name.trim() !== (todoCollection?.name || '') ||
-    description.trim() !== (todoCollection?.description || '') ||
-    isComplete !== (todoCollection?.isComplete || false);
-
+  const requiredFieldsHaveValues = !!fields.name.value.trim();
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
@@ -42,37 +32,37 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           className="col-span-4 md:col-span-3"
           type="text"
           label="Name"
-          value={name}
+          value={fields.name.value}
           disabled={busy}
-          error={nameError}
-          onBlur={validateName}
-          onChange={(evt) => setName(evt.target.value)}
+          error={fields.name.error}
+          onBlur={fields.name.validate}
+          onChange={(evt) => fields.name.setValue(evt.target.value)}
         />
         <Input
           id="collection-due-date"
           className="col-span-4 md:col-span-1"
           type="date"
           label="Due Date"
-          value={dueDate}
+          value={fields.dueDate.value}
           disabled={busy}
-          onChange={(evt) => setDueDate(evt.target.value)}
+          onChange={(evt) => fields.dueDate.setValue(evt.target.value)}
         />
         <Description
           id="place-description"
           className="col-span-4 mt-2"
           label="Description"
           rows={3}
-          value={description}
+          value={fields.description.value}
           disabled={busy}
-          onChange={(evt) => setDescription(evt.target.value)}
+          onChange={(evt) => fields.description.setValue(evt.target.value)}
         />
         <label className="label">
           <input
             type="checkbox"
             className="checkbox"
-            checked={isComplete}
+            checked={fields.isComplete.value}
             disabled={busy}
-            onChange={(evt) => setIsComplete(evt.target.checked)}
+            onChange={(evt) => fields.isComplete.setValue(evt.target.checked)}
           />
           Archived
         </label>
@@ -87,10 +77,10 @@ const TodoCollectionEditor = ({ todoCollection, onCancel, onConfirm }: TodoColle
           onClick={() => {
             setBusy(true);
             const data: Pick<TodoCollection, 'name' | 'description' | 'isComplete' | 'dueDate'> = {
-              name: name!,
-              description: description,
-              isComplete: isComplete,
-              dueDate: dueDate,
+              name: fields.name.value!,
+              description: fields.description.value,
+              isComplete: fields.isComplete.value,
+              dueDate: fields.dueDate.value || null,
             };
             onConfirm(
               todoCollection
