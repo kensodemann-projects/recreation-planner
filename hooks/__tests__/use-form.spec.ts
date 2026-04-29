@@ -41,6 +41,16 @@ describe('useForm', () => {
       );
       expect(result.current.isValid).toBe(true);
     });
+
+    it("treats an empty string validation result as no error", () => {
+      const { result } = renderHook(() =>
+        useForm({
+          name: { initialValue: 'Alice', validate: (v) => (v ? '' : 'Required') },
+        }),
+      );
+      expect(result.current.fields.name.error).toBeFalsy();
+      expect(result.current.isValid).toBe(true);
+    });
   });
 
   describe('field.setValue', () => {
