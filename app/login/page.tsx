@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { isEmail, isRequired } from '@/utils/input-validations';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -10,21 +10,14 @@ import Input from '../ui/input';
 import { login } from './actions';
 
 const LoginPage = () => {
-  const {
-    value: email,
-    error: emailError,
-    setValue: setEmail,
-    validate: validateEmail,
-  } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Email Address') || isEmail(value));
-  const {
-    value: password,
-    error: passwordError,
-    setValue: setPassword,
-    validate: validatePassword,
-  } = useFormControl<string>('', (value: string | undefined) => isRequired(value, 'Password'));
-  const router = useRouter();
+  const { fields } = useForm({
+    email: { initialValue: '', validate: (v: string | undefined) => isRequired(v, 'Email Address') || isEmail(v) },
+    password: { initialValue: '', validate: (v: string | undefined) => isRequired(v, 'Password') },
+  });
 
-  const loginDisabled = !(email && password) || !!(emailError || passwordError);
+  const router = useRouter();
+  const loginDisabled =
+    !(fields.email.value && fields.password.value) || !!(fields.email.error || fields.password.error);
 
   const [alertLoginFailed, setAlertLoginFailed] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -40,20 +33,20 @@ const LoginPage = () => {
             disabled={busy}
             type="email"
             label="Email Address"
-            value={email}
-            error={emailError}
-            onBlur={validateEmail}
-            onChange={(evt) => setEmail(evt.target.value)}
+            value={fields.email.value}
+            error={fields.email.error}
+            onBlur={fields.email.validate}
+            onChange={(evt) => fields.email.setValue(evt.target.value)}
           />
           <Input
             id="password"
             disabled={busy}
             type={showPassword ? 'text' : 'password'}
             label="Password"
-            value={password}
-            error={passwordError}
-            onBlur={validatePassword}
-            onChange={(evt) => setPassword(evt.target.value)}
+            value={fields.password.value}
+            error={fields.password.error}
+            onBlur={fields.password.validate}
+            onChange={(evt) => fields.password.setValue(evt.target.value)}
           />
           <div className="card-actions justify-end mt-4">
             <div className="flex-1">
@@ -75,13 +68,13 @@ const LoginPage = () => {
               disabled={loginDisabled || busy}
               onClick={async () => {
                 setBusy(true);
-                const { success } = await login(email!, password!);
+                const { success } = await login(fields.email.value, fields.password.value);
                 setBusy(false);
                 if (success) {
                   router.replace('/adventure');
                 } else {
                   setAlertLoginFailed(true);
-                  setPassword('');
+                  fields.password.setValue('');
                 }
               }}
             >
