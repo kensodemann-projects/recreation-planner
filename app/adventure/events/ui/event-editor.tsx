@@ -3,7 +3,7 @@ import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { Event, EventType, Place } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -17,40 +17,24 @@ export interface EventEditorProps {
 }
 
 const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorProps) => {
-  const [alertPlaceCreation, setAlertPlaceCreation] = useState(false);
-  const {
-    value: eventName,
-    error: eventNameError,
-    setValue: setEventName,
-    validate: validateEventName,
-  } = useFormControl(event?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const { value: eventTypeId, setValue: setEventTypeId } = useFormControl(event?.type.id || types[0]?.id);
-  const { value: eventPlaceId, setValue: setEventPlaceId } = useFormControl(event?.place.id || places[0]?.id);
-  const {
-    value: eventBeginDate,
-    error: eventBeginDateError,
-    setValue: setEventBeginDate,
-    validate: validateEventBeginDate,
-  } = useFormControl(event?.beginDate || '', (value: string | undefined) => isRequired(value, 'Begin Date'));
-  const { value: eventBeginTime, setValue: setEventBeginTime } = useFormControl(event?.beginTime || '');
-  const { value: eventEndDate, setValue: setEventEndDate } = useFormControl(event?.endDate || '');
-  const { value: eventEndTime, setValue: setEventEndTime } = useFormControl(event?.endTime || '');
-  const { value: eventDescription, setValue: setEventDescription } = useFormControl(event?.description || '');
+  const { fields, isDirty } = useForm({
+    eventName: { initialValue: event?.name || '', validate: (v: string | undefined) => isRequired(v, 'Name') },
+    eventTypeId: { initialValue: event?.type.id || types[0]?.id },
+    eventPlaceId: { initialValue: event?.place.id || places[0]?.id },
+    eventBeginDate: {
+      initialValue: event?.beginDate || '',
+      validate: (v: string | undefined) => isRequired(v, 'Begin Date'),
+    },
+    eventBeginTime: { initialValue: event?.beginTime || '' },
+    eventEndDate: { initialValue: event?.endDate || '' },
+    eventEndTime: { initialValue: event?.endTime || '' },
+    eventDescription: { initialValue: event?.description || '' },
+  });
 
+  const [alertPlaceCreation, setAlertPlaceCreation] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const requiredFieldsHaveValues = !!(eventName.trim() && eventBeginDate.trim());
-
-  const isDirty =
-    eventName.trim() !== (event?.name || '') ||
-    eventTypeId !== event?.type.id ||
-    eventPlaceId !== event?.place.id ||
-    eventBeginDate.trim() !== (event?.beginDate || '') ||
-    eventBeginTime.trim() !== (event?.beginTime || '') ||
-    eventEndDate.trim() !== (event?.endDate || '') ||
-    eventEndTime.trim() !== (event?.endTime || '') ||
-    eventDescription.trim() !== (event?.description || '');
-
+  const requiredFieldsHaveValues = !!(fields.eventName.value.trim() && fields.eventBeginDate.value.trim());
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   const handleConfirm = () => {
@@ -60,14 +44,14 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
 
   const buildEvent = (): Event => ({
     id: event?.id,
-    name: eventName!,
-    beginDate: eventBeginDate!,
-    beginTime: eventBeginTime,
-    endDate: eventEndDate,
-    endTime: eventEndTime,
-    type: types.find((x) => x.id === eventTypeId) || types[0],
-    place: places.find((x) => x.id === eventPlaceId) || places[0],
-    description: eventDescription,
+    name: fields.eventName.value,
+    beginDate: fields.eventBeginDate.value,
+    beginTime: fields.eventBeginTime.value,
+    endDate: fields.eventEndDate.value,
+    endTime: fields.eventEndTime.value,
+    type: types.find((x) => x.id === fields.eventTypeId.value) || types[0],
+    place: places.find((x) => x.id === fields.eventPlaceId.value) || places[0],
+    description: fields.eventDescription.value,
   });
 
   return (
@@ -79,30 +63,30 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           type="text"
           label="Name"
-          value={eventName}
-          error={eventNameError}
-          onBlur={validateEventName}
-          onChange={(evt) => setEventName(evt.target.value)}
+          value={fields.eventName.value}
+          error={fields.eventName.error}
+          onBlur={fields.eventName.validate}
+          onChange={(evt) => fields.eventName.setValue(evt.target.value)}
         />
         <Select
           id="event-type"
           className="col-span-4 md:col-span-2"
           disabled={busy}
           label="Type of Trip / Event"
-          value={eventTypeId}
+          value={fields.eventTypeId.value}
           values={types}
-          onChange={(evt) => setEventTypeId(+evt.target.value)}
+          onChange={(evt) => fields.eventTypeId.setValue(+evt.target.value)}
         />
         <Select
           id="event-place"
           className="col-span-4 md:col-span-2"
           disabled={busy}
           label="Location"
-          value={eventPlaceId}
+          value={fields.eventPlaceId.value}
           values={places}
           onChange={(evt) => {
             const id = +evt.target.value;
-            setEventPlaceId(+evt.target.value);
+            fields.eventPlaceId.setValue(id);
             if (id < 0) {
               setAlertPlaceCreation(true);
             }
@@ -114,10 +98,10 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           type="date"
           label="Begin Date"
-          value={eventBeginDate}
-          error={eventBeginDateError}
-          onBlur={validateEventBeginDate}
-          onChange={(evt) => setEventBeginDate(evt.target.value)}
+          value={fields.eventBeginDate.value}
+          error={fields.eventBeginDate.error}
+          onBlur={fields.eventBeginDate.validate}
+          onChange={(evt) => fields.eventBeginDate.setValue(evt.target.value)}
         />
         <Input
           id="event-begin-time"
@@ -125,8 +109,8 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           type="time"
           label="Begin Time"
-          value={eventBeginTime}
-          onChange={(evt) => setEventBeginTime(evt.target.value)}
+          value={fields.eventBeginTime.value}
+          onChange={(evt) => fields.eventBeginTime.setValue(evt.target.value)}
         />
         <Input
           id="event-end-date"
@@ -134,8 +118,8 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           type="date"
           label="End Date"
-          value={eventEndDate}
-          onChange={(evt) => setEventEndDate(evt.target.value)}
+          value={fields.eventEndDate.value}
+          onChange={(evt) => fields.eventEndDate.setValue(evt.target.value)}
         />
         <Input
           id="event-end-time"
@@ -143,8 +127,8 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           type="time"
           label="End Time"
-          value={eventEndTime}
-          onChange={(evt) => setEventEndTime(evt.target.value)}
+          value={fields.eventEndTime.value}
+          onChange={(evt) => fields.eventEndTime.setValue(evt.target.value)}
         />
         <Description
           id="event-description"
@@ -152,8 +136,8 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           disabled={busy}
           label="Description"
           rows={5}
-          value={eventDescription}
-          onChange={(evt) => setEventDescription(evt.target.value)}
+          value={fields.eventDescription.value}
+          onChange={(evt) => fields.eventDescription.setValue(evt.target.value)}
         />
       </div>
       <div className="flex flow-row gap-8 justify-end mt-4">
