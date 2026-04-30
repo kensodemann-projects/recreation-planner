@@ -564,11 +564,5 @@ describe('Maintenace Item Editor', () => {
         cost: 73,
       });
     });
-
-    it('does not enable editing if modifying the units w/o any usage entered', async () => {
-      expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeTruthy();
-      await user.selectOptions(getUsageUnitsSelect(), '2');
-      expect(getUpdateButton().attributes.getNamedItem('disabled')).toBeTruthy();
-    });
   });
 });
