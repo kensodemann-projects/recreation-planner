@@ -48,11 +48,11 @@ const MaintenanceItemEditor = ({
       validate: (value: string | undefined) => checkDescriptionValidity(value),
     },
     usage: {
-      initialValue: maintenanceItem?.usage || '',
+      initialValue: maintenanceItem?.usage ?? '',
       validate: (value: string | number | undefined) => checkUsageValidity(value),
     },
     cost: {
-      initialValue: maintenanceItem?.cost || '',
+      initialValue: maintenanceItem?.cost ?? '',
       validate: (value: string | number | undefined) => checkCostValidity(value),
     },
   });
