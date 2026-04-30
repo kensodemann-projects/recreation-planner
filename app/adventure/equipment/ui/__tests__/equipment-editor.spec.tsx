@@ -330,6 +330,22 @@ describe('Equipment Editor', () => {
             },
           });
         });
+
+        it('passes null for cost when cost is not entered', async () => {
+          let equipment: Equipment | null = null;
+          const user = userEvent.setup();
+          render(
+            <EquipmentEditor
+              equipmentTypes={EQUIPMENT_TYPES}
+              onCancel={() => null}
+              onConfirm={(e) => (equipment = e)}
+            />,
+          );
+          await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Test Equipment');
+          await user.click(screen.getByRole('button', { name: 'Create' }));
+          expect(equipment).not.toBeNull();
+          expect(equipment!.cost).toBeNull();
+        });
       });
     });
 

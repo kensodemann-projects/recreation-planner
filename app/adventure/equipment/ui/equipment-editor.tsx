@@ -4,7 +4,7 @@ import Input from '@/app/ui/input';
 import SectionHeader from '@/app/ui/section-header';
 import Select from '@/app/ui/select';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { Equipment, EquipmentType } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -17,63 +17,28 @@ export interface EquipmentEditorProps {
 }
 
 const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: EquipmentEditorProps) => {
-  const {
-    value: name,
-    error: nameError,
-    setValue: setName,
-    validate: validateName,
-  } = useFormControl(equipment?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const { value: equipmentTypeId, setValue: setEquipmentTypeId } = useFormControl(
-    equipment?.equipmentType.id || equipmentTypes[0].id,
-  );
-  const { value: description, setValue: setDescription } = useFormControl(equipment?.description || '');
-  const { value: purchaseDate, setValue: setPurchaseDate } = useFormControl<string>(equipment?.purchaseDate || '');
-  const { value: cost, setValue: setCost } = useFormControl(equipment?.cost || '');
-  const { value: manufacturer, setValue: setManufacturer } = useFormControl(equipment?.manufacturer || '');
-  const { value: model, setValue: setModel } = useFormControl(equipment?.model || '');
-  const { value: identification, setValue: setIdentification } = useFormControl(equipment?.identification || '');
-  const { value: length, setValue: setLength } = useFormControl(equipment?.length || '');
-  const { value: weight, setValue: setWeight } = useFormControl(equipment?.weight || '');
-  const { value: capacity, setValue: setCapacity } = useFormControl(equipment?.capacity || '');
-  const { value: licensePlateNumber, setValue: setLicencePlateNumber } = useFormControl(
-    equipment?.licensePlateNumber || '',
-  );
-  const { value: insuranceCarrier, setValue: setInsuranceCarrier } = useFormControl(equipment?.insuranceCarrier || '');
-  const { value: insurancePolicyNumber, setValue: setInsurancePolicyNumber } = useFormControl(
-    equipment?.insurancePolicyNumber || '',
-  );
-  const { value: insuranceContactName, setValue: setInsuranceContactName } = useFormControl(
-    equipment?.insuranceContactName || '',
-  );
-  const { value: insuranceContactPhoneNumber, setValue: setInsuranceContactPhoneNumber } = useFormControl(
-    equipment?.insuranceContactPhoneNumber || '',
-  );
-  const { value: insuranceContactEmail, setValue: setInsuranceContactEmail } = useFormControl(
-    equipment?.insuranceContactEmail || '',
-  );
+  const { fields, isDirty } = useForm({
+    name: { initialValue: equipment?.name ?? '', validate: (value: string | undefined) => isRequired(value, 'Name') },
+    description: { initialValue: equipment?.description ?? '' },
+    purchaseDate: { initialValue: equipment?.purchaseDate ?? '' },
+    cost: { initialValue: equipment?.cost ?? '' },
+    manufacturer: { initialValue: equipment?.manufacturer ?? '' },
+    model: { initialValue: equipment?.model ?? '' },
+    identification: { initialValue: equipment?.identification ?? '' },
+    length: { initialValue: equipment?.length ?? '' },
+    weight: { initialValue: equipment?.weight ?? '' },
+    capacity: { initialValue: equipment?.capacity ?? '' },
+    licensePlateNumber: { initialValue: equipment?.licensePlateNumber ?? '' },
+    insuranceCarrier: { initialValue: equipment?.insuranceCarrier ?? '' },
+    insurancePolicyNumber: { initialValue: equipment?.insurancePolicyNumber ?? '' },
+    insuranceContactName: { initialValue: equipment?.insuranceContactName ?? '' },
+    insuranceContactPhoneNumber: { initialValue: equipment?.insuranceContactPhoneNumber ?? '' },
+    insuranceContactEmail: { initialValue: equipment?.insuranceContactEmail ?? '' },
+    equipmentTypeId: { initialValue: equipment?.equipmentType.id ?? equipmentTypes[0].id },
+  });
+
   const [busy, setBusy] = useState(false);
-
-  const isDirty =
-    name.trim() !== (equipment?.name || '') ||
-    equipmentTypeId !== equipment?.equipmentType.id ||
-    description.trim() !== (equipment?.description || '') ||
-    purchaseDate.trim() !== (equipment?.purchaseDate || '') ||
-    cost !== (equipment?.cost || '') ||
-    manufacturer.trim() !== (equipment?.manufacturer || '') ||
-    model.trim() !== (equipment?.model || '') ||
-    identification.trim() !== (equipment?.identification || '') ||
-    licensePlateNumber.trim() !== (equipment?.licensePlateNumber || '') ||
-    weight.trim() !== (equipment?.weight || '') ||
-    length.trim() !== (equipment?.length || '') ||
-    capacity.trim() !== (equipment?.capacity || '') ||
-    insuranceCarrier.trim() !== (equipment?.insuranceCarrier || '') ||
-    insurancePolicyNumber.trim() !== (equipment?.insurancePolicyNumber || '') ||
-    insuranceContactName.trim() !== (equipment?.insuranceContactName || '') ||
-    insuranceContactPhoneNumber.trim() !== (equipment?.insuranceContactPhoneNumber || '') ||
-    insuranceContactEmail.trim() !== (equipment?.insuranceContactEmail || '');
-
-  const requiredFieldsHaveValues = !!name.trim();
-
+  const requiredFieldsHaveValues = !!fields.name.value.trim();
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
@@ -85,11 +50,11 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Name"
-            value={name}
+            value={fields.name.value}
             disabled={busy}
-            error={nameError}
-            onBlur={validateName}
-            onChange={(evt) => setName(evt.target.value)}
+            error={fields.name.error}
+            onBlur={fields.name.validate}
+            onChange={(evt) => fields.name.setValue(evt.target.value)}
           />
 
           <Select
@@ -97,9 +62,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             disabled={busy}
             label="Type of Equipment"
-            value={equipmentTypeId}
+            value={fields.equipmentTypeId.value}
             values={equipmentTypes}
-            onChange={(evt) => setEquipmentTypeId(+evt.target.value)}
+            onChange={(evt) => fields.equipmentTypeId.setValue(+evt.target.value)}
           />
 
           <Description
@@ -107,9 +72,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4"
             label="Description"
             rows={3}
-            value={description}
+            value={fields.description.value}
             disabled={busy}
-            onChange={(evt) => setDescription(evt.target.value)}
+            onChange={(evt) => fields.description.setValue(evt.target.value)}
           />
 
           <Input
@@ -117,19 +82,19 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="date"
             label="Purchase Date"
-            value={purchaseDate}
+            value={fields.purchaseDate.value}
             disabled={busy}
-            onChange={(evt) => setPurchaseDate(evt.target.value)}
+            onChange={(evt) => fields.purchaseDate.setValue(evt.target.value)}
           />
 
           <Input
             id="equipment-cost"
             className="col-span-4 md:col-span-2"
             type="number"
-            value={cost ?? undefined}
+            value={fields.cost.value ?? undefined}
             label="Cost"
             disabled={busy}
-            onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
+            onChange={(evt) => fields.cost.setValue(evt.target.value && evt.target.valueAsNumber)}
           />
 
           <Input
@@ -137,9 +102,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Manufacturer"
-            value={manufacturer}
+            value={fields.manufacturer.value}
             disabled={busy}
-            onChange={(evt) => setManufacturer(evt.target.value)}
+            onChange={(evt) => fields.manufacturer.setValue(evt.target.value)}
           />
 
           <Input
@@ -147,9 +112,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Model"
-            value={model}
+            value={fields.model.value}
             disabled={busy}
-            onChange={(evt) => setModel(evt.target.value)}
+            onChange={(evt) => fields.model.setValue(evt.target.value)}
           />
 
           <Input
@@ -157,9 +122,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Identification"
-            value={identification}
+            value={fields.identification.value}
             disabled={busy}
-            onChange={(evt) => setIdentification(evt.target.value)}
+            onChange={(evt) => fields.identification.setValue(evt.target.value)}
           />
 
           <Input
@@ -167,9 +132,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="License Plate"
-            value={licensePlateNumber}
+            value={fields.licensePlateNumber.value}
             disabled={busy}
-            onChange={(evt) => setLicencePlateNumber(evt.target.value)}
+            onChange={(evt) => fields.licensePlateNumber.setValue(evt.target.value)}
           />
         </div>
       </section>
@@ -185,9 +150,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Weight"
-            value={weight}
+            value={fields.weight.value}
             disabled={busy}
-            onChange={(evt) => setWeight(evt.target.value)}
+            onChange={(evt) => fields.weight.setValue(evt.target.value)}
           />
 
           <Input
@@ -195,9 +160,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Length"
-            value={length}
+            value={fields.length.value}
             disabled={busy}
-            onChange={(evt) => setLength(evt.target.value)}
+            onChange={(evt) => fields.length.setValue(evt.target.value)}
           />
 
           <Input
@@ -205,9 +170,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4"
             type="text"
             label="Capacity"
-            value={capacity}
+            value={fields.capacity.value}
             disabled={busy}
-            onChange={(evt) => setCapacity(evt.target.value)}
+            onChange={(evt) => fields.capacity.setValue(evt.target.value)}
           />
         </div>
       </section>
@@ -223,9 +188,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Carrier"
-            value={insuranceCarrier}
+            value={fields.insuranceCarrier.value}
             disabled={busy}
-            onChange={(evt) => setInsuranceCarrier(evt.target.value)}
+            onChange={(evt) => fields.insuranceCarrier.setValue(evt.target.value)}
           />
 
           <Input
@@ -233,19 +198,19 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Policy Number"
-            value={insurancePolicyNumber}
+            value={fields.insurancePolicyNumber.value}
             disabled={busy}
-            onChange={(evt) => setInsurancePolicyNumber(evt.target.value)}
+            onChange={(evt) => fields.insurancePolicyNumber.setValue(evt.target.value)}
           />
 
           <Input
-            id="equipment-insurance-conact-name"
+            id="equipment-insurance-contact-name"
             className="col-span-4"
             type="text"
             label="Contact Name"
-            value={insuranceContactName}
+            value={fields.insuranceContactName.value}
             disabled={busy}
-            onChange={(evt) => setInsuranceContactName(evt.target.value)}
+            onChange={(evt) => fields.insuranceContactName.setValue(evt.target.value)}
           />
 
           <Input
@@ -253,9 +218,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="text"
             label="Contact Phone Number"
-            value={insuranceContactPhoneNumber}
+            value={fields.insuranceContactPhoneNumber.value}
             disabled={busy}
-            onChange={(evt) => setInsuranceContactPhoneNumber(evt.target.value)}
+            onChange={(evt) => fields.insuranceContactPhoneNumber.setValue(evt.target.value)}
           />
 
           <Input
@@ -263,9 +228,9 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
             className="col-span-4 md:col-span-2"
             type="email"
             label="Contact Email"
-            value={insuranceContactEmail}
+            value={fields.insuranceContactEmail.value}
             disabled={busy}
-            onChange={(evt) => setInsuranceContactEmail(evt.target.value)}
+            onChange={(evt) => fields.insuranceContactEmail.setValue(evt.target.value)}
           />
         </div>
       </section>
@@ -279,23 +244,23 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
           onClick={() => {
             setBusy(true);
             const data: Equipment = {
-              name: name!,
-              description: description,
-              purchaseDate: purchaseDate,
-              cost: Number(cost),
-              manufacturer: manufacturer,
-              model: model,
-              identification: identification,
-              length: length,
-              weight: weight,
-              capacity: capacity,
-              licensePlateNumber: licensePlateNumber,
-              insuranceCarrier: insuranceCarrier,
-              insurancePolicyNumber: insurancePolicyNumber,
-              insuranceContactName: insuranceContactName,
-              insuranceContactPhoneNumber: insuranceContactPhoneNumber,
-              insuranceContactEmail: insuranceContactEmail,
-              equipmentType: equipmentTypes.find((x) => x.id === equipmentTypeId)!,
+              name: fields.name.value,
+              description: fields.description.value,
+              purchaseDate: fields.purchaseDate.value,
+              cost: fields.cost.value !== '' && !isNaN(Number(fields.cost.value)) ? Number(fields.cost.value) : null,
+              manufacturer: fields.manufacturer.value,
+              model: fields.model.value,
+              identification: fields.identification.value,
+              length: fields.length.value,
+              weight: fields.weight.value,
+              capacity: fields.capacity.value,
+              licensePlateNumber: fields.licensePlateNumber.value,
+              insuranceCarrier: fields.insuranceCarrier.value,
+              insurancePolicyNumber: fields.insurancePolicyNumber.value,
+              insuranceContactName: fields.insuranceContactName.value,
+              insuranceContactPhoneNumber: fields.insuranceContactPhoneNumber.value,
+              insuranceContactEmail: fields.insuranceContactEmail.value,
+              equipmentType: equipmentTypes.find((x) => x.id === fields.equipmentTypeId.value)!,
             };
             onConfirm(equipment ? { ...equipment, ...data } : data);
           }}
