@@ -204,7 +204,7 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
           />
 
           <Input
-            id="equipment-insurance-conact-name"
+            id="equipment-insurance-contact-name"
             className="col-span-4"
             type="text"
             label="Contact Name"
