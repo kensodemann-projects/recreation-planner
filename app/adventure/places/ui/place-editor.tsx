@@ -4,7 +4,7 @@ import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { Place, PlaceType } from '@/models';
 import { isHttpUrl, isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -17,60 +17,38 @@ export interface PlaceEditorProps {
 }
 
 const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) => {
-  const {
-    value: placeName,
-    error: placeNameError,
-    setValue: setPlaceName,
-    validate: validatePlaceName,
-  } = useFormControl(place?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-
-  const { value: description, setValue: setDescription } = useFormControl(place?.description || '');
-  const { value: addressLine1, setValue: setAddressLine1 } = useFormControl(place?.address?.line1 || '');
-  const { value: addressLine2, setValue: setAddressLine2 } = useFormControl(place?.address?.line2 || '');
-  const { value: addressCity, setValue: setCity } = useFormControl(place?.address?.city || '');
-  const { value: addressState, setValue: setState } = useFormControl(place?.address?.state || '');
-  const { value: addressPostal, setValue: setPostal } = useFormControl(place?.address?.postal || '');
-  const { value: phoneNumber, setValue: setPhoneNumber } = useFormControl(place?.phoneNumber || '');
-  const {
-    value: website,
-    error: websiteError,
-    setValue: setWebsite,
-    validate: validateWebsite,
-  } = useFormControl(place?.website || '', (value: string | undefined) => isHttpUrl(value));
-  const { value: placeTypeId, setValue: setPlaceTypeId } = useFormControl<number>(place?.type.id || types[0].id!);
+  const { fields, isDirty } = useForm({
+    placeName: { initialValue: place?.name || '', validate: (value: string | undefined) => isRequired(value, 'Name') },
+    description: { initialValue: place?.description || '' },
+    addressLine1: { initialValue: place?.address?.line1 || '' },
+    addressLine2: { initialValue: place?.address?.line2 || '' },
+    addressCity: { initialValue: place?.address?.city || '' },
+    addressState: { initialValue: place?.address?.state || '' },
+    addressPostal: { initialValue: place?.address?.postal || '' },
+    phoneNumber: { initialValue: place?.phoneNumber || '' },
+    website: { initialValue: place?.website || '', validate: (value: string | undefined) => isHttpUrl(value) },
+    placeTypeId: { initialValue: place?.type.id || types[0].id! },
+  });
 
   const [busy, setBusy] = useState(false);
 
-  const requiredFieldsHaveValues = !!placeName.trim();
-
-  const isDirty =
-    placeName.trim() !== (place?.name || '') ||
-    description.trim() !== (place?.description || '') ||
-    addressLine1.trim() !== (place?.address?.line1 || '') ||
-    addressLine2.trim() !== (place?.address?.line2 || '') ||
-    addressCity.trim() !== (place?.address?.city || '') ||
-    addressState.trim() !== (place?.address?.state || '') ||
-    addressPostal.trim() !== (place?.address?.postal || '') ||
-    phoneNumber.trim() !== (place?.phoneNumber || '') ||
-    website.trim() !== (place?.website || '') ||
-    placeTypeId !== place?.type.id;
-
+  const requiredFieldsHaveValues = !!fields.placeName.value.trim();
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   const buildPlace = (): Place => ({
     id: place?.id,
-    name: placeName!,
-    type: types.find((t) => t.id === placeTypeId) || types[0],
+    name: fields.placeName.value,
+    type: types.find((t) => t.id === fields.placeTypeId.value) || types[0],
     address: {
-      line1: addressLine1,
-      line2: addressLine2,
-      city: addressCity,
-      state: addressState,
-      postal: addressPostal,
+      line1: fields.addressLine1.value,
+      line2: fields.addressLine2.value,
+      city: fields.addressCity.value,
+      state: fields.addressState.value,
+      postal: fields.addressPostal.value,
     },
-    description: description,
-    phoneNumber: phoneNumber,
-    website: website,
+    description: fields.description.value,
+    phoneNumber: fields.phoneNumber.value,
+    website: fields.website.value,
   });
 
   return (
@@ -82,19 +60,19 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           disabled={busy}
           type="text"
           label="Name"
-          value={placeName}
-          error={placeNameError}
-          onBlur={validatePlaceName}
-          onChange={(evt) => setPlaceName(evt.target.value)}
+          value={fields.placeName.value}
+          error={fields.placeName.error}
+          onBlur={fields.placeName.validate}
+          onChange={(evt) => fields.placeName.setValue(evt.target.value)}
         />
         <Select
           id="place-type"
           className="col-span-4 md:col-span-2"
           disabled={busy}
           label="Type of place"
-          value={placeTypeId}
+          value={fields.placeTypeId.value}
           values={types}
-          onChange={(evt) => setPlaceTypeId(+evt.target.value)}
+          onChange={(evt) => fields.placeTypeId.setValue(+evt.target.value)}
         />
         <Description
           id="place-description"
@@ -102,8 +80,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           disabled={busy}
           label="Description"
           rows={3}
-          value={description}
-          onChange={(evt) => setDescription(evt.target.value)}
+          value={fields.description.value}
+          onChange={(evt) => fields.description.setValue(evt.target.value)}
         />
         <Input
           id="address-line-1"
@@ -111,8 +89,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="Line 1"
-          value={addressLine1}
-          onChange={(evt) => setAddressLine1(evt.target.value)}
+          value={fields.addressLine1.value}
+          onChange={(evt) => fields.addressLine1.setValue(evt.target.value)}
         />
         <Input
           id="address-line-2"
@@ -120,8 +98,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="Line 2"
-          value={addressLine2}
-          onChange={(evt) => setAddressLine2(evt.target.value)}
+          value={fields.addressLine2.value}
+          onChange={(evt) => fields.addressLine2.setValue(evt.target.value)}
         />
         <Input
           id="city"
@@ -129,8 +107,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="City"
-          value={addressCity}
-          onChange={(evt) => setCity(evt.target.value)}
+          value={fields.addressCity.value}
+          onChange={(evt) => fields.addressCity.setValue(evt.target.value)}
         />
         <Input
           id="state"
@@ -138,8 +116,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="State / Province"
-          value={addressState}
-          onChange={(evt) => setState(evt.target.value)}
+          value={fields.addressState.value}
+          onChange={(evt) => fields.addressState.setValue(evt.target.value)}
         />
         <Input
           id="postal-code"
@@ -147,8 +125,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="Postal Code"
-          value={addressPostal}
-          onChange={(evt) => setPostal(evt.target.value)}
+          value={fields.addressPostal.value}
+          onChange={(evt) => fields.addressPostal.setValue(evt.target.value)}
         />
         <Input
           id="phone-number"
@@ -156,8 +134,8 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="Phone Number"
-          value={phoneNumber}
-          onChange={(evt) => setPhoneNumber(evt.target.value)}
+          value={fields.phoneNumber.value}
+          onChange={(evt) => fields.phoneNumber.setValue(evt.target.value)}
         />
         <Input
           id="website"
@@ -165,10 +143,10 @@ const PlaceEditor = ({ place, types, onConfirm, onCancel }: PlaceEditorProps) =>
           type="text"
           disabled={busy}
           label="Website"
-          value={website}
-          error={websiteError}
-          onBlur={validateWebsite}
-          onChange={(evt) => setWebsite(evt.target.value)}
+          value={fields.website.value}
+          error={fields.website.error}
+          onBlur={fields.website.validate}
+          onChange={(evt) => fields.website.setValue(evt.target.value)}
         />
       </div>
       <div className="flex flow-row gap-8 justify-end mt-4">
