@@ -2,7 +2,7 @@ import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
-import { useFormControl } from '@/hooks/use-form-control';
+import { useForm } from '@/hooks/use-form';
 import { MaintenanceItem, MaintenanceType, UsageUnits } from '@/models';
 import { isRequired } from '@/utils/input-validations';
 import { useState } from 'react';
@@ -22,81 +22,52 @@ const MaintenanceItemEditor = ({
   onCancel,
   onConfirm,
 }: MaintenanceItemEditorProps) => {
-  const checkCostValidity = (eventTypeId: number, cost: string | number | undefined): string => {
-    return eventTypeId === 3 || eventTypeId === 4 ? isRequired(cost, 'Cost') : '';
+  const checkCostValidity = (cost: string | number | undefined): string => {
+    return fields.eventTypeId.value === 3 || fields.eventTypeId.value === 4 ? isRequired(cost, 'Cost') : '';
+  };
+  const checkDescriptionValidity = (description: string | undefined): string => {
+    return fields.eventTypeId.value === 5 ? isRequired(description, 'Description') : '';
+  };
+  const checkUsageValidity = (usage: string | number | undefined): string => {
+    return fields.eventTypeId.value === 1 ? isRequired(usage, 'Usage') : '';
   };
 
-  const checkDescriptionValidity = (eventTypeId: number, description: string | undefined): string => {
-    return eventTypeId === 5 ? isRequired(description, 'Description') : '';
-  };
+  const { fields, isDirty } = useForm({
+    name: {
+      initialValue: maintenanceItem?.name || '',
+      validate: (value: string | undefined) => isRequired(value, 'Name'),
+    },
+    eventDate: {
+      initialValue: maintenanceItem?.date || '',
+      validate: (value: string | undefined) => isRequired(value, 'Date'),
+    },
+    eventTypeId: { initialValue: maintenanceItem?.maintenanceType.id || maintenanceTypes[0].id },
+    usageUnitsId: { initialValue: maintenanceItem?.usageUnits?.id || usageUnits[0].id },
+    description: {
+      initialValue: maintenanceItem?.description || '',
+      validate: (value: string | undefined) => checkDescriptionValidity(value),
+    },
+    usage: {
+      initialValue: maintenanceItem?.usage || '',
+      validate: (value: string | number | undefined) => checkUsageValidity(value),
+    },
+    cost: {
+      initialValue: maintenanceItem?.cost || '',
+      validate: (value: string | number | undefined) => checkCostValidity(value),
+    },
+  });
 
-  const checkUsageValidity = (eventTypeId: number, usage: string | number | undefined): string => {
-    return eventTypeId === 1 ? isRequired(usage, 'Usage') : '';
-  };
-
-  const {
-    value: name,
-    error: nameError,
-    setValue: setName,
-    validate: validateName,
-  } = useFormControl(maintenanceItem?.name || '', (value: string | undefined) => isRequired(value, 'Name'));
-  const { value: eventTypeId, setValue: setEventTypeId } = useFormControl(
-    maintenanceItem?.maintenanceType.id || maintenanceTypes[0].id,
-  );
-  const { value: usageUnitsId, setValue: setUsageUnitsId } = useFormControl(
-    maintenanceItem?.usageUnits?.id || usageUnits[0].id,
-  );
-  const {
-    value: eventDate,
-    error: eventDateError,
-    setValue: setEventDate,
-    validate: validateEventDate,
-  } = useFormControl(maintenanceItem?.date || '', (value: string | undefined) => isRequired(value, 'Date'));
-  const {
-    value: description,
-    error: descriptionError,
-    setValue: setDescription,
-    validate: validateDescription,
-  } = useFormControl(maintenanceItem?.description || '', (value: string | undefined) =>
-    checkDescriptionValidity(eventTypeId || 0, value),
-  );
-  const {
-    value: usage,
-    error: usageError,
-    setValue: setUsage,
-    validate: validateUsage,
-  } = useFormControl(maintenanceItem?.usage ?? '', (value: string | number | undefined) =>
-    checkUsageValidity(eventTypeId || 0, value),
-  );
-  const {
-    value: cost,
-    error: costError,
-    setValue: setCost,
-    validate: validateCost,
-  } = useFormControl(maintenanceItem?.cost ?? '', (value: string | number | undefined) =>
-    checkCostValidity(eventTypeId || 0, value),
-  );
   const [busy, setBusy] = useState(false);
 
   const requiredFieldsHaveValues = !!(
-    name.trim() &&
-    eventDate.trim() &&
-    ((eventTypeId === 1 && (usage || usage === 0)) ||
-      eventTypeId === 2 ||
-      (eventTypeId === 3 && (cost || cost === 0)) ||
-      (eventTypeId === 4 && (cost || cost === 0)) ||
-      (eventTypeId === 5 && description.trim()))
+    fields.name.value.trim() &&
+    fields.eventDate.value.trim() &&
+    ((fields.eventTypeId.value === 1 && (fields.usage.value || fields.usage.value === 0)) ||
+      fields.eventTypeId.value === 2 ||
+      (fields.eventTypeId.value === 3 && (fields.cost.value || fields.cost.value === 0)) ||
+      (fields.eventTypeId.value === 4 && (fields.cost.value || fields.cost.value === 0)) ||
+      (fields.eventTypeId.value === 5 && fields.description.value.trim()))
   );
-
-  const isDirty =
-    maintenanceItem?.maintenanceType.id !== eventTypeId ||
-    maintenanceItem?.name !== name.trim() ||
-    maintenanceItem?.date !== eventDate.trim() ||
-    (maintenanceItem?.description || '') !== description.trim() ||
-    (maintenanceItem?.cost || '') !== cost ||
-    (maintenanceItem?.usage || '') !== usage ||
-    (usage && maintenanceItem?.usageUnits?.id !== usageUnitsId);
-
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
 
   return (
@@ -107,11 +78,11 @@ const MaintenanceItemEditor = ({
           className="col-span-4 md:col-span-2"
           type="text"
           label="Name"
-          value={name}
+          value={fields.name.value}
           disabled={busy}
-          error={nameError}
-          onBlur={validateName}
-          onChange={(evt) => setName(evt.target.value)}
+          error={fields.name.error}
+          onBlur={fields.name.validate}
+          onChange={(evt) => fields.name.setValue(evt.target.value)}
         />
 
         <Select
@@ -119,9 +90,9 @@ const MaintenanceItemEditor = ({
           className="col-span-4 md:col-span-2 xl:col-span-1"
           disabled={busy}
           label="Type of Event"
-          value={eventTypeId}
+          value={fields.eventTypeId.value}
           values={maintenanceTypes}
-          onChange={(evt) => setEventTypeId(+evt.target.value)}
+          onChange={(evt) => fields.eventTypeId.setValue(+evt.target.value)}
         />
 
         <Input
@@ -129,11 +100,11 @@ const MaintenanceItemEditor = ({
           className="col-span-4 xl:col-span-1"
           type="date"
           label="Date"
-          value={eventDate}
+          value={fields.eventDate.value}
           disabled={busy}
-          error={eventDateError}
-          onBlur={validateEventDate}
-          onChange={(evt) => setEventDate(evt.target.value)}
+          error={fields.eventDate.error}
+          onBlur={fields.eventDate.validate}
+          onChange={(evt) => fields.eventDate.setValue(evt.target.value)}
         />
 
         <Description
@@ -141,11 +112,11 @@ const MaintenanceItemEditor = ({
           className="col-span-4"
           label="Description"
           rows={3}
-          value={description}
-          error={descriptionError}
+          value={fields.description.value}
+          error={fields.description.error}
           disabled={busy}
-          onBlur={validateDescription}
-          onChange={(evt) => setDescription(evt.target.value)}
+          onBlur={fields.description.validate}
+          onChange={(evt) => fields.description.setValue(evt.target.value)}
         />
 
         <Input
@@ -153,11 +124,11 @@ const MaintenanceItemEditor = ({
           className="col-span-4 xl:col-span-2"
           type="number"
           label="Cost"
-          value={cost}
-          error={costError}
+          value={fields.cost.value}
+          error={fields.cost.error}
           disabled={busy}
-          onBlur={validateCost}
-          onChange={(evt) => setCost(evt.target.value && evt.target.valueAsNumber)}
+          onBlur={fields.cost.validate}
+          onChange={(evt) => fields.cost.setValue(evt.target.value && evt.target.valueAsNumber)}
         />
 
         <Input
@@ -165,11 +136,11 @@ const MaintenanceItemEditor = ({
           className="col-span-4 md:col-span-2 xl:col-span-1"
           type="number"
           label="Usage"
-          value={usage}
-          error={usageError}
+          value={fields.usage.value}
+          error={fields.usage.error}
           disabled={busy}
-          onBlur={validateUsage}
-          onChange={(evt) => setUsage(evt.target.value && evt.target.valueAsNumber)}
+          onBlur={fields.usage.validate}
+          onChange={(evt) => fields.usage.setValue(evt.target.value && evt.target.valueAsNumber)}
         />
 
         <Select
@@ -177,9 +148,9 @@ const MaintenanceItemEditor = ({
           className="col-span-4 md:col-span-2 xl:col-span-1"
           disabled={busy}
           label="Usage Units"
-          value={usageUnitsId}
+          value={fields.usageUnitsId.value}
           values={usageUnits}
-          onChange={(evt) => setUsageUnitsId(+evt.target.value)}
+          onChange={(evt) => fields.usageUnitsId.setValue(+evt.target.value)}
         />
       </div>
 
@@ -192,13 +163,16 @@ const MaintenanceItemEditor = ({
           onClick={() => {
             setBusy(true);
             const data: Omit<MaintenanceItem, 'equipmentRid'> = {
-              name: name!,
-              date: eventDate!,
-              description: description,
-              cost: cost || cost === 0 ? Number(cost) : null,
-              usage: usage || usage === 0 ? Number(usage) : null,
-              maintenanceType: maintenanceTypes.find((x) => x.id === +(eventTypeId || '1'))!,
-              usageUnits: usage || usage === 0 ? usageUnits.find((x) => x.id === +(usageUnitsId || '1'))! : undefined,
+              name: fields.name.value,
+              date: fields.eventDate.value,
+              description: fields.description.value,
+              cost: fields.cost.value || fields.cost.value === 0 ? Number(fields.cost.value) : null,
+              usage: fields.usage.value || fields.usage.value === 0 ? Number(fields.usage.value) : null,
+              maintenanceType: maintenanceTypes.find((x) => x.id === +(fields.eventTypeId.value || '1'))!,
+              usageUnits:
+                fields.usage.value || fields.usage.value === 0
+                  ? usageUnits.find((x) => x.id === +(fields.usageUnitsId.value || '1'))!
+                  : undefined,
             };
             onConfirm(maintenanceItem ? { ...maintenanceItem, ...data } : data);
           }}
