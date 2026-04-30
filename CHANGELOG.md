@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.3.3
+
+### Patch Changes
+
+- bdecbe9: Consolidate the form composition for editors.
+
 ## 1.3.2
 
 ### Patch Changes
