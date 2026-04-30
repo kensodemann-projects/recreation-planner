@@ -86,7 +86,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           values={places}
           onChange={(evt) => {
             const id = +evt.target.value;
-            fields.eventPlaceId.setValue(+evt.target.value);
+            fields.eventPlaceId.setValue(id);
             if (id < 0) {
               setAlertPlaceCreation(true);
             }
