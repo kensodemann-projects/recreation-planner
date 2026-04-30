@@ -247,7 +247,7 @@ const EquipmentEditor = ({ equipment, equipmentTypes, onCancel, onConfirm }: Equ
               name: fields.name.value,
               description: fields.description.value,
               purchaseDate: fields.purchaseDate.value,
-              cost: Number(fields.cost.value),
+              cost: fields.cost.value !== '' && !isNaN(Number(fields.cost.value)) ? Number(fields.cost.value) : null,
               manufacturer: fields.manufacturer.value,
               model: fields.model.value,
               identification: fields.identification.value,
