@@ -1,7 +1,7 @@
 'use client';
 
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
-import { redirectToEquipmentDetails } from '../utils';
+import { redirectToDetails } from '@/utils/navigation';
 import { createConfirmed } from './actions';
 
 type CreateTodoCollectionProps = {
@@ -13,7 +13,7 @@ const CreateTodoCollection = ({ equipmentRid }: CreateTodoCollectionProps) => {
     <>
       <TodoCollectionEditor
         onConfirm={(collection) => createConfirmed({ ...collection, equipmentRid: equipmentRid })}
-        onCancel={() => redirectToEquipmentDetails(equipmentRid)}
+        onCancel={() => redirectToDetails('equipment', equipmentRid, 'Todods')}
       />
     </>
   );
