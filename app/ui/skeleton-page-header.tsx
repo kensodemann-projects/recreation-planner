@@ -1,8 +1,8 @@
 const SkeletonPageHeader = () => {
   return (
-    <div className="flex justify-center">
-      <div className="skeleton h-8 w-48"></div>
-    </div>
+    <header className="text-center mb-8">
+      <div className="skeleton h-8 w-48 inline-block"></div>
+    </header>
   );
 };
 
