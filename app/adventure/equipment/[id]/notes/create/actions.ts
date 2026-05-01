@@ -2,12 +2,12 @@
 
 import { addNote } from '@/app/adventure/notes/data';
 import { Note } from '@/models';
+import { redirectToDetails } from '@/utils/navigation';
 import { redirect } from 'next/navigation';
-import { redirectToEquipmentDetails } from '../utils';
 
 export const createConfirmed = async (note: Note) => {
   if (await addNote(note)) {
-    redirectToEquipmentDetails(note.equipmentRid!);
+    redirectToDetails('equipment', note.equipmentRid!, 'Notes');
   } else {
     redirect('/error');
   }

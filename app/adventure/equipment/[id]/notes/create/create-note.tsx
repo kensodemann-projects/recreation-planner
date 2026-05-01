@@ -1,7 +1,7 @@
 'use client';
 
 import NoteEditor from '@/app/adventure/notes/ui/note-editor';
-import { redirectToEquipmentDetails } from '../utils';
+import { redirectToDetails } from '@/utils/navigation';
 import { createConfirmed } from './actions';
 
 type CreateNoteProps = {
@@ -13,7 +13,7 @@ const CreateNote = ({ equipmentRid }: CreateNoteProps) => {
     <>
       <NoteEditor
         onConfirm={(note) => createConfirmed({ ...note, equipmentRid })}
-        onCancel={() => redirectToEquipmentDetails(equipmentRid)}
+        onCancel={() => redirectToDetails('equipment', equipmentRid, 'Notes')}
       />
     </>
   );
