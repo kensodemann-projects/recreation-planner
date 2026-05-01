@@ -13,7 +13,7 @@ const CreateItineraryItem = ({ eventRid }: CreateItineraryItemProps) => {
     <>
       <ItineraryItemEditor
         onConfirm={(item) => createConfirmed({ ...item, eventRid })}
-        onCancel={() => redirectToDetails('events', eventRid, 'Initinerary')}
+        onCancel={() => redirectToDetails('events', eventRid, 'Itinerary')}
       />
     </>
   );
