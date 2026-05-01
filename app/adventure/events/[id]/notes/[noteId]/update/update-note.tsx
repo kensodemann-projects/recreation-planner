@@ -2,7 +2,7 @@
 
 import NoteEditor from '@/app/adventure/notes/ui/note-editor';
 import { Note } from '@/models';
-import { redirectToEventDetails } from '../../utils';
+import { redirectToDetails } from '@/utils/navigation';
 import { updateConfirmed } from './actions';
 
 type UpdateNoteProperties = {
@@ -15,7 +15,7 @@ const UpdateNote = ({ note }: UpdateNoteProperties) => {
       <NoteEditor
         note={note}
         onConfirm={(evt) => updateConfirmed(evt as Note)}
-        onCancel={() => redirectToEventDetails(note.eventRid!)}
+        onCancel={() => redirectToDetails('events', note.eventRid!, 'Notes')}
       />
     </>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
-import { redirectToEventDetails } from '../utils';
+import { redirectToDetails } from '@/utils/navigation';
 import { createConfirmed } from './actions';
 
 type CreateTodoCollectionProps = {
@@ -13,7 +13,7 @@ const CreateTodoCollection = ({ eventRid }: CreateTodoCollectionProps) => {
     <>
       <TodoCollectionEditor
         onConfirm={(collection) => createConfirmed({ ...collection, eventRid })}
-        onCancel={() => redirectToEventDetails(eventRid)}
+        onCancel={() => redirectToDetails('events', eventRid, 'Todos')}
       />
     </>
   );
