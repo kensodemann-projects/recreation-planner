@@ -1,19 +1,19 @@
 import SkeletonCardGrid from '../ui/skeleton-card-grid';
 import SkeletonContainer from '../ui/skeleton-container';
-import SkeletonHeader from '../ui/skeleton-header';
+import SkeletonSectionHeader from '../ui/skeleton-section-header';
 import SkeletonList from '../ui/skeleton-list';
-import Title from './title';
+import SkeletonPageHeader from '../ui/skeleton-page-header';
 
 const Loading = () => {
   return (
     <>
-      <Title />
       <SkeletonContainer>
-        <SkeletonHeader />
+        <SkeletonPageHeader />
+        <SkeletonSectionHeader />
         <SkeletonList />
-        <SkeletonHeader />
+        <SkeletonSectionHeader />
         <SkeletonList />
-        <SkeletonHeader />
+        <SkeletonSectionHeader />
         <SkeletonCardGrid />
       </SkeletonContainer>
     </>
