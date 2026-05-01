@@ -2,7 +2,7 @@
 
 import TodoCollectionEditor from '@/app/adventure/todos/ui/todo-collection-editor';
 import { TodoCollection } from '@/models';
-import { redirectToEventDetails } from '../../utils';
+import { redirectToDetails } from '@/utils/navigation';
 import { updateConfirmed } from './actions';
 
 type UpdateTodoCollectionProperties = { todoCollection: TodoCollection };
@@ -13,7 +13,7 @@ const UpdateTodoCollection = ({ todoCollection }: UpdateTodoCollectionProperties
       <TodoCollectionEditor
         todoCollection={todoCollection}
         onConfirm={updateConfirmed}
-        onCancel={() => redirectToEventDetails(todoCollection.eventRid!)}
+        onCancel={() => redirectToDetails('events', todoCollection.eventRid!, 'Todos')}
       />
     </>
   );

@@ -1,8 +1,8 @@
 'use client';
 
 import { Equipment, MaintenanceType, UsageUnits } from '@/models';
+import { redirectToDetails } from '@/utils/navigation';
 import MaintenanceItemEditor from '../ui/maintenance-item-editor';
-import { redirectToEquipmentDetails } from '../utils';
 import { createConfirmed } from './actions';
 
 type CreateMaintenanceItemProperties = {
@@ -18,7 +18,7 @@ const CreateMaintenanceItem = ({ equipment, maintenanceTypes, usageUnits }: Crea
         maintenanceTypes={maintenanceTypes}
         usageUnits={usageUnits}
         onConfirm={(evt) => createConfirmed({ ...evt, equipmentRid: equipment.id! })}
-        onCancel={() => redirectToEquipmentDetails(equipment.id!)}
+        onCancel={() => redirectToDetails('equipment', equipment.id!, 'Maintenance')}
       />
     </>
   );

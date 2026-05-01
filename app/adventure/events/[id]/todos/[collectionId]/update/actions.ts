@@ -2,12 +2,12 @@
 
 import { updateTodoCollection } from '@/app/adventure/todos/data';
 import { TodoCollection } from '@/models';
+import { redirectToDetails } from '@/utils/navigation';
 import { redirect } from 'next/navigation';
-import { redirectToEventDetails } from '../../utils';
 
 export const updateConfirmed = async (collection: TodoCollection) => {
   if (await updateTodoCollection(collection)) {
-    redirectToEventDetails(collection.eventRid!);
+    redirectToDetails('events', collection.eventRid!, 'Todos');
   } else {
     redirect('/error');
   }

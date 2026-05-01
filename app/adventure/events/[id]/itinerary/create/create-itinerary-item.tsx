@@ -1,7 +1,7 @@
 'use client';
 
+import { redirectToDetails } from '@/utils/navigation';
 import ItineraryItemEditor from '../ui/itinerary-item-editor';
-import { redirectToEventDetails } from '../utils';
 import { createConfirmed } from './actions';
 
 type CreateItineraryItemProps = {
@@ -13,7 +13,7 @@ const CreateItineraryItem = ({ eventRid }: CreateItineraryItemProps) => {
     <>
       <ItineraryItemEditor
         onConfirm={(item) => createConfirmed({ ...item, eventRid })}
-        onCancel={() => redirectToEventDetails(eventRid)}
+        onCancel={() => redirectToDetails('events', eventRid, 'Itinerary')}
       />
     </>
   );

@@ -1,13 +1,13 @@
 'use server';
 
-import { TodoCollection } from '@/models';
-import { redirect } from 'next/navigation';
 import { addTodoCollection } from '@/app/adventure/todos/data';
-import { redirectToEventDetails } from '../utils';
+import { TodoCollection } from '@/models';
+import { redirectToDetails } from '@/utils/navigation';
+import { redirect } from 'next/navigation';
 
 export const createConfirmed = async (collection: TodoCollection) => {
   if (await addTodoCollection(collection)) {
-    redirectToEventDetails(collection.eventRid!);
+    redirectToDetails('events', collection.eventRid!, 'Todos');
   } else {
     redirect('/error');
   }

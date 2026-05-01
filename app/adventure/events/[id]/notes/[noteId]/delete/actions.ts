@@ -2,17 +2,17 @@
 
 import { deleteNote } from '@/app/adventure/notes/data';
 import { Note } from '@/models';
+import { redirectToDetails } from '@/utils/navigation';
 import { redirect } from 'next/navigation';
-import { redirectToEventDetails } from '../../utils';
 
 export const deleteConfirmed = async (eventId: number, n: Note) => {
   if (await deleteNote(n)) {
-    redirectToEventDetails(eventId);
+    redirectToDetails('events', eventId, 'Notes');
   } else {
     redirect('/error');
   }
 };
 
 export const deleteAborted = async (eventId: number) => {
-  redirectToEventDetails(eventId);
+  redirectToDetails('events', eventId, 'Notes');
 };
