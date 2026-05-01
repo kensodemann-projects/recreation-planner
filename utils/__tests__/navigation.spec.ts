@@ -19,8 +19,8 @@ describe('navigation utils', () => {
     });
 
     it('includes the active tab', () => {
-      redirectToDetails('events', 334, 'itinerary');
-      expect(redirect).toHaveBeenCalledExactlyOnceWith('/adventure/events/334?lastActivity=itinerary');
+      redirectToDetails('events', 334, 'Itinerary');
+      expect(redirect).toHaveBeenCalledExactlyOnceWith('/adventure/events/334?lastActivity=Itinerary');
     });
   });
 });
