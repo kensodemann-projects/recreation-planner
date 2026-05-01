@@ -1,8 +1,7 @@
 import { addWeeks, endOfWeek, formatISO, startOfWeek } from 'date-fns';
-import PageHeader from '../ui/page-header';
-import TitleHeading from '../ui/title-heading';
 import Dashboard from './dashboard';
 import { fetchLatestEvents, fetchUpcomingEvents } from './events/data';
+import Title from './title';
 import { fetchDueTodoCollections } from './todos/data';
 
 const dateToString = (dt: Date) => formatISO(dt, { representation: 'date' });
@@ -24,9 +23,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <PageHeader>
-        <TitleHeading>Dashboard</TitleHeading>
-      </PageHeader>
+      <Title />
       <Dashboard currentEvents={currentEvents} latestEvents={latestEvents} dueTodoCollections={todoCollections} />
     </>
   );
