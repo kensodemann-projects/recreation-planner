@@ -13,7 +13,7 @@ const CreateTodoCollection = ({ equipmentRid }: CreateTodoCollectionProps) => {
     <>
       <TodoCollectionEditor
         onConfirm={(collection) => createConfirmed({ ...collection, equipmentRid: equipmentRid })}
-        onCancel={() => redirectToDetails('equipment', equipmentRid, 'Todods')}
+        onCancel={() => redirectToDetails('equipment', equipmentRid, 'Todos')}
       />
     </>
   );
