@@ -1,5 +1,12 @@
 # recreation-planner
 
+## 1.3.4
+
+### Patch Changes
+
+- 9eeb475: Consolidate the navigation to the entity details page.
+- 2af938e: Add titles and skeletons for a more complete loading experience.
+
 ## 1.3.3
 
 ### Patch Changes
