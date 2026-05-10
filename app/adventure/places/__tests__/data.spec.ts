@@ -118,7 +118,7 @@ describe('places data', () => {
 
         it('queries the places table', async () => {
           await fetchPlaces();
-          expect(mockFrom).toHaveBeenCalledWith('places');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('places');
         });
 
         it('returns the converted places list', async () => {
@@ -173,7 +173,7 @@ describe('places data', () => {
 
         it('queries the places table', async () => {
           await fetchPlace(1, full);
-          expect(mockFrom).toHaveBeenCalledWith('places');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('places');
         });
 
         it('returns the converted place', async () => {
@@ -226,7 +226,7 @@ describe('places data', () => {
 
         it('inserts into the places table', async () => {
           await addPlace(place);
-          expect(mockFrom).toHaveBeenCalledWith('places');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('places');
         });
 
         it('returns the converted place', async () => {
@@ -279,7 +279,7 @@ describe('places data', () => {
 
         it('queries the place_types table', async () => {
           await fetchPlaceTypes();
-          expect(mockFrom).toHaveBeenCalledWith('place_types');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('place_types');
         });
 
         it('returns the place types', async () => {
@@ -323,7 +323,7 @@ describe('places data', () => {
       it('queries the events table', async () => {
         (executeQuery as Mock).mockResolvedValue({ success: true, data: { count: 0 } });
         await canDeletePlace(place);
-        expect(mockFrom).toHaveBeenCalledWith('events');
+        expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
       });
 
       describe('when the place is not used in any events', () => {
@@ -390,7 +390,7 @@ describe('places data', () => {
 
         it('deletes from the places table', async () => {
           await deletePlace(place);
-          expect(mockFrom).toHaveBeenCalledWith('places');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('places');
         });
 
         it('returns true', async () => {
@@ -444,7 +444,7 @@ describe('places data', () => {
 
         it('updates the places table', async () => {
           await updatePlace(place);
-          expect(mockFrom).toHaveBeenCalledWith('places');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('places');
         });
 
         it('returns the converted place', async () => {

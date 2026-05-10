@@ -117,7 +117,7 @@ describe('todos data', () => {
 
         it('queries the todo_collections table', async () => {
           await fetchTodoCollections();
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns the converted todo collections', async () => {
@@ -175,7 +175,7 @@ describe('todos data', () => {
 
         it('queries the todo_collections table', async () => {
           await fetchTodoCollection(1);
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns the converted todo collection', async () => {
@@ -233,7 +233,7 @@ describe('todos data', () => {
 
         it('queries the todo_collections table', async () => {
           await fetchDueTodoCollections('2025-07-01');
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns the converted todo collections', async () => {
@@ -286,7 +286,7 @@ describe('todos data', () => {
 
         it('inserts into the todo_collections table', async () => {
           await addTodoCollection(todoCollection);
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns the converted todo collection', async () => {
@@ -360,7 +360,7 @@ describe('todos data', () => {
 
         it('deletes from the todo_collections table', async () => {
           await deleteTodoCollection(todoCollection);
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns true', async () => {
@@ -414,7 +414,7 @@ describe('todos data', () => {
 
         it('updates the todo_collections table', async () => {
           await updateTodoCollection(todoCollection);
-          expect(mockFrom).toHaveBeenCalledWith('todo_collections');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_collections');
         });
 
         it('returns the converted todo collection', async () => {
@@ -467,7 +467,7 @@ describe('todos data', () => {
 
         it('inserts into the todo_items table', async () => {
           await addTodoItem(todoItem);
-          expect(mockFrom).toHaveBeenCalledWith('todo_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_items');
         });
 
         it('returns the converted todo item', async () => {
@@ -541,7 +541,7 @@ describe('todos data', () => {
 
         it('deletes from the todo_items table', async () => {
           await deleteTodoItem(todoItem);
-          expect(mockFrom).toHaveBeenCalledWith('todo_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_items');
         });
 
         it('returns true', async () => {
@@ -595,7 +595,7 @@ describe('todos data', () => {
 
         it('updates the todo_items table', async () => {
           await updateTodoItem(todoItem);
-          expect(mockFrom).toHaveBeenCalledWith('todo_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('todo_items');
         });
 
         it('returns the converted todo item', async () => {

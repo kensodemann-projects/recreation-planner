@@ -133,7 +133,7 @@ describe('events data', () => {
 
         it('queries the events table', async () => {
           await fetchUpcomingEvents('2024-01-01');
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted events list', async () => {
@@ -142,7 +142,7 @@ describe('events data', () => {
 
         it('also queries the events table when an end date is provided', async () => {
           await fetchUpcomingEvents('2024-01-01', '2024-12-31');
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
       });
 
@@ -191,7 +191,7 @@ describe('events data', () => {
 
         it('queries the events table', async () => {
           await fetchPriorEvents('2024-01-01');
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted events list', async () => {
@@ -244,7 +244,7 @@ describe('events data', () => {
 
         it('queries the events table', async () => {
           await fetchLatestEvents(5);
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted events list', async () => {
@@ -297,7 +297,7 @@ describe('events data', () => {
 
         it('queries the events table', async () => {
           await fetchEvent(1);
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted event', async () => {
@@ -307,7 +307,7 @@ describe('events data', () => {
         describe('when fetching the full event', () => {
           it('queries the events table', async () => {
             await fetchEvent(1, true);
-            expect(mockFrom).toHaveBeenCalledWith('events');
+            expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
           });
 
           it('returns the converted event', async () => {
@@ -361,7 +361,7 @@ describe('events data', () => {
 
         it('inserts into the events table', async () => {
           await addEvent(event);
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted event', async () => {
@@ -435,7 +435,7 @@ describe('events data', () => {
 
         it('deletes from the events table', async () => {
           await deleteEvent(event);
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns true', async () => {
@@ -489,7 +489,7 @@ describe('events data', () => {
 
         it('queries the event_types table', async () => {
           await fetchEventTypes();
-          expect(mockFrom).toHaveBeenCalledWith('event_types');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('event_types');
         });
 
         it('returns the event types', async () => {
@@ -542,7 +542,7 @@ describe('events data', () => {
 
         it('updates the events table', async () => {
           await updateEvent(event);
-          expect(mockFrom).toHaveBeenCalledWith('events');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
         it('returns the converted event', async () => {

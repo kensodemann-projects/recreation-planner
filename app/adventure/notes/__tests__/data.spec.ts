@@ -75,7 +75,7 @@ describe('notes data', () => {
 
         it('queries the notes table', async () => {
           await fetchNote(1);
-          expect(mockFrom).toHaveBeenCalledWith('notes');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('notes');
         });
 
         it('returns the converted note', async () => {
@@ -128,7 +128,7 @@ describe('notes data', () => {
 
         it('inserts into the notes table', async () => {
           await addNote(note);
-          expect(mockFrom).toHaveBeenCalledWith('notes');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('notes');
         });
 
         it('returns the converted note', async () => {
@@ -202,7 +202,7 @@ describe('notes data', () => {
 
         it('deletes from the notes table', async () => {
           await deleteNote(note);
-          expect(mockFrom).toHaveBeenCalledWith('notes');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('notes');
         });
 
         it('returns true', async () => {
@@ -256,7 +256,7 @@ describe('notes data', () => {
 
         it('updates the notes table', async () => {
           await updateNote(note);
-          expect(mockFrom).toHaveBeenCalledWith('notes');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('notes');
         });
 
         it('returns the converted note', async () => {
