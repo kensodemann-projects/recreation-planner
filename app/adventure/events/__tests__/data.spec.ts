@@ -12,7 +12,12 @@ import {
   fetchUpcomingEvents,
   updateEvent,
 } from '../data';
-import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
+import {
+  buildSupabaseChainableMock,
+  setLoggedIn,
+  setLoggedOut,
+  SupabaseChainableMock,
+} from '@/test-utils/data-helpers';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
@@ -88,12 +93,12 @@ const event = {
 // --- Tests ---
 
 describe('events data', () => {
+  const supabaseMocks: SupabaseChainableMock = buildSupabaseChainableMock();
   let mockFrom: Mock;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const chain = buildChainableMock();
-    mockFrom = vi.fn().mockReturnValue(chain);
+    mockFrom = vi.fn().mockReturnValue(supabaseMocks);
     const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
@@ -144,6 +149,18 @@ describe('events data', () => {
           await fetchUpcomingEvents('2024-01-01', '2024-12-31');
           expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
+
+        it('limits to greater than or equal to date', async () => {
+          await fetchUpcomingEvents('2024-01-01');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.lte).not.toHaveBeenCalled();
+        });
+
+        it('limits based on the date window when two dates are given', async () => {
+          await fetchUpcomingEvents('2024-01-01', '2024-12-31');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.lte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-12-31');
+        });
       });
 
       describe('when no data is returned', () => {
@@ -192,6 +209,18 @@ describe('events data', () => {
         it('queries the events table', async () => {
           await fetchPriorEvents('2024-01-01');
           expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
+        });
+
+        it('limits by effective end date', async () => {
+          await fetchPriorEvents('2024-01-01');
+          expect(supabaseMocks.lt).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.gte).not.toHaveBeenCalled();
+        });
+
+        it('limits to a window of time if two dates are given', async () => {
+          await fetchPriorEvents('2024-01-01', '2023-12-15');
+          expect(supabaseMocks.lt).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2023-12-15');
         });
 
         it('returns the converted events list', async () => {
