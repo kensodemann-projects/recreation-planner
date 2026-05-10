@@ -1,7 +1,6 @@
-import { fetchUpcomingEvents } from '@/app/adventure/events/data';
+import { fetchPriorEvents, fetchUpcomingEvents } from '@/app/adventure/events/data';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchLatestEvents } from '../events/__mocks__/data';
 import HomePage from '../page';
 import { fetchDueTodoCollections } from '../todos/data';
 
@@ -22,18 +21,19 @@ describe('Adventures Home Page', () => {
   it('fetches the current events', async () => {
     vi.setSystemTime(new Date(2024, 8, 3));
     await HomePage();
-    expect(fetchUpcomingEvents).toHaveBeenCalledExactlyOnceWith('2024-09-01', '2024-09-28');
+    expect(fetchUpcomingEvents).toHaveBeenCalledExactlyOnceWith('2024-09-03');
   });
 
-  it('fetchs the latest three created events', async () => {
-    await HomePage();
-    expect(fetchLatestEvents).toHaveBeenCalledExactlyOnceWith(3);
-  });
-
-  it('fetches due todo collections', async () => {
+  it('fetches the events for last week', async () => {
     vi.setSystemTime(new Date(2024, 8, 3));
     await HomePage();
-    expect(fetchDueTodoCollections).toHaveBeenCalledExactlyOnceWith('2024-09-07');
+    expect(fetchPriorEvents).toHaveBeenCalledExactlyOnceWith('2024-09-03', '2024-08-27');
+  });
+
+  it('fetches due todo collections due within a week', async () => {
+    vi.setSystemTime(new Date(2024, 8, 3));
+    await HomePage();
+    expect(fetchDueTodoCollections).toHaveBeenCalledExactlyOnceWith('2024-09-10');
   });
 
   it('renders the dashboard component', async () => {

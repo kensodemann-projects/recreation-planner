@@ -1,20 +1,27 @@
-import { addWeeks, endOfWeek, formatISO, startOfWeek } from 'date-fns';
+import { addWeeks, formatISO } from 'date-fns';
 import PageHeader from '../ui/page-header';
 import TitleHeading from '../ui/title-heading';
 import Dashboard from './dashboard';
-import { fetchLatestEvents, fetchUpcomingEvents } from './events/data';
+import { fetchPriorEvents, fetchUpcomingEvents } from './events/data';
 import { fetchDueTodoCollections } from './todos/data';
+import { Event } from '@/models';
 
 const dateToString = (dt: Date) => formatISO(dt, { representation: 'date' });
 
-const getHomePageData = async () => {
-  const now = Date.now();
-  const weekStartDate = startOfWeek(now);
-  const weekEndDate = endOfWeek(now);
+const firstThreeEvents = (events: Event[]) => events.slice(0, Math.min(3, events.length));
+const filterCurrentEvents = (events: Event[], dt: string) => events.filter((e) => e.beginDate <= dt);
 
-  const currentEvents = await fetchUpcomingEvents(dateToString(weekStartDate), dateToString(addWeeks(weekEndDate, 3)));
-  const latestEvents = await fetchLatestEvents(3);
-  const todoCollections = await fetchDueTodoCollections(dateToString(weekEndDate));
+const getHomePageData = async () => {
+  const now = new Date();
+
+  const allEvents = await fetchUpcomingEvents(dateToString(now));
+  const latestEvents = await fetchPriorEvents(dateToString(now), dateToString(addWeeks(now, -1)));
+  const todoCollections = await fetchDueTodoCollections(dateToString(addWeeks(now, 1)));
+
+  let currentEvents = filterCurrentEvents(allEvents, dateToString(addWeeks(now, 2)));
+  if (currentEvents.length < 3) {
+    currentEvents = firstThreeEvents(allEvents);
+  }
 
   return { currentEvents, latestEvents, todoCollections };
 };
