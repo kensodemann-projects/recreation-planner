@@ -69,9 +69,9 @@ export const fetchUpcomingEvents = async (startDate: string, endDate?: string): 
   return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
 };
 
-export const fetchPriorEvents = async (dt: string, endDate?: string): Promise<Event[]> => {
+export const fetchPriorEvents = async (beforeDate: string, afterDate?: string): Promise<Event[]> => {
   const res = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt, endDate)),
+    executeQuery<EventDTO[]>(priorEventsQuery(supabase, beforeDate, afterDate)),
   );
   return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
 };
