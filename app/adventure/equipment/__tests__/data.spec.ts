@@ -146,7 +146,7 @@ describe('equipment data', () => {
 
         it('queries the equipment table', async () => {
           await fetchAllEquipment();
-          expect(mockFrom).toHaveBeenCalledWith('equipment');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment');
         });
 
         it('returns the converted equipment list', async () => {
@@ -199,7 +199,7 @@ describe('equipment data', () => {
 
         it('queries the equipment table', async () => {
           await fetchEquipment(1);
-          expect(mockFrom).toHaveBeenCalledWith('equipment');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment');
         });
 
         it('returns the converted equipment', async () => {
@@ -252,7 +252,7 @@ describe('equipment data', () => {
 
         it('inserts into the equipment table', async () => {
           await addEquipment(equipment);
-          expect(mockFrom).toHaveBeenCalledWith('equipment');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment');
         });
 
         it('returns the converted equipment', async () => {
@@ -326,7 +326,7 @@ describe('equipment data', () => {
 
         it('deletes from the equipment table', async () => {
           await deleteEquipment(equipment);
-          expect(mockFrom).toHaveBeenCalledWith('equipment');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment');
         });
 
         it('returns true', async () => {
@@ -380,7 +380,7 @@ describe('equipment data', () => {
 
         it('updates the equipment table', async () => {
           await updateEquipment(equipment);
-          expect(mockFrom).toHaveBeenCalledWith('equipment');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment');
         });
 
         it('returns the converted equipment', async () => {
@@ -433,7 +433,7 @@ describe('equipment data', () => {
 
         it('queries the equipment_types table', async () => {
           await fetchEquipmentTypes();
-          expect(mockFrom).toHaveBeenCalledWith('equipment_types');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('equipment_types');
         });
 
         it('returns the converted equipment types', async () => {
@@ -486,7 +486,7 @@ describe('equipment data', () => {
 
         it('queries the maintenance_items table', async () => {
           await fetchMaintenanceItem(5);
-          expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('maintenance_items');
         });
 
         it('returns the converted maintenance item', async () => {
@@ -539,7 +539,7 @@ describe('equipment data', () => {
 
         it('inserts into the maintenance_items table', async () => {
           await addMaintenanceItem(maintenanceItem);
-          expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('maintenance_items');
         });
 
         it('returns the converted maintenance item', async () => {
@@ -613,7 +613,7 @@ describe('equipment data', () => {
 
         it('deletes from the maintenance_items table', async () => {
           await deleteMaintenanceItem(maintenanceItem);
-          expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('maintenance_items');
         });
 
         it('returns true', async () => {
@@ -667,7 +667,7 @@ describe('equipment data', () => {
 
         it('updates the maintenance_items table', async () => {
           await updateMaintenanceItem(maintenanceItem);
-          expect(mockFrom).toHaveBeenCalledWith('maintenance_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('maintenance_items');
         });
 
         it('returns the converted maintenance item', async () => {
@@ -720,7 +720,7 @@ describe('equipment data', () => {
 
         it('queries the maintenance_types table', async () => {
           await fetchMaintenanceTypes();
-          expect(mockFrom).toHaveBeenCalledWith('maintenance_types');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('maintenance_types');
         });
 
         it('returns the converted maintenance types', async () => {
@@ -775,7 +775,7 @@ describe('equipment data', () => {
 
         it('queries the usage_units table', async () => {
           await fetchUsageUnits();
-          expect(mockFrom).toHaveBeenCalledWith('usage_units');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('usage_units');
         });
 
         it('returns the converted usage units', async () => {

@@ -81,7 +81,7 @@ describe('itinerary data', () => {
 
         it('queries the itinerary_items table', async () => {
           await fetchItineraryItem(1);
-          expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('itinerary_items');
         });
 
         it('returns the converted itinerary item', async () => {
@@ -134,7 +134,7 @@ describe('itinerary data', () => {
 
         it('inserts into the itinerary_items table', async () => {
           await addItineraryItem(itineraryItem);
-          expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('itinerary_items');
         });
 
         it('returns the converted itinerary item', async () => {
@@ -208,7 +208,7 @@ describe('itinerary data', () => {
 
         it('deletes from the itinerary_items table', async () => {
           await deleteItineraryItem(itineraryItem);
-          expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('itinerary_items');
         });
 
         it('returns true', async () => {
@@ -262,7 +262,7 @@ describe('itinerary data', () => {
 
         it('updates the itinerary_items table', async () => {
           await updateItineraryItem(itineraryItem);
-          expect(mockFrom).toHaveBeenCalledWith('itinerary_items');
+          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('itinerary_items');
         });
 
         it('returns the converted itinerary item', async () => {
