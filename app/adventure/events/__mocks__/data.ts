@@ -44,7 +44,7 @@ export const EVENTS: Array<Event> = [
   {
     id: 3,
     beginDate: '2022-02-14',
-    name: 'Rmoance Day',
+    name: 'Romance Day',
     description: 'A full day of naked fun',
     place: PLACES[2],
     type: EVENT_TYPES[2],
@@ -64,7 +64,6 @@ export const EVENTS: Array<Event> = [
 
 export const fetchPriorEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchUpcomingEvents = vi.fn().mockResolvedValue(EVENTS);
-export const fetchLatestEvents = vi.fn().mockResolvedValue(EVENTS);
 export const fetchEvent = vi.fn().mockImplementation((id: number, full: boolean = false) => {
   const event = EVENTS.find((x) => x.id === id);
   return Promise.resolve(event && (full ? { ...event, notes: [], todoCollections: [] } : { ...event }));
