@@ -23,7 +23,7 @@ const upcomingEventsQuery = (supabase: SupabaseClient, startDate: string, endDat
   return query.order('begin_date').order('begin_time', { nullsFirst: true });
 };
 
-const priorEventsQuery = (supabase: SupabaseClient, dt: string): any => {
+const priorEventsQuery = (supabase: SupabaseClient, dt: string, endDate?: string): any => {
   return supabase
     .from(eventsTable)
     .select(selectColumns)
@@ -74,8 +74,10 @@ export const fetchUpcomingEvents = async (startDate: string, endDate?: string): 
   return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
 };
 
-export const fetchPriorEvents = async (dt: string): Promise<Event[]> => {
-  const res = await withAuth((supabase: SupabaseClient) => executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt)));
+export const fetchPriorEvents = async (dt: string, endDate?: string): Promise<Event[]> => {
+  const res = await withAuth((supabase: SupabaseClient) =>
+    executeQuery<EventDTO[]>(priorEventsQuery(supabase, dt, endDate)),
+  );
   return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
 };
 
