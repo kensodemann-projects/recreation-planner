@@ -27,10 +27,6 @@ const priorEventsQuery = (supabase: SupabaseClient, beforeDate: string, afterDat
   return query.order('begin_date', { ascending: false }).order('begin_time', { ascending: false, nullsFirst: false });
 };
 
-const lastCreatedEventsQuery = (supabase: SupabaseClient, x: number) => {
-  return supabase.from(eventsTable).select(selectColumns).order('created_at', { ascending: false }).limit(x);
-};
-
 const eventQuery = (supabase: SupabaseClient, id: number): any => {
   return supabase.from(eventsTable).select(selectColumns).eq('id', id).single();
 };
@@ -72,13 +68,6 @@ export const fetchUpcomingEvents = async (startDate: string, endDate?: string): 
 export const fetchPriorEvents = async (beforeDate: string, afterDate?: string): Promise<Event[]> => {
   const res = await withAuth((supabase: SupabaseClient) =>
     executeQuery<EventDTO[]>(priorEventsQuery(supabase, beforeDate, afterDate)),
-  );
-  return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
-};
-
-export const fetchLatestEvents = async (count: number): Promise<Event[]> => {
-  const res = await withAuth((supabase: SupabaseClient) =>
-    executeQuery<EventDTO[]>(lastCreatedEventsQuery(supabase, count)),
   );
   return (res.success ? res.data : []).map((p) => convertToEvent(p) as Event);
 };

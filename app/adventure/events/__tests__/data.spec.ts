@@ -1,3 +1,9 @@
+import {
+  buildSupabaseChainableMock,
+  setLoggedIn,
+  setLoggedOut,
+  SupabaseChainableMock,
+} from '@/test-utils/data-helpers';
 import { executeQuery } from '@/utils/data';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
@@ -7,17 +13,10 @@ import {
   deleteEvent,
   fetchEvent,
   fetchEventTypes,
-  fetchLatestEvents,
   fetchPriorEvents,
   fetchUpcomingEvents,
   updateEvent,
 } from '../data';
-import {
-  buildSupabaseChainableMock,
-  setLoggedIn,
-  setLoggedOut,
-  SupabaseChainableMock,
-} from '@/test-utils/data-helpers';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
@@ -235,59 +234,6 @@ describe('events data', () => {
 
         it('returns an empty array', async () => {
           expect(await fetchPriorEvents('2024-01-01')).toEqual([]);
-        });
-      });
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // fetchLatestEvents
-  // ---------------------------------------------------------------------------
-
-  describe('fetchLatestEvents', () => {
-    describe('when not logged in', () => {
-      beforeEach(setLoggedOut);
-
-      it('returns an empty array', async () => {
-        expect(await fetchLatestEvents(5)).toEqual([]);
-      });
-
-      it('does not access the database', async () => {
-        await fetchLatestEvents(5);
-        expect(executeQuery).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when logged in', () => {
-      beforeEach(setLoggedIn);
-
-      describe('when data is returned', () => {
-        beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue({ success: true, data: [eventDTO] });
-        });
-
-        it('calls executeQuery', async () => {
-          await fetchLatestEvents(5);
-          expect(executeQuery).toHaveBeenCalledOnce();
-        });
-
-        it('queries the events table', async () => {
-          await fetchLatestEvents(5);
-          expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
-        });
-
-        it('returns the converted events list', async () => {
-          expect(await fetchLatestEvents(5)).toEqual([event]);
-        });
-      });
-
-      describe('when no data is returned', () => {
-        beforeEach(() => {
-          (executeQuery as Mock).mockResolvedValue({ success: false, error: 'NOT_FOUND' });
-        });
-
-        it('returns an empty array', async () => {
-          expect(await fetchLatestEvents(5)).toEqual([]);
         });
       });
     });
