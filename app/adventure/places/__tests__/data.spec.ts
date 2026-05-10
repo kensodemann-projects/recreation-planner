@@ -1,4 +1,4 @@
-import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
+import { buildSupabaseChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 import { executeQuery } from '@/utils/data';
 import { createClient } from '@/utils/supabase/server';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
@@ -77,7 +77,7 @@ describe('places data', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const chain = buildChainableMock();
+    const chain = buildSupabaseChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
     const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

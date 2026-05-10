@@ -8,7 +8,7 @@ import {
   fetchItineraryItem,
   updateItineraryItem,
 } from '../data';
-import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
+import { buildSupabaseChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
@@ -40,7 +40,7 @@ describe('itinerary data', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const chain = buildChainableMock();
+    const chain = buildSupabaseChainableMock();
     mockFrom = vi.fn().mockReturnValue(chain);
     const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

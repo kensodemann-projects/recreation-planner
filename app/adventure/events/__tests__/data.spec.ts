@@ -12,7 +12,12 @@ import {
   fetchUpcomingEvents,
   updateEvent,
 } from '../data';
-import { buildChainableMock, setLoggedIn, setLoggedOut } from '@/test-utils/data-helpers';
+import {
+  buildSupabaseChainableMock,
+  setLoggedIn,
+  setLoggedOut,
+  SupabaseChainableMock,
+} from '@/test-utils/data-helpers';
 
 vi.mock('@/utils/supabase/server');
 vi.mock('@/utils/data', () => ({ executeQuery: vi.fn() }));
@@ -88,12 +93,12 @@ const event = {
 // --- Tests ---
 
 describe('events data', () => {
+  const supabaseMocks: SupabaseChainableMock = buildSupabaseChainableMock();
   let mockFrom: Mock;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const chain = buildChainableMock();
-    mockFrom = vi.fn().mockReturnValue(chain);
+    mockFrom = vi.fn().mockReturnValue(supabaseMocks);
     const client = createClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(createClient).mockReturnValue({ ...client, from: mockFrom } as any);
@@ -192,6 +197,13 @@ describe('events data', () => {
         it('queries the events table', async () => {
           await fetchPriorEvents('2024-01-01');
           expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
+        });
+
+        it('limits by end date with begin date as fallback', async () => {
+          await fetchPriorEvents('2024-01-01');
+          expect(supabaseMocks.or).toHaveBeenCalledExactlyOnceWith(
+            'end_date.lt."2024-01-01",and(end_date.is.null,begin_date.lt."2024-01-01")',
+          );
         });
 
         it('returns the converted events list', async () => {

@@ -1,12 +1,26 @@
 import { createClient } from '@/utils/supabase/server';
 import { type Mock, vi } from 'vitest';
 
-export const buildChainableMock = () => {
+export interface SupabaseChainableMock extends Record<string, Mock> {
+  select: Mock;
+  insert: Mock;
+  update: Mock;
+  delete: Mock;
+  eq: Mock;
+  gt: Mock;
+  lt: Mock;
+  single: Mock;
+  order: Mock;
+  or: Mock;
+  limit: Mock;
+}
+
+export const buildSupabaseChainableMock = (): SupabaseChainableMock => {
   const chain: Record<string, Mock> = {};
   ['select', 'insert', 'update', 'delete', 'eq', 'gt', 'lt', 'single', 'order', 'or', 'limit'].forEach((method) => {
     chain[method] = vi.fn().mockReturnValue(chain);
   });
-  return chain;
+  return chain as SupabaseChainableMock;
 };
 
 export const setLoggedOut = () => {
