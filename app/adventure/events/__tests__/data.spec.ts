@@ -149,6 +149,18 @@ describe('events data', () => {
           await fetchUpcomingEvents('2024-01-01', '2024-12-31');
           expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
+
+        it('limits to greater than or equal to date', async () => {
+          await fetchUpcomingEvents('2024-01-01');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.lte).not.toHaveBeenCalled();
+        });
+
+        it('limits based on the date window when two dates are given', async () => {
+          await fetchUpcomingEvents('2024-01-01', '2024-12-31');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.lte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-12-31');
+        });
       });
 
       describe('when no data is returned', () => {
@@ -199,11 +211,16 @@ describe('events data', () => {
           expect(mockFrom).toHaveBeenCalledExactlyOnceWith('events');
         });
 
-        it('limits by end date with begin date as fallback', async () => {
+        it('limits by effective end date', async () => {
           await fetchPriorEvents('2024-01-01');
-          expect(supabaseMocks.or).toHaveBeenCalledExactlyOnceWith(
-            'end_date.lt."2024-01-01",and(end_date.is.null,begin_date.lt."2024-01-01")',
-          );
+          expect(supabaseMocks.lt).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.gte).not.toHaveBeenCalled();
+        });
+
+        it('limits to a window of time if two dates are given', async () => {
+          await fetchPriorEvents('2024-01-01', '2023-12-15');
+          expect(supabaseMocks.lt).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2024-01-01');
+          expect(supabaseMocks.gte).toHaveBeenCalledExactlyOnceWith('effective_end_date', '2023-12-15');
         });
 
         it('returns the converted events list', async () => {

@@ -12,24 +12,19 @@ const childTableColumns = ', itinerary_items(*), notes(*), todo_collections(*, t
 const eventsTable = 'events';
 
 const upcomingEventsQuery = (supabase: SupabaseClient, startDate: string, endDate?: string): any => {
-  let query = supabase
-    .from(eventsTable)
-    .select(selectColumns)
-    .or(`end_date.gte."${startDate}",and(end_date.is.null,begin_date.gte."${startDate}")`);
+  let query = supabase.from(eventsTable).select(selectColumns).gte('effective_end_date', startDate);
   if (endDate) {
-    query = query.or(`end_date.lte."${endDate}",and(end_date.is.null,begin_date.lte."${endDate}")`);
+    query = query.lte('effective_end_date', endDate);
   }
-
   return query.order('begin_date').order('begin_time', { nullsFirst: true });
 };
 
-const priorEventsQuery = (supabase: SupabaseClient, dt: string, endDate?: string): any => {
-  return supabase
-    .from(eventsTable)
-    .select(selectColumns)
-    .or(`end_date.lt."${dt}",and(end_date.is.null,begin_date.lt."${dt}")`)
-    .order('begin_date', { ascending: false })
-    .order('begin_time', { ascending: false, nullsFirst: false });
+const priorEventsQuery = (supabase: SupabaseClient, beforeDate: string, afterDate?: string): any => {
+  let query = supabase.from(eventsTable).select(selectColumns).lt('effective_end_date', beforeDate);
+  if (afterDate) {
+    query = query.gte('effective_end_date', afterDate);
+  }
+  return query.order('begin_date', { ascending: false }).order('begin_time', { ascending: false, nullsFirst: false });
 };
 
 const lastCreatedEventsQuery = (supabase: SupabaseClient, x: number) => {

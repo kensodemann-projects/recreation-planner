@@ -8,7 +8,9 @@ export interface SupabaseChainableMock extends Record<string, Mock> {
   delete: Mock;
   eq: Mock;
   gt: Mock;
+  gte: Mock;
   lt: Mock;
+  lte: Mock;
   single: Mock;
   order: Mock;
   or: Mock;
@@ -17,9 +19,11 @@ export interface SupabaseChainableMock extends Record<string, Mock> {
 
 export const buildSupabaseChainableMock = (): SupabaseChainableMock => {
   const chain: Record<string, Mock> = {};
-  ['select', 'insert', 'update', 'delete', 'eq', 'gt', 'lt', 'single', 'order', 'or', 'limit'].forEach((method) => {
-    chain[method] = vi.fn().mockReturnValue(chain);
-  });
+  ['select', 'insert', 'update', 'delete', 'eq', 'gt', 'gte', 'lt', 'lte', 'single', 'order', 'or', 'limit'].forEach(
+    (method) => {
+      chain[method] = vi.fn().mockReturnValue(chain);
+    },
+  );
   return chain as SupabaseChainableMock;
 };
 
