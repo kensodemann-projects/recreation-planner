@@ -9,9 +9,19 @@ describe('Event Card', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  it('renders the title', () => {
+  it('renders the name in the title', () => {
     render(<EventCard event={TEST_EVENT} />);
     expect(screen.getByRole('heading', { level: 3, name: TEST_EVENT.name })).toBeDefined();
+  });
+
+  it('renders the date range in the sub-title', () => {
+    render(<EventCard event={TEST_EVENT} />);
+    expect(
+      screen.getByRole('heading', {
+        level: 4,
+        name: 'Sep 28, 2024 at 6:30 PM - Sep 30, 2024 at 10:30 PM',
+      }),
+    ).toBeDefined();
   });
 });
 
