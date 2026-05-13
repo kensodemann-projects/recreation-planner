@@ -9,19 +9,29 @@ describe('Event Card', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  it('renders the name in the title', () => {
-    render(<EventCard event={TEST_EVENT} />);
-    expect(screen.getByRole('heading', { level: 3, name: TEST_EVENT.name })).toBeDefined();
-  });
-
-  it('renders the date range in the sub-title', () => {
+  it('renders the date range in the title', () => {
     render(<EventCard event={TEST_EVENT} />);
     expect(
       screen.getByRole('heading', {
-        level: 4,
+        level: 3,
         name: 'Sep 28, 2024 at 6:30 PM - Sep 30, 2024 at 10:30 PM',
       }),
     ).toBeDefined();
+  });
+
+  it('renders the name in the sub-title', () => {
+    render(<EventCard event={TEST_EVENT} />);
+    expect(screen.getByRole('heading', { level: 4, name: TEST_EVENT.name })).toBeDefined();
+  });
+
+  it('renders the location', () => {
+    render(<EventCard event={TEST_EVENT} />);
+    expect(screen.getByText(TEST_EVENT.place.name)).toBeDefined();
+  });
+
+  it('renders the event type', () => {
+    render(<EventCard event={TEST_EVENT} />);
+    expect(screen.getByText(TEST_EVENT.type.name)).toBeDefined();
   });
 });
 

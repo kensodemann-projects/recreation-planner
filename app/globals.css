@@ -37,3 +37,11 @@
 :focus-within {
   outline: none;
 }
+
+.card-sub-title {
+  font-size: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  display: flex;
+}
