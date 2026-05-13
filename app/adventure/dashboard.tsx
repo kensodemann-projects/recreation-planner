@@ -5,7 +5,7 @@ import EventsTable from '@/app/adventure/events/events-table';
 import EventsList from '@/app/adventure/events/events-list';
 import Todos from './todos/ui/todos';
 import Message from '../ui/message';
-import EventCard from './events/ui/event-card';
+// import EventCard from './events/ui/event-card';
 
 interface DashboardProps {
   currentEvents: Event[];

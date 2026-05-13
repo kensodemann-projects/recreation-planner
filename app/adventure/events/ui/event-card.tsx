@@ -1,12 +1,14 @@
 import { Event } from '@/models';
 import { formatDateRange } from '@/utils/formatters';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export interface EventCardProps {
   event: Event;
   callingPage?: string;
 }
 
-const EventCard = ({ event }: EventCardProps) => {
+const EventCard = ({ event, callingPage }: EventCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
@@ -16,6 +18,19 @@ const EventCard = ({ event }: EventCardProps) => {
         <h4 className="card-sub-title">{event.name}</h4>
         <p>{event.type.name}</p>
         <p>{event.place.name}</p>
+
+        <div className="card-actions justify-end items-center mt-6">
+          <Link href={`adventure/events/${event.id}/delete?callingPage=${callingPage}`}>
+            <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the collection">
+              <TrashIcon className="w-6" />
+            </button>
+          </Link>
+          <Link href={`adventure/events/${event.id}/update?callingPage=${callingPage}`}>
+            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
+              <PencilSquareIcon className="w-6" />
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
