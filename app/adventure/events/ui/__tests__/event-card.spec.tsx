@@ -1,9 +1,14 @@
 import { PLACES } from '@/app/adventure/places/__mocks__/data';
 import { Event } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENT_TYPES } from '../../__mocks__/data';
 import EventCard from '../event-card';
+
+vi.mock('next/link', () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
+}));
 
 describe('Event Card', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -32,6 +37,34 @@ describe('Event Card', () => {
   it('renders the event type', () => {
     render(<EventCard event={TEST_EVENT} />);
     expect(screen.getByText(TEST_EVENT.type.name)).toBeDefined();
+  });
+
+  describe('delete link', () => {
+    it('links to the delete page for the event', () => {
+      render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/delete?callingPage=/adventure`);
+    });
+
+    it('includes an undefined callingPage when not provided', () => {
+      render(<EventCard event={TEST_EVENT} />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/delete?callingPage=undefined`);
+    });
+  });
+
+  describe('edit link', () => {
+    it('links to the update page for the event', () => {
+      render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/update?callingPage=/adventure`);
+    });
+
+    it('includes an undefined callingPage when not provided', () => {
+      render(<EventCard event={TEST_EVENT} />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/update?callingPage=undefined`);
+    });
   });
 });
 
