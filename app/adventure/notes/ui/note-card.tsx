@@ -4,12 +4,12 @@ import { Note } from '@/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-export interface TodoCollectionCardProps {
+export interface NoteCardProps {
   baseHref: string;
   note: Note;
 }
 
-const TodoCollectionCard = ({ baseHref, note }: TodoCollectionCardProps) => {
+const NoteCard = ({ baseHref, note }: NoteCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
@@ -32,4 +32,4 @@ const TodoCollectionCard = ({ baseHref, note }: TodoCollectionCardProps) => {
   );
 };
 
-export default TodoCollectionCard;
+export default NoteCard;
