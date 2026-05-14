@@ -15,7 +15,11 @@ const EventCard = ({ event, callingPage }: EventCardProps) => {
         <h3 className="card-title">
           {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
         </h3>
-        <h4 className="card-sub-title">{event.name}</h4>
+        <h4 className="card-sub-title">
+          <Link href={`/adventure/events/${event.id}${callingPage ? `?callingPage=${callingPage}` : ''}`}>
+            {event.name}
+          </Link>
+        </h4>
         <p>{event.type.name}</p>
         <p>{event.place.name}</p>
 
