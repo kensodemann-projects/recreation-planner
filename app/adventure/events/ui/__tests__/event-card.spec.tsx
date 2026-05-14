@@ -46,10 +46,10 @@ describe('Event Card', () => {
       expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/delete?callingPage=/adventure`);
     });
 
-    it('includes an undefined callingPage when not provided', () => {
+    it('does not include the search parameter when callingPage is not provided', () => {
       render(<EventCard event={TEST_EVENT} />);
       const link = screen.getByRole('button', { name: /delete/i }).closest('a');
-      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/delete?callingPage=undefined`);
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/delete`);
     });
   });
 
@@ -60,10 +60,10 @@ describe('Event Card', () => {
       expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/update?callingPage=/adventure`);
     });
 
-    it('includes an undefined callingPage when not provided', () => {
+    it('does not include the search parameter when callingPage is not provided', () => {
       render(<EventCard event={TEST_EVENT} />);
       const link = screen.getByRole('button', { name: /edit/i }).closest('a');
-      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/update?callingPage=undefined`);
+      expect(link?.getAttribute('href')).toBe(`adventure/events/${TEST_EVENT.id}/update`);
     });
   });
 });
