@@ -39,6 +39,20 @@ describe('Event Card', () => {
     expect(screen.getByText(TEST_EVENT.type.name)).toBeDefined();
   });
 
+  describe('name link', () => {
+    it('links to the event detail page', () => {
+      render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
+      const link = screen.getByRole('link', { name: TEST_EVENT.name });
+      expect(link.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}?callingPage=/adventure`);
+    });
+
+    it('does not include the search parameter when callingPage is not provided', () => {
+      render(<EventCard event={TEST_EVENT} />);
+      const link = screen.getByRole('link', { name: TEST_EVENT.name });
+      expect(link.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}`);
+    });
+  });
+
   describe('delete link', () => {
     it('links to the delete page for the event', () => {
       render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
