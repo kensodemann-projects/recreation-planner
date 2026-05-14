@@ -6,8 +6,12 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { addTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
 import { EVENTS } from '@/app/adventure/events/__mocks__/data';
+import React from 'react';
 
 vi.mock('../../data');
+vi.mock('next/link', () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
+}));
 
 describe('TODO Collection Card', () => {
   beforeEach(() => vi.clearAllMocks());
