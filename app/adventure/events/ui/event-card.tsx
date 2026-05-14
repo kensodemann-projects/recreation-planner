@@ -9,6 +9,8 @@ export interface EventCardProps {
 }
 
 const EventCard = ({ event, callingPage }: EventCardProps) => {
+  const searchParams = callingPage ? `?callingPage=${callingPage}` : '';
+
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
@@ -16,20 +18,18 @@ const EventCard = ({ event, callingPage }: EventCardProps) => {
           {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
         </h3>
         <h4 className="card-sub-title">
-          <Link href={`/adventure/events/${event.id}${callingPage ? `?callingPage=${callingPage}` : ''}`}>
-            {event.name}
-          </Link>
+          <Link href={`/adventure/events/${event.id}${searchParams}`}>{event.name}</Link>
         </h4>
         <p>{event.type.name}</p>
         <p>{event.place.name}</p>
 
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={`/adventure/events/${event.id}/delete${callingPage ? `?callingPage=${callingPage}` : ''}`}>
+          <Link href={`/adventure/events/${event.id}/delete${searchParams}`}>
             <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the event">
               <TrashIcon className="w-6" />
             </button>
           </Link>
-          <Link href={`/adventure/events/${event.id}/update${callingPage ? `?callingPage=${callingPage}` : ''}`}>
+          <Link href={`/adventure/events/${event.id}/update${searchParams}`}>
             <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the event">
               <PencilSquareIcon className="w-6" />
             </button>
