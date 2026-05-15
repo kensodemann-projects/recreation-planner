@@ -18,6 +18,7 @@ describe('dashboard component', () => {
     it('displays the events', () => {
       render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
       EVENTS.forEach((e) => expect(screen.getByRole('link', { name: e.name })));
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(EVENTS.length);
     });
 
     it('does not display a no events message', () => {
@@ -53,6 +54,7 @@ describe('dashboard component', () => {
       expect(screen.getByRole('link', { name: EVENTS[0].name }));
       expect(screen.getByRole('link', { name: EVENTS[2].name }));
       expect(screen.getByRole('link', { name: EVENTS[3].name }));
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
     });
 
     it('does not display a no events message', () => {
@@ -64,14 +66,14 @@ describe('dashboard component', () => {
   });
 
   describe('without recently created events', () => {
-    it('displays the "Recent Past Events" header', () => {
+    it('does not display the "Recent Past Events" header', () => {
       render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
-      expect(screen.getByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeDefined();
+      expect(screen.queryByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeNull();
     });
 
-    it('displays a no events message', () => {
+    it('does not display a no events message', () => {
       render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
-      expect(screen.getByText('You have no events.')).toBeDefined();
+      expect(screen.queryByText('You have no events.')).toBeNull();
     });
   });
 

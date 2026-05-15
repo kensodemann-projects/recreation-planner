@@ -29,20 +29,18 @@ const Dashboard = ({ currentEvents, dueTodoCollections, recentPastEvents }: Dash
         )}
       </section>
 
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Recent Past Events</SubtitleHeading>
-        </SectionHeader>
-        {recentPastEvents.length ? (
+      {recentPastEvents.length ? (
+        <section>
+          <SectionHeader>
+            <SubtitleHeading>Recent Past Events</SubtitleHeading>
+          </SectionHeader>
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
             {recentPastEvents.map((x) => (
               <EventCard event={x} key={x.id} callingPage="Home" />
             ))}
           </div>
-        ) : (
-          <Message>You have no events.</Message>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <section>
         <SectionHeader>
