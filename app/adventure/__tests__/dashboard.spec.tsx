@@ -39,11 +39,11 @@ describe('dashboard component', () => {
   });
 
   describe('with recently created events', () => {
-    it('displays the "Most Recent Events" header', () => {
+    it('displays the "Recent Past Events" header', () => {
       render(
         <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
       );
-      expect(screen.getByRole('heading', { name: 'Most Recent Events', level: 2 })).toBeDefined();
+      expect(screen.getByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeDefined();
     });
 
     it('displays the events', () => {
@@ -64,9 +64,9 @@ describe('dashboard component', () => {
   });
 
   describe('without recently created events', () => {
-    it('displays the "Most Recent Events" header', () => {
+    it('displays the "Recent Past Events" header', () => {
       render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
-      expect(screen.getByRole('heading', { name: 'Most Recent Events', level: 2 })).toBeDefined();
+      expect(screen.getByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeDefined();
     });
 
     it('displays a no events message', () => {
@@ -76,7 +76,7 @@ describe('dashboard component', () => {
   });
 
   describe('with due todo collections', () => {
-    it('displays the "Most Recent Events" header', () => {
+    it('displays the "Due TODOs" header', () => {
       render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={TODO_COLLECTIONS} />);
       expect(screen.getByRole('heading', { name: 'Due TODOs', level: 2 })).toBeDefined();
     });
@@ -88,7 +88,7 @@ describe('dashboard component', () => {
   });
 
   describe('without due todo collections', () => {
-    it('displays the "Most Recent Events" header', () => {
+    it('displays the "Due TODOs" header', () => {
       render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByRole('heading', { name: 'Due TODOs', level: 2 })).toBeDefined();
     });

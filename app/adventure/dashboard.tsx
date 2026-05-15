@@ -31,7 +31,7 @@ const Dashboard = ({ currentEvents, dueTodoCollections, recentPastEvents }: Dash
 
       <section>
         <SectionHeader>
-          <SubtitleHeading>Most Recent Events</SubtitleHeading>
+          <SubtitleHeading>Recent Past Events</SubtitleHeading>
         </SectionHeader>
         {recentPastEvents.length ? (
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
