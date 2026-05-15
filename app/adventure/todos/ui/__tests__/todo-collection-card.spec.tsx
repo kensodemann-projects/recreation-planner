@@ -1,12 +1,12 @@
 import { EQUIPMENT } from '@/app/adventure/equipment/__mocks__/data';
+import { EVENTS } from '@/app/adventure/events/__mocks__/data';
 import { TodoCollection } from '@/models';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { addTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
-import { EVENTS } from '@/app/adventure/events/__mocks__/data';
-import React from 'react';
 
 vi.mock('../../data');
 vi.mock('next/link', () => ({
@@ -98,7 +98,7 @@ describe('TODO Collection Card', () => {
       expect(screen.getByText(EVENTS[0].name)).toBeDefined();
     });
 
-    it('does not display an assoication if there is not one', () => {
+    it('does not display an association if there is not one', () => {
       render(<TodoCollectionCard baseHref="/adventure/todos" todoCollection={TEST_COLLECTION} />);
       expect(screen.queryByText('For Equipment:')).toBeNull();
       expect(screen.queryByText('For Event:')).toBeNull();
@@ -154,6 +154,34 @@ describe('TODO Collection Card', () => {
     expect(updateTodoItem).toHaveBeenCalledExactlyOnceWith({
       ...item,
       isComplete: false,
+    });
+  });
+
+  describe('delete link', () => {
+    it('links to the delete page for the collection', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete?callingPage=Home`);
+    });
+
+    it('does not include the search parameter when callingPage is not provided', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete`);
+    });
+  });
+
+  describe('edit link', () => {
+    it('links to the update page for the event', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update?callingPage=Home`);
+    });
+
+    it('does not include the search parameter when callingPage is not provided', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update`);
     });
   });
 
