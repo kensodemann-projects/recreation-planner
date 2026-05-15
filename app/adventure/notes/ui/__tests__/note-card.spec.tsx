@@ -1,12 +1,7 @@
 import { Note } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
-import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NoteCard from '../note-card';
-
-vi.mock('next/link', () => ({
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
-}));
 
 describe('Note Card', () => {
   beforeEach(() => vi.clearAllMocks());
