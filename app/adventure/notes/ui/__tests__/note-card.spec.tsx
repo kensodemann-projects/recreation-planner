@@ -1,9 +1,13 @@
 import { Note } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
+import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NoteCard from '../note-card';
 
 vi.mock('../../data');
+vi.mock('next/link', () => ({
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
+}));
 
 describe('Note Card', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -25,6 +29,22 @@ describe('Note Card', () => {
     expect(links.length).toBe(2);
     expect(links[0]).toHaveProperty('href', expect.stringMatching(/\/7314159\/delete$/));
     expect(links[1]).toHaveProperty('href', expect.stringMatching(/\/7314159\/update$/));
+  });
+
+  describe('delete link', () => {
+    it('links to the delete page for the collection', () => {
+      render(<NoteCard baseHref={`/adventure/event/${TEST_NOTE.eventRid}/notes`} note={TEST_NOTE} />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/event/${TEST_NOTE.eventRid}/notes/${TEST_NOTE.id}/delete`);
+    });
+  });
+
+  describe('edit link', () => {
+    it('links to the update page for the event', () => {
+      render(<NoteCard baseHref={`/adventure/event/${TEST_NOTE.eventRid}/notes`} note={TEST_NOTE} />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/event/${TEST_NOTE.eventRid}/notes/${TEST_NOTE.id}/update`);
+    });
   });
 });
 
