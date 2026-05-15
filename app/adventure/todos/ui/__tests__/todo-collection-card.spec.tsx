@@ -127,7 +127,7 @@ describe('TODO Collection Card', () => {
   });
 
   describe('edit link', () => {
-    it('links to the update page for the event', () => {
+    it('links to the update page for the collection', () => {
       render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
       const link = screen.getByRole('button', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update?callingPage=Home`);
