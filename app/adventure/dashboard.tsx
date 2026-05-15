@@ -1,38 +1,22 @@
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Event, TodoCollection } from '@/models';
-import EventsTable from '@/app/adventure/events/events-table';
-import EventsList from '@/app/adventure/events/events-list';
-import Todos from './todos/ui/todos';
 import Message from '../ui/message';
-// import EventCard from './events/ui/event-card';
+import EventCard from './events/ui/event-card';
+import Todos from './todos/ui/todos';
 
 interface DashboardProps {
   currentEvents: Event[];
-  latestEvents: Event[];
+  recentPastEvents: Event[];
   dueTodoCollections: TodoCollection[];
 }
 
-const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: DashboardProps) => {
+const Dashboard = ({ currentEvents, dueTodoCollections, recentPastEvents }: DashboardProps) => {
   return (
     <>
       <section>
         <SectionHeader>
           <SubtitleHeading>Upcoming Events</SubtitleHeading>
-        </SectionHeader>
-        {currentEvents.length ? (
-          <>
-            <EventsTable className="hidden md:table" events={currentEvents} callingPage="Home" />
-            <EventsList className="block md:hidden" events={currentEvents} callingPage="Home" />
-          </>
-        ) : (
-          <Message>You have no upcoming events.</Message>
-        )}
-      </section>
-
-      {/* <section>
-        <SectionHeader>
-          <SubtitleHeading>Have a look</SubtitleHeading>
         </SectionHeader>
         {currentEvents.length ? (
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
@@ -41,23 +25,22 @@ const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: Dashboar
             ))}
           </div>
         ) : (
-          <Message>You have no events in this timeframe.</Message>
-        )}
-      </section> */}
-
-      <section>
-        <SectionHeader>
-          <SubtitleHeading>Most Recent Events</SubtitleHeading>
-        </SectionHeader>
-        {latestEvents.length ? (
-          <>
-            <EventsTable className="hidden md:table" events={latestEvents} callingPage="Home" />
-            <EventsList className="block md:hidden" events={latestEvents} callingPage="Home" />
-          </>
-        ) : (
-          <Message>You have no events.</Message>
+          <Message>You have no upcoming events.</Message>
         )}
       </section>
+
+      {recentPastEvents.length ? (
+        <section>
+          <SectionHeader>
+            <SubtitleHeading>Recent Past Events</SubtitleHeading>
+          </SectionHeader>
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+            {recentPastEvents.map((x) => (
+              <EventCard event={x} key={x.id} callingPage="Home" />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section>
         <SectionHeader>

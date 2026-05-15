@@ -11,84 +11,92 @@ describe('dashboard component', () => {
 
   describe('with current events', () => {
     it('displays the "Upcoming Trips & Events" header', () => {
-      render(<Dashboard currentEvents={EVENTS} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByRole('heading', { name: 'Upcoming Events', level: 2 })).toBeDefined();
     });
 
     it('displays the events', () => {
-      render(<Dashboard currentEvents={EVENTS} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
       EVENTS.forEach((e) => expect(screen.getByRole('link', { name: e.name })));
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(EVENTS.length);
     });
 
     it('does not display a no events message', () => {
-      render(<Dashboard currentEvents={EVENTS} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.queryByText('You have no upcoming events.')).toBeNull();
     });
   });
 
   describe('without current events', () => {
     it('displays the "Upcoming Events" header', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByRole('heading', { name: 'Upcoming Events', level: 2 })).toBeDefined();
     });
 
     it('displays a no events message', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByText('You have no upcoming events.')).toBeDefined();
     });
   });
 
   describe('with recently created events', () => {
-    it('displays the "Most Recent Events" header', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />);
-      expect(screen.getByRole('heading', { name: 'Most Recent Events', level: 2 })).toBeDefined();
+    it('displays the "Recent Past Events" header', () => {
+      render(
+        <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
+      );
+      expect(screen.getByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeDefined();
     });
 
     it('displays the events', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />);
+      render(
+        <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
+      );
       expect(screen.getByRole('link', { name: EVENTS[0].name }));
       expect(screen.getByRole('link', { name: EVENTS[2].name }));
       expect(screen.getByRole('link', { name: EVENTS[3].name }));
+      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
     });
 
     it('does not display a no events message', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />);
+      render(
+        <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
+      );
       expect(screen.queryByText('You have no events.')).toBeNull();
     });
   });
 
   describe('without recently created events', () => {
-    it('displays the "Most Recent Events" header', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
-      expect(screen.getByRole('heading', { name: 'Most Recent Events', level: 2 })).toBeDefined();
+    it('does not display the "Recent Past Events" header', () => {
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
+      expect(screen.queryByRole('heading', { name: 'Recent Past Events', level: 2 })).toBeNull();
     });
 
-    it('displays a no events message', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
-      expect(screen.getByText('You have no events.')).toBeDefined();
+    it('does not display a no events message', () => {
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
+      expect(screen.queryByText('You have no events.')).toBeNull();
     });
   });
 
   describe('with due todo collections', () => {
-    it('displays the "Most Recent Events" header', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={TODO_COLLECTIONS} />);
+    it('displays the "Due TODOs" header', () => {
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={TODO_COLLECTIONS} />);
       expect(screen.getByRole('heading', { name: 'Due TODOs', level: 2 })).toBeDefined();
     });
 
     it('does not display a no TODOs message', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={TODO_COLLECTIONS} />);
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={TODO_COLLECTIONS} />);
       expect(screen.queryByText('You have no TODOs due at this time.')).toBeNull();
     });
   });
 
   describe('without due todo collections', () => {
-    it('displays the "Most Recent Events" header', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
+    it('displays the "Due TODOs" header', () => {
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByRole('heading', { name: 'Due TODOs', level: 2 })).toBeDefined();
     });
 
     it('displays a no TODOs message', () => {
-      render(<Dashboard currentEvents={[]} latestEvents={[]} dueTodoCollections={[]} />);
+      render(<Dashboard currentEvents={[]} recentPastEvents={[]} dueTodoCollections={[]} />);
       expect(screen.getByText('You have no TODOs due at this time.')).toBeDefined();
     });
   });
