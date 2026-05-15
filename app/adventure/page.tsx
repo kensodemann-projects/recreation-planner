@@ -15,7 +15,7 @@ const getHomePageData = async () => {
   const now = new Date();
 
   const allEvents = await fetchUpcomingEvents(dateToString(now));
-  const latestEvents = await fetchPriorEvents(dateToString(now), dateToString(addWeeks(now, -1)));
+  const pastEvents = await fetchPriorEvents(dateToString(now), dateToString(addWeeks(now, -1)));
   const todoCollections = await fetchDueTodoCollections(dateToString(addWeeks(now, 1)));
 
   let currentEvents = filterCurrentEvents(allEvents, dateToString(addWeeks(now, 2)));
@@ -23,18 +23,18 @@ const getHomePageData = async () => {
     currentEvents = firstThreeEvents(allEvents);
   }
 
-  return { currentEvents, latestEvents, todoCollections };
+  return { currentEvents, pastEvents, todoCollections };
 };
 
 const HomePage = async () => {
-  const { currentEvents, latestEvents, todoCollections } = await getHomePageData();
+  const { currentEvents, pastEvents, todoCollections } = await getHomePageData();
 
   return (
     <>
       <PageHeader>
         <TitleHeading>Dashboard</TitleHeading>
       </PageHeader>
-      <Dashboard currentEvents={currentEvents} latestEvents={latestEvents} dueTodoCollections={todoCollections} />
+      <Dashboard currentEvents={currentEvents} recentPastEvents={pastEvents} dueTodoCollections={todoCollections} />
     </>
   );
 };
