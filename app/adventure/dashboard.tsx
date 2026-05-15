@@ -7,11 +7,11 @@ import Todos from './todos/ui/todos';
 
 interface DashboardProps {
   currentEvents: Event[];
-  latestEvents: Event[];
+  recentPastEvents: Event[];
   dueTodoCollections: TodoCollection[];
 }
 
-const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: DashboardProps) => {
+const Dashboard = ({ currentEvents, dueTodoCollections, recentPastEvents }: DashboardProps) => {
   return (
     <>
       <section>
@@ -33,9 +33,9 @@ const Dashboard = ({ currentEvents, dueTodoCollections, latestEvents }: Dashboar
         <SectionHeader>
           <SubtitleHeading>Most Recent Events</SubtitleHeading>
         </SectionHeader>
-        {latestEvents.length ? (
+        {recentPastEvents.length ? (
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
-            {latestEvents.map((x) => (
+            {recentPastEvents.map((x) => (
               <EventCard event={x} key={x.id} callingPage="Home" />
             ))}
           </div>
