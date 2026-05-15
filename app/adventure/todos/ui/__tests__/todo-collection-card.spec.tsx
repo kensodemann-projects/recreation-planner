@@ -1,11 +1,11 @@
 import { EQUIPMENT } from '@/app/adventure/equipment/__mocks__/data';
+import { EVENTS } from '@/app/adventure/events/__mocks__/data';
 import { TodoCollection } from '@/models';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import { addTodoItem, updateTodoItem } from '../../data';
 import TodoCollectionCard from '../todo-collection-card';
-import { EVENTS } from '@/app/adventure/events/__mocks__/data';
 
 vi.mock('../../data');
 
@@ -14,64 +14,34 @@ describe('TODO Collection Card', () => {
   afterEach(() => cleanup());
 
   it('renders the title', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     expect(screen.getByRole('heading', { level: 3, name: TEST_COLLECTION.name })).toBeDefined();
   });
 
   it('renders the due date if the collection has one', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     expect(screen.getByText('Due Date:')).toBeDefined();
     expect(screen.getByText('Mar 17, 2025')).toBeDefined();
   });
 
   it('does not render the due date if the collection does not have one', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={{ ...TEST_COLLECTION, dueDate: null }}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={{ ...TEST_COLLECTION, dueDate: null }} />);
     expect(screen.queryByText('Due Date:')).toBeNull();
   });
 
   it('renders the description', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     expect(screen.getByText(TEST_COLLECTION.description!)).toBeDefined();
   });
 
   it('renders the todo items', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     const items = screen.getByTestId('todo-items');
     expect(within(items).getAllByRole('checkbox').length).toEqual(TEST_COLLECTION.todoItems.length);
   });
 
   it('renders the open items first, completed items last', () => {
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     const elements = screen.getAllByRole('checkbox');
     expect(elements[0].parentElement!.textContent).toEqual('Test the fetching');
     expect(elements[1].parentElement!.textContent).toEqual('Create an item');
@@ -94,7 +64,7 @@ describe('TODO Collection Card', () => {
       expect(screen.getByText(EVENTS[0].name)).toBeDefined();
     });
 
-    it('does not display an assoication if there is not one', () => {
+    it('does not display an association if there is not one', () => {
       render(<TodoCollectionCard baseHref="/adventure/todos" todoCollection={TEST_COLLECTION} />);
       expect(screen.queryByText('For Equipment:')).toBeNull();
       expect(screen.queryByText('For Event:')).toBeNull();
@@ -104,12 +74,7 @@ describe('TODO Collection Card', () => {
   it('allows the user to update todo item text', async () => {
     const item = TEST_COLLECTION.todoItems.find((x) => x.name === 'Fetch the data');
     const user = userEvent.setup();
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     await user.click(screen.getByText('Fetch the data'));
     await user.type(screen.getByRole('textbox'), ' and do something with it');
     await user.click(screen.getByTestId('save-button'));
@@ -122,12 +87,7 @@ describe('TODO Collection Card', () => {
   it('allows items to be checked', async () => {
     const item = TEST_COLLECTION.todoItems.find((x) => x.name === 'Create an item');
     const user = userEvent.setup();
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     const elements = screen.getAllByRole('checkbox');
     await user.click(elements[1]);
     expect(updateTodoItem).toHaveBeenCalledExactlyOnceWith({
@@ -139,12 +99,7 @@ describe('TODO Collection Card', () => {
   it('allows items to be unchecked', async () => {
     const item = TEST_COLLECTION.todoItems.find((x) => x.name === 'Fetch the data');
     const user = userEvent.setup();
-    render(
-      <TodoCollectionCard
-        baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-        todoCollection={TEST_COLLECTION}
-      />,
-    );
+    render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
     const elements = screen.getAllByRole('checkbox');
     await user.click(elements[2]);
     expect(updateTodoItem).toHaveBeenCalledExactlyOnceWith({
@@ -153,15 +108,38 @@ describe('TODO Collection Card', () => {
     });
   });
 
+  describe('delete link', () => {
+    it('links to the delete page for the collection', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete?callingPage=Home`);
+    });
+
+    it('does not include the search parameter when callingPage is not provided', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
+      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete`);
+    });
+  });
+
+  describe('edit link', () => {
+    it('links to the update page for the collection', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update?callingPage=Home`);
+    });
+
+    it('does not include the search parameter when callingPage is not provided', () => {
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
+      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update`);
+    });
+  });
+
   describe('add button', () => {
     it('adds a new TODO', async () => {
       const user = userEvent.setup();
-      render(
-        <TodoCollectionCard
-          baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-          todoCollection={TEST_COLLECTION}
-        />,
-      );
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
       await user.click(screen.getByRole('button', { name: 'Add new Todo Item' }));
       expect(addTodoItem).toHaveBeenCalledExactlyOnceWith({ isComplete: false, name: '', todoCollectionRid: 7314159 });
     });
@@ -169,12 +147,7 @@ describe('TODO Collection Card', () => {
     it('displays the new TODO', async () => {
       (addTodoItem as Mock).mockResolvedValue({ id: 932, name: '', todoCollectionRid: 7314159, isComplete: false });
       const user = userEvent.setup();
-      render(
-        <TodoCollectionCard
-          baseHref={`/adventure/todos/${TEST_COLLECTION.id}/update`}
-          todoCollection={TEST_COLLECTION}
-        />,
-      );
+      render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
       await user.click(screen.getByRole('button', { name: 'Add new Todo Item' }));
       const items = screen.getByTestId('todo-items');
       expect(within(items).getAllByRole('checkbox').length).toEqual(TEST_COLLECTION.todoItems.length + 1);

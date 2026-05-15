@@ -1,14 +1,9 @@
 import { PLACES } from '@/app/adventure/places/__mocks__/data';
 import { Event } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
-import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENT_TYPES } from '../../__mocks__/data';
 import EventCard from '../event-card';
-
-vi.mock('next/link', () => ({
-  default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,
-}));
 
 describe('Event Card', () => {
   beforeEach(() => vi.clearAllMocks());
