@@ -1,6 +1,5 @@
 import SkeletonCardGrid from '../ui/skeleton-card-grid';
 import SkeletonContainer from '../ui/skeleton-container';
-import SkeletonLineFull from '../ui/skeleton-line-full';
 import SkeletonLineShort from '../ui/skeleton-line-short';
 import SkeletonPageHeader from '../ui/skeleton-page-header';
 
@@ -11,14 +10,10 @@ const Loading = () => {
         <SkeletonPageHeader />
         {/* Upcoming Events*/}
         <SkeletonLineShort />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
+        <SkeletonCardGrid />
         {/* Recent Events*/}
         <SkeletonLineShort />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
+        <SkeletonCardGrid />
         {/* due TODOs  */}
         <SkeletonLineShort />
         <SkeletonCardGrid />
