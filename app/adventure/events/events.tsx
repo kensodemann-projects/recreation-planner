@@ -1,8 +1,6 @@
 import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Event } from '@/models';
-import EventsList from './events-list';
-import EventsTable from './events-table';
 import EventCard from './ui/event-card';
 
 interface EventsProperties {
