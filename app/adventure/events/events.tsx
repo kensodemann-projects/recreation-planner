@@ -3,6 +3,7 @@ import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Event } from '@/models';
 import EventsList from './events-list';
 import EventsTable from './events-table';
+import EventCard from './ui/event-card';
 
 interface EventsProperties {
   priorEvents: Array<Event>;
@@ -17,8 +18,11 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <SectionHeader>
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
           </SectionHeader>
-          <EventsTable className="hidden md:table" events={upcomingEvents} callingPage="Events" />
-          <EventsList className="block md:hidden" events={upcomingEvents} callingPage="Events" />
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+            {upcomingEvents.map((x) => (
+              <EventCard event={x} key={x.id} callingPage="Events" />
+            ))}
+          </div>
         </section>
       ) : undefined}
       {priorEvents.length ? (
@@ -26,8 +30,11 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <SectionHeader>
             <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
           </SectionHeader>
-          <EventsTable className="hidden md:table" events={priorEvents} callingPage="Events" />
-          <EventsList className="block md:hidden" events={priorEvents} callingPage="Events" />
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+            {priorEvents.map((x) => (
+              <EventCard event={x} key={x.id} callingPage="Events" />
+            ))}
+          </div>
         </section>
       ) : undefined}
     </>
