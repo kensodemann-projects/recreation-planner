@@ -1,5 +1,16 @@
 # recreation-planner
 
+## 1.4.0
+
+### Minor Changes
+
+- 938b787: Show the upcoming and prior events in responsive grids of cards rather than tables and lists.
+- 80b6dbf: Show key upcoming events in the dashboard. Limit prior events on the dashboard to one week.
+
+### Patch Changes
+
+- 2116739: Update package dependencies.
+
 ## 1.3.4
 
 ### Patch Changes
