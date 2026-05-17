@@ -11,7 +11,7 @@ const ShowAllToggle = ({ checked, onChange }: ShowAllToggleProperties) => {
       <input
         type="checkbox"
         className="checkbox checkbox-sm"
-        defaultChecked={checked}
+        checked={!!checked}
         onChange={(e) => onChange?.(e.target.checked)}
       />
       <span className="text-sm">Show All</span>
