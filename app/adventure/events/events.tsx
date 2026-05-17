@@ -6,6 +6,8 @@ import EventCard from './ui/event-card';
 interface EventsProperties {
   priorEvents: Array<Event>;
   upcomingEvents: Array<Event>;
+  showAllPriorEvents?: boolean;
+  showAllUpcomingEvents?: boolean;
 }
 
 const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
@@ -14,7 +16,13 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
       {upcomingEvents.length ? (
         <section>
           <SectionHeader>
-            <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
+            <div className="flex items-center justify-between w-full">
+              <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" className="checkbox checkbox-sm" />
+                <span className="text-sm">Show All</span>
+              </label>
+            </div>
           </SectionHeader>
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
             {upcomingEvents.map((x) => (
@@ -26,7 +34,13 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
       {priorEvents.length ? (
         <section>
           <SectionHeader>
-            <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
+            <div className="flex items-center justify-between w-full">
+              <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" className="checkbox checkbox-sm" />
+                <span className="text-sm">Show All</span>
+              </label>
+            </div>
           </SectionHeader>
           <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
             {priorEvents.map((x) => (

@@ -70,4 +70,24 @@ describe('Events', () => {
       expect(screen.queryByRole('heading', { name: 'Prior Trips & Events' })).toBeNull();
     });
   });
+
+  describe('Show All checkboxes', () => {
+    it('renders a Show All checkbox for upcoming events section', () => {
+      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      expect(checkboxes.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('renders a Show All checkbox for prior events section', () => {
+      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      expect(checkboxes.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('renders two Show All checkboxes when both sections are present', () => {
+      render(<Events upcomingEvents={EVENTS} priorEvents={EVENTS} />);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      expect(checkboxes.length).toBeGreaterThanOrEqual(2);
+    });
+  });
 });
