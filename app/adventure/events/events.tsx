@@ -11,7 +11,7 @@ interface EventsProperties {
   showAllUpcomingEvents?: boolean;
 }
 
-const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
+const Events = ({ priorEvents, upcomingEvents, showAllPriorEvents, showAllUpcomingEvents }: EventsProperties) => {
   return (
     <>
       <section>
@@ -19,7 +19,7 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
             <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" className="checkbox checkbox-sm" />
+              <input type="checkbox" className="checkbox checkbox-sm" defaultChecked={showAllUpcomingEvents} />
               <span className="text-sm">Show All</span>
             </label>
           </div>
@@ -39,7 +39,7 @@ const Events = ({ priorEvents, upcomingEvents }: EventsProperties) => {
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
             <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" className="checkbox checkbox-sm" />
+              <input type="checkbox" className="checkbox checkbox-sm" defaultChecked={showAllPriorEvents} />
               <span className="text-sm">Show All</span>
             </label>
           </div>

@@ -57,5 +57,45 @@ describe('Events', () => {
       const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
       expect(checkboxes.length).toBeGreaterThanOrEqual(2);
     });
+
+    describe('upcoming events Show All checkbox', () => {
+      it('is unchecked by default when showAllUpcomingEvents is not provided', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(false);
+      });
+
+      it('is checked when showAllUpcomingEvents is true', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} showAllUpcomingEvents={true} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(true);
+      });
+
+      it('is unchecked when showAllUpcomingEvents is false', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} showAllUpcomingEvents={false} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(false);
+      });
+    });
+
+    describe('prior events Show All checkbox', () => {
+      it('is unchecked by default when showAllPriorEvents is not provided', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+      });
+
+      it('is checked when showAllPriorEvents is true', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} showAllPriorEvents={true} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(true);
+      });
+
+      it('is unchecked when showAllPriorEvents is false', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} showAllPriorEvents={false} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+      });
+    });
   });
 });
