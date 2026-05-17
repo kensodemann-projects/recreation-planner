@@ -9,9 +9,18 @@ interface EventsProperties {
   upcomingEvents: Array<Event>;
   showAllPriorEvents?: boolean;
   showAllUpcomingEvents?: boolean;
+  onShowAllPriorEventsChange?: (showAll: boolean) => void;
+  onShowAllUpcomingEventsChange?: (showAll: boolean) => void;
 }
 
-const Events = ({ priorEvents, upcomingEvents, showAllPriorEvents, showAllUpcomingEvents }: EventsProperties) => {
+const Events = ({
+  priorEvents,
+  upcomingEvents,
+  showAllPriorEvents,
+  showAllUpcomingEvents,
+  onShowAllPriorEventsChange,
+  onShowAllUpcomingEventsChange,
+}: EventsProperties) => {
   return (
     <>
       <section>
@@ -19,7 +28,12 @@ const Events = ({ priorEvents, upcomingEvents, showAllPriorEvents, showAllUpcomi
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
             <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" className="checkbox checkbox-sm" defaultChecked={showAllUpcomingEvents} />
+              <input
+                type="checkbox"
+                className="checkbox checkbox-sm"
+                defaultChecked={showAllUpcomingEvents}
+                onChange={(e) => onShowAllUpcomingEventsChange?.(e.target.checked)}
+              />
               <span className="text-sm">Show All</span>
             </label>
           </div>
@@ -39,7 +53,12 @@ const Events = ({ priorEvents, upcomingEvents, showAllPriorEvents, showAllUpcomi
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
             <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" className="checkbox checkbox-sm" defaultChecked={showAllPriorEvents} />
+              <input
+                type="checkbox"
+                className="checkbox checkbox-sm"
+                defaultChecked={showAllPriorEvents}
+                onChange={(e) => onShowAllPriorEventsChange?.(e.target.checked)}
+              />
               <span className="text-sm">Show All</span>
             </label>
           </div>

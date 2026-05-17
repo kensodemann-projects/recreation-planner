@@ -1,4 +1,5 @@
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENTS } from '../__mocks__/data';
 import Events from '../events';
@@ -95,6 +96,68 @@ describe('Events', () => {
         render(<Events upcomingEvents={[]} priorEvents={EVENTS} showAllPriorEvents={false} />);
         const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
         expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+      });
+    });
+
+    describe('interactions', () => {
+      it('calls onShowAllUpcomingEventsChange with true when the upcoming Show All checkbox is clicked', async () => {
+        const onShowAllUpcomingEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllUpcomingEventsChange={onShowAllUpcomingEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[0]);
+        expect(onShowAllUpcomingEventsChange).toHaveBeenCalledExactlyOnceWith(true);
+      });
+
+      it('calls onShowAllPriorEventsChange with true when the prior Show All checkbox is clicked', async () => {
+        const onShowAllPriorEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllPriorEventsChange={onShowAllPriorEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[1]);
+        expect(onShowAllPriorEventsChange).toHaveBeenCalledExactlyOnceWith(true);
+      });
+
+      it('does not call onShowAllPriorEventsChange when the upcoming Show All checkbox is clicked', async () => {
+        const onShowAllPriorEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllPriorEventsChange={onShowAllPriorEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[0]);
+        expect(onShowAllPriorEventsChange).not.toHaveBeenCalled();
+      });
+
+      it('does not call onShowAllUpcomingEventsChange when the prior Show All checkbox is clicked', async () => {
+        const onShowAllUpcomingEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllUpcomingEventsChange={onShowAllUpcomingEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[1]);
+        expect(onShowAllUpcomingEventsChange).not.toHaveBeenCalled();
       });
     });
   });
