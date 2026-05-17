@@ -14,7 +14,7 @@ describe('Events Page', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
-    vi.mocked(cookies).mockResolvedValue({ get: vi.fn() } as unknown as ReturnType<typeof cookies>);
+    vi.mocked(cookies).mockResolvedValue({ get: vi.fn() } as unknown as Awaited<ReturnType<typeof cookies>>);
   });
 
   afterEach(() => {
