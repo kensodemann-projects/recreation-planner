@@ -1,15 +1,17 @@
 import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { formatISO, startOfWeek } from 'date-fns';
+import { addMonths, formatISO, startOfWeek } from 'date-fns';
 import Link from 'next/link';
 import { fetchPriorEvents, fetchUpcomingEvents } from './data';
 import Events from './events';
 
 const getEventsPageData = async () => {
   const dt = formatISO(startOfWeek(Date.now()), { representation: 'date' });
-  const upcomingEvents = await fetchUpcomingEvents(dt);
-  const priorEvents = await fetchPriorEvents(dt);
+  const endDate = formatISO(addMonths(startOfWeek(Date.now()), 3), { representation: 'date' });
+  const afterDate = formatISO(addMonths(startOfWeek(Date.now()), -1), { representation: 'date' });
+  const upcomingEvents = await fetchUpcomingEvents(dt, endDate);
+  const priorEvents = await fetchPriorEvents(dt, afterDate);
   return { upcomingEvents, priorEvents };
 };
 
