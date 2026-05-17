@@ -13,7 +13,7 @@ describe('Events', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  describe('with upcoming events', () => {
+  describe('upcoming events', () => {
     it('renders the "Upcoming Trips & Events" section heading', () => {
       render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
       expect(screen.getByRole('heading', { name: 'Upcoming Trips & Events' })).toBeDefined();
@@ -25,18 +25,14 @@ describe('Events', () => {
       expect(cards).toHaveLength(EVENTS.length);
     });
 
-    it('does not render the events list', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
-      expect(screen.queryByTestId('events-list')).toBeNull();
-    });
-
-    it('does not render the events table', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
-      expect(screen.queryByTestId('events-table')).toBeNull();
+    it('displays a no events message', () => {
+      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
+      expect(screen.getByRole('heading', { name: 'Upcoming Trips & Events' })).toBeDefined();
+      expect(screen.getByText('You have no upcoming events.')).toBeDefined();
     });
   });
 
-  describe('with prior events', () => {
+  describe('prior events', () => {
     it('renders the "Prior Trips & Events" section heading', () => {
       render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
       expect(screen.getByRole('heading', { name: 'Prior Trips & Events' })).toBeDefined();
@@ -48,44 +44,16 @@ describe('Events', () => {
       expect(cards).toHaveLength(EVENTS.length);
     });
 
-    it('does not render the events list', () => {
-      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
-      expect(screen.queryByTestId('events-list')).toBeNull();
-    });
-
-    it('does not render the events table', () => {
-      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
-      expect(screen.queryByTestId('events-table')).toBeNull();
-    });
-  });
-
-  describe('with no events', () => {
-    it('does not render the upcoming section', () => {
-      render(<Events upcomingEvents={[]} priorEvents={[]} />);
-      expect(screen.queryByRole('heading', { name: 'Upcoming Trips & Events' })).toBeNull();
-    });
-
-    it('does not render the prior section', () => {
-      render(<Events upcomingEvents={[]} priorEvents={[]} />);
-      expect(screen.queryByRole('heading', { name: 'Prior Trips & Events' })).toBeNull();
+    it('displays a no events message', () => {
+      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
+      expect(screen.getByRole('heading', { name: 'Prior Trips & Events' })).toBeDefined();
+      expect(screen.getByText('You have no prior events.')).toBeDefined();
     });
   });
 
   describe('Show All checkboxes', () => {
-    it('renders a Show All checkbox for upcoming events section', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
-      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
-      expect(checkboxes.length).toBeGreaterThanOrEqual(1);
-    });
-
-    it('renders a Show All checkbox for prior events section', () => {
-      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
-      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
-      expect(checkboxes.length).toBeGreaterThanOrEqual(1);
-    });
-
     it('renders two Show All checkboxes when both sections are present', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={EVENTS} />);
+      render(<Events upcomingEvents={[]} priorEvents={[]} />);
       const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
       expect(checkboxes.length).toBeGreaterThanOrEqual(2);
     });
