@@ -2,6 +2,7 @@ import SectionHeader from '@/app/ui/section-header';
 import SubtitleHeading from '@/app/ui/subtitle-heading';
 import { Event } from '@/models';
 import EventCard from './ui/event-card';
+import ShowAllToggle from './ui/show-all-toggle';
 import Message from '@/app/ui/message';
 
 interface EventsProperties {
@@ -27,15 +28,7 @@ const Events = ({
         <SectionHeader>
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Upcoming Trips &amp; Events</SubtitleHeading>
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm"
-                defaultChecked={showAllUpcomingEvents}
-                onChange={(e) => onShowAllUpcomingEventsChange?.(e.target.checked)}
-              />
-              <span className="text-sm">Show All</span>
-            </label>
+            <ShowAllToggle checked={showAllUpcomingEvents} onChange={onShowAllUpcomingEventsChange} />
           </div>
         </SectionHeader>
         {upcomingEvents.length ? (
@@ -52,15 +45,7 @@ const Events = ({
         <SectionHeader>
           <div className="flex items-center justify-between w-full">
             <SubtitleHeading>Prior Trips &amp; Events</SubtitleHeading>
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm"
-                defaultChecked={showAllPriorEvents}
-                onChange={(e) => onShowAllPriorEventsChange?.(e.target.checked)}
-              />
-              <span className="text-sm">Show All</span>
-            </label>
+            <ShowAllToggle checked={showAllPriorEvents} onChange={onShowAllPriorEventsChange} />
           </div>
         </SectionHeader>
         {priorEvents.length ? (
