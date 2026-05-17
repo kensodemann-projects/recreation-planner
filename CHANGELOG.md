@@ -1,5 +1,14 @@
 # recreation-planner
 
+## 1.4.1
+
+### Patch Changes
+
+- 4b66fac: Limit the events displayed by default on the events listing page.
+- 4b66fac: Replace lists with a reactive grid of cards on Trips & Events.
+- d3ec8e1: Remove dead code.
+- cfb68da: Add "show all" checkboxes for upcoming and prior events.
+
 ## 1.4.0
 
 ### Minor Changes
