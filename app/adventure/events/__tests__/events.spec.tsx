@@ -4,8 +4,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENTS } from '../__mocks__/data';
 import Events from '../events';
 
-vi.mock('../events-list', () => ({ default: () => <div data-testid="events-list" /> }));
-vi.mock('../events-table', () => ({ default: () => <div data-testid="events-table" /> }));
 vi.mock('../ui/event-card', () => ({
   default: ({ event }: { event: { name: string } }) => <div data-testid="event-card">{event.name}</div>,
 }));

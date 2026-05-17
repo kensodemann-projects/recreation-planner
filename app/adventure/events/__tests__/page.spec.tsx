@@ -1,6 +1,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { cookies } from 'next/headers';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { setShowAllPriorEvents, setShowAllUpcomingEvents } from '../actions';
 import { fetchPriorEvents, fetchUpcomingEvents } from '../data';
 import EventsPage from '../page';
 
@@ -12,6 +14,7 @@ describe('Events Page', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
+    vi.mocked(cookies).mockResolvedValue({ get: vi.fn() } as unknown as ReturnType<typeof cookies>);
   });
 
   afterEach(() => {
@@ -112,6 +115,54 @@ describe('Events Page', () => {
       render(jsx);
       const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
       expect((checkboxes[1] as HTMLInputElement).checked).toBe(true);
+    });
+  });
+
+  describe('action wiring', () => {
+    beforeEach(() => vi.useRealTimers());
+
+    it('calls setShowAllUpcomingEvents(true) when the upcoming Show All checkbox is clicked', async () => {
+      const user = userEvent.setup();
+      const jsx = await EventsPage();
+      render(jsx);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      await user.click(checkboxes[0]);
+      expect(setShowAllUpcomingEvents).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('calls setShowAllPriorEvents(true) when the prior Show All checkbox is clicked', async () => {
+      const user = userEvent.setup();
+      const jsx = await EventsPage();
+      render(jsx);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      await user.click(checkboxes[1]);
+      expect(setShowAllPriorEvents).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('calls setShowAllUpcomingEvents(false) when the upcoming Show All checkbox is unchecked', async () => {
+      const cookieStore = await cookies();
+      (cookieStore.get as Mock).mockImplementation((name: string) =>
+        name === 'show-all-upcoming-events' ? { value: 'true' } : undefined,
+      );
+      const user = userEvent.setup();
+      const jsx = await EventsPage();
+      render(jsx);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      await user.click(checkboxes[0]);
+      expect(setShowAllUpcomingEvents).toHaveBeenCalledExactlyOnceWith(false);
+    });
+
+    it('calls setShowAllPriorEvents(false) when the prior Show All checkbox is unchecked', async () => {
+      const cookieStore = await cookies();
+      (cookieStore.get as Mock).mockImplementation((name: string) =>
+        name === 'show-all-prior-events' ? { value: 'true' } : undefined,
+      );
+      const user = userEvent.setup();
+      const jsx = await EventsPage();
+      render(jsx);
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      await user.click(checkboxes[1]);
+      expect(setShowAllPriorEvents).toHaveBeenCalledExactlyOnceWith(false);
     });
   });
 });

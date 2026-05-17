@@ -2,10 +2,11 @@ import PageHeader from '@/app/ui/page-header';
 import TitleHeading from '@/app/ui/title-heading';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { addMonths, formatISO, startOfWeek } from 'date-fns';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { setShowAllPriorEvents, setShowAllUpcomingEvents } from './actions';
 import { fetchPriorEvents, fetchUpcomingEvents } from './data';
 import Events from './events';
-import { cookies } from 'next/headers';
 
 const getEventsPageData = async () => {
   const cookieStore = await cookies();
@@ -34,6 +35,8 @@ const EventsPage = async () => {
         upcomingEvents={upcomingEvents}
         showAllUpcomingEvents={showAllUpcomingEvents}
         showAllPriorEvents={showAllPriorEvents}
+        onShowAllUpcomingEventsChange={setShowAllUpcomingEvents}
+        onShowAllPriorEventsChange={setShowAllPriorEvents}
       />
       <Link className="fixed bottom-4 right-4" href="/adventure/events/create">
         <button className="btn btn-primary btn-circle btn-outline">
