@@ -1,10 +1,9 @@
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENTS } from '../__mocks__/data';
 import Events from '../events';
 
-vi.mock('../events-list', () => ({ default: () => <div data-testid="events-list" /> }));
-vi.mock('../events-table', () => ({ default: () => <div data-testid="events-table" /> }));
 vi.mock('../ui/event-card', () => ({
   default: ({ event }: { event: { name: string } }) => <div data-testid="event-card">{event.name}</div>,
 }));
@@ -13,7 +12,7 @@ describe('Events', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  describe('with upcoming events', () => {
+  describe('upcoming events', () => {
     it('renders the "Upcoming Trips & Events" section heading', () => {
       render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
       expect(screen.getByRole('heading', { name: 'Upcoming Trips & Events' })).toBeDefined();
@@ -25,18 +24,14 @@ describe('Events', () => {
       expect(cards).toHaveLength(EVENTS.length);
     });
 
-    it('does not render the events list', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
-      expect(screen.queryByTestId('events-list')).toBeNull();
-    });
-
-    it('does not render the events table', () => {
-      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
-      expect(screen.queryByTestId('events-table')).toBeNull();
+    it('displays a no events message', () => {
+      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
+      expect(screen.getByRole('heading', { name: 'Upcoming Trips & Events' })).toBeDefined();
+      expect(screen.getByText('You have no upcoming events.')).toBeDefined();
     });
   });
 
-  describe('with prior events', () => {
+  describe('prior events', () => {
     it('renders the "Prior Trips & Events" section heading', () => {
       render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
       expect(screen.getByRole('heading', { name: 'Prior Trips & Events' })).toBeDefined();
@@ -48,26 +43,120 @@ describe('Events', () => {
       expect(cards).toHaveLength(EVENTS.length);
     });
 
-    it('does not render the events list', () => {
-      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
-      expect(screen.queryByTestId('events-list')).toBeNull();
-    });
-
-    it('does not render the events table', () => {
-      render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
-      expect(screen.queryByTestId('events-table')).toBeNull();
+    it('displays a no events message', () => {
+      render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
+      expect(screen.getByRole('heading', { name: 'Prior Trips & Events' })).toBeDefined();
+      expect(screen.getByText('You have no prior events.')).toBeDefined();
     });
   });
 
-  describe('with no events', () => {
-    it('does not render the upcoming section', () => {
+  describe('Show All checkboxes', () => {
+    it('renders two Show All checkboxes when both sections are present', () => {
       render(<Events upcomingEvents={[]} priorEvents={[]} />);
-      expect(screen.queryByRole('heading', { name: 'Upcoming Trips & Events' })).toBeNull();
+      const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+      expect(checkboxes.length).toBeGreaterThanOrEqual(2);
     });
 
-    it('does not render the prior section', () => {
-      render(<Events upcomingEvents={[]} priorEvents={[]} />);
-      expect(screen.queryByRole('heading', { name: 'Prior Trips & Events' })).toBeNull();
+    describe('upcoming events Show All checkbox', () => {
+      it('is unchecked by default when showAllUpcomingEvents is not provided', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(false);
+      });
+
+      it('is checked when showAllUpcomingEvents is true', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} showAllUpcomingEvents={true} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(true);
+      });
+
+      it('is unchecked when showAllUpcomingEvents is false', () => {
+        render(<Events upcomingEvents={EVENTS} priorEvents={[]} showAllUpcomingEvents={false} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[0] as HTMLInputElement).checked).toBe(false);
+      });
+    });
+
+    describe('prior events Show All checkbox', () => {
+      it('is unchecked by default when showAllPriorEvents is not provided', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+      });
+
+      it('is checked when showAllPriorEvents is true', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} showAllPriorEvents={true} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(true);
+      });
+
+      it('is unchecked when showAllPriorEvents is false', () => {
+        render(<Events upcomingEvents={[]} priorEvents={EVENTS} showAllPriorEvents={false} />);
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
+      });
+    });
+
+    describe('interactions', () => {
+      it('calls onShowAllUpcomingEventsChange with true when the upcoming Show All checkbox is clicked', async () => {
+        const onShowAllUpcomingEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllUpcomingEventsChange={onShowAllUpcomingEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[0]);
+        expect(onShowAllUpcomingEventsChange).toHaveBeenCalledExactlyOnceWith(true);
+      });
+
+      it('calls onShowAllPriorEventsChange with true when the prior Show All checkbox is clicked', async () => {
+        const onShowAllPriorEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllPriorEventsChange={onShowAllPriorEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[1]);
+        expect(onShowAllPriorEventsChange).toHaveBeenCalledExactlyOnceWith(true);
+      });
+
+      it('does not call onShowAllPriorEventsChange when the upcoming Show All checkbox is clicked', async () => {
+        const onShowAllPriorEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllPriorEventsChange={onShowAllPriorEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[0]);
+        expect(onShowAllPriorEventsChange).not.toHaveBeenCalled();
+      });
+
+      it('does not call onShowAllUpcomingEventsChange when the prior Show All checkbox is clicked', async () => {
+        const onShowAllUpcomingEventsChange = vi.fn();
+        const user = userEvent.setup();
+        render(
+          <Events
+            upcomingEvents={EVENTS}
+            priorEvents={EVENTS}
+            onShowAllUpcomingEventsChange={onShowAllUpcomingEventsChange}
+          />,
+        );
+        const checkboxes = screen.getAllByLabelText('Show All', { selector: 'input[type="checkbox"]' });
+        await user.click(checkboxes[1]);
+        expect(onShowAllUpcomingEventsChange).not.toHaveBeenCalled();
+      });
     });
   });
 });
