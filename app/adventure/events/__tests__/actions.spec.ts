@@ -17,18 +17,22 @@ describe('Events Actions', () => {
     it('sets the show-all-upcoming-events cookie to true when called with true', async () => {
       const cookieStore = await cookies();
       await setShowAllUpcomingEvents(true);
-      expect(cookieStore.set).toHaveBeenCalledWith('show-all-upcoming-events', 'true');
+      expect(cookieStore.set).toHaveBeenCalledExactlyOnceWith('show-all-upcoming-events', 'true', {
+        maxAge: 60 * 60 * 24 * 365,
+      });
     });
 
     it('sets the show-all-upcoming-events cookie to false when called with false', async () => {
       const cookieStore = await cookies();
       await setShowAllUpcomingEvents(false);
-      expect(cookieStore.set).toHaveBeenCalledWith('show-all-upcoming-events', 'false');
+      expect(cookieStore.set).toHaveBeenCalledExactlyOnceWith('show-all-upcoming-events', 'false', {
+        maxAge: 60 * 60 * 24 * 365,
+      });
     });
 
     it('calls revalidatePath for the events page', async () => {
       await setShowAllUpcomingEvents(true);
-      expect(revalidatePath).toHaveBeenCalledWith('/adventure/events');
+      expect(revalidatePath).toHaveBeenCalledExactlyOnceWith('/adventure/events');
     });
   });
 
@@ -36,18 +40,22 @@ describe('Events Actions', () => {
     it('sets the show-all-prior-events cookie to true when called with true', async () => {
       const cookieStore = await cookies();
       await setShowAllPriorEvents(true);
-      expect(cookieStore.set).toHaveBeenCalledWith('show-all-prior-events', 'true');
+      expect(cookieStore.set).toHaveBeenCalledExactlyOnceWith('show-all-prior-events', 'true', {
+        maxAge: 60 * 60 * 24 * 365,
+      });
     });
 
     it('sets the show-all-prior-events cookie to false when called with false', async () => {
       const cookieStore = await cookies();
       await setShowAllPriorEvents(false);
-      expect(cookieStore.set).toHaveBeenCalledWith('show-all-prior-events', 'false');
+      expect(cookieStore.set).toHaveBeenCalledExactlyOnceWith('show-all-prior-events', 'false', {
+        maxAge: 60 * 60 * 24 * 365,
+      });
     });
 
     it('calls revalidatePath for the events page', async () => {
       await setShowAllPriorEvents(true);
-      expect(revalidatePath).toHaveBeenCalledWith('/adventure/events');
+      expect(revalidatePath).toHaveBeenCalledExactlyOnceWith('/adventure/events');
     });
   });
 });
