@@ -44,7 +44,7 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
         <Link
           className="btn btn-primary mt-5"
           href={`${equipment.id}/maintenance/create`}
-          aria-label="Add a maintenance item"
+          aria-label="Add Maintenance Item"
         >
           <PlusCircleIcon className="w-6" />
           Add Maintenance Item
@@ -61,7 +61,7 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
       <section className="tab-content">
         <Notes notes={equipment.notes || []} baseHref={`/adventure/equipment/${equipment.id}/notes`} />
 
-        <Link className="btn btn-primary mt-5" href={`${equipment.id}/notes/create`} aria-label="Add a note">
+        <Link className="btn btn-primary mt-5" href={`${equipment.id}/notes/create`} aria-label="Add Note">
           <PlusCircleIcon className="w-6" />
           Add Note
         </Link>
