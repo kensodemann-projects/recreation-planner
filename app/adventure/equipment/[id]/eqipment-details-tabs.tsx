@@ -26,7 +26,7 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
       />
       <section className="tab-content" data-testid="todos-section">
         <Todos collections={equipment.todoCollections!} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
-        <Link className="btn btn-primary mt-5" href={`${equipment.id}/todos/create`} aria-label="Add a todo collection">
+        <Link className="btn btn-primary mt-5" href={`${equipment.id}/todos/create`} aria-label="Add Todo Collection">
           <PlusCircleIcon className="w-6" />
           Add Todo Collection
         </Link>

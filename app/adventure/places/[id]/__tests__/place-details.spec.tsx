@@ -122,7 +122,7 @@ describe('Place', () => {
 
     it('renders the add note link', () => {
       render(<PlaceDetails place={testPlace} />);
-      expect(screen.getByRole('link', { name: 'Add a note to the place' })).toBeDefined();
+      expect(screen.getByRole('link', { name: 'Add Note' })).toBeDefined();
     });
   });
 });
