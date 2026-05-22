@@ -24,15 +24,19 @@ const EventCard = ({ event, callingPage }: EventCardProps) => {
         <p>{event.place.name}</p>
 
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={`/adventure/events/${event.id}/delete${searchParams}`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the event">
-              <TrashIcon className="w-6" />
-            </button>
+          <Link
+            href={`/adventure/events/${event.id}/delete${searchParams}`}
+            className="btn btn-error btn-outline btn-circle"
+            aria-label="Delete the event"
+          >
+            <TrashIcon className="w-6" />
           </Link>
-          <Link href={`/adventure/events/${event.id}/update${searchParams}`}>
-            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the event">
-              <PencilSquareIcon className="w-6" />
-            </button>
+          <Link
+            href={`/adventure/events/${event.id}/update${searchParams}`}
+            className="btn btn-secondary btn-outline btn-circle"
+            aria-label="Edit the event"
+          >
+            <PencilSquareIcon className="w-6" />
           </Link>
         </div>
       </div>
