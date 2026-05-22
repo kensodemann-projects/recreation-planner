@@ -1,5 +1,5 @@
+import SkeletonCardGrid from '@/app/ui/skeleton-card-grid';
 import SkeletonContainer from '@/app/ui/skeleton-container';
-import SkeletonLineFull from '@/app/ui/skeleton-line-full';
 import SkeletonPageHeader from '@/app/ui/skeleton-page-header';
 
 const Loading = () => {
@@ -7,9 +7,7 @@ const Loading = () => {
     <>
       <SkeletonContainer>
         <SkeletonPageHeader />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
-        <SkeletonLineFull />
+        <SkeletonCardGrid />
       </SkeletonContainer>
     </>
   );
