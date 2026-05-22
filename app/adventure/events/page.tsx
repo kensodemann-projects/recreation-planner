@@ -38,10 +38,8 @@ const EventsPage = async () => {
         onShowAllUpcomingEventsChange={setShowAllUpcomingEvents}
         onShowAllPriorEventsChange={setShowAllPriorEvents}
       />
-      <Link className="fixed bottom-4 right-4" href="/adventure/events/create">
-        <button className="btn btn-primary btn-circle btn-outline">
-          <PlusIcon className="w-6" />
-        </button>
+      <Link className="fixed bottom-4 right-4 btn btn-primary btn-circle" href="/adventure/events/create">
+        <PlusIcon className="w-6" />
       </Link>
     </>
   );

@@ -14,10 +14,8 @@ const EquipmentPage = async () => {
         <TitleHeading>Equipment</TitleHeading>
       </PageHeader>
       <EquipmentWrapper equipment={equipment} />
-      <Link className="fixed bottom-4 right-4" href="/adventure/equipment/create">
-        <button className="btn btn-primary btn-circle btn-outline">
-          <PlusIcon className="w-6" />
-        </button>
+      <Link className="fixed bottom-4 right-4 btn btn-primary btn-circle" href="/adventure/equipment/create">
+        <PlusIcon className="w-6" />
       </Link>
     </>
   );
