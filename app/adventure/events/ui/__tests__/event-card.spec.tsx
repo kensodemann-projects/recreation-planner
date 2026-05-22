@@ -51,13 +51,13 @@ describe('Event Card', () => {
   describe('delete link', () => {
     it('links to the delete page for the event', () => {
       render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}/delete?callingPage=/adventure`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<EventCard event={TEST_EVENT} />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}/delete`);
     });
   });
@@ -65,13 +65,13 @@ describe('Event Card', () => {
   describe('edit link', () => {
     it('links to the update page for the event', () => {
       render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}/update?callingPage=/adventure`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<EventCard event={TEST_EVENT} />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}/update`);
     });
   });

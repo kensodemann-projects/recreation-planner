@@ -70,7 +70,7 @@ describe('Place Card', () => {
   describe('delete link', () => {
     it('links to the delete page for the place', () => {
       render(<PlaceCard place={TEST_PLACE} callingPage="/adventure/places" />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(
         `/adventure/places/${TEST_PLACE.id}/delete?callingPage=/adventure/places`,
       );
@@ -78,7 +78,7 @@ describe('Place Card', () => {
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<PlaceCard place={TEST_PLACE} />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}/delete`);
     });
   });
@@ -86,7 +86,7 @@ describe('Place Card', () => {
   describe('edit link', () => {
     it('links to the update page for the place', () => {
       render(<PlaceCard place={TEST_PLACE} callingPage="/adventure/places" />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(
         `/adventure/places/${TEST_PLACE.id}/update?callingPage=/adventure/places`,
       );
@@ -94,7 +94,7 @@ describe('Place Card', () => {
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<PlaceCard place={TEST_PLACE} />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}/update`);
     });
   });
