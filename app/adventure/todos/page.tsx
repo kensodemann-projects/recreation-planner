@@ -14,10 +14,13 @@ const TodosPage = async () => {
         <TitleHeading>Todos</TitleHeading>
       </PageHeader>
       <Todos collections={collections} baseHref="/adventure/todos" />
-      <Link className="fixed bottom-4 right-4" href="/adventure/todos/create">
-        <button className="btn btn-primary btn-circle btn-outline">
-          <PlusIcon className="w-6" />
-        </button>
+      <Link
+        aria-label="Create todo collection"
+        className="fixed bottom-4 right-4 btn btn-primary btn-circle"
+        href="/adventure/todos/create"
+        title="Create todo collection"
+      >
+        <PlusIcon className="w-6" />
       </Link>
     </>
   );

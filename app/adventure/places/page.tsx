@@ -14,10 +14,13 @@ const PlacesPage = async () => {
         <TitleHeading>Places</TitleHeading>
       </PageHeader>
       <Places places={places} />
-      <Link className="fixed bottom-4 right-4" href="/adventure/places/create">
-        <button className="btn btn-primary btn-circle btn-outline">
-          <PlusIcon className="w-6" />
-        </button>
+      <Link
+        aria-label="Add place"
+        title="Add place"
+        className="fixed bottom-4 right-4 btn btn-primary btn-circle"
+        href="/adventure/places/create"
+      >
+        <PlusIcon className="w-6" />
       </Link>
     </>
   );
