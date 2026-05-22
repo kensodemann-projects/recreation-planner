@@ -38,7 +38,11 @@ const EventsPage = async () => {
         onShowAllUpcomingEventsChange={setShowAllUpcomingEvents}
         onShowAllPriorEventsChange={setShowAllPriorEvents}
       />
-      <Link className="fixed bottom-4 right-4 btn btn-primary btn-circle" href="/adventure/events/create">
+      <Link
+        aria-label="Create event"
+        className="fixed bottom-4 right-4 btn btn-primary btn-circle"
+        href="/adventure/events/create"
+      >
         <PlusIcon className="w-6" />
       </Link>
     </>
