@@ -20,7 +20,7 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
       <input type="radio" name="event-tabs" className="tab" aria-label="Todos" defaultChecked={activeTab === 'Todos'} />
       <section className="tab-content">
         <Todos collections={event.todoCollections || []} baseHref={`/adventure/events/${event.id}/todos`} />
-        <Link className="btn btn-primary mt-5" href={`${event.id}/todos/create`} aria-label="Add a todo collection">
+        <Link className="btn btn-primary mt-5" href={`${event.id}/todos/create`} aria-label="Add Todo Collection">
           <PlusCircleIcon className="w-6" />
           Add Todo Collection
         </Link>
@@ -35,7 +35,7 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
       />
       <section className="tab-content">
         <ItineraryItems items={event.itinerary || []} baseHref={`/adventure/events/${event.id}/itinerary`} />
-        <Link className="btn btn-primary mt-5" href={`${event.id}/itinerary/create`} aria-label="Add an itinerary item">
+        <Link className="btn btn-primary mt-5" href={`${event.id}/itinerary/create`} aria-label="Add Itinerary Item">
           <PlusCircleIcon className="w-6" />
           Add Itinerary Item
         </Link>
@@ -44,7 +44,7 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
       <input type="radio" name="event-tabs" className="tab" aria-label="Notes" defaultChecked={activeTab === 'Notes'} />
       <section className="tab-content">
         <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
-        <Link className="btn btn-primary mt-5" href={`${event.id}/notes/create`} aria-label="Add a note">
+        <Link className="btn btn-primary mt-5" href={`${event.id}/notes/create`} aria-label="Add Note">
           <PlusCircleIcon className="w-6" />
           Add Note
         </Link>

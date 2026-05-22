@@ -34,7 +34,7 @@ describe('Event Details', () => {
   describe('todo section', () => {
     it('renders the add todo link', () => {
       render(<EventDetails event={testEvent} />);
-      expect(screen.getByRole('link', { name: 'Add a todo collection' })).toBeDefined();
+      expect(screen.getByRole('link', { name: 'Add Todo Collection' })).toBeDefined();
     });
 
     it('renders the todo collections', () => {
@@ -48,7 +48,7 @@ describe('Event Details', () => {
   describe('notes section', () => {
     it('renders the add note link', () => {
       render(<EventDetails event={testEvent} />);
-      expect(screen.getByRole('link', { name: 'Add a note' })).toBeDefined();
+      expect(screen.getByRole('link', { name: 'Add Note' })).toBeDefined();
     });
   });
 });
