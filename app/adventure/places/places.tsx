@@ -1,12 +1,14 @@
 import { Place } from '@/models';
-import PlacesList from './places-list';
-import PlacesTable from './places-table';
+import PlaceCard from './ui/place-card';
 
 const Places = ({ places }: { places: Array<Place> }) => {
   return (
     <>
-      <PlacesTable className="hidden md:table" places={places} />
-      <PlacesList className="block md:hidden" places={places} />
+      <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
+        {places.map((x) => (
+          <PlaceCard place={x} key={x.id} />
+        ))}
+      </div>
     </>
   );
 };

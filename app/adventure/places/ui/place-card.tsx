@@ -24,6 +24,8 @@ const PlaceCard = ({ place, callingPage }: PlaceCardProps) => {
         <Address value={place.address} />
         {place.phoneNumber && <div>{place.phoneNumber}</div>}
 
+        <div className="grow" />
+
         <div className="card-actions justify-end items-center mt-6">
           <Link
             href={`/adventure/places/${place.id}/delete${searchParams}`}
