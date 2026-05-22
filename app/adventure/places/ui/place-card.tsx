@@ -3,6 +3,7 @@ import LabeledField from '@/app/ui/labeled-field';
 import { Place } from '@/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import PlaceTypeIcon from './place-type-icon';
 
 export interface PlaceCardProps {
   place: Place;
@@ -15,8 +16,9 @@ const PlaceCard = ({ place, callingPage }: PlaceCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
-        <h3 className="card-title">
+        <h3 className="card-title justify-between">
           <Link href={`/adventure/places/${place.id}${searchParams}`}>{place.name}</Link>
+          <PlaceTypeIcon typeName={place.type.name} />
         </h3>
         <h4 className="card-sub-title">{place.type.name}</h4>
 

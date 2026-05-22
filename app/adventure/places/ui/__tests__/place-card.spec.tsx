@@ -11,7 +11,7 @@ describe('Place Card', () => {
   describe('main title', () => {
     it('renders the place name', () => {
       render(<PlaceCard place={TEST_PLACE} />);
-      expect(screen.getByRole('heading', { level: 3, name: TEST_PLACE.name })).toBeDefined();
+      expect(screen.getByRole('heading', { level: 3, name: new RegExp(TEST_PLACE.name) })).toBeDefined();
     });
 
     it('links to the place detail page', () => {
@@ -25,6 +25,14 @@ describe('Place Card', () => {
       render(<PlaceCard place={TEST_PLACE} />);
       const link = screen.getByRole('link', { name: TEST_PLACE.name });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}`);
+    });
+  });
+
+  describe('place type icon', () => {
+    it('renders the icon corresponding to the place type', () => {
+      render(<PlaceCard place={TEST_PLACE} />);
+      const heading = screen.getByRole('heading', { level: 3 });
+      expect(within(heading).getByRole('img', { name: `${TEST_PLACE.type.name} icon` })).toBeDefined();
     });
   });
 
