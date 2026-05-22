@@ -237,14 +237,14 @@ describe('EquipmentDetails', () => {
     it('renders an add button', () => {
       render(<EquipmentDetails equipment={testEquipment} />);
       const section = screen.getByTestId('maintenance-items-section');
-      expect(within(section).getByRole('button', { name: 'Add Event' })).toBeDefined();
+      expect(within(section).getByRole('link', { name: 'Add a maintenance item' })).toBeDefined();
     });
   });
 
   describe('notes section', () => {
     it('renders the add button', () => {
       render(<EquipmentDetails equipment={testEquipment} />);
-      expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();
+      expect(screen.getByRole('link', { name: 'Add a note' })).toBeDefined();
     });
   });
 });

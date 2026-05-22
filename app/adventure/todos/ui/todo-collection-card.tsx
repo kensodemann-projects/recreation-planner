@@ -91,15 +91,19 @@ const TodoCollectionCard = ({ baseHref, callingPage, todoCollection }: TodoColle
             ))}
         </div>
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={`${baseHref}/${todoCollection.id}/delete${searchParams}`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the collection">
-              <TrashIcon className="w-6" />
-            </button>
+          <Link
+            className="btn btn-error btn-outline btn-circle"
+            href={`${baseHref}/${todoCollection.id}/delete${searchParams}`}
+            aria-label="Delete the collection"
+          >
+            <TrashIcon className="w-6" />
           </Link>
-          <Link href={`${baseHref}/${todoCollection.id}/update${searchParams}`}>
-            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the collection">
-              <PencilSquareIcon className="w-6" />
-            </button>
+          <Link
+            className="btn btn-secondary btn-circle btn-outline"
+            href={`${baseHref}/${todoCollection.id}/update${searchParams}`}
+            aria-label="Edit the collection"
+          >
+            <PencilSquareIcon className="w-6" />
           </Link>
           <button
             className="btn btn-primary btn-outline btn-circle"

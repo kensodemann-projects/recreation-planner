@@ -120,9 +120,9 @@ describe('Place', () => {
       expect(screen.getByRole('heading', { level: 2, name: 'Notes' })).toBeDefined();
     });
 
-    it('renders the add button', () => {
+    it('renders the add note link', () => {
       render(<PlaceDetails place={testPlace} />);
-      expect(screen.getByRole('button', { name: 'Add Note' })).toBeDefined();
+      expect(screen.getByRole('link', { name: 'Add a note to the place' })).toBeDefined();
     });
   });
 });
