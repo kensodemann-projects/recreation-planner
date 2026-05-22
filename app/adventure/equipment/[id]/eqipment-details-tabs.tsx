@@ -26,11 +26,13 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
       />
       <section className="tab-content" data-testid="todos-section">
         <Todos collections={equipment.todoCollections!} baseHref={`/adventure/equipment/${equipment.id}/todos`} />
-        <Link href={`${equipment.id}/todos/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Todo Collection
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/equipment/${equipment.id}/todos/create`}
+          aria-label="Add Todo Collection"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Todo Collection
         </Link>
       </section>
 
@@ -43,11 +45,13 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
       />
       <section className="tab-content" data-testid="maintenance-items-section">
         <MaintenanceItemsWrapper maintenanceItems={equipment.maintenanceItems!} />
-        <Link href={`${equipment.id}/maintenance/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Event
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/equipment/${equipment.id}/maintenance/create`}
+          aria-label="Add Maintenance Item"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Maintenance Item
         </Link>
       </section>
 
@@ -61,11 +65,13 @@ const EquipmentDetailsTabs = ({ equipment }: EquipmentDetailsTabsProps) => {
       <section className="tab-content">
         <Notes notes={equipment.notes || []} baseHref={`/adventure/equipment/${equipment.id}/notes`} />
 
-        <Link href={`${equipment.id}/notes/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Note
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/equipment/${equipment.id}/notes/create`}
+          aria-label="Add Note"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Note
         </Link>
       </section>
     </div>

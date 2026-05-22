@@ -51,11 +51,13 @@ const Place = ({ place }: { place: PlaceModel }) => {
 
         <Notes notes={place.notes || []} baseHref={`/adventure/places/${place.id}/notes`} />
 
-        <Link href={`${place.id}/notes/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Note
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/places/${place.id}/notes/create`}
+          aria-label="Add Note"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Note
         </Link>
       </section>
     </>

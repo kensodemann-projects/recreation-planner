@@ -111,13 +111,13 @@ describe('TODO Collection Card', () => {
   describe('delete link', () => {
     it('links to the delete page for the collection', () => {
       render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete?callingPage=Home`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/delete`);
     });
   });
@@ -125,13 +125,13 @@ describe('TODO Collection Card', () => {
   describe('edit link', () => {
     it('links to the update page for the collection', () => {
       render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} callingPage="Home" />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update?callingPage=Home`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<TodoCollectionCard baseHref={'/adventure/todos'} todoCollection={TEST_COLLECTION} />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/todos/${TEST_COLLECTION.id}/update`);
     });
   });

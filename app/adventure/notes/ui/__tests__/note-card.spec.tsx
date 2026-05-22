@@ -20,7 +20,7 @@ describe('Note Card', () => {
   describe('delete link', () => {
     it('links to the delete page for the note', () => {
       render(<NoteCard baseHref={`/adventure/event/${TEST_NOTE.eventRid}/notes`} note={TEST_NOTE} />);
-      const link = screen.getByRole('button', { name: /delete/i }).closest('a');
+      const link = screen.getByRole('link', { name: /delete/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/event/${TEST_NOTE.eventRid}/notes/${TEST_NOTE.id}/delete`);
     });
   });
@@ -28,7 +28,7 @@ describe('Note Card', () => {
   describe('edit link', () => {
     it('links to the update page for the note', () => {
       render(<NoteCard baseHref={`/adventure/event/${TEST_NOTE.eventRid}/notes`} note={TEST_NOTE} />);
-      const link = screen.getByRole('button', { name: /edit/i }).closest('a');
+      const link = screen.getByRole('link', { name: /edit/i }).closest('a');
       expect(link?.getAttribute('href')).toBe(`/adventure/event/${TEST_NOTE.eventRid}/notes/${TEST_NOTE.id}/update`);
     });
   });

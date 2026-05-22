@@ -16,15 +16,19 @@ const NoteCard = ({ baseHref, note }: NoteCardProps) => {
         <h3 className="card-title">{note.name}</h3>
         <p className="grow whitespace-pre-line">{note.description}</p>
         <div className="card-actions justify-end items-center mt-6">
-          <Link href={`${baseHref}/${note.id}/delete`}>
-            <button className="btn btn-error btn-outline btn-circle" aria-label="Delete the note">
-              <TrashIcon className="w-6" />
-            </button>
+          <Link
+            className="btn btn-error btn-outline btn-circle"
+            href={`${baseHref}/${note.id}/delete`}
+            aria-label="Delete the note"
+          >
+            <TrashIcon className="w-6" />
           </Link>
-          <Link href={`${baseHref}/${note.id}/update`}>
-            <button className="btn btn-secondary btn-outline btn-circle" aria-label="Edit the note">
-              <PencilSquareIcon className="w-6" />
-            </button>
+          <Link
+            className="btn btn-secondary btn-outline btn-circle"
+            href={`${baseHref}/${note.id}/update`}
+            aria-label="Edit the note"
+          >
+            <PencilSquareIcon className="w-6" />
           </Link>
         </div>
       </div>

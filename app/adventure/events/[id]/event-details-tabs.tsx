@@ -20,11 +20,13 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
       <input type="radio" name="event-tabs" className="tab" aria-label="Todos" defaultChecked={activeTab === 'Todos'} />
       <section className="tab-content">
         <Todos collections={event.todoCollections || []} baseHref={`/adventure/events/${event.id}/todos`} />
-        <Link href={`${event.id}/todos/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Todo Collection
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/events/${event.id}/todos/create`}
+          aria-label="Add Todo Collection"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Todo Collection
         </Link>
       </section>
 
@@ -37,22 +39,26 @@ const EventDetailsTabs = ({ event }: EventDetailsTabsProps) => {
       />
       <section className="tab-content">
         <ItineraryItems items={event.itinerary || []} baseHref={`/adventure/events/${event.id}/itinerary`} />
-        <Link href={`${event.id}/itinerary/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Itinerary Item
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/events/${event.id}/itinerary/create`}
+          aria-label="Add Itinerary Item"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Itinerary Item
         </Link>
       </section>
 
       <input type="radio" name="event-tabs" className="tab" aria-label="Notes" defaultChecked={activeTab === 'Notes'} />
       <section className="tab-content">
         <Notes notes={event.notes || []} baseHref={`/adventure/events/${event.id}/notes`} />
-        <Link href={`${event.id}/notes/create`}>
-          <button className="btn btn-primary mt-5">
-            <PlusCircleIcon className="w-6" />
-            Add Note
-          </button>
+        <Link
+          className="btn btn-primary mt-5"
+          href={`/adventure/events/${event.id}/notes/create`}
+          aria-label="Add Note"
+        >
+          <PlusCircleIcon className="w-6" />
+          Add Note
         </Link>
       </section>
     </div>
