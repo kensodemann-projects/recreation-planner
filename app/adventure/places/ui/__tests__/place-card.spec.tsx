@@ -1,5 +1,5 @@
 import { Place } from '@/models';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PLACE_TYPES } from '../../__mocks__/data';
 import PlaceCard from '../place-card';
@@ -8,20 +8,16 @@ describe('Place Card', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(() => cleanup());
 
-  it('renders the place name', () => {
-    render(<PlaceCard place={TEST_PLACE} />);
-    expect(screen.getByRole('heading', { level: 3, name: TEST_PLACE.name })).toBeDefined();
-  });
+  describe('main title', () => {
+    it('renders the place name', () => {
+      render(<PlaceCard place={TEST_PLACE} />);
+      expect(screen.getByRole('heading', { level: 3, name: TEST_PLACE.name })).toBeDefined();
+    });
 
-  it('renders the place type', () => {
-    render(<PlaceCard place={TEST_PLACE} />);
-    expect(screen.getByText(TEST_PLACE.type.name)).toBeDefined();
-  });
-
-  describe('name link', () => {
     it('links to the place detail page', () => {
       render(<PlaceCard place={TEST_PLACE} callingPage="/adventure/places" />);
-      const link = screen.getByRole('link', { name: TEST_PLACE.name });
+      const headerLink = screen.getByRole('heading', { level: 3 });
+      const link = within(headerLink).getByRole('link', { name: TEST_PLACE.name });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}?callingPage=/adventure/places`);
     });
 
@@ -32,7 +28,14 @@ describe('Place Card', () => {
     });
   });
 
-  describe.skip('address', () => {
+  describe('sub title', () => {
+    it('renders the place type', () => {
+      render(<PlaceCard place={TEST_PLACE} />);
+      expect(screen.getByRole('heading', { level: 4, name: TEST_PLACE.type.name })).toBeDefined();
+    });
+  });
+
+  describe('address', () => {
     it('renders the address when present', () => {
       render(<PlaceCard place={TEST_PLACE} />);
       expect(screen.getByText(TEST_PLACE.address.line1!)).toBeDefined();
@@ -44,7 +47,7 @@ describe('Place Card', () => {
     });
   });
 
-  describe.skip('phone number', () => {
+  describe('phone number', () => {
     it('renders the phone number when present', () => {
       render(<PlaceCard place={TEST_PLACE} />);
       expect(screen.getByText(TEST_PLACE.phoneNumber!)).toBeDefined();
