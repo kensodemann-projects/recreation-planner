@@ -1,5 +1,4 @@
 import Address from '@/app/ui/address';
-import LabeledField from '@/app/ui/labeled-field';
 import { Place } from '@/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
