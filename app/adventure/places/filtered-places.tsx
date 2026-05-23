@@ -18,7 +18,7 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
 
   return (
     <>
-      <div className="flex gap-2 items-center mb-4">
+      <div className="flex w-full items-center mb-4">
         <label className="flex items-center gap-2">
           <span>Place Type</span>
           <select
@@ -35,6 +35,7 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
             ))}
           </select>
         </label>
+        <div className="grow" />
         <button className="btn btn-ghost" onClick={clearFilters}>
           Clear Filter
         </button>

@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { PLACE_TYPES, PLACES } from '../__mocks__/data';
 import FilteredPlaces from '../filtered-places';
 
-describe('Places Filter Wrapper', () => {
+describe('Filtered Places', () => {
   afterEach(() => cleanup());
 
   const placeTypes: PlaceType[] = [...PLACE_TYPES];
