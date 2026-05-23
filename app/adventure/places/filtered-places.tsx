@@ -26,11 +26,11 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:flex md:items-center gap-2 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center mb-4">
         <label className="flex items-center gap-2">
           <span>Place Type</span>
           <select
-            className="select select-bordered"
+            className="select select-bordered flex-1"
             aria-label="Place Type"
             value={selectedTypeId ?? ''}
             onChange={(e) => setSelectedTypeId(e.target.value ? +e.target.value : null)}
@@ -45,15 +45,17 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
         </label>
         <input
           type="search"
-          className="input input-bordered md:flex-1"
+          className="input input-bordered md:col-span-2"
           aria-label="Search"
           placeholder="Search"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <button className="btn btn-ghost md:ml-auto" onClick={clearFilters}>
-          Clear Filter
-        </button>
+        <div className="flex justify-end">
+          <button className="btn btn-ghost" onClick={clearFilters}>
+            Clear Filter
+          </button>
+        </div>
       </div>
       <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
         {filteredPlaces.map((x) => (
