@@ -1,7 +1,7 @@
 'use client';
 
 import { Place, PlaceType } from '@/models';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import PlaceCard from './ui/place-card';
 
 export interface FilteredPlacesProps {
@@ -12,17 +12,24 @@ export interface FilteredPlacesProps {
 const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
   const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
   const [searchText, setSearchText] = useState('');
+  const needle = searchText.toLowerCase().trim();
 
-  const filteredPlaces = places.filter((p) => {
-    const matchesType = selectedTypeId === null || p.type.id === selectedTypeId;
-    const needle = searchText.toLowerCase().trim();
-    const matchesSearch =
-      !needle ||
-      [p.name, p.address.line1, p.address.line2, p.address.city, p.address.state, p.address.postal].some((field) =>
-        field?.toLowerCase().includes(needle),
-      );
-    return matchesType && matchesSearch;
-  });
+  const filteredPlaces = useMemo(
+    () =>
+      places.filter((p) => {
+        const matchesType = selectedTypeId === null || p.type.id === selectedTypeId;
+        const matchesSearch =
+          !needle ||
+          p.name.toLowerCase().includes(needle) ||
+          p.address.line1?.toLowerCase().includes(needle) ||
+          p.address.line2?.toLowerCase().includes(needle) ||
+          p.address.city?.toLowerCase().includes(needle) ||
+          p.address.state?.toLowerCase().includes(needle) ||
+          p.address.postal?.toLowerCase().includes(needle);
+        return matchesType && matchesSearch;
+      }),
+    [needle, places, selectedTypeId],
+  );
 
   const clearFilters = () => {
     setSelectedTypeId(null);
