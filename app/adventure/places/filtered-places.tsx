@@ -51,7 +51,7 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <div className="flex justify-end">
+        <div className="flex justify-center md:justify-end">
           <button className="btn btn-ghost" onClick={clearFilters}>
             Clear Filter
           </button>
