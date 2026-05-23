@@ -26,7 +26,7 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
 
   return (
     <>
-      <div className="flex w-full items-center mb-4">
+      <div className="grid grid-cols-1 md:flex md:items-center gap-2 mb-4">
         <label className="flex items-center gap-2">
           <span>Place Type</span>
           <select
@@ -45,14 +45,13 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
         </label>
         <input
           type="search"
-          className="input input-bordered mx-4"
+          className="input input-bordered md:flex-1"
           aria-label="Search"
           placeholder="Search"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <div className="grow" />
-        <button className="btn btn-ghost" onClick={clearFilters}>
+        <button className="btn btn-ghost md:ml-auto" onClick={clearFilters}>
           Clear Filter
         </button>
       </div>
