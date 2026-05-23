@@ -45,7 +45,7 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
         </label>
         <input
           type="search"
-          className="input input-bordered md:col-span-2"
+          className="input input-bordered w-full md:col-span-2"
           aria-label="Search"
           placeholder="Search"
           value={searchText}
