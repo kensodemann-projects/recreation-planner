@@ -1,5 +1,13 @@
 # recreation-planner
 
+## 1.4.2
+
+### Patch Changes
+
+- edae04f: Make the action button links more accessible by not having wrapped buttons.
+- 3f840c8: Make FAB buttons more accessible by not nesting the button. Make them layer better by making them non-outline.
+- adb2b62: Replace the places list with a responsive grid of place cards.
+
 ## 1.4.1
 
 ### Patch Changes
