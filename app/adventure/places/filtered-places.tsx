@@ -12,7 +12,8 @@ export interface FilteredPlacesProps {
 const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
   const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
 
-  const filteredPlaces = selectedTypeId ? places.filter((p) => p.type.id === selectedTypeId) : places;
+  const filteredPlaces =
+    selectedTypeId !== null ? places.filter((p) => p.type.id === selectedTypeId) : places;
 
   const clearFilters = () => setSelectedTypeId(null);
 
