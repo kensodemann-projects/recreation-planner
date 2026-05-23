@@ -21,11 +21,11 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
       const matchesSearch =
         !needle ||
         p.name.toLowerCase().includes(needle) ||
-        p.address.line1?.toLowerCase().includes(needle) ||
-        p.address.line2?.toLowerCase().includes(needle) ||
-        p.address.city?.toLowerCase().includes(needle) ||
-        p.address.state?.toLowerCase().includes(needle) ||
-        p.address.postal?.toLowerCase().includes(needle);
+        p.address.line1?.toLowerCase()?.includes(needle) ||
+        p.address.line2?.toLowerCase()?.includes(needle) ||
+        p.address.city?.toLowerCase()?.includes(needle) ||
+        p.address.state?.toLowerCase()?.includes(needle) ||
+        p.address.postal?.toLowerCase()?.includes(needle);
       return matchesType && matchesSearch;
     });
   }, [places, searchText, selectedTypeId]);
