@@ -3,7 +3,7 @@ import TitleHeading from '@/app/ui/title-heading';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { fetchPlaceTypes, fetchPlaces } from './data';
-import PlacesFilterWrapper from './ui/places-filter-wrapper';
+import FilteredPlaces from './filtered-places';
 
 const PlacesPage = async () => {
   const [places, placeTypes] = await Promise.all([fetchPlaces(), fetchPlaceTypes()]);
@@ -13,7 +13,7 @@ const PlacesPage = async () => {
       <PageHeader>
         <TitleHeading>Places</TitleHeading>
       </PageHeader>
-      <PlacesFilterWrapper places={places} placeTypes={placeTypes} />
+      <FilteredPlaces places={places} placeTypes={placeTypes} />
       <Link
         aria-label="Add place"
         title="Add place"

@@ -2,14 +2,14 @@
 
 import { Place, PlaceType } from '@/models';
 import { useState } from 'react';
-import PlaceCard from './place-card';
+import PlaceCard from './ui/place-card';
 
-export interface PlacesFilterWrapperProps {
+export interface FilteredPlacesProps {
   places: Place[];
   placeTypes: PlaceType[];
 }
 
-const PlacesFilterWrapper = ({ places, placeTypes }: PlacesFilterWrapperProps) => {
+const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
   const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
 
   const filteredPlaces = selectedTypeId ? places.filter((p) => p.type.id === selectedTypeId) : places;
@@ -48,4 +48,4 @@ const PlacesFilterWrapper = ({ places, placeTypes }: PlacesFilterWrapperProps) =
   );
 };
 
-export default PlacesFilterWrapper;
+export default FilteredPlaces;

@@ -2,8 +2,8 @@ import { Place, PlaceType } from '@/models';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
-import { PLACE_TYPES, PLACES } from '../../__mocks__/data';
-import PlacesFilterWrapper from '../places-filter-wrapper';
+import { PLACE_TYPES, PLACES } from '../__mocks__/data';
+import FilteredPlaces from '../filtered-places';
 
 describe('Places Filter Wrapper', () => {
   afterEach(() => cleanup());
@@ -13,12 +13,12 @@ describe('Places Filter Wrapper', () => {
 
   describe('Place Type filter', () => {
     it('renders the Place Type dropdown', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       expect(screen.getByRole('combobox', { name: 'Place Type' })).toBeDefined();
     });
 
     it('populates the dropdown with all place types', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' }) as HTMLSelectElement;
       placeTypes.forEach((t) => {
         expect(select).toBeDefined();
@@ -27,12 +27,12 @@ describe('Places Filter Wrapper', () => {
     });
 
     it('includes an "All" option', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       expect(screen.getByRole('option', { name: 'All' })).toBeDefined();
     });
 
     it('defaults to "All" (no filter active)', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' }) as HTMLSelectElement;
       expect(select.value).toBe('');
     });
@@ -40,14 +40,14 @@ describe('Places Filter Wrapper', () => {
 
   describe('Clear Filter button', () => {
     it('renders a Clear Filter button', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       expect(screen.getByRole('button', { name: /clear filter/i })).toBeDefined();
     });
   });
 
   describe('when no filter is active', () => {
     it('shows all places', () => {
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       places.forEach((p) => {
         expect(screen.getByRole('link', { name: p.name })).toBeDefined();
       });
@@ -57,7 +57,7 @@ describe('Places Filter Wrapper', () => {
   describe('when a Place Type is selected', () => {
     it('shows only places of the selected type', async () => {
       const user = userEvent.setup();
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' });
 
       await user.selectOptions(select, String(PLACE_TYPES[0].id));
@@ -75,7 +75,7 @@ describe('Places Filter Wrapper', () => {
 
     it('updates live when the selection changes', async () => {
       const user = userEvent.setup();
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' });
 
       await user.selectOptions(select, String(PLACE_TYPES[1].id));
@@ -95,7 +95,7 @@ describe('Places Filter Wrapper', () => {
   describe('Clear Filter button', () => {
     it('resets the filter and shows all places', async () => {
       const user = userEvent.setup();
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' });
 
       await user.selectOptions(select, String(PLACE_TYPES[0].id));
@@ -110,7 +110,7 @@ describe('Places Filter Wrapper', () => {
 
     it('resets the Place Type dropdown to "All"', async () => {
       const user = userEvent.setup();
-      render(<PlacesFilterWrapper places={places} placeTypes={placeTypes} />);
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       const select = screen.getByRole('combobox', { name: 'Place Type' }) as HTMLSelectElement;
 
       await user.selectOptions(select, String(PLACE_TYPES[0].id));
