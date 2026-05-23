@@ -118,6 +118,39 @@ describe('Filtered Places', () => {
       expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
     });
 
+    it('filters places by city', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+
+      await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'cornell');
+
+      expect(screen.getByRole('link', { name: 'Burnet State Park' })).toBeDefined();
+      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+    });
+
+    it('filters places by state', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+
+      await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'WI');
+
+      const wiPlaces = PLACES.filter((p) => p.address.state === 'WI');
+      const nonWiPlaces = PLACES.filter((p) => p.address.state !== 'WI');
+
+      wiPlaces.forEach((p) => expect(screen.getByRole('link', { name: p.name })).toBeDefined());
+      nonWiPlaces.forEach((p) => expect(screen.queryByRole('link', { name: p.name })).toBeNull());
+    });
+
+    it('filters places by street address', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+
+      await user.type(screen.getByRole('searchbox', { name: 'Search' }), '255th');
+
+      expect(screen.getByRole('link', { name: 'Burnet State Park' })).toBeDefined();
+      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+    });
+
     it('combines with the Place Type filter', async () => {
       const user = userEvent.setup();
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);

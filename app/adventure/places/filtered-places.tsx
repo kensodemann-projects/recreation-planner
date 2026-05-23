@@ -15,7 +15,12 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
 
   const filteredPlaces = places.filter((p) => {
     const matchesType = selectedTypeId === null || p.type.id === selectedTypeId;
-    const matchesSearch = p.name.toLowerCase().includes(searchText.toLowerCase().trim());
+    const needle = searchText.toLowerCase().trim();
+    const matchesSearch =
+      !needle ||
+      [p.name, p.address.line1, p.address.line2, p.address.city, p.address.state, p.address.postal].some((field) =>
+        field?.toLowerCase().includes(needle),
+      );
     return matchesType && matchesSearch;
   });
 
