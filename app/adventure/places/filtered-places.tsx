@@ -11,11 +11,18 @@ export interface FilteredPlacesProps {
 
 const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
   const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState('');
 
-  const filteredPlaces =
-    selectedTypeId !== null ? places.filter((p) => p.type.id === selectedTypeId) : places;
+  const filteredPlaces = places.filter((p) => {
+    const matchesType = selectedTypeId === null || p.type.id === selectedTypeId;
+    const matchesSearch = p.name.toLowerCase().includes(searchText.toLowerCase().trim());
+    return matchesType && matchesSearch;
+  });
 
-  const clearFilters = () => setSelectedTypeId(null);
+  const clearFilters = () => {
+    setSelectedTypeId(null);
+    setSearchText('');
+  };
 
   return (
     <>
@@ -36,6 +43,14 @@ const FilteredPlaces = ({ places, placeTypes }: FilteredPlacesProps) => {
             ))}
           </select>
         </label>
+        <input
+          type="search"
+          className="input input-bordered mx-4"
+          aria-label="Search"
+          placeholder="Search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
         <div className="grow" />
         <button className="btn btn-ghost" onClick={clearFilters}>
           Clear Filter

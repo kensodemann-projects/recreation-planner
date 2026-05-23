@@ -85,6 +85,52 @@ describe('Filtered Places', () => {
     });
   });
 
+  describe('Search input', () => {
+    it('renders a search input', () => {
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      expect(screen.getByRole('searchbox', { name: 'Search' })).toBeDefined();
+    });
+
+    it('defaults to empty', () => {
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      const input = screen.getByRole('searchbox', { name: 'Search' }) as HTMLInputElement;
+      expect(input.value).toBe('');
+    });
+
+    it('filters places by name as the user types', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      const input = screen.getByRole('searchbox', { name: 'Search' });
+
+      await user.type(input, 'bong');
+
+      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
+      expect(screen.queryByRole('link', { name: 'Burnet State Park' })).toBeNull();
+    });
+
+    it('is case-insensitive', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      const input = screen.getByRole('searchbox', { name: 'Search' });
+
+      await user.type(input, 'BONG');
+
+      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
+    });
+
+    it('combines with the Place Type filter', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+
+      await user.selectOptions(screen.getByRole('combobox', { name: 'Place Type' }), String(PLACE_TYPES[0].id));
+      await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'bong');
+
+      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
+      expect(screen.queryByRole('link', { name: 'Burnet State Park' })).toBeNull();
+      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+    });
+  });
+
   describe('Clear Filter', () => {
     it('renders', () => {
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
@@ -104,6 +150,18 @@ describe('Filtered Places', () => {
       places.forEach((p) => {
         expect(screen.getByRole('link', { name: p.name })).toBeDefined();
       });
+    });
+
+    it('resets the search input', async () => {
+      const user = userEvent.setup();
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      const input = screen.getByRole('searchbox', { name: 'Search' }) as HTMLInputElement;
+
+      await user.type(input, 'bong');
+
+      await user.click(screen.getByRole('button', { name: /clear filter/i }));
+
+      expect(input.value).toBe('');
     });
 
     it('resets the Place Type dropdown to "All"', async () => {
