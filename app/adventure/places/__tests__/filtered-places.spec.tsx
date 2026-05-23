@@ -38,13 +38,6 @@ describe('Filtered Places', () => {
     });
   });
 
-  describe('Clear Filter button', () => {
-    it('renders a Clear Filter button', () => {
-      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
-      expect(screen.getByRole('button', { name: /clear filter/i })).toBeDefined();
-    });
-  });
-
   describe('when no filter is active', () => {
     it('shows all places', () => {
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
@@ -92,7 +85,12 @@ describe('Filtered Places', () => {
     });
   });
 
-  describe('Clear Filter button', () => {
+  describe('Clear Filter', () => {
+    it('renders', () => {
+      render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
+      expect(screen.getByRole('button', { name: /clear filter/i })).toBeDefined();
+    });
+
     it('resets the filter and shows all places', async () => {
       const user = userEvent.setup();
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
