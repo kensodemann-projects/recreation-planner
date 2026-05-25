@@ -116,8 +116,8 @@ describe('Activity Editor', () => {
     describe('initial value', () => {
       it('is set to the first location with no event', () => {
         render(<EventEditor types={eventTypes} places={places} onCancel={() => null} onConfirm={() => null} />);
-        const sel = screen.getByRole('combobox', { name: 'Location' }) as HTMLSelectElement;
-        expect(+sel.value).toBe(PLACES[0].id);
+        const inp = screen.getByRole('combobox', { name: 'Location' }) as HTMLInputElement;
+        expect(inp.value).toBe(PLACES[0].name);
       });
 
       it('is set to the location of the event', () => {
@@ -130,8 +130,8 @@ describe('Activity Editor', () => {
             onConfirm={() => null}
           />,
         );
-        const sel = screen.getByRole('combobox', { name: 'Location' }) as HTMLSelectElement;
-        expect(+sel.value).toBe(TEST_EVENT.place.id);
+        const inp = screen.getByRole('combobox', { name: 'Location' }) as HTMLInputElement;
+        expect(inp.value).toBe(TEST_EVENT.place.name);
       });
     });
   });
@@ -407,7 +407,10 @@ describe('Activity Editor', () => {
           );
           await user.type(screen.getByRole('textbox', { name: 'Name' }), 'Buy some food');
           await user.type(screen.getByLabelText('Begin Date'), '2024-08-01');
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '3');
+          const locationInput = screen.getByRole('combobox', { name: 'Location' });
+          await user.clear(locationInput);
+          await user.type(locationInput, 'Richard');
+          await user.click(screen.getByRole('option', { name: 'Richard Bong State Park' }));
           await user.click(screen.getByRole('button', { name: 'Create' }));
           expect(event!.place).toEqual(PLACES[2]);
         });
@@ -566,7 +569,10 @@ describe('Activity Editor', () => {
           />,
         );
         const btn = screen.getByRole('button', { name: 'Update' });
-        await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '2');
+        const locationInput = screen.getByRole('combobox', { name: 'Location' });
+        await user.clear(locationInput);
+        await user.type(locationInput, 'Indianapolis');
+        await user.click(screen.getByRole('option', { name: 'Indianapolis Motor Speedway' }));
         expect(btn.attributes.getNamedItem('disabled')).toBeFalsy();
       });
 
@@ -738,7 +744,10 @@ describe('Activity Editor', () => {
               onConfirm={(e) => (event = e)}
             />,
           );
-          await user.selectOptions(screen.getByRole('combobox', { name: 'Location' }), '3');
+          const locationInput = screen.getByRole('combobox', { name: 'Location' });
+          await user.clear(locationInput);
+          await user.type(locationInput, 'Richard');
+          await user.click(screen.getByRole('option', { name: 'Richard Bong State Park' }));
           await user.click(screen.getByRole('button', { name: 'Update' }));
           expect(event).toEqual({ ...TEST_EVENT, place: PLACES[2] });
         });
