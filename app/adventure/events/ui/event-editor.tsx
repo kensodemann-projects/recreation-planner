@@ -3,7 +3,7 @@ import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
-import { Combobox, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useForm } from '@/hooks/use-form';
 import { Event, EventType, Place } from '@/models';
 import { isRequired } from '@/utils/input-validations';
@@ -98,14 +98,17 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
               }
             }}
           >
-            <ComboboxLabel className="label">Location</ComboboxLabel>
             <div className="relative">
-              <ComboboxInput
-                id="event-place"
-                className="input input-bordered w-full"
-                displayValue={(place: Place | null) => place?.name ?? ''}
-                onChange={(e) => setPlaceQuery(e.target.value)}
-              />
+              <label className="floating-label" htmlFor="event-place">
+                <span>Location</span>
+                <ComboboxInput
+                  id="event-place"
+                  className="input input-md w-full"
+                  displayValue={(place: Place | null) => place?.name ?? ''}
+                  onChange={(e) => setPlaceQuery(e.target.value)}
+                  placeholder="Location"
+                />
+              </label>
               <ComboboxOptions className="absolute z-10 w-full top-full mt-1 bg-base-100 border border-base-300 rounded-box shadow-lg">
                 {filteredPlaces.map((place) => (
                   <ComboboxOption
