@@ -1,5 +1,13 @@
 # recreation-planner
 
+## 1.4.3
+
+### Patch Changes
+
+- e09bf9c: Use an autocomplete instead of a select for place selection.
+- 52dfcdd: Update the pnpm settings to match current paradigms.
+- 52dfcdd: Update dependencies.
+
 ## 1.4.2
 
 ### Patch Changes
