@@ -3,6 +3,7 @@ import BusyIndicator from '@/app/ui/busy-indicator';
 import Description from '@/app/ui/description';
 import Input from '@/app/ui/input';
 import Select from '@/app/ui/select';
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useForm } from '@/hooks/use-form';
 import { Event, EventType, Place } from '@/models';
 import { isRequired } from '@/utils/input-validations';
@@ -33,6 +34,11 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
 
   const [alertPlaceCreation, setAlertPlaceCreation] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [placeQuery, setPlaceQuery] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(event?.place ?? places[0] ?? null);
+
+  const filteredPlaces =
+    placeQuery === '' ? places : places.filter((p) => p.name.toLowerCase().includes(placeQuery.toLowerCase()));
 
   const requiredFieldsHaveValues = !!(fields.eventName.value.trim() && fields.eventBeginDate.value.trim());
   const disableConfirmButton = !(requiredFieldsHaveValues && isDirty);
@@ -50,7 +56,7 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
     endDate: fields.eventEndDate.value,
     endTime: fields.eventEndTime.value,
     type: types.find((x) => x.id === fields.eventTypeId.value) || types[0],
-    place: places.find((x) => x.id === fields.eventPlaceId.value) || places[0],
+    place: selectedPlace || places[0],
     description: fields.eventDescription.value,
   });
 
@@ -77,21 +83,46 @@ const EventEditor = ({ event, types, places, onCancel, onConfirm }: EventEditorP
           values={types}
           onChange={(evt) => fields.eventTypeId.setValue(+evt.target.value)}
         />
-        <Select
-          id="event-place"
-          className="col-span-4 md:col-span-2"
-          disabled={busy}
-          label="Location"
-          value={fields.eventPlaceId.value}
-          values={places}
-          onChange={(evt) => {
-            const id = +evt.target.value;
-            fields.eventPlaceId.setValue(id);
-            if (id < 0) {
-              setAlertPlaceCreation(true);
-            }
-          }}
-        />
+        <div className="col-span-4 md:col-span-2">
+          <Combobox
+            immediate
+            disabled={busy}
+            value={selectedPlace}
+            onChange={(place: Place | null) => {
+              if (place) {
+                setSelectedPlace(place);
+                fields.eventPlaceId.setValue(place.id!);
+                if ((place.id ?? 0) < 0) {
+                  setAlertPlaceCreation(true);
+                }
+              }
+            }}
+          >
+            <div className="relative">
+              <label className="floating-label" htmlFor="event-place">
+                <span>Location</span>
+                <ComboboxInput
+                  id="event-place"
+                  className="input input-md w-full"
+                  displayValue={(place: Place | null) => place?.name ?? ''}
+                  onChange={(e) => setPlaceQuery(e.target.value)}
+                  placeholder="Location"
+                />
+              </label>
+              <ComboboxOptions className="absolute z-10 w-full top-full mt-1 bg-base-100 border border-base-300 rounded-box shadow-lg">
+                {filteredPlaces.map((place) => (
+                  <ComboboxOption
+                    key={place.id}
+                    value={place}
+                    className="px-4 py-2 cursor-pointer data-[focus]:bg-base-200"
+                  >
+                    {place.name}
+                  </ComboboxOption>
+                ))}
+              </ComboboxOptions>
+            </div>
+          </Combobox>
+        </div>
         <Input
           id="event-begin-date"
           className="col-span-4 md:col-span-1"
