@@ -18,13 +18,13 @@
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.106.2",
+    "@supabase/supabase-js": "^2.107.0",
     "@vercel/speed-insights": "^2.0.0",
     "daisyui": "^5.5.20",
     "date-fns": "^4.4.0",
-    "next": "^16.2.6",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "next": "^16.2.7",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
@@ -39,14 +39,14 @@
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.6",
+    "eslint-config-next": "^16.2.7",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.0.6",
+    "lint-staged": "^17.0.7",
     "postcss": "^8.5.15",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "prettier": "@ionic/prettier-config",
   "lint-staged": {
