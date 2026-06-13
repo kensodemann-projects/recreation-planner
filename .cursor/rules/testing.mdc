@@ -1,0 +1,64 @@
+---
+description: Vitest, RTL, TDD, and test planning conventions
+globs: **/__tests__/**,**/*.spec.ts,**/*.spec.tsx,vitest.config.ts,vitest.setup.ts
+alwaysApply: false
+---
+
+# Testing
+
+- **Runner/Env**: Vitest with jsdom (see `vitest.config.ts` and `vitest.setup.ts`).
+- **RTL usage**: For server components that return JSX, tests often `await` the page function then `render(jsx)`.
+- **Module mocks**:
+  - Supabase: `vi.mock('@/utils/supabase/auth')`, `vi.mock('@/utils/supabase/server')`, `vi.mock('@/utils/supabase/client')` with implementations in `utils/supabase/__mocks__/`.
+  - Next.js: `vi.mock('next/navigation')` (and mock `next/link` when needed) for navigation behavior.
+- **Test layout**: Co-located `__tests__/*.spec.tsx` near the page/components they verify.
+- **Timers**: Use `vi.useFakeTimers()` where time-dependent logic is tested.
+
+## TDD vs. Testing Existing Functionality
+
+You may be asked to create tests for or test plans for features that do not exist yet. **Do Not** implement the features, only the tests (or the plans) and clearly indicate whether the test is TDD or testing existing functionality.
+
+- **TDD**: Feature doesn't exist yet — tests will fail initially, and **that is expected and OK**. Note what code changes are needed to make them pass (e.g., "This test will fail until `updateEquipment` is called instead of `addEquipment`").
+- **Existing functionality**: Tests should pass immediately (or reveal bugs). Reference the existing code that implements the behavior.
+
+## Test Planning Workflow
+
+When asked to create a test plan for TODO comments (e.g., "create a test plan for TODOs in @file"):
+
+### Process
+
+1. **Search for TODO comments**: Look for comments matching the pattern `TODO: Cursor <description>` in the specified file(s)
+2. **Analyze context**: Examine the surrounding test structure:
+   - Parent describe blocks and their purpose
+   - Related test cases (before/after the TODO)
+   - Setup and teardown code (beforeEach/afterEach)
+   - Mock configurations and test data used
+3. **Find reference patterns**: Search the same test file for similar test cases that test comparable functionality, use similar interactions, and follow the same assertion patterns
+4. **Understand component behavior**: If testing React components, examine the source component file to understand:
+   - Event handlers and callbacks
+   - Props and their usage
+   - Conditional rendering logic
+   - State, effects, and data flow between components
+5. **Determine implementation status**: Check if the feature being tested exists in the source code
+   - If feature exists: Tests can be implemented immediately
+   - If feature missing: Note that tests will fail until feature is implemented (TDD approach)
+6. **Create PLAN.md**: Generate a detailed plan file in the same directory as the test file
+
+### PLAN.md Structure
+
+For each TODO test case, include: test location (line number and describe block hierarchy), context (scenario, user workflow, and implementation status), setup steps (mock data, mounting, async considerations), test actions (interactions, queries, event emissions), assertions (visibility, props, DOM state, mock calls), pattern references (similar tests by line number, test data used), and key implementation notes (relevant source code, what needs to be implemented for TDD tests).
+
+Use clear markdown with headers and code blocks. Make it detailed enough that implementation is straightforward. Do not modify any code — only create the PLAN.md file.
+
+### Workflow and Implementation
+
+The expected workflow is:
+
+1. Create PLAN.md (do not implement tests yet)
+2. User reviews and potentially modifies PLAN.md
+3. User instructs you to implement tests from the plan
+
+When implementing, always read the current PLAN.md first — the user may have modified it. Do not rely on the original TODO comments alone.
+
+- For TDD tests: implement the failing tests as written; failing is expected — note what code changes are needed to make them pass
+- For existing functionality tests: tests should pass; if they don't, investigate and explain why.

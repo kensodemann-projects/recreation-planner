@@ -1,0 +1,66 @@
+---
+description: Recreation Planner architecture, patterns, and code conventions
+alwaysApply: true
+---
+
+# Recreation Planner Project Instructions
+
+Next.js (App Router) + React + TypeScript application using Supabase for authentication and data access. Styling uses Tailwind CSS and DaisyUI. Built with pnpm; tested with Vitest and React Testing Library.
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, DaisyUI
+- **Backend**: Supabase (Auth, Postgres) via `@supabase/ssr` helpers
+- **Build/Runtime**: Next.js (`next build`, `next start`), dev with Turbopack
+- **Testing**: Vitest + @testing-library/react (+ jsdom)
+
+## Project Structure
+
+- `app/`: Route segments and pages (Server Components by default). Tests co-located under `__tests__/` near route modules.
+- `app/ui/`: Reusable UI building blocks used across pages.
+- `utils/supabase/`: Supabase integration
+  - `client.ts`: Browser client via `createBrowserClient`
+  - `server.ts`: Server client via `createServerClient` with Next cookies
+  - `auth.ts`: Auth helpers (e.g., `isNotLoggedIn()`)
+  - `middleware.ts`: `updateSession()` for auth cookie refresh; used by root `middleware.ts`
+  - `__mocks__/`: Vitest-ready mocks for Supabase helpers
+- `utils/`: Shared utilities (e.g., `data.ts`, `formatters.ts`, `input-validations.ts`) with tests in `utils/__tests__/`
+- `models/`: Domain models and DTO converters in `models/convert/` with dedicated tests
+- `hooks/`: Custom hooks (e.g., `use-form-control.ts`) and tests
+- `public/`: Static assets
+- Config: `next.config.mjs`, `tsconfig.json`, `eslint.config.mjs`, `vitest.config.ts`, `vitest.setup.ts`
+
+## App Router + Components
+
+- **Server Components by default**: Route modules under `app/` are server components unless they include `'use client'`.
+- **Client Components**: Add `'use client'` for components that need state, effects, or browser-only APIs.
+- **Server Actions**: Use `'use server'` modules for mutations (e.g., `app/login/actions.ts` using Supabase auth, `revalidatePath`, and `redirect`).
+
+## Data Access & Auth
+
+- **Supabase SSR**: Use `createClient()` from `utils/supabase/server` in server-only code. Use `utils/supabase/client` for client-side needs.
+- **Auth Gate**: Use `isNotLoggedIn()` to guard server-rendered pages. Middleware `updateSession()` in root `middleware.ts` keeps Supabase cookies in sync.
+- **Queries/Mutations**: Encapsulate database calls in `app/**/data.ts` using Supabase clients. Convert between models and DTOs via `models/convert/*` helpers.
+
+## Data Access Pattern
+
+Each route area has a `data.ts` marked `'use server'` with a two-layer structure:
+
+1. **Private query builders** — take a `SupabaseClient` and return a Supabase query object (not yet awaited).
+2. **Exported async functions** — call `isNotLoggedIn()` as auth guard, create the client, build the query, and pass through `executeQuery<T>()` from `utils/data.ts` (returns `null` on failure).
+
+All mutations use `convertToEntityDTO()` before insert/update; results use `convertToEntity()` from `models/convert/`.
+
+## Navigation & Imports
+
+- Use `next/navigation` for `redirect`, `notFound`, and `revalidatePath` in server code.
+- Async route components can `await` data and return JSX (tests render the resolved JSX).
+- Use `@/...` path alias for absolute imports from the project root.
+
+## Code Conventions
+
+- **Routes/Pages**: Files under `app/**` export default async functions returning JSX; keep server logic in server components/actions unless client interactivity is required.
+- **UI Components**: Shared components live in `app/ui/`; follow existing naming and props patterns.
+- **Models**: Centralize domain types and converters in `models/` and `models/convert/`.
+- **Tests**: Co-locate `*.spec.ts(x)` under `__tests__/` and mock Supabase/Next modules as needed.
+- **Comments**: Be minimal; explain intent and non-obvious decisions.

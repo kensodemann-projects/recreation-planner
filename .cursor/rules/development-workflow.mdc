@@ -1,0 +1,47 @@
+---
+description: Environment setup, commands, branching, and release process
+alwaysApply: true
+---
+
+# Development Workflow
+
+## Environment
+
+Create `.env.local` with:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+
+Values are available from your Supabase project's API settings.
+
+## Commands
+
+```bash
+pnpm dev       # Start dev server (Turbopack)
+pnpm test      # Run tests once (Vitest)
+pnpm test:dev  # Watch mode for tests
+pnpm lint      # ESLint check
+pnpm build     # Production build
+pnpm start     # Start production server
+```
+
+To run a single test file: `pnpm test -- path/to/file.spec.tsx`
+To run tests matching a name pattern: `pnpm test -- -t "test name"`
+
+## Branching Workflow
+
+Hybrid git-flow:
+
+1. Create a base branch per feature.
+2. Create sub-branches off the base for each change; open PRs with **Squash Commits** back into the base.
+3. Run `pnpm changeset` on each sub-branch to document the change.
+4. When the feature is complete, open a PR from the base branch into `main` — **do not squash** this merge.
+
+## Release Process
+
+1. `pnpm changeset` – Document changes in a branch.
+2. Implement code, tests, open PR, review, and merge.
+3. `pnpm bump` – Update versions via Changesets; commit, create tag (`vX.Y.Z`), and push with tags.
+4. Deploy via your target (e.g., Vercel) with environment variables configured. For manual deployments, build with `pnpm build` and run with `pnpm start`.
