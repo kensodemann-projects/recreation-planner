@@ -42,7 +42,7 @@ describe('Filtered Places', () => {
     it('shows all places', () => {
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       places.forEach((p) => {
-        expect(screen.getByRole('link', { name: p.name })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
     });
   });
@@ -59,10 +59,10 @@ describe('Filtered Places', () => {
       const otherPlaces = PLACES.filter((p) => p.type.id !== PLACE_TYPES[0].id);
 
       stateParkPlaces.forEach((p) => {
-        expect(screen.getByRole('link', { name: p.name })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
       otherPlaces.forEach((p) => {
-        expect(screen.queryByRole('link', { name: p.name })).toBeNull();
+        expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull();
       });
     });
 
@@ -77,10 +77,10 @@ describe('Filtered Places', () => {
       const otherPlaces = PLACES.filter((p) => p.type.id !== PLACE_TYPES[1].id);
 
       raceTrackPlaces.forEach((p) => {
-        expect(screen.getByRole('link', { name: p.name })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
       otherPlaces.forEach((p) => {
-        expect(screen.queryByRole('link', { name: p.name })).toBeNull();
+        expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull();
       });
     });
   });
@@ -104,8 +104,8 @@ describe('Filtered Places', () => {
 
       await user.type(input, 'bong');
 
-      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
-      expect(screen.queryByRole('link', { name: 'Burnet State Park' })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[0].name}` })).toBeNull();
     });
 
     it('is case-insensitive', async () => {
@@ -115,7 +115,7 @@ describe('Filtered Places', () => {
 
       await user.type(input, 'BONG');
 
-      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
     });
 
     it('filters places by city', async () => {
@@ -124,8 +124,8 @@ describe('Filtered Places', () => {
 
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'cornell');
 
-      expect(screen.getByRole('link', { name: 'Burnet State Park' })).toBeDefined();
-      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[0].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
 
     it('filters places by state', async () => {
@@ -137,8 +137,8 @@ describe('Filtered Places', () => {
       const wiPlaces = PLACES.filter((p) => p.address.state === 'WI');
       const nonWiPlaces = PLACES.filter((p) => p.address.state !== 'WI');
 
-      wiPlaces.forEach((p) => expect(screen.getByRole('link', { name: p.name })).toBeDefined());
-      nonWiPlaces.forEach((p) => expect(screen.queryByRole('link', { name: p.name })).toBeNull());
+      wiPlaces.forEach((p) => expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined());
+      nonWiPlaces.forEach((p) => expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull());
     });
 
     it('filters places by street address', async () => {
@@ -147,8 +147,8 @@ describe('Filtered Places', () => {
 
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), '255th');
 
-      expect(screen.getByRole('link', { name: 'Burnet State Park' })).toBeDefined();
-      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[0].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
 
     it('combines with the Place Type filter', async () => {
@@ -158,9 +158,9 @@ describe('Filtered Places', () => {
       await user.selectOptions(screen.getByRole('combobox', { name: 'Place Type' }), String(PLACE_TYPES[0].id));
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'bong');
 
-      expect(screen.getByRole('link', { name: 'Richard Bong State Park' })).toBeDefined();
-      expect(screen.queryByRole('link', { name: 'Burnet State Park' })).toBeNull();
-      expect(screen.queryByRole('link', { name: 'Indianapolis Motor Speedway' })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[0].name}` })).toBeNull();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
   });
 
@@ -181,7 +181,7 @@ describe('Filtered Places', () => {
       await user.click(clearButton);
 
       places.forEach((p) => {
-        expect(screen.getByRole('link', { name: p.name })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
     });
 

@@ -17,7 +17,7 @@ describe('dashboard component', () => {
 
     it('displays the events', () => {
       render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
-      EVENTS.forEach((e) => expect(screen.getByRole('link', { name: e.name })));
+      EVENTS.forEach((e) => expect(screen.getByRole('link', { name: `View ${e.name}` })));
       expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(EVENTS.length);
     });
 
@@ -51,9 +51,9 @@ describe('dashboard component', () => {
       render(
         <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
       );
-      expect(screen.getByRole('link', { name: EVENTS[0].name }));
-      expect(screen.getByRole('link', { name: EVENTS[2].name }));
-      expect(screen.getByRole('link', { name: EVENTS[3].name }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[0].name}` }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[2].name}` }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[3].name}` }));
       expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
     });
 

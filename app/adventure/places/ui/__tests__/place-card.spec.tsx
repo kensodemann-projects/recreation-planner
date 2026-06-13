@@ -16,14 +16,13 @@ describe('Place Card', () => {
 
     it('links to the place detail page', () => {
       render(<PlaceCard place={TEST_PLACE} callingPage="/adventure/places" />);
-      const headerLink = screen.getByRole('heading', { level: 3 });
-      const link = within(headerLink).getByRole('link', { name: TEST_PLACE.name });
+      const link = screen.getByRole('link', { name: `View ${TEST_PLACE.name}` });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}?callingPage=/adventure/places`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<PlaceCard place={TEST_PLACE} />);
-      const link = screen.getByRole('link', { name: TEST_PLACE.name });
+      const link = screen.getByRole('link', { name: `View ${TEST_PLACE.name}` });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}`);
     });
   });

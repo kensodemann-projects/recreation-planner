@@ -14,14 +14,14 @@ const EventCard = ({ event, callingPage }: EventCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
-        <h3 className="card-title">
-          {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
-        </h3>
-        <h4 className="card-sub-title">
-          <Link href={`/adventure/events/${event.id}${searchParams}`}>{event.name}</Link>
-        </h4>
-        <p>{event.type.name}</p>
-        <p>{event.place.name}</p>
+        <Link href={`/adventure/events/${event.id}${searchParams}`} aria-label={`View ${event.name}`}>
+          <h3 className="card-title">
+            {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
+          </h3>
+          <h4 className="card-sub-title">{event.name}</h4>
+          <p>{event.type.name}</p>
+          <p>{event.place.name}</p>
+        </Link>
 
         <div className="card-actions justify-end items-center mt-6">
           <Link
