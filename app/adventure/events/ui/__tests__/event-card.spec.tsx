@@ -1,5 +1,6 @@
 import { PLACES } from '@/app/adventure/places/__mocks__/data';
 import { Event } from '@/models';
+import { formatDateRange } from '@/utils/formatters';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENT_TYPES } from '../../__mocks__/data';
@@ -34,16 +35,16 @@ describe('Event Card', () => {
     expect(screen.getByText(TEST_EVENT.type.name)).toBeDefined();
   });
 
-  describe('name link', () => {
+  describe('detail link', () => {
     it('links to the event detail page', () => {
       render(<EventCard event={TEST_EVENT} callingPage="/adventure" />);
-      const link = screen.getByRole('link', { name: TEST_EVENT.name });
+      const link = screen.getByRole('link', { name: eventDetailLinkName(TEST_EVENT) });
       expect(link.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}?callingPage=/adventure`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<EventCard event={TEST_EVENT} />);
-      const link = screen.getByRole('link', { name: TEST_EVENT.name });
+      const link = screen.getByRole('link', { name: eventDetailLinkName(TEST_EVENT) });
       expect(link.getAttribute('href')).toBe(`/adventure/events/${TEST_EVENT.id}`);
     });
   });
@@ -76,6 +77,9 @@ describe('Event Card', () => {
     });
   });
 });
+
+const eventDetailLinkName = (event: Event) =>
+  `${formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)} ${event.name} ${event.type.name} ${event.place.name}`;
 
 const TEST_EVENT: Event = {
   id: 314,
