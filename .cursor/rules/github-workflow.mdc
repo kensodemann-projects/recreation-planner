@@ -1,0 +1,43 @@
+---
+description: GitHub issue templates, subtasks, and pull request review guidelines
+alwaysApply: true
+---
+
+# GitHub Issue Templates
+
+Templates for Feature, Task, and Bug issues are in `.github/ISSUE_TEMPLATE/`. Read the appropriate template before creating or suggesting issues to ensure the correct structure and frontmatter.
+
+**Subtasks**: When generating subtasks, **DO NOT create files**. Instead, output the complete markdown for each subtask in the chat first for review. When asked, create the GitHub issues using the `gh` CLI. Link subtasks to the parent using the issue number (e.g., "Related to #123").
+
+# Pull Request Reviews
+
+## Focus Areas
+
+- **Security**: No hardcoded secrets; validate inputs; enforce auth checks in server actions and data loaders.
+- **Performance**: Avoid N+1 queries; minimize client bundles; keep server components server-only when possible.
+- **Testing**: Add/maintain coverage for data operations and routing behaviors.
+- **Comments**: Minimal and purposeful; explain "why", not "what".
+
+## Review Style
+
+- Provide specific, actionable feedback with code examples.
+- Acknowledge good patterns and creative solutions.
+- Link to best-practices documentation when relevant.
+- Focus on improvement, not criticism.
+
+## Review Comment Format
+
+**Issue:** Describe what needs attention
+**Suggestion:** Provide specific improvement with code example
+**Why:** Explain reasoning and benefits
+**Documentation:** Link to best-practices if applicable
+
+## Review Labels
+
+- 🔒 Security concerns (immediate attention)
+- ⚡ Performance issues/optimizations
+- 🧹 Code cleanup and maintainability
+- 📚 Documentation gaps
+- ✅ Positive feedback
+- 🚨 Critical blockers
+- 💭 Questions for discussion
