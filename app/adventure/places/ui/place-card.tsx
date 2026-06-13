@@ -15,14 +15,16 @@ const PlaceCard = ({ place, callingPage }: PlaceCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
-        <h3 className="card-title justify-between">
-          <Link href={`/adventure/places/${place.id}${searchParams}`}>{place.name}</Link>
-          <PlaceTypeIcon typeName={place.type.name} />
-        </h3>
-        <h4 className="card-sub-title">{place.type.name}</h4>
+        <Link href={`/adventure/places/${place.id}${searchParams}`}>
+          <h3 className="card-title justify-between">
+            {place.name}
+            <PlaceTypeIcon typeName={place.type.name} />
+          </h3>
+          <h4 className="card-sub-title">{place.type.name}</h4>
 
-        <Address value={place.address} />
-        {place.phoneNumber && <div>{place.phoneNumber}</div>}
+          <Address value={place.address} />
+          {place.phoneNumber && <div>{place.phoneNumber}</div>}
+        </Link>
 
         <div className="grow" />
 
