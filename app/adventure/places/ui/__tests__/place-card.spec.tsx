@@ -1,5 +1,4 @@
 import { Place } from '@/models';
-import { cityStatePostal } from '@/utils/formatters';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PLACE_TYPES } from '../../__mocks__/data';
@@ -17,13 +16,13 @@ describe('Place Card', () => {
 
     it('links to the place detail page', () => {
       render(<PlaceCard place={TEST_PLACE} callingPage="/adventure/places" />);
-      const link = screen.getByRole('link', { name: placeDetailLinkName(TEST_PLACE) });
+      const link = screen.getByRole('link', { name: `View ${TEST_PLACE.name}` });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}?callingPage=/adventure/places`);
     });
 
     it('does not include the search parameter when callingPage is not provided', () => {
       render(<PlaceCard place={TEST_PLACE} />);
-      const link = screen.getByRole('link', { name: placeDetailLinkName(TEST_PLACE) });
+      const link = screen.getByRole('link', { name: `View ${TEST_PLACE.name}` });
       expect(link.getAttribute('href')).toBe(`/adventure/places/${TEST_PLACE.id}`);
     });
   });
@@ -99,24 +98,6 @@ describe('Place Card', () => {
     });
   });
 });
-
-const placeDetailLinkName = (place: Place) => {
-  let name = `${place.name}${place.type.name} icon ${place.type.name}`;
-  if (place.address.line1) {
-    name += ` ${place.address.line1}`;
-  }
-  if (place.address.line2) {
-    name += ` ${place.address.line2}`;
-  }
-  const cityLine = cityStatePostal(place.address.city, place.address.state, place.address.postal);
-  if (cityLine) {
-    name += ` ${cityLine}`;
-  }
-  if (place.phoneNumber) {
-    name += ` ${place.phoneNumber}`;
-  }
-  return name;
-};
 
 const TEST_PLACE: Place = {
   id: 42,

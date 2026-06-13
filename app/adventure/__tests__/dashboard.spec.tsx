@@ -1,5 +1,3 @@
-import { Event } from '@/models';
-import { formatDateRange } from '@/utils/formatters';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Dashboard from '../dashboard';
@@ -19,7 +17,7 @@ describe('dashboard component', () => {
 
     it('displays the events', () => {
       render(<Dashboard currentEvents={EVENTS} recentPastEvents={[]} dueTodoCollections={[]} />);
-      EVENTS.forEach((e) => expect(screen.getByRole('link', { name: eventDetailLinkName(e) })));
+      EVENTS.forEach((e) => expect(screen.getByRole('link', { name: `View ${e.name}` })));
       expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(EVENTS.length);
     });
 
@@ -53,9 +51,9 @@ describe('dashboard component', () => {
       render(
         <Dashboard currentEvents={[]} recentPastEvents={[EVENTS[0], EVENTS[2], EVENTS[3]]} dueTodoCollections={[]} />,
       );
-      expect(screen.getByRole('link', { name: eventDetailLinkName(EVENTS[0]) }));
-      expect(screen.getByRole('link', { name: eventDetailLinkName(EVENTS[2]) }));
-      expect(screen.getByRole('link', { name: eventDetailLinkName(EVENTS[3]) }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[0].name}` }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[2].name}` }));
+      expect(screen.getByRole('link', { name: `View ${EVENTS[3].name}` }));
       expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
     });
 
@@ -103,6 +101,3 @@ describe('dashboard component', () => {
     });
   });
 });
-
-const eventDetailLinkName = (event: Event) =>
-  `${formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)} ${event.name} ${event.type.name} ${event.place.name}`;

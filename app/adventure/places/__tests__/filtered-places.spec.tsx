@@ -1,5 +1,4 @@
 import { Place, PlaceType } from '@/models';
-import { cityStatePostal } from '@/utils/formatters';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -43,7 +42,7 @@ describe('Filtered Places', () => {
     it('shows all places', () => {
       render(<FilteredPlaces places={places} placeTypes={placeTypes} />);
       places.forEach((p) => {
-        expect(screen.getByRole('link', { name: placeDetailLinkName(p) })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
     });
   });
@@ -60,10 +59,10 @@ describe('Filtered Places', () => {
       const otherPlaces = PLACES.filter((p) => p.type.id !== PLACE_TYPES[0].id);
 
       stateParkPlaces.forEach((p) => {
-        expect(screen.getByRole('link', { name: placeDetailLinkName(p) })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
       otherPlaces.forEach((p) => {
-        expect(screen.queryByRole('link', { name: placeDetailLinkName(p) })).toBeNull();
+        expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull();
       });
     });
 
@@ -78,10 +77,10 @@ describe('Filtered Places', () => {
       const otherPlaces = PLACES.filter((p) => p.type.id !== PLACE_TYPES[1].id);
 
       raceTrackPlaces.forEach((p) => {
-        expect(screen.getByRole('link', { name: placeDetailLinkName(p) })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
       otherPlaces.forEach((p) => {
-        expect(screen.queryByRole('link', { name: placeDetailLinkName(p) })).toBeNull();
+        expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull();
       });
     });
   });
@@ -105,8 +104,8 @@ describe('Filtered Places', () => {
 
       await user.type(input, 'bong');
 
-      expect(screen.getByRole('link', { name: placeDetailLinkName(PLACES[2]) })).toBeDefined();
-      expect(screen.queryByRole('link', { name: placeDetailLinkName(PLACES[0]) })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[0].name}` })).toBeNull();
     });
 
     it('is case-insensitive', async () => {
@@ -116,7 +115,7 @@ describe('Filtered Places', () => {
 
       await user.type(input, 'BONG');
 
-      expect(screen.getByRole('link', { name: placeDetailLinkName(PLACES[2]) })).toBeDefined();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
     });
 
     it('filters places by city', async () => {
@@ -125,8 +124,8 @@ describe('Filtered Places', () => {
 
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'cornell');
 
-      expect(screen.getByRole('link', { name: placeDetailLinkName(PLACES[0]) })).toBeDefined();
-      expect(screen.queryByRole('link', { name: placeDetailLinkName(PLACES[1]) })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[0].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
 
     it('filters places by state', async () => {
@@ -138,8 +137,8 @@ describe('Filtered Places', () => {
       const wiPlaces = PLACES.filter((p) => p.address.state === 'WI');
       const nonWiPlaces = PLACES.filter((p) => p.address.state !== 'WI');
 
-      wiPlaces.forEach((p) => expect(screen.getByRole('link', { name: placeDetailLinkName(p) })).toBeDefined());
-      nonWiPlaces.forEach((p) => expect(screen.queryByRole('link', { name: placeDetailLinkName(p) })).toBeNull());
+      wiPlaces.forEach((p) => expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined());
+      nonWiPlaces.forEach((p) => expect(screen.queryByRole('link', { name: `View ${p.name}` })).toBeNull());
     });
 
     it('filters places by street address', async () => {
@@ -148,8 +147,8 @@ describe('Filtered Places', () => {
 
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), '255th');
 
-      expect(screen.getByRole('link', { name: placeDetailLinkName(PLACES[0]) })).toBeDefined();
-      expect(screen.queryByRole('link', { name: placeDetailLinkName(PLACES[1]) })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[0].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
 
     it('combines with the Place Type filter', async () => {
@@ -159,9 +158,9 @@ describe('Filtered Places', () => {
       await user.selectOptions(screen.getByRole('combobox', { name: 'Place Type' }), String(PLACE_TYPES[0].id));
       await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'bong');
 
-      expect(screen.getByRole('link', { name: placeDetailLinkName(PLACES[2]) })).toBeDefined();
-      expect(screen.queryByRole('link', { name: placeDetailLinkName(PLACES[0]) })).toBeNull();
-      expect(screen.queryByRole('link', { name: placeDetailLinkName(PLACES[1]) })).toBeNull();
+      expect(screen.getByRole('link', { name: `View ${PLACES[2].name}` })).toBeDefined();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[0].name}` })).toBeNull();
+      expect(screen.queryByRole('link', { name: `View ${PLACES[1].name}` })).toBeNull();
     });
   });
 
@@ -182,7 +181,7 @@ describe('Filtered Places', () => {
       await user.click(clearButton);
 
       places.forEach((p) => {
-        expect(screen.getByRole('link', { name: placeDetailLinkName(p) })).toBeDefined();
+        expect(screen.getByRole('link', { name: `View ${p.name}` })).toBeDefined();
       });
     });
 
@@ -212,21 +211,3 @@ describe('Filtered Places', () => {
     });
   });
 });
-
-const placeDetailLinkName = (place: Place) => {
-  let name = `${place.name}${place.type.name} icon ${place.type.name}`;
-  if (place.address.line1) {
-    name += ` ${place.address.line1}`;
-  }
-  if (place.address.line2) {
-    name += ` ${place.address.line2}`;
-  }
-  const cityLine = cityStatePostal(place.address.city, place.address.state, place.address.postal);
-  if (cityLine) {
-    name += ` ${cityLine}`;
-  }
-  if (place.phoneNumber) {
-    name += ` ${place.phoneNumber}`;
-  }
-  return name;
-};

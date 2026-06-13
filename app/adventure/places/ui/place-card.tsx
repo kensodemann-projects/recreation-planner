@@ -15,7 +15,7 @@ const PlaceCard = ({ place, callingPage }: PlaceCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
-        <Link href={`/adventure/places/${place.id}${searchParams}`}>
+        <Link href={`/adventure/places/${place.id}${searchParams}`} aria-label={`View ${place.name}`}>
           <h3 className="card-title justify-between">
             {place.name}
             <PlaceTypeIcon typeName={place.type.name} />

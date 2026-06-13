@@ -14,7 +14,7 @@ const EventCard = ({ event, callingPage }: EventCardProps) => {
   return (
     <div className="card card-border bg-base-100">
       <div className="card-body">
-        <Link href={`/adventure/events/${event.id}${searchParams}`}>
+        <Link href={`/adventure/events/${event.id}${searchParams}`} aria-label={`View ${event.name}`}>
           <h3 className="card-title">
             {formatDateRange(event.beginDate, event.beginTime, event.endDate, event.endTime)}
           </h3>
