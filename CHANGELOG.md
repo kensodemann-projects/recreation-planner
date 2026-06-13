@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.4.4
+
+### Patch Changes
+
+- Modify the event and place cards to contain a larger clickable area for navigation.
+
 ## 1.4.3
 
 ### Patch Changes
