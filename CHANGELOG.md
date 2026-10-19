@@ -1,5 +1,11 @@
 # recreation-planner
 
+## 1.4.5
+
+### Patch Changes
+
+- 9318e55: update dependencies
+
 ## 1.4.4
 
 ### Patch Changes
