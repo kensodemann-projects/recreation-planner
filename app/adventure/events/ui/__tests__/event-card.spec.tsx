@@ -1,4 +1,5 @@
 import { PLACES } from '@/app/adventure/places/__mocks__/data';
+import { Event } from '@/models/event';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EVENT_TYPES } from '../../__mocks__/data';

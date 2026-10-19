@@ -129,6 +129,8 @@ describe('note converters', () => {
           name: 'Do the needful',
           description: 'The needful was not really that needed',
           equipmentRid: 3,
+          eventRid: null,
+          placeRid: null,
         },
         expected: {
           name: 'Do the needful',
@@ -143,7 +145,9 @@ describe('note converters', () => {
         value: {
           name: 'Do the needful',
           description: 'The needful was not really that needed',
+          equipmentRid: null,
           eventRid: 314,
+          placeRid: null,
         },
         expected: {
           name: 'Do the needful',
@@ -158,6 +162,8 @@ describe('note converters', () => {
         value: {
           name: 'Do the needful',
           description: 'The needful was not really that needed',
+          equipmentRid: null,
+          eventRid: null,
           placeRid: 783,
         },
         expected: {
