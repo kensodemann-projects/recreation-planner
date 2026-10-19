@@ -11,6 +11,8 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Faster than the forks default for this suite. `isolate` does not apply to vmThreads.
+    pool: 'vmThreads',
     setupFiles: './vitest.setup.ts',
     env: {
       NODE_OPTIONS: '--localstorage-file=./vite-storage',
